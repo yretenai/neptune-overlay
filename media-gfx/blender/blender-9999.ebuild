@@ -234,10 +234,13 @@ src_configure() {
 		-DWITH_ALEMBIC=$(usex alembic)
 		-DWITH_ASSERT_ABORT=$(usex debug)
 		-DWITH_BOOST=ON
+		-DWITH_EXPERIMENTAL_FEATURES=OFF
+		-DWITH_VULKAN_BACKEND=OFF
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
 		-DWITH_CXX_GUARDEDALLOC=$(usex debug)
+		-DWITH_VULKAN_GUARDEDALLOC=OFF
 		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cycles-bin-kernels)
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda TRUE FALSE)
