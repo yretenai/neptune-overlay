@@ -26,6 +26,7 @@ fi
 SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
 IUSE="+bullet +dds +fluid +openexr +tbb -vulkan
+	experimental
 	alembic collada +color-management cuda +cycles cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
@@ -243,7 +244,7 @@ src_configure() {
 		-DWITH_ALEMBIC=$(usex alembic)
 		-DWITH_ASSERT_ABORT=$(usex debug)
 		-DWITH_BOOST=ON
-		-DWITH_EXPERIMENTAL_FEATURES=$([[ ${PV} = *9999* ]] && echo "ON" || echo "OFF")
+		-DWITH_EXPERIMENTAL_FEATURES=$(usex experimental)
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
