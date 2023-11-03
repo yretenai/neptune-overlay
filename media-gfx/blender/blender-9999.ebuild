@@ -25,7 +25,7 @@ fi
 
 SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
-IUSE="+bullet +dds +fluid +openexr +tbb
+IUSE="+bullet +dds +fluid +openexr +tbb -vulkan
 	alembic collada +color-management cuda +cycles cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
@@ -44,7 +44,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	test? ( color-management )"
 
 # Library versions for official builds can be found in the blender source directory in:
-# build_files/build_environment/install_deps.sh
+# build_files/build_environment/CMakeLists.txt
 RDEPEND="${PYTHON_DEPS}
 	dev-libs/boost:=[nls?]
 	dev-libs/lzo:2=
@@ -110,6 +110,14 @@ RDEPEND="${PYTHON_DEPS}
 		>=x11-libs/libxkbcommon-0.2.0
 		media-libs/mesa[wayland]
 		sys-apps/dbus
+	)
+	vulkan? (
+		>=media-libs/shaderc-2022.3
+		>=dev-util/spirv-tools-1.3.261
+		>=dev-util/spirv-headers-1.3.261
+		>=dev-util/glslang-1.3.261
+		>=dev-util/vulkan-headers-1.3.261
+		>=media-libs/vulkan-loader-1.3.261
 	)
 	X? (
 		x11-libs/libX11
@@ -226,6 +234,7 @@ src_configure() {
 	append-lfs-flags
 	blender_get_version
 
+	# todo: fix shaderc and glslang for vulkan
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=OFF
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
@@ -234,13 +243,13 @@ src_configure() {
 		-DWITH_ALEMBIC=$(usex alembic)
 		-DWITH_ASSERT_ABORT=$(usex debug)
 		-DWITH_BOOST=ON
-		-DWITH_EXPERIMENTAL_FEATURES=OFF
-		-DWITH_VULKAN_BACKEND=OFF
+		-DWITH_EXPERIMENTAL_FEATURES=$([[ ${PV} = *9999* ]] && echo "ON" || echo "OFF")
+		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
 		-DWITH_CXX_GUARDEDALLOC=$(usex debug)
-		-DWITH_VULKAN_GUARDEDALLOC=OFF
+		-DWITH_VULKAN_GUARDEDALLOC=$(usex debug)
 		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cycles-bin-kernels)
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda TRUE FALSE)
