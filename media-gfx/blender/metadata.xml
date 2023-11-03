@@ -76,5 +76,8 @@
 		<flag name="experimental">
 			Build Experimental Blender Modules
 		</flag>
+		<flag name="vulkan">
+			Add support for the experimental Vulkan viewport backend
+		</flag>
 	</use>
 </pkgmetadata>
