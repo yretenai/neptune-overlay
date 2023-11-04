@@ -25,8 +25,7 @@ fi
 
 SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
-IUSE="+bullet +dds +fluid +openexr +tbb -vulkan
-	experimental
+IUSE="+bullet +dds +fluid +openexr +tbb -vulkan experimental
 	alembic collada +color-management cuda +cycles cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
@@ -49,7 +48,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 RDEPEND="${PYTHON_DEPS}
 	dev-libs/boost:=[nls?]
 	dev-libs/lzo:2=
-	>=dev-util/glslang-1.3.261
 	$(python_gen_cond_dep '
 		dev-python/cython[${PYTHON_USEDEP}]
 		dev-python/numpy[${PYTHON_USEDEP}]
@@ -113,12 +111,10 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-		>=media-libs/shaderc-2022.3
-		>=dev-util/spirv-tools-1.3.261
-		>=dev-util/spirv-headers-1.3.261
-		>=dev-util/glslang-1.3.261
-		>=dev-util/vulkan-headers-1.3.261
-		>=media-libs/vulkan-loader-1.3.261
+		media-libs/shaderc
+		dev-util/spirv-tools
+		dev-util/glslang
+		media-libs/vulkan-loader
 	)
 	X? (
 		x11-libs/libX11
@@ -143,6 +139,10 @@ BDEPEND="
 		dev-texlive/texlive-latexextra
 	)
 	nls? ( sys-devel/gettext )
+	vulkan? (
+		dev-util/spirv-headers
+		dev-util/vulkan-headers
+	)
 	wayland? (
 		dev-util/wayland-scanner
 	)
@@ -239,7 +239,6 @@ src_configure() {
 	append-lfs-flags
 	blender_get_version
 
-	# todo: fix shaderc and glslang for vulkan
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=OFF
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
