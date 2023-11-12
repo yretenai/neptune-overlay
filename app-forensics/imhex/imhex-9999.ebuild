@@ -19,7 +19,6 @@ IUSE="+system-llvm"
 
 PATCHES=(
 	"${FILESDIR}/require-llvm-16.patch"
-	"${FILESDIR}/remove-Werror.patch"
 )
 
 DEPEND="
@@ -53,6 +52,14 @@ pkg_pretend() {
 	if tc-is-gcc && [[ $(gcc-major-version) -lt 12 ]]; then
 		die "${PN} requires GCC 12 or newer"
 	fi
+}
+
+src_prepare() {
+	cmake_src_prepare
+
+	sed -e "s| -Werror||g" -i cmake/build_helpers.cmake || die
+	sed -e "s| -Werror||g" -i lib/external/pattern_language/lib/CMakeLists.txt || die
+	sed -e "s| -Werror||g" -i lib/external/pattern_language/cli/CMakeLists.txt || die
 }
 
 src_configure() {

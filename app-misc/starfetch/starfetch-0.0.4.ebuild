@@ -21,6 +21,10 @@ src_prepare() {
 	sed -e "s|/usr/local/share/starfetch|${EPREFIX}/usr/share/${PN}|" -i src/starfetch.cpp || die
 }
 
+src_compile() {
+	emake PREFIX="${EPREFIX}/usr" || die
+}
+
 src_install() {
 	dobin starfetch
 	insinto "${EPREFIX}"/usr/share/${PN}; doins -r res/*

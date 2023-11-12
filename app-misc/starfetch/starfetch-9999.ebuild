@@ -7,7 +7,8 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 else
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/Haruno19/starfetch.git"
+	EGIT_REPO_URI="https://github.com/yretenai/starfetch.git"
+	# EGIT_REPO_URI="https://github.com/Haruno19/starfetch.git"
 fi
 
 DESCRIPTION="command line tool that displays constellations"
@@ -19,6 +20,10 @@ src_prepare() {
 	default
 
 	sed -e "s|/usr/local/share/starfetch|${EPREFIX}/usr/share/${PN}|" -i src/starfetch.cpp || die
+}
+
+src_compile() {
+	emake PREFIX="${EPREFIX}/usr" || die
 }
 
 src_install() {
