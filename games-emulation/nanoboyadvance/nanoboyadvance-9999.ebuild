@@ -34,11 +34,8 @@ DEPEND="
 		dev-qt/qtopengl:5
 	)
 	qt6? (
-		dev-qt/qtcore:6
-		dev-qt/qtgui:6
-		dev-qt/qtwidgets:6
-		dev-qt/qtopengl:6
-		dev-qt/qtopenglwidgets:6
+		dev-qt/qtbase:6[gui,opengl,widgets]
+		dev-qt/qt5compat:6
 	)
 "
 RDEPEND="${DEPEND}"
