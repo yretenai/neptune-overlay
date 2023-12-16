@@ -1,14 +1,13 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# TODO(ada): Fix HIP, see note below
 # TODO(???): Check CUDA, I (Ada) do not have a CUDA-capable GPU to test this on.
 # TODO(ada): Fix AMDGPU_TARGETS being hardcoded -> https://github.com/OpenImageDenoise/oidn/blob/v2.1.0/devices/hip/CMakeLists.txt#L24-L29
 # TODO(ada): Only use openimageio if examples is also set.
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_COMPAT=( python3_{9..12} )
 
 ROCM_VERSION="5.7.1"
 
@@ -26,15 +25,10 @@ else
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 fi
 
-# NOTE: HIP is explicitly disabled because of an error that I need to fix.
-# -> reinterpret_cast cannot resolve overloaded function 'powf' to type 'uintptr_t' (aka 'unsigned long')
-# https://github.com/OpenImageDenoise/mkl-dnn/blob/9bea36e6b8e341953f922ce5c6f5dbaca9179a86/src/cpu/x64/injectors/jit_uni_eltwise_injector.cpp#L1084
-# this should be reinterpret_cast<uintptr_t>(static_cast<float(*)(float, float)>(powf))
-IUSE="-hip cuda sycl examples openimageio"
+IUSE="hip cuda sycl examples openimageio"
 LICENSE="Apache-2.0"
 SLOT="0"
 REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} )"
-# check if it all still compiles with hipcc as CXX, otherwise add ^^ ( hip cuda sycl )
 
 RDEPEND="${PYTHON_DEPS}
 	openimageio? ( media-libs/openimageio )
@@ -62,15 +56,14 @@ src_configure() {
 
 	if use hip; then
 		mycmakeargs+=(
-			-DOIDN_DEVICE_HIP_COMPILER=hipcc
+			-DOIDN_DEVICE_HIP_COMPILER="$(hipconfig -p)/bin/hipcc"
 			-DGPU_TARGETS="$(get_amdgpu_flags)"
 			-DAMDGPU_TARGETS="$(get_amdgpu_flags)" # unsure if these are used, they're SET() not OPTION()
 		)
 
 		addpredict /dev/kfd
-		addpredict /dev/dri/
-		export ROCM_PATH="$(hipconfig -p)"
-		export CXX=hipcc # <-- this is needed in addition to OIDN_DEVICE_HIP_COMPILER
+		addpredict /dev/dri
+		export ROCM_PATH="$(hipconfig -R)"
 	fi
 
 	cmake_src_configure
