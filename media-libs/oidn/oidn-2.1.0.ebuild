@@ -34,6 +34,7 @@ IUSE="-hip cuda sycl examples openimageio"
 LICENSE="Apache-2.0"
 SLOT="0"
 REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} )"
+# check if it all still compiles with hipcc as CXX, otherwise add ^^ ( hip cuda sycl )
 
 RDEPEND="${PYTHON_DEPS}
 	openimageio? ( media-libs/openimageio )
@@ -51,12 +52,6 @@ BDEPEND="
 "
 
 src_configure() {
-	if use hip; then
-		addpredict /dev/kfd
-		addpredict /dev/dri/
-		export ROCM_PATH="$(hipconfig -p)"
-	fi
-
 	local mycmakeargs=(
 		-DOIDN_DEVICE_CUDA=$(usex cuda)
 		-DOIDN_DEVICE_HIP=$(usex hip)
@@ -72,6 +67,9 @@ src_configure() {
 			-DAMDGPU_TARGETS="$(get_amdgpu_flags)" # unsure if these are used, they're SET() not OPTION()
 		)
 
+		addpredict /dev/kfd
+		addpredict /dev/dri/
+		export ROCM_PATH="$(hipconfig -p)"
 		export CXX=hipcc # <-- this is needed in addition to OIDN_DEVICE_HIP_COMPILER
 	fi
 
