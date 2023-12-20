@@ -1,0 +1,161 @@
+diff --git a/Makefile b/Makefile
+index 81bf9c8..e6fedde 100644
+--- a/Makefile
++++ b/Makefile
+@@ -37,7 +37,7 @@ PREFIX  ?= /usr/local
+ VOID    := /dev/null
+ 
+ PRGDIR  = programs
+-LIBDIR  = lib
++LIZARDDIR  = lib
+ TESTDIR = tests
+ 
+ 
+@@ -56,7 +56,7 @@ default: lizard
+ all: lib lizard
+ 
+ lib:
+-	@$(MAKE) -C $(LIBDIR) all
++	@$(MAKE) -C $(LIZARDDIR) all
+ 
+ lizard:
+ 	@$(MAKE) -C $(PRGDIR)
+@@ -65,7 +65,7 @@ lizard:
+ clean:
+ 	@$(MAKE) -C $(PRGDIR) $@ > $(VOID)
+ 	@$(MAKE) -C $(TESTDIR) $@ > $(VOID)
+-	@$(MAKE) -C $(LIBDIR) $@ > $(VOID)
++	@$(MAKE) -C $(LIZARDDIR) $@ > $(VOID)
+ 	@$(MAKE) -C examples $@ > $(VOID)
+ 	@$(RM) lizard$(EXT)
+ 	@echo Cleaning completed
+@@ -78,11 +78,11 @@ ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU OpenBSD FreeBSD Ne
+ HOST_OS = POSIX
+ 
+ install:
+-	@$(MAKE) -C $(LIBDIR) $@
++	@$(MAKE) -C $(LIZARDDIR) $@
+ 	@$(MAKE) -C $(PRGDIR) $@
+ 
+ uninstall:
+-	@$(MAKE) -C $(LIBDIR) $@
++	@$(MAKE) -C $(LIZARDDIR) $@
+ 	@$(MAKE) -C $(PRGDIR) $@
+ 
+ travis-install:
+@@ -93,13 +93,13 @@ test:
+ 
+ clangtest: clean
+ 	clang -v
+-	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(LIBDIR)  all CC=clang
++	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(LIZARDDIR)  all CC=clang
+ 	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(PRGDIR)  all CC=clang
+ 	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(TESTDIR) all CC=clang
+ 
+ clangtest-native: clean
+ 	clang -v
+-	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(LIBDIR)  all    CC=clang
++	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(LIZARDDIR)  all    CC=clang
+ 	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(PRGDIR)  native CC=clang
+ 	@CFLAGS="-O3 -Werror -Wconversion -Wno-sign-conversion" $(MAKE) -C $(TESTDIR) native CC=clang
+ 
+@@ -112,7 +112,7 @@ staticAnalyze: clean
+ platformTest: clean
+ 	@echo "\n ---- test lizard with $(CC) compiler ----"
+ 	@$(CC) -v
+-	CFLAGS="-O3 -Werror"         $(MAKE) -C $(LIBDIR) all
++	CFLAGS="-O3 -Werror"         $(MAKE) -C $(LIZARDDIR) all
+ 	CFLAGS="-O3 -Werror -static" $(MAKE) -C $(PRGDIR) native
+ 	CFLAGS="-O3 -Werror -static" $(MAKE) -C $(TESTDIR) native
+ 	$(MAKE) -C $(TESTDIR) test-platform
+@@ -121,7 +121,7 @@ versionsTest: clean
+ 	$(MAKE) -C $(TESTDIR) $@
+ 
+ examples:
+-	$(MAKE) -C $(LIBDIR)
++	$(MAKE) -C $(LIZARDDIR)
+ 	$(MAKE) -C $(PRGDIR) lizard
+ 	$(MAKE) -C examples test
+ 
+@@ -144,13 +144,13 @@ cmake:
+ 
+ gpptest: clean
+ 	g++ -v
+-	CC=g++ $(MAKE) -C $(LIBDIR)  all CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
++	CC=g++ $(MAKE) -C $(LIZARDDIR)  all CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
+ 	CC=g++ $(MAKE) -C $(PRGDIR)  all CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
+ 	CC=g++ $(MAKE) -C $(TESTDIR) all CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
+ 
+ gpptest-native: clean
+ 	g++ -v
+-	CC=g++ $(MAKE) -C $(LIBDIR)  all    CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
++	CC=g++ $(MAKE) -C $(LIZARDDIR)  all    CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
+ 	CC=g++ $(MAKE) -C $(PRGDIR)  native CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
+ 	CC=g++ $(MAKE) -C $(TESTDIR) native CFLAGS="-O3 -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror"
+ 
+diff --git a/programs/Makefile b/programs/Makefile
+index 313f83c..caa8d0c 100644
+--- a/programs/Makefile
++++ b/programs/Makefile
+@@ -29,16 +29,16 @@
+ # ##########################################################################
+ 
+ VOID = /dev/null
+-LIBDIR  := ../lib
+-ENTROPY_FILES := $(LIBDIR)/entropy/*.c
+-#TEST_CODEWORDS := $(LIBDIR)/test/*.h
++LIZARDDIR  := ../lib
++ENTROPY_FILES := $(LIZARDDIR)/entropy/*.c
++#TEST_CODEWORDS := $(LIZARDDIR)/test/*.h
+ 
+ CFLAGS  ?= -O3   # allows custom optimization flags. For example : CFLAGS="-O2 -g" make
+ CFLAGS  += -Wall -Wextra -Wundef -Wcast-qual -Wcast-align -Wshadow \
+            -Wswitch-enum -Wdeclaration-after-statement -Wstrict-prototypes \
+ 		   -Wpointer-arith -Wstrict-aliasing=1
+ CFLAGS  += $(MOREFLAGS)
+-CPPFLAGS:= -I$(LIBDIR) -DXXH_NAMESPACE=Lizard_
++CPPFLAGS:= -I$(LIZARDDIR) -DXXH_NAMESPACE=Lizard_
+ FLAGS   := $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
+ 
+ # Define *.exe as extension for Windows systems
+@@ -64,32 +64,32 @@ native: lizard
+ all: native m32
+ 
+ # dependencies
+-$(LIBDIR)/lizard_compress.o: $(LIBDIR)/lizard_compress.c $(LIBDIR)/lizard_common.h $(LIBDIR)/lizard_compress*.h $(LIBDIR)/lizard_parser_*.h $(TEST_CODEWORDS)
++$(LIZARDDIR)/lizard_compress.o: $(LIZARDDIR)/lizard_compress.c $(LIZARDDIR)/lizard_common.h $(LIZARDDIR)/lizard_compress*.h $(LIZARDDIR)/lizard_parser_*.h $(TEST_CODEWORDS)
+ 	$(CC) $(FLAGS) $< -c -o $@
+ 
+-$(LIBDIR)/lizard_compress32.o: $(LIBDIR)/lizard_compress.c $(LIBDIR)/lizard_common.h $(LIBDIR)/lizard_compress*.h $(LIBDIR)/lizard_parser_*.h $(TEST_CODEWORDS)
++$(LIZARDDIR)/lizard_compress32.o: $(LIZARDDIR)/lizard_compress.c $(LIZARDDIR)/lizard_common.h $(LIZARDDIR)/lizard_compress*.h $(LIZARDDIR)/lizard_parser_*.h $(TEST_CODEWORDS)
+ 	$(CC) -m32 $(FLAGS) $< -c -o $@
+ 
+-$(LIBDIR)/lizard_decompress.o: $(LIBDIR)/lizard_decompress.c $(LIBDIR)/lizard_compress.h $(LIBDIR)/lizard_common.h $(LIBDIR)/lizard_decompress*.h $(TEST_CODEWORDS)
++$(LIZARDDIR)/lizard_decompress.o: $(LIZARDDIR)/lizard_decompress.c $(LIZARDDIR)/lizard_compress.h $(LIZARDDIR)/lizard_common.h $(LIZARDDIR)/lizard_decompress*.h $(TEST_CODEWORDS)
+ 	$(CC) $(FLAGS) $(ALIGN_LOOP) $< -c -o $@
+ 
+-$(LIBDIR)/lizard_decompress32.o: $(LIBDIR)/lizard_decompress.c $(LIBDIR)/lizard_compress.h $(LIBDIR)/lizard_common.h $(LIBDIR)/lizard_decompress*.h $(TEST_CODEWORDS)
++$(LIZARDDIR)/lizard_decompress32.o: $(LIZARDDIR)/lizard_decompress.c $(LIZARDDIR)/lizard_compress.h $(LIZARDDIR)/lizard_common.h $(LIZARDDIR)/lizard_decompress*.h $(TEST_CODEWORDS)
+ 	$(CC) -m32 $(FLAGS) $< -c -o $@
+ 
+ 
+ 
+-lizard: $(LIBDIR)/lizard_decompress.o $(LIBDIR)/lizard_compress.o $(LIBDIR)/lizard_frame.o $(LIBDIR)/xxhash/xxhash.o bench.o lizardio.o lizardcli.o datagen.o $(ENTROPY_FILES)
++lizard: $(LIZARDDIR)/lizard_decompress.o $(LIZARDDIR)/lizard_compress.o $(LIZARDDIR)/lizard_frame.o $(LIZARDDIR)/xxhash/xxhash.o bench.o lizardio.o lizardcli.o datagen.o $(ENTROPY_FILES)
+ 	$(CC) $(FLAGS) $^ -o $@$(EXT)
+ 
+-lizardnohuf: $(LIBDIR)/lizard_decompress.c $(LIBDIR)/lizard_compress.c $(LIBDIR)/lizard_frame.o $(LIBDIR)/xxhash/xxhash.o bench.c lizardio.o lizardcli.c datagen.o
++lizardnohuf: $(LIZARDDIR)/lizard_decompress.c $(LIZARDDIR)/lizard_compress.c $(LIZARDDIR)/lizard_frame.o $(LIZARDDIR)/xxhash/xxhash.o bench.c lizardio.o lizardcli.c datagen.o
+ 	$(CC) -DLIZARD_NO_HUFFMAN $(FLAGS) $^ -o $@$(EXT)
+ 
+-lizardc32: $(LIBDIR)/lizard_decompress32.o $(LIBDIR)/lizard_compress32.o $(LIBDIR)/lizard_frame.c $(LIBDIR)/xxhash/xxhash.c bench.c lizardio.c lizardcli.c datagen.c $(ENTROPY_FILES)
++lizardc32: $(LIZARDDIR)/lizard_decompress32.o $(LIZARDDIR)/lizard_compress32.o $(LIZARDDIR)/lizard_frame.c $(LIZARDDIR)/xxhash/xxhash.c bench.c lizardio.c lizardcli.c datagen.c $(ENTROPY_FILES)
+ 	$(CC) -m32 $(FLAGS) $^ -o $@$(EXT)
+ 
+ 
+ clean:
+-	@$(MAKE) -C $(LIBDIR) $@ > $(VOID)
++	@$(MAKE) -C $(LIZARDDIR) $@ > $(VOID)
+ 	@rm -f core *.o *.test tmp* \
+         lizard$(EXT) lizardc32$(EXT) \
+ 	@echo Cleaning completed
