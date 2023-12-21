@@ -16,24 +16,24 @@ LICENSE="AGPL3"
 SLOT="0"
 KEYWORDS="amd64"
 RESTRICT="bindist mirror strip test"
-IUSE=""
+IUSE="heif ffmpeg pdf"
 
 RDEPEND="
 	sys-libs/glibc
 	x11-libs/cairo
-	media-video/ffmpeg
+	ffmpeg? ( media-video/ffmpeg )
 	x11-libs/gdk-pixbuf:2
 	dev-libs/glib:2
 	x11-libs/gtk+:3
 	x11-libs/libX11
 	x11-libs/libxcb
-	media-libs/libheif
+	heif? ( media-libs/libheif )
 	dev-libs/openssl
 	net-libs/webkit-gtk:4/37
 	net-libs/libsoup:2.4
 "
 
-# TODO: libpdfium????
+# TODO: spacedrive uses libpdfium, we could use the provided libpdfium.so but i don't want to.
 
 QA_PREBUILT="*"
 
