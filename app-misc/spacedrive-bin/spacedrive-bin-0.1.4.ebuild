@@ -52,7 +52,6 @@ src_install() {
 
 	insinto /usr
 	gzip -d usr/share/man/man1/${MY_PN}.1.gz || die
-	doman usr/share/man/man1/${MY_PN}.1 && rm usr/share/man/man1/${MY_PN}.1
 	rm -rf usr/share/doc
 	doins -r usr/share
 }
