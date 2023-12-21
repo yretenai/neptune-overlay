@@ -46,6 +46,11 @@ src_unpack() {
 src_install() {
 	exeinto /usr/bin
 	doexe usr/bin/${MY_PN}
+	if use pdf; then
+		exeinto /usr/lib/spacedrive
+		doexe usr/lib/spacedrive/libpdfium.so
+	fi
+
 	insinto /usr
 	gzip -d usr/share/man/man1/${MY_PN}.1.gz || die
 	doman usr/share/man/man1/${MY_PN}.1 && rm usr/share/man/man1/${MY_PN}.1
