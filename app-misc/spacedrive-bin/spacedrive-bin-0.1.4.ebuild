@@ -44,8 +44,7 @@ src_unpack() {
 }
 
 src_install() {
-	exeinto /usr/bin
-	doexe usr/bin/${MY_PN}
+	dobin usr/bin/${MY_PN}
 	if use pdf; then
 		exeinto /usr/lib/spacedrive
 		doexe usr/lib/spacedrive/libpdfium.so
