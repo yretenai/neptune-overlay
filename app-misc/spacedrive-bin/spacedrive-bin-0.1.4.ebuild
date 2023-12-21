@@ -52,7 +52,3 @@ src_install() {
 	rm -rf usr/share/doc
 	doins -r usr/share
 }
-
-pkg_postinst() {
-	xdg_pkg_postinst
-}
