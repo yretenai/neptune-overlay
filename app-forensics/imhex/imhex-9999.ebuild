@@ -3,15 +3,39 @@
 
 EAPI=8
 
+DOTNET_PKG_COMPAT="7.0"
 CMAKE_BUILD_TYPE="Release"
 CMAKE_MAKEFILE_GENERATOR="emake"
+NUGETS="
+microsoft.aspnetcore.app.ref@7.0.14
+microsoft.aspnetcore.app.runtime.linux-arm64@7.0.14
+microsoft.aspnetcore.app.runtime.linux-arm@7.0.14
+microsoft.aspnetcore.app.runtime.linux-musl-arm64@7.0.14
+microsoft.aspnetcore.app.runtime.linux-musl-arm@7.0.14
+microsoft.aspnetcore.app.runtime.linux-musl-x64@7.0.14
+microsoft.aspnetcore.app.runtime.linux-x64@7.0.14
+microsoft.netcore.app.host.linux-arm64@7.0.14
+microsoft.netcore.app.host.linux-arm@7.0.14
+microsoft.netcore.app.host.linux-musl-arm64@7.0.14
+microsoft.netcore.app.host.linux-musl-arm@7.0.14
+microsoft.netcore.app.host.linux-musl-x64@7.0.14
+microsoft.netcore.app.host.linux-x64@7.0.14
+microsoft.netcore.app.ref@7.0.14
+microsoft.netcore.app.runtime.linux-arm64@7.0.14
+microsoft.netcore.app.runtime.linux-arm@7.0.14
+microsoft.netcore.app.runtime.linux-musl-arm64@7.0.14
+microsoft.netcore.app.runtime.linux-musl-arm@7.0.14
+microsoft.netcore.app.runtime.linux-musl-x64@7.0.14
+microsoft.netcore.app.runtime.linux-x64@7.0.14
+"
 
-inherit cmake llvm toolchain-funcs desktop git-r3
+inherit dotnet-pkg cmake llvm toolchain-funcs desktop git-r3
 
 DESCRIPTION="A hex editor for reverse engineers, programmers, and eyesight"
 HOMEPAGE="https://github.com/WerWolv/ImHex"
 
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
+SRC_URI="${NUGET_URIS}"
 
 SLOT="0"
 LICENSE="GPL-2"
@@ -48,18 +72,32 @@ BDEPEND="
 	dev-util/ccache
 "
 
+DOTNET_PKG_PROJECTS=( "${S}/plugins/script_loader/dotnet/AssemblyLoader/AssemblyLoader.csproj" )
+
 pkg_pretend() {
 	if tc-is-gcc && [[ $(gcc-major-version) -lt 12 ]]; then
 		die "${PN} requires GCC 12 or newer"
 	fi
 }
 
-src_prepare() {
-	cmake_src_prepare
+# never gets called
+pkg_setup() {
+	dotnet-pkg-base_setup
+}
 
+src_unpack() {
+	git-r3_src_unpack
+	dotnet-pkg_src_unpack
+}
+
+src_prepare() {
 	sed -e "s| -Werror||g" -i cmake/build_helpers.cmake || die
 	sed -e "s| -Werror||g" -i lib/external/pattern_language/lib/CMakeLists.txt || die
 	sed -e "s| -Werror||g" -i lib/external/pattern_language/cli/CMakeLists.txt || die
+	sed -e "s|^add_dotnet_assembly|#|g" -i plugins/script_loader/dotnet/CMakeLists.txt || die
+	sed -e "s|add_dependencies|#|g" -i plugins/script_loader/CMakeLists.txt || die
+
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -82,6 +120,7 @@ src_configure() {
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
 		-D IMHEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
 		-D IMHEX_STRICT_WARNINGS=OFF \
+		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_VERSION="${PV}" \
 		-D PROJECT_VERSION="${PV}" \
 		-D USE_SYSTEM_CAPSTONE=ON \
@@ -93,10 +132,17 @@ src_configure() {
 	)
 
 	cmake_src_configure
+	dotnet-pkg_src_configure
+}
+
+# again, calling both because dotnet will never be called apparently?
+src_compile() {
+	cmake_src_compile
+	dotnet-pkg_src_compile
 }
 
 src_install() {
 	cmake_src_install
-
+	dotnet-pkg-base_install "/usr/$(get_libdir)/imhex/plugins/"
 	domenu "${S}/dist/${PN}.desktop"
 }
