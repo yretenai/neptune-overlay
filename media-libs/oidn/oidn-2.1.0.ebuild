@@ -36,7 +36,7 @@ RDEPEND="${PYTHON_DEPS}
 		virtual/opencl
 		dev-libs/intel-compute-runtime
 	)
-	hip? ( dev-util/hip )
+	hip? ( >=dev-util/hip-5.5.0 )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	dev-cpp/tbb:=
 	dev-lang/ispc"
