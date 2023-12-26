@@ -45,6 +45,10 @@ BDEPEND="
 	hip? ( dev-util/hip )
 "
 
+PATCHES=(
+	"${FILESDIR}/fix-hip.patch"
+)
+
 src_configure() {
 	local mycmakeargs=(
 		-DOIDN_DEVICE_CUDA=$(usex cuda)
