@@ -37,6 +37,7 @@ src_unpack() {
 }
 
 src_install() {
+	find "${S}" -iname ".git" -type d -exec rm -rf {} \; &> /dev/null
 	insinto /usr/share/imhex
 	rm -rf "${S}/tests"
 	doins -r "${S}"/*
