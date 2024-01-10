@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 567a58d..dda8453 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -189,14 +189,15 @@ if (WHISPER_BLAS)
+         set(BLA_SIZEOF_INTEGER 8)
+         set(BLA_PREFER_PKGCONFIG 1)
+         find_package(BLAS)
++        find_library(OPENBLAS openblas)
+ 
+         if(BLAS_FOUND)
+             message(STATUS "BLAS compatible library found")
+-            message(STATUS "Libraries ${BLAS_LIBRARIES}")
++            message(STATUS "Libraries ${BLAS_LIBRARIES} ${OPENBLAS}")
+             find_path(BLAS_INCLUDE_DIRS cblas.h /usr/include/openblas /usr/local/include/openblas $ENV{BLAS_HOME}/include)
+             set(WHISPER_EXTRA_FLAGS ${WHISPER_EXTRA_FLAGS} -DGGML_USE_OPENBLAS)
+             include_directories(${BLAS_INCLUDE_DIRS})
+-            set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES})
++            set(WHISPER_EXTRA_LIBS ${WHISPER_EXTRA_LIBS} ${BLAS_LIBRARIES} ${OPENBLAS})
+         else()
+             message(FATAL_ERROR "BLAS library was not found")
+         endif()
