@@ -29,7 +29,10 @@ RDEPEND="
 	x11-libs/libxcb
 	heif? ( media-libs/libheif )
 	dev-libs/openssl
-	net-libs/webkit-gtk:4/37
+	|| (
+		net-libs/webkit-gtk:4
+		net-libs/webkit-gtk:4.1
+	)
 	net-libs/libsoup:2.4
 "
 
