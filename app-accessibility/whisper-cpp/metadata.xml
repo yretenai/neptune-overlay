@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>ada@chronovore.dev</email>
+		<name>Ada Ahmed</name>
+	</maintainer>
+	<upstream>
+		<changelog>https://github.com/ggerganov/whisper.cpp/releases</changelog>
+		<bugs-to>https://github.com/ggerganov/whisper.cpp/issues</bugs-to>
+		<remote-id type="github">ggerganov/whisper.cpp</remote-id>
+	</upstream>
+	<use>
+		<flag name="hip">Enable ROCM HIP support (computation on GPU)</flag>
+		<flag name="models">Download Whisper GGML models (virtual)</flag>
+		<flag name="openblas">Enable openBLAS support (computation on GPU)</flag>
+		<flag name="sdl2">Enable SDL2 example programs</flag>
+		<flag name="torch">Install scripts for use with PyTorch</flag>
+	</use>
+</pkgmetadata>

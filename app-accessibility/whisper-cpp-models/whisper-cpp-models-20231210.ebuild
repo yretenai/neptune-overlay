@@ -33,6 +33,8 @@ for i in ${MODELS[@]}; do
 	use_default=""
 	if [ "$i" == "base" ]; then
 		use_default="+"
+	elif [ "$i" == "base-en" ]; then
+		use_default="+"
 	elif [ "$i" == "large*" ]; then
 		use_default="-"
 	fi
