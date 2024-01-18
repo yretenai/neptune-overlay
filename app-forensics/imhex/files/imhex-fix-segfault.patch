@@ -1,0 +1,13 @@
+diff --git a/lib/libimhex/source/api/plugin_manager.cpp b/lib/libimhex/source/api/plugin_manager.cpp
+index f9ed8636..d2b4e07c 100644
+--- a/lib/libimhex/source/api/plugin_manager.cpp
++++ b/lib/libimhex/source/api/plugin_manager.cpp
+@@ -186,6 +186,8 @@ namespace hex {
+     std::span<SubCommand> Plugin::getSubCommands() const {
+         if (m_functions.getSubCommandsFunction != nullptr) {
+             const auto result = m_functions.getSubCommandsFunction();
++            if (result == nullptr)
++                return { };
+ 
+             return *static_cast<std::vector<SubCommand>*>(result);
+         } else {

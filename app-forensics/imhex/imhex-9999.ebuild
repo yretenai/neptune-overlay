@@ -51,6 +51,7 @@ LICENSE="GPL-2"
 IUSE="+system-llvm"
 
 PATCHES=(
+	"${FILESDIR}/imhex-fix-segfault.patch"
 	"${FILESDIR}/require-llvm-16.patch"
 )
 
