@@ -1,0 +1,12 @@
+diff --git a/src/nba/src/hw/apu/apu.hpp b/src/nba/src/hw/apu/apu.hpp
+index 789e940..08ea000 100644
+--- a/src/nba/src/hw/apu/apu.hpp
++++ b/src/nba/src/hw/apu/apu.hpp
+@@ -7,6 +7,7 @@
+ 
+ #pragma once
+ 
++#include <algorithm>
+ #include <nba/common/dsp/resampler.hpp>
+ #include <nba/common/dsp/ring_buffer.hpp>
+ #include <nba/config.hpp>

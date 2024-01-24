@@ -17,6 +17,9 @@ fi
 IUSE="qt6 +qt5"
 REQUIRED_USE="^^ ( qt6 qt5 )"
 
+PATCHES=(
+       "${FILESDIR}/9999-add-algorithms.patch"
+)
 
 LICENSE="GPL-3"
 SLOT="0"
