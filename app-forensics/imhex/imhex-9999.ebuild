@@ -50,10 +50,6 @@ SLOT="0"
 LICENSE="GPL-2"
 IUSE="+system-llvm"
 
-PATCHES=(
-	"${FILESDIR}/require-llvm-16.patch"
-)
-
 DEPEND="
 	app-forensics/yara
 	>=dev-cpp/nlohmann_json-3.10.2
