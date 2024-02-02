@@ -214,6 +214,7 @@ src_prepare() {
 		-e "s|blender.svg|blender-${BV}.svg|" \
 		-e "s|blender-symbolic.svg|blender-${BV}-symbolic.svg|" \
 		-e "s|blender.desktop|blender-${BV}.desktop|" \
+		-e "s|org.blender.Blender.metainfo.xml|blender-${BV}.metainfo.xml|" \
 		-i source/creator/CMakeLists.txt || die
 
 	sed \
@@ -229,6 +230,7 @@ src_prepare() {
 		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg \
 		"release/freedesktop/icons/symbolic/apps/blender-${BV}-symbolic.svg" || die
 	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
+	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml" || die
 
 	if use test; then
 		# Without this the tests will try to use /usr/bin/blender and /usr/share/blender/ to run the tests.
