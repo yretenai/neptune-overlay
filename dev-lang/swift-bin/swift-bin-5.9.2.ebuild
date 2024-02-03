@@ -83,9 +83,8 @@ src_install() {
 	doexe ${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace \
 		${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace-static
 
-	doheader -r ${WORKDIR}/${SWIFTDIR}/usr/include
-	insinto /usr/include/swift
-	doins -r /usr/include/swift
+	doheader -r ${WORKDIR}/${SWIFTDIR}/usr/include/SourceKit
+	doheader -r ${WORKDIR}/${SWIFTDIR}/usr/include/swift
 
 	insinto /usr/lib
 	doins -r ${WORKDIR}/${SWIFTDIR}/usr/lib/swift \
