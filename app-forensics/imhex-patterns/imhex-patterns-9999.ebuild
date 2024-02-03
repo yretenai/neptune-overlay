@@ -8,15 +8,20 @@ HOMEPAGE="https://imhex.werwolv.net/"
 SLOT="0"
 KEYWORDS="amd64 arm arm64"
 
-inherit git-r3
+inherit git-r3 vcs-clean
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex-Patterns.git"
 S="${WORKDIR}/${P}"
 
 LICENSE="|| ( GPL-2 )"
 
-# RDEPEND="
-# 	app-forensics/imhex
-# "
+RDEPEND="
+	app-forensics/imhex
+"
+
+src_prepare() {
+	default
+	egit_clean
+}
 
 src_install() {
 	insinto /usr/share/imhex

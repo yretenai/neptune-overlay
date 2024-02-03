@@ -29,7 +29,7 @@ microsoft.netcore.app.runtime.linux-musl-x64@7.0.14
 microsoft.netcore.app.runtime.linux-x64@7.0.14
 "
 
-inherit dotnet-pkg cmake llvm toolchain-funcs desktop
+inherit dotnet-pkg cmake llvm toolchain-funcs desktop vcs-clean
 
 DESCRIPTION="A hex editor for reverse engineers, programmers, and eyesight"
 HOMEPAGE="https://github.com/WerWolv/ImHex"
@@ -48,10 +48,9 @@ fi
 
 SLOT="0"
 LICENSE="GPL-2"
-IUSE="+system-llvm"
+IUSE="+system-llvm lto"
 
 DEPEND="
-	app-forensics/yara
 	app-forensics/pattern-language
 	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/capstone
@@ -94,6 +93,7 @@ pkg_setup() {
 src_unpack() {
 	git-r3_src_unpack
 	dotnet-pkg_src_unpack
+	egit_clean "${S}/lib"
 }
 
 src_prepare() {
@@ -116,7 +116,7 @@ src_configure() {
 		-D CMAKE_OBJC_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_OBJCXX_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_SKIP_RPATH=ON \
-		-D IMHEX_PLUGINS_IN_SHARE=OFF \
+		-D IMHEX_PLUGINS_IN_SHARE=ON \
 		-D IMHEX_STRIP_RELEASE=OFF \
 		-D IMHEX_OFFLINE_BUILD=ON \
 		-D IMHEX_IGNORE_BAD_CLONE=ON \
@@ -127,6 +127,8 @@ src_configure() {
 		-D IMHEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
 		-D IMHEX_STRICT_WARNINGS=OFF \
 		-D IMHEX_BUNDLE_DOTNET=OFF \
+		-D IMHEX_ENABLE_LTO=$(usex lto) \
+		-D IMHEX_ENABLE_UNITY_BUILD=OFF \
 		-D IMHEX_VERSION="${PV}" \
 		-D PROJECT_VERSION="${PV}" \
 		-D USE_SYSTEM_CAPSTONE=ON \
@@ -134,7 +136,8 @@ src_configure() {
 		-D USE_SYSTEM_LLVM=$(use system-llvm) \
 		-D USE_SYSTEM_NFD=ON \
 		-D USE_SYSTEM_NLOHMANN_JSON=ON \
-		-D USE_SYSTEM_YARA=ON
+		-D USE_SYSTEM_NFD=ON \
+		-D USE_SYSTEM_YARA=OFF
 	)
 
 	cmake_src_configure

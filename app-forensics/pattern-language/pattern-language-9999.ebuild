@@ -22,7 +22,7 @@ fi
 
 SLOT="0"
 LICENSE="LGPL-2.1"
-IUSE="+system-llvm"
+IUSE=""
 
 DEPEND="
 	>=dev-cpp/nlohmann_json-3.10.2
@@ -30,7 +30,6 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
-	system-llvm? ( <sys-devel/llvm-17 )
 	sys-devel/lld
 "
 
@@ -64,9 +63,15 @@ src_configure() {
 		-D LIBPL_ENABLE_EXAMPLE=OFF \
 		-D PROJECT_VERSION="${PV}" \
 		-D USE_SYSTEM_FMT=ON \
-		-D USE_SYSTEM_LLVM=$(use system-llvm) \
 		-D USE_SYSTEM_NLOHMANN_JSON=ON \
 	)
 
 	cmake_src_configure
+}
+
+src_install() {
+	default
+	cmake_src_install
+	doheader -r lib/include/pl
+	doheader lib/include/pl.hpp
 }
