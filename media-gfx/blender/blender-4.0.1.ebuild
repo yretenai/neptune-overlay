@@ -218,7 +218,7 @@ src_prepare() {
 		-i source/creator/CMakeLists.txt || die
 
 	sed \
-		-e "s|Name=Blender|Name=Blender ${PV}|" \
+		-e "s|Name=Blender|Name=Blender ${BV}|" \
 		-e "s|Exec=blender|Exec=blender-${BV}|" \
 		-e "s|Icon=blender|Icon=blender-${BV}|" \
 		-i release/freedesktop/blender.desktop || die
