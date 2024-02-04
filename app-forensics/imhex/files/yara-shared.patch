@@ -1,0 +1,14 @@
+diff --git a/plugins/yara_rules/CMakeLists.txt b/plugins/yara_rules/CMakeLists.txt
+index 6bec8ab8..0d50e9d4 100644
+--- a/plugins/yara_rules/CMakeLists.txt
++++ b/plugins/yara_rules/CMakeLists.txt
+@@ -6,7 +6,8 @@ if (NOT USE_SYSTEM_YARA)
+     add_subdirectory(${THIRD_PARTY_LIBS_FOLDER}/yara ${CMAKE_CURRENT_BINARY_DIR}/yara EXCLUDE_FROM_ALL)
+     set(YARA_LIBRARIES libyara)
+ else()
+-    find_package(Yara REQUIRED)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(YARA REQUIRED IMPORTED_TARGET yara)
+ endif()
+ 
+ add_imhex_plugin(

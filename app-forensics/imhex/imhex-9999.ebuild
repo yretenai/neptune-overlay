@@ -51,6 +51,7 @@ LICENSE="GPL-2"
 IUSE="+system-llvm lto"
 
 DEPEND="
+	app-forensics/yara
 	app-forensics/pattern-language
 	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/capstone
@@ -76,6 +77,11 @@ BDEPEND="
 	sys-devel/lld
 	dev-util/ccache
 "
+
+PATCHES=(
+	"${FILESDIR}/yara-shared.patch"
+	"${FILESDIR}/dont-ship-libpl.patch"
+)
 
 DOTNET_PKG_PROJECTS=( "${S}/plugins/script_loader/dotnet/AssemblyLoader/AssemblyLoader.csproj" )
 
@@ -137,7 +143,7 @@ src_configure() {
 		-D USE_SYSTEM_NFD=ON \
 		-D USE_SYSTEM_NLOHMANN_JSON=ON \
 		-D USE_SYSTEM_NFD=ON \
-		-D USE_SYSTEM_YARA=OFF
+		-D USE_SYSTEM_YARA=ON
 	)
 
 	cmake_src_configure

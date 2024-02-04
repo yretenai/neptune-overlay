@@ -1,0 +1,27 @@
+diff --git a/cmake/build_helpers.cmake b/cmake/build_helpers.cmake
+index ee125f29..86612e3a 100644
+--- a/cmake/build_helpers.cmake
++++ b/cmake/build_helpers.cmake
+@@ -611,15 +611,6 @@ macro(addBundledLibraries)
+     set(LIBPL_SHARED_LIBRARY ON CACHE BOOL "" FORCE)
+     add_subdirectory(${EXTERNAL_LIBS_FOLDER}/pattern_language EXCLUDE_FROM_ALL)
+ 
+-    install(
+-        TARGETS
+-            libpl
+-        DESTINATION
+-            "${CMAKE_INSTALL_LIBDIR}"
+-        PERMISSIONS
+-            OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+-    )
+-
+     if (WIN32)
+         set_target_properties(
+                 libpl
+@@ -745,4 +736,4 @@ endfunction()
+ function(addIncludesFromLibrary target library)
+     get_target_property(library_include_dirs ${library} INTERFACE_INCLUDE_DIRECTORIES)
+     target_include_directories(${target} PRIVATE ${library_include_dirs})
+-endfunction()
+\ No newline at end of file
++endfunction()
