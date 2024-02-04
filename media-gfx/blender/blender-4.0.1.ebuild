@@ -487,7 +487,7 @@ pkg_postrm() {
 
 	ewarn ""
 	ewarn "You may want to remove the following directory."
-	ewarn "~/.config/${PN}/${SLOT}/cache/"
+	ewarn "~/.config/${PN}/${BV}/cache/"
 	ewarn "It may contain extra render kernels not tracked by portage"
 	ewarn ""
 }
