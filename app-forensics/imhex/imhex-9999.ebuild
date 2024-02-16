@@ -80,7 +80,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/yara-shared.patch"
-	"${FILESDIR}/dont-ship-libpl.patch"
 )
 
 DOTNET_PKG_PROJECTS=( "${S}/plugins/script_loader/dotnet/AssemblyLoader/AssemblyLoader.csproj" )
