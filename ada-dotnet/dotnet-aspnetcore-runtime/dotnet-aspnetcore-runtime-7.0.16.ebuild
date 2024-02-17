@@ -7,8 +7,8 @@ MY_PV="${PV/-r*/}"
 
 inherit unpacker
 
-DESCRIPTION="dotnet cli utility"
-HOMEPAGE="https://github.com/dotnet/runtime"
+DESCRIPTION="dotnet aspnet core runtime"
+HOMEPAGE="https://github.com/dotnet/aspnetcore"
 SRC_URI="
 	amd64? (
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${PV}/aspnetcore-runtime-${PV}-linux-x64.tar.gz )

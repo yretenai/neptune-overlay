@@ -7,7 +7,7 @@ MY_PV="${PV/-r*/}"
 
 inherit unpacker
 
-DESCRIPTION="dotnet cli utility"
+DESCRIPTION="dotnet runtime"
 HOMEPAGE="https://github.com/dotnet/runtime"
 SRC_URI="
 	amd64? (

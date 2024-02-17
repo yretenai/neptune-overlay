@@ -4,12 +4,12 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DOTNET_PV="8.0.100"
+DOTNET_PV="8.0.201"
 
 inherit unpacker
 
-DESCRIPTION="dotnet cli utility"
-HOMEPAGE="https://github.com/dotnet/sdk"
+DESCRIPTION="dotnet standard"
+HOMEPAGE="https://github.com/dotnet/standard"
 SRC_URI="
 	amd64? (
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-x64.tar.gz )
