@@ -45,10 +45,13 @@ src_unpack() {
 
 src_install() {
 	dobin usr/bin/${MY_PN}
+	exeinto /usr/lib/spacedrive
 	if use pdf; then
-		exeinto /usr/lib/spacedrive
 		doexe usr/lib/spacedrive/libpdfium.so
 	fi
+	doexe usr/lib/spacedrive/libonnxruntime_providers_shared.so
+	doexe usr/lib/spacedrive/libonnxruntime.so.1.17.0
+	doexe usr/lib/spacedrive/libonnxruntime.so
 
 	insinto /usr
 	gzip -d usr/share/man/man1/${MY_PN}.1.gz || die
