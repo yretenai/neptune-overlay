@@ -35,13 +35,13 @@ QA_PREBUILT="*"
 S="${WORKDIR}"
 
 RDEPEND="
-	ada-dotnet/dotnet-cli-bin
-	ada-dotnet/dotnet-runtime:${SLOT}
+	neptune-dotnet/dotnet-cli-bin
+	neptune-dotnet/dotnet-runtime:${SLOT}
 "
 
 src_install() {
 	# install into existing dotnet env
-	local dest="opt/ada-dotnet"
+	local dest="opt/neptune-dotnet"
 	dodir "${dest%/*}"
 	insinto "${dest}/shared"
 	

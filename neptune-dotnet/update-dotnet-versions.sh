@@ -1,5 +1,5 @@
 #!/bin/zsh
-ADADOTNET_ROOT='/var/db/repos/neptune/ada-dotnet'
+ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
 DOTNET_6_0_VERSION=$(./dotnet-version.sh runtime "6.0")
 DOTNET_7_0_VERSION=$(./dotnet-version.sh runtime "7.0")
