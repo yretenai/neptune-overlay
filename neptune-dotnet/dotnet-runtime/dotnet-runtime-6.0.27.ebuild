@@ -7,7 +7,7 @@ MY_PV="${PV/-r*/}"
 
 inherit unpacker
 
-DESCRIPTION="dotnet cli utility"
+DESCRIPTION="dotnet runtime"
 HOMEPAGE="https://github.com/dotnet/runtime"
 SRC_URI="
 	amd64? (
@@ -25,28 +25,25 @@ SRC_URI="
 "
 
 LICENSE="MIT"
-SLOT="0"
+SDK_SLOT="$(ver_cut 1-2)"
+RUNTIME_SLOT="${SDK_SLOT}.0"
+SLOT="${SDK_SLOT}/${RUNTIME_SLOT}"
 KEYWORDS="amd64 arm arm64"
 RESTRICT="bindist mirror strip test"
-
-RDEPEND="
-	app-crypt/mit-krb5:0/0
-	dev-libs/icu
-	dev-util/lttng-ust:0/2.12
-	sys-libs/zlib:0/1
-"
 
 QA_PREBUILT="*"
 S="${WORKDIR}"
 
+RDEPEND="
+	neptune-dotnet/dotnet-cli-bin
+"
+
 src_install() {
-	local dest="opt/ada-dotnet"
-	dodir "${dest%/*}" "${dest%/*}/metadata" "${dest%/*}/"
-	exeinto "${dest}"
-	doexe dotnet
+	# install into existing dotnet env
+	local dest="opt/neptune-dotnet"
+	dodir "${dest%/*}"
 	insinto "${dest}"
-	doins LICENSE.txt ThirdPartyNotices.txt
-	echo "DOTNET_ROOT=\"/${dest}\"" > 99ada-dotnet
-	doenvd 99ada-dotnet
-	dosym "../../${dest}/dotnet" "/usr/bin/ada-dotnet"
+
+	# install dotnet packs
+	doins -r host shared
 }
