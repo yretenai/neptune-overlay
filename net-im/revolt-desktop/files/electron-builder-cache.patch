@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 97e6355..388766f 100644
+--- a/package.json
++++ b/package.json
+@@ -38,6 +38,9 @@
+     },
+     "productName": "Revolt",
+     "build": {
++        "electronDownload": {
++            "cache": "__T__/electron"
++        },
+         "appId": "chat.revolt.app",
+         "mac": {
+             "target": [
