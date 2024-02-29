@@ -10,7 +10,7 @@ inherit desktop unpacker xdg
 
 DESCRIPTION="Spacedrive is an open source cross-platform file explorer, powered by a virtual distributed filesystem written in Rust."
 HOMEPAGE="https://www.spacedrive.com/"
-SRC_URI="https://github.com/spacedriveapp/${MY_PN}/releases/download/${MY_PV}/${MY_PN^}-linux-x86_64.deb -> ${MY_PN^}.deb"
+SRC_URI="https://github.com/spacedriveapp/${MY_PN}/releases/download/${MY_PV}/${MY_PN^}-linux-x86_64.deb -> ${MY_PN^}-${MY_PV}.deb"
 
 LICENSE="AGPL3"
 SLOT="0"
