@@ -5,12 +5,14 @@ EAPI=8
 
 inherit desktop xdg
 
+T_PV="3.21-1"
+
 DESCRIPTION="Tixati is a New and Powerful P2P System"
 HOMEPAGE="https://www.tixati.com/"
-SRC_URI="https://download2.tixati.com/download/${PN}-3.19-1.x86_64.manualinstall.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN}-3.19-1.x86_64.manualinstall/"
+SRC_URI="https://download2.tixati.com/download/${PN}-${T_PV}.x86_64.manualinstall.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/${PN}-${T_PV}.x86_64.manualinstall/"
 
-LICENSE=""
+LICENSE="all-rights-reserved"
 
 SLOT="0"
 KEYWORDS="~amd64"

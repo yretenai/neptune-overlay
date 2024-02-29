@@ -12,7 +12,7 @@ inherit git-r3 vcs-clean
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex-Patterns.git"
 S="${WORKDIR}/${P}"
 
-LICENSE="|| ( GPL-2 )"
+LICENSE="GPL-2"
 
 RDEPEND="
 	app-forensics/imhex
