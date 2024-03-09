@@ -55,11 +55,11 @@ src_prepare() {
 }
 
 src_install() {
-	dobin ${WORKDIR}/${SWIFTDIR}/usr/bin/plutil \
+	dobin ${WORKDIR}/${SWIFTDIR}/usr/bin/docc \
+		${WORKDIR}/${SWIFTDIR}/usr/bin/plutil \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/repl_swift \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/sourcekit-lsp \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-api-checker.py \
-		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build-sdk-interfaces \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build-tool \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-demangle \
@@ -67,17 +67,22 @@ src_install() {
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-frontend \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-help \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package \
-		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package-collection \
-		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-run \
-		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-test
+		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-plugin-server
 
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift"
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-api-digester"
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-api-extract"
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-autolink-extract"
+	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-cache-tool"
+	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-symbolgraph-extract"
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swiftc"
-	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-symbolgraph-extract"
-	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-symbolgraph-extract"
+
+	dosym "swift-package" "${EPREFIX}/usr/bin/swift-build"
+	dosym "swift-package" "${EPREFIX}/usr/bin/swift-experimental-sdk"
+	dosym "swift-package" "${EPREFIX}/usr/bin/swift-package-collection"
+	dosym "swift-package" "${EPREFIX}/usr/bin/swift-package-registry"
+	dosym "swift-package" "${EPREFIX}/usr/bin/swift-run"
+	dosym "swift-package" "${EPREFIX}/usr/bin/swift-test"
 
 	exeinto /usr/libexec/swift/linux
 	doexe ${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace \
@@ -90,20 +95,22 @@ src_install() {
 	doins -r ${WORKDIR}/${SWIFTDIR}/usr/lib/swift \
 		${WORKDIR}/${SWIFTDIR}/usr/lib/swift_static
 
-	dolib.so ${WORKDIR}/${SWIFTDIR}/usr/lib/libIndexStore.so.13git \
+	dolib.so ${WORKDIR}/${SWIFTDIR}/usr/lib/libIndexStore.so.15git \
 		${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so \
 		${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so
 
-	dosym "../lib64/libIndexStore.so.13git" "${EPREFIX}/usr/lib/libIndexStore.so"
-	dosym "../lib64/libIndexStore.so.13git" "${EPREFIX}/usr/lib/libIndexStore.so.13git"
+	dosym "../lib64/libIndexStore.so.15git" "${EPREFIX}/usr/lib/libIndexStore.so"
 	dosym "../lib64/libsourcekitdInProc.so" "${EPREFIX}/usr/lib/libsourcekitdInProc.so"
 	dosym "../lib64/libswiftDemangle.so" "${EPREFIX}/usr/lib/libswiftDemangle.so"
+	# maybe do clang 15?
 	dosym "${EPREFIX}/usr/lib/clang/17" "${EPREFIX}/usr/lib/swift/clang"
 	dosym "${EPREFIX}/usr/lib/clang/17" "${EPREFIX}/usr/lib/swift_static/clang"
 
 	insinto /usr/share
 	doins -r ${WORKDIR}/${SWIFTDIR}/usr/share/icuswift \
-		${WORKDIR}/${SWIFTDIR}/usr/share/swift
+		${WORKDIR}/${SWIFTDIR}/usr/share/swift \
+		${WORKDIR}/${SWIFTDIR}/usr/share/docc \
+		${WORKDIR}/${SWIFTDIR}/usr/share/pm
 
 	dodoc -r ${WORKDIR}/${SWIFTDIR}/usr/share/doc/swift
 	doman ${WORKDIR}/${SWIFTDIR}/usr/share/man/man1/swift.1
