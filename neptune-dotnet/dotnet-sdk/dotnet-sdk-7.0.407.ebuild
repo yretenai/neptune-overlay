@@ -35,7 +35,7 @@ QA_PREBUILT="*"
 S="${WORKDIR}"
 
 RDEPEND="
-	neptune-dotnet/dotnet-cli-bin
+	>=neptune-dotnet/dotnet-cli-bin-${MY_PV}
 	neptune-dotnet/dotnet-runtime:${SLOT}
 	neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 	neptune-dotnet/netstandard:2.1
