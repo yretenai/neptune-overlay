@@ -35,7 +35,7 @@ QA_PREBUILT="*"
 S="${WORKDIR}"
 
 RDEPEND="
-	neptune-dotnet/dotnet-cli-bin
+	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
 "
 
 src_install() {
