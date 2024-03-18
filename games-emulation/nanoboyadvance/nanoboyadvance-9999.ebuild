@@ -68,3 +68,9 @@ src_configure() {
 
 	cmake_src_configure
 }
+
+src_install() {
+	default
+	cmake_src_install
+	dolib.so "${BUILD_DIR}/src/platform/core/libglad_gl_core_33.so"
+}
