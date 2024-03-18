@@ -1,24 +1,22 @@
 EAPI=8
 
-inherit cmake
+PYTHON_COMPAT=( python3_{10..12} )
+
+inherit cmake git-r3 python-single-r1
 
 DESCRIPTION="A cycle-accurate Nintendo Game Boy Advance emulator"
 HOMEPAGE="https://github.com/nba-emu/NanoBoyAdvance"
 
-if [[ ${PV} == 9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/nba-emu/${PN}.git"
-	KEYWORDS=""
-else
-	SRC_URI="https://github.com/nba-emu/${PN}/releases/download/v${PV}/${P}.tar.xz"
-	KEYWORDS="amd64 ~arm"
-fi
+EGIT_REPO_URI="https://github.com/nba-emu/${PN}.git"
+GLAD_EGIT_REPO_URI="https://github.com/Dav1dde/glad.git"
 
+KEYWORDS=""
 IUSE="qt6 +qt5"
 REQUIRED_USE="^^ ( qt6 qt5 )"
 
 PATCHES=(
-       "${FILESDIR}/9999-add-algorithms.patch"
+	"${FILESDIR}/9999-add-algorithms.patch"
+	"${FILESDIR}/9999-load-glad.patch"
 )
 
 LICENSE="GPL-3"
@@ -43,10 +41,22 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
+	$(python_gen_cond_dep '
+		>=dev-python/jinja-2.7[${PYTHON_USEDEP}]
+	')
 	dev-cpp/toml11
 "
 
+src_unpack() {
+	git-r3_src_unpack
+
+	git-r3_fetch "${GLAD_EGIT_REPO_URI}"
+	git-r3_checkout "${GLAD_EGIT_REPO_URI}" "${S}/glad"
+}
+
 src_configure() {
+	sed -e "s|find_package(Python |find_package(Python ${EPYTHON:6} EXACT |" -i glad/cmake/GladConfig.cmake || die
+
 	local mycmakeargs=(
 		-DPORTABLE_MODE=OFF
 		-DUSE_QT6=$(usex qt6)

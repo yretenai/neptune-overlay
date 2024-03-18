@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 98f4154..251a7ba 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ option(PLATFORM_QT "Build Qt frontend." ON)
+ 
++set(GLAD_SOURCES_DIR "${PROJECT_SOURCE_DIR}/glad")
++add_subdirectory("${GLAD_SOURCES_DIR}/cmake" glad_cmake)
++
+ add_subdirectory(src/nba)
+ add_subdirectory(src/platform/core)
+ 
