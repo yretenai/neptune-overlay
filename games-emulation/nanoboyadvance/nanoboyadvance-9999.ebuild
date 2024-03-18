@@ -59,6 +59,7 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DPORTABLE_MODE=OFF
+		-DBUILD_SHARED_LIBS=OFF
 		-DUSE_QT6=$(usex qt6)
 		-DUSE_SYSTEM_TOML11=ON
 		-DUSE_SYSTEM_UNARR=ON
@@ -69,8 +70,3 @@ src_configure() {
 	cmake_src_configure
 }
 
-src_install() {
-	default
-	cmake_src_install
-	dolib.so "${BUILD_DIR}/src/platform/core/libglad_gl_core_33.so"
-}
