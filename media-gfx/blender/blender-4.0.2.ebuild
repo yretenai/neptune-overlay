@@ -96,7 +96,7 @@ RDEPEND="${PYTHON_DEPS}
 	openpgl? ( >=media-libs/openpgl-0.5.0 )
 	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
 	openvdb? (
-		>=media-gfx/openvdb-10.0.0:=[nanovdb?]
+		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( <dev-libs/optix-7.5.0 )
@@ -145,6 +145,10 @@ BDEPEND="
 		dev-util/wayland-scanner
 	)
 "
+
+PATCHES=(
+	"${FILESDIR}/${PN}-4.0.1-openvdb-11.patch"
+)
 
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp

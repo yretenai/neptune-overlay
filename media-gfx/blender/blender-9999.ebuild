@@ -1,6 +1,15 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# TODO
+# - Package Hydra
+# 	https://github.com/Ray-Tracing-Systems/HydraCore
+# 	https://github.com/Ray-Tracing-Systems/HydraAPI
+# - Package USD
+# 	https://github.com/PixarAnimationStudios/OpenUSD
+# - Package Draco
+# 	https://github.com/google/draco
+
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
@@ -26,11 +35,11 @@ fi
 SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental
-	alembic collada +color-management cuda +cycles cycles-bin-kernels
+	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
-	+sndfile test +tiff valgrind wayland +webp X"
+	+sndfile test +tiff valgrind wayland +webp X +otf renderdoc"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -93,7 +102,7 @@ RDEPEND="${PYTHON_DEPS}
 	openpgl? ( >=media-libs/openpgl-0.5.0 )
 	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
 	openvdb? (
-		>=media-gfx/openvdb-10.0.0:=[nanovdb?]
+		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( <dev-libs/optix-7.5.0 )
@@ -121,6 +130,12 @@ RDEPEND="${PYTHON_DEPS}
         dev-util/glslang
     	media-libs/vulkan-loader
     )
+	otf? (
+		media-libs/harfbuzz
+	)
+	renderdoc? (
+		media-gfx/renderdoc
+	)
 	X? (
 		x11-libs/libX11
 		x11-libs/libXi
@@ -152,6 +167,10 @@ BDEPEND="
 		dev-util/wayland-scanner
 	)
 "
+
+PATCHES=(
+	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
+)
 
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
@@ -280,17 +299,18 @@ src_configure() {
 		-DWITH_CYCLES_PATH_GUIDING=$(usex openpgl)
 		-DWITH_CYCLES_STANDALONE=no
 		-DWITH_CYCLES_STANDALONE_GUI=no
+		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
 		-DWITH_DOC_MANPAGE=$(usex man)
 		-DWITH_FFTW3=$(usex fftw)
 		-DWITH_GHOST_WAYLAND=$(usex wayland)
 		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"
-		-DWITH_GHOST_WAYLAND_DBUS=$(usex wayland)
 		-DWITH_GHOST_WAYLAND_DYNLOAD=no
 		-DWITH_GHOST_WAYLAND_LIBDECOR=no
 		-DWITH_GHOST_X11=$(usex X)
 		-DWITH_GMP=$(usex gmp)
 		-DWITH_GTESTS=$(usex test)
 		-DWITH_HARU=$(usex pdf)
+		-DWITH_HARFBUZZ=$(usex otf)
 		-DWITH_HEADLESS=$($(use X || use wayland) && echo OFF || echo ON)
 		-DWITH_INSTALL_PORTABLE=no
 		-DWITH_IMAGE_OPENEXR=$(usex openexr)
@@ -299,7 +319,7 @@ src_configure() {
 		-DWITH_INPUT_NDOF=$(usex ndof)
 		-DWITH_INTERNATIONAL=$(usex nls)
 		-DWITH_JACK=$(usex jack)
-		-DWITH_MATERIALX=no
+		-DWITH_MATERIALX=no # TODO: Package MaterialX
 		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
@@ -317,7 +337,7 @@ src_configure() {
 		-DWITH_PUGIXML=$(usex pugixml)
 		-DWITH_PULSEAUDIO=$(usex pulseaudio)
 		-DWITH_PYTHON_INSTALL=no
-		-DWITH_DRACO=no
+		-DWITH_DRACO=no # TODO: Package Draco
 		-DWITH_PYTHON_INSTALL_NUMPY=no
 		-DWITH_PYTHON_INSTALL_ZSTANDARD=no
 		-DWITH_SDL=$(usex sdl)
@@ -326,10 +346,9 @@ src_configure() {
 		-DWITH_SYSTEM_FREETYPE=yes
 		-DWITH_SYSTEM_LZO=yes
 		-DWITH_TBB=$(usex tbb)
-
-		-DWITH_USD=no
-		-DWITH_HYDRA=no
-
+		-DWITH_USD=no # TODO: Package USD
+		-DWITH_HYDRA=no # TODO: Package Hydra
+		-DWITH_RENDERDOC=$(usex renderdoc)
 		-DWITH_XR_OPENXR=no
 	)
 
