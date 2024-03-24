@@ -350,6 +350,7 @@ src_configure() {
 		-DWITH_HYDRA=no # TODO: Package Hydra
 		-DWITH_RENDERDOC=$(usex renderdoc)
 		-DWITH_XR_OPENXR=no
+		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 	)
 
 	if use optix; then

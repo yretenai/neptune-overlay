@@ -325,6 +325,7 @@ src_configure() {
 		-DWITH_HYDRA=no
 
 		-DWITH_XR_OPENXR=no
+		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 	)
 
 	if use optix; then

@@ -47,6 +47,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/fix-hip.patch"
+	"${FILESDIR}/fix-hip-cmake.patch"
 )
 
 src_configure() {
@@ -65,7 +66,6 @@ src_configure() {
 			-DAMDGPU_TARGETS="$(get_amdgpu_flags)" # unsure if these are used, they're SET() not OPTION()
 		)
 
-		sed -e "s/-DCMAKE_TOOLCHAIN_FILE:FILEPATH=\${CMAKE_TOOLCHAIN_FILE}//" -i devices/CMakeLists.txt || die
 		addpredict /dev/kfd
 		addpredict /dev/dri
 		export ROCM_PATH="$(hipconfig -R)"
