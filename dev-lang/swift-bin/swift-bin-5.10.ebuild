@@ -56,7 +56,6 @@ src_prepare() {
 
 src_install() {
 	dobin ${WORKDIR}/${SWIFTDIR}/usr/bin/docc \
-		${WORKDIR}/${SWIFTDIR}/usr/bin/plutil \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/repl_swift \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/sourcekit-lsp \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-api-checker.py \
@@ -68,6 +67,8 @@ src_install() {
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-help \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-plugin-server
+	
+	newbin ${WORKDIR}/${SWIFTDIR}/usr/bin/plutil swift-plutil
 
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift"
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift-api-digester"
