@@ -59,3 +59,35 @@ $ dotnet --list-sdks
 7.0.406 [/opt/neptune-dotnet/sdk]
 8.0.201 [/opt/neptune-dotnet/sdk]
 ```
+
+### conflicts with other repositories
+
+If you use this overlay's blender you should mask Gentoo's ebuilds for blender
+
+```
+media-gfx/blender::gentoo
+```
+
+Similarly, you should probably mask any embree version above version 4 as they're still slotted for version 3.
+
+```
+>=media-libs/embree-4.0.0::gentoo
+```
+
+and OIDN if you use HIP
+
+```
+media-libs/oidn::gentoo
+```
+
+Mask Guru's imhex if you use neptune's imhex (`app-forensics/imhex`)
+
+```
+app-editors/imhex::guru
+```
+
+and discord if you use discord 
+
+```
+net-im/discord::gentoo
+```
