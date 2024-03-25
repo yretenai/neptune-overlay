@@ -14,21 +14,18 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
 
-inherit check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
+inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
 
+EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
+ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
+
 if [[ ${PV} = *9999* ]] ; then
-	# Subversion is needed for downloading unit test files
-	inherit git-r3 subversion
-	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-	ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
+	EGIT_BRANCH="main"
 else
-	SRC_URI="https://download.blender.org/source/${P}.tar.xz"
-	# Update these between major releases.
-	TEST_TARBALL_VERSION="$(ver_cut 1-2).0"
-	SRC_URI+=" test? ( https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}/${PN}-${TEST_TARBALL_VERSION}-tests.tar.xz )"
+	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	KEYWORDS="~amd64 ~arm ~arm64"
 fi
 
@@ -39,8 +36,8 @@ IUSE="+bullet +fluid +openexr +tbb vulkan experimental
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
-	+sndfile test +tiff valgrind wayland +webp X +otf renderdoc"
-RESTRICT="!test? ( test )"
+	+sndfile +tiff valgrind wayland +webp X +otf renderdoc"
+RESTRICT="test"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	alembic? ( openexr )
@@ -51,8 +48,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	nanovdb? ( openvdb )
 	openvdb? ( tbb )
 	optix? ( cuda )
-	osl? ( cycles )
-	test? ( color-management )"
+	osl? ( cycles )"
 
 # Library versions for official builds can be found in the blender source directory in:
 # build_files/build_environment/install_deps.sh
@@ -169,7 +165,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
+	"${FILESDIR}/${PN}-${PV}-openvdb-11.patch"
 )
 
 blender_check_requirements() {
@@ -202,27 +198,9 @@ pkg_setup() {
 }
 
 src_unpack() {
-	if [[ ${PV} = *9999* ]] ; then
-		git-r3_src_unpack
-
-		git-r3_fetch "${ADDONS_EGIT_REPO_URI}"
-		git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons"
-
-		if use test; then
-			TESTS_SVN_URL=https://svn.blender.org/svnroot/bf-blender/trunk/lib/tests
-			subversion_fetch ${TESTS_SVN_URL} ../lib/tests
-		fi
-		ASSETS_SVN_URL=https://svn.blender.org/svnroot/bf-blender/trunk/lib/assets
-		subversion_fetch ${ASSETS_SVN_URL} ../lib/assets
-	else
-		default
-		if use test; then
-			#The tests are downloaded from: https://svn.blender.org/svnroot/bf-blender/tags/blender-${SLOT}-release/lib/tests
-			mkdir -p lib || die
-			mv "${WORKDIR}/blender-${TEST_TARBALL_VERSION}-tests/tests" lib || die
-		fi
-	fi
-
+	git-r3_src_unpack
+	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" ${EGIT_BRANCH}
+	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons"
 }
 
 src_prepare() {
@@ -256,17 +234,12 @@ src_prepare() {
 		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg \
 		"release/freedesktop/icons/symbolic/apps/blender-${BV}-symbolic.svg" || die
 	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
-	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml" || die
+	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml" 
+	mv release/freedesktop/org.blender.Blender.appdata.xml "release/freedesktop/blender-${BV}.appdata.xml"
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
     fi
-
-	if use test; then
-		# Without this the tests will try to use /usr/bin/blender and /usr/share/blender/ to run the tests.
-		sed -e "s|set(TEST_INSTALL_DIR.*|set(TEST_INSTALL_DIR ${T}/usr)|g" -i tests/CMakeLists.txt || die
-		sed -e "s|string(REPLACE.*|set(TEST_INSTALL_DIR ${T}/usr)|g" -i build_files/cmake/Modules/GTestTesting.cmake || die
-	fi
 }
 
 src_configure() {
@@ -308,7 +281,7 @@ src_configure() {
 		-DWITH_GHOST_WAYLAND_LIBDECOR=no
 		-DWITH_GHOST_X11=$(usex X)
 		-DWITH_GMP=$(usex gmp)
-		-DWITH_GTESTS=$(usex test)
+		-DWITH_GTESTS=no
 		-DWITH_HARU=$(usex pdf)
 		-DWITH_HARFBUZZ=$(usex otf)
 		-DWITH_HEADLESS=$($(use X || use wayland) && echo OFF || echo ON)
@@ -383,45 +356,7 @@ src_configure() {
 		)
 	fi
 
-	if use test ; then
-		local CYCLES_TEST_DEVICES=( "CPU" )
-		if use cycles-bin-kernels; then
-			use cuda && CYCLES_TEST_DEVICES+=( "CUDA" )
-			use optix && CYCLES_TEST_DEVICES+=( "OPTIX" )
-			use hip && CYCLES_TEST_DEVICES+=( "HIP" )
-		fi
-		mycmakeargs+=(
-			-DCYCLES_TEST_DEVICES:STRING="$(local IFS=";"; echo "${CYCLES_TEST_DEVICES[*]}")"
-			-DWITH_COMPOSITOR_REALTIME_TESTS=yes
-			-DWITH_GTESTS=yes
-			-DWITH_OPENGL_DRAW_TESTS=yes
-			-DWITH_OPENGL_RENDER_TESTS=yes
-		)
-	fi
-
 	cmake_src_configure
-}
-
-src_test() {
-	# A lot of tests needs to have access to the installed data files.
-	# So install them into the image directory now.
-	DESTDIR="${T}" cmake_build install "$@"
-
-	blender_get_version
-	# Define custom blender data/script file paths not be able to find them otherwise during testing.
-	# (Because the data is in the image directory and it will default to look in /usr/share)
-	export BLENDER_SYSTEM_SCRIPTS="${T}/usr/share/blender/${BV}/scripts"
-	export BLENDER_SYSTEM_DATAFILES="${T}/usr/share/blender/${BV}/datafiles"
-
-	# Sanity check that the script and datafile path is valid.
-	# If they are not vaild, blender will fallback to the default path which is not what we want.
-	[ -d "$BLENDER_SYSTEM_SCRIPTS" ] || die "The custom script path is invalid, fix the ebuild!"
-	[ -d "$BLENDER_SYSTEM_DATAFILES" ] || die "The custom datafiles path is invalid, fix the ebuild!"
-
-	cmake_src_test
-
-	# Clean up the image directory for src_install
-	rm -fr "${T}"/usr || die
 }
 
 src_install() {
