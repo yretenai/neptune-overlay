@@ -21,6 +21,7 @@ HOMEPAGE="https://www.blender.org"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
+ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 if [[ ${PV} = *9999* ]] ; then
 	EGIT_BRANCH="main"
@@ -198,9 +199,9 @@ pkg_setup() {
 }
 
 src_unpack() {
+	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" ${EGIT_BRANCH} "${ADDONS_EGIT_LOCAL_ID}"
+	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" ${EGIT_BRANCH}
-	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons"
 }
 
 src_prepare() {
@@ -234,7 +235,7 @@ src_prepare() {
 		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg \
 		"release/freedesktop/icons/symbolic/apps/blender-${BV}-symbolic.svg" || die
 	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
-	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml" 
+	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml"
 	mv release/freedesktop/org.blender.Blender.appdata.xml "release/freedesktop/blender-${BV}.appdata.xml"
 
 	if use vulkan; then

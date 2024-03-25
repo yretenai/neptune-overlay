@@ -2,13 +2,15 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
 
-inherit cmake git-r3 python-single-r1
+inherit cmake git-r3 python-single-r1 xdg-utils
 
 DESCRIPTION="A cycle-accurate Nintendo Game Boy Advance emulator"
 HOMEPAGE="https://github.com/nba-emu/NanoBoyAdvance"
 
 EGIT_REPO_URI="https://github.com/nba-emu/${PN}.git"
+GLAD_EGIT_COMMIT="adc3d7a1d704e099581ca25bc5bbdf728c2db67b"
 GLAD_EGIT_REPO_URI="https://github.com/Dav1dde/glad.git"
+GLAD_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-glad"
 
 KEYWORDS=""
 IUSE="qt6 +qt5"
@@ -48,10 +50,9 @@ BDEPEND="
 "
 
 src_unpack() {
+	git-r3_fetch "${GLAD_EGIT_REPO_URI}" "${GLAD_EGIT_COMMIT}" "${GLAD_EGIT_LOCAL_ID}"
+	git-r3_checkout "${GLAD_EGIT_REPO_URI}" "${S}/glad" "${GLAD_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
-
-	git-r3_fetch "${GLAD_EGIT_REPO_URI}"
-	git-r3_checkout "${GLAD_EGIT_REPO_URI}" "${S}/glad"
 }
 
 src_configure() {
@@ -70,3 +71,14 @@ src_configure() {
 	cmake_src_configure
 }
 
+pkg_postinst() {
+	xdg_icon_cache_update
+	xdg_mimeinfo_database_update
+	xdg_desktop_database_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
+	xdg_mimeinfo_database_update
+	xdg_desktop_database_update
+}
