@@ -8,10 +8,10 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{9..12} )
-
+LLVM_MAX_SLOT=17
 ROCM_VERSION="5.7.1"
 
-inherit rocm cuda cmake python-single-r1
+inherit rocm cuda cmake python-single-r1 llvm
 
 DESCRIPTION="Intel(R) Open Image Denoise library"
 HOMEPAGE="https://www.openimagedenoise.org/"
@@ -31,7 +31,7 @@ SLOT="0"
 REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} )"
 
 RDEPEND="${PYTHON_DEPS}
-	openimageio? ( media-libs/openimageio )
+	examples? ( openimageio? ( media-libs/openimageio ) )
 	sycl? (
 		virtual/opencl
 		dev-libs/intel-compute-runtime
@@ -47,6 +47,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/fix-hip.patch"
+	"${FILESDIR}/amdgpu-targets.patch"
 )
 
 src_configure() {
@@ -55,21 +56,21 @@ src_configure() {
 		-DOIDN_DEVICE_HIP=$(usex hip)
 		-DOIDN_DEVICE_SYCL=$(usex sycl)
 		-DOIDN_APPS=$(usex examples)
-		-DOIDN_APPS_OPENIMAGEIO=$(usex openimageio)
 	)
+
+	if use examples; then
+		mycmakeargs+=(
+			-DOIDN_APPS_OPENIMAGEIO=$(usex openimageio)
+		)
+	fi
 
 	if use hip; then
 		mycmakeargs+=(
+			-DOIDN_DEVICE_HIP_COMPILER="$(get_llvm_prefix ${LLVM_MAX_SLOT})/bin/clang++"
+			-DROCM_PATH="$(hipconfig -R)"
 			-DOIDN_DEVICE_HIP_COMPILER="$(hipconfig -p)/bin/hipcc"
-			-DGPU_TARGETS="$(get_amdgpu_flags)"
 			-DAMDGPU_TARGETS="$(get_amdgpu_flags)" # unsure if these are used, they're SET() not OPTION()
 		)
-
-		sed -e "s/-DCMAKE_TOOLCHAIN_FILE:FILEPATH=\${CMAKE_TOOLCHAIN_FILE}//" -i devices/CMakeLists.txt || die
-		# sed -e "s/ INTERNAL / STRING /" -i devices/hip/CMakeLists.txt || die
-		addpredict /dev/kfd
-		addpredict /dev/dri
-		export ROCM_PATH="$(hipconfig -R)"
 	fi
 
 	cmake_src_configure
