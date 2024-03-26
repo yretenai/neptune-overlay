@@ -3,6 +3,8 @@
 
 EAPI=8
 
+LLVM_SLOT=15
+
 MY_PN="${PN/-bin*/}"
 MY_PV="${PV/-r*/}"
 
@@ -24,22 +26,28 @@ KEYWORDS="~amd64 ~arm64"
 RESTRICT="test bindist mirror strip"
 
 RDEPEND="
-sys-devel/binutils[gold]
-sys-devel/llvm:17
-dev-libs/icu
-sys-libs/timezone-data
-sys-libs/zlib
-dev-vcs/git
-dev-db/sqlite
-net-misc/curl
-dev-lang/python:2.7
-dev-libs/libedit
-dev-libs/libxml2
-dev-libs/libbsd
-app-arch/gzip
+	sys-devel/binutils[gold]
+	sys-devel/llvm:17
+	dev-libs/icu
+	sys-libs/timezone-data
+	sys-libs/zlib
+	dev-vcs/git
+	dev-db/sqlite
+	net-misc/curl
+	dev-lang/python:2.7
+	dev-libs/libedit
+	dev-libs/libxml2
+	dev-libs/libbsd
+	app-arch/gzip
+	sys-devel/clang:${LLVM_SLOT}
+	sys-devel/llvm:${LLVM_SLOT}
 "
 
 SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9"
+
+if [[ ARCH == arm64 ]]; then
+	SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9-aarch64"
+fi
 
 src_prepare() {
 	default
@@ -67,7 +75,7 @@ src_install() {
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-help \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package \
 		${WORKDIR}/${SWIFTDIR}/usr/bin/swift-plugin-server
-	
+
 	newbin ${WORKDIR}/${SWIFTDIR}/usr/bin/plutil swift-plutil
 
 	dosym "swift-frontend" "${EPREFIX}/usr/bin/swift"
@@ -103,9 +111,13 @@ src_install() {
 	dosym "../lib64/libIndexStore.so.15git" "${EPREFIX}/usr/lib/libIndexStore.so"
 	dosym "../lib64/libsourcekitdInProc.so" "${EPREFIX}/usr/lib/libsourcekitdInProc.so"
 	dosym "../lib64/libswiftDemangle.so" "${EPREFIX}/usr/lib/libswiftDemangle.so"
-	# maybe do clang 15?
-	dosym "${EPREFIX}/usr/lib/clang/17" "${EPREFIX}/usr/lib/swift/clang"
-	dosym "${EPREFIX}/usr/lib/clang/17" "${EPREFIX}/usr/lib/swift_static/clang"
+
+	local clang_version=$(best_version sys-devel/clang:${LLVM_SLOT})
+	clang_version=${clang_version#*/*-} # reduce it to ${PV}-${PR}
+	clang_version=${clang_version%%[_-]*} # main version without beta/pre/patch/revision
+
+	dosym "${EPREFIX}/usr/lib/clang/${clang_version}" "${EPREFIX}/usr/lib/swift/clang"
+	dosym "${EPREFIX}/usr/lib/clang/${clang_version}" "${EPREFIX}/usr/lib/swift_static/clang"
 
 	insinto /usr/share
 	doins -r ${WORKDIR}/${SWIFTDIR}/usr/share/icuswift \
