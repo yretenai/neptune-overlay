@@ -1,32 +1,29 @@
 # Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# TODO
-# - Package Hydra
-# 	https://github.com/Ray-Tracing-Systems/HydraCore
-# 	https://github.com/Ray-Tracing-Systems/HydraAPI
-# - Package USD
-# 	https://github.com/PixarAnimationStudios/OpenUSD
-# - Package Draco
-# 	https://github.com/google/draco
-
 EAPI=8
+
 
 PYTHON_COMPAT=( python3_{10..12} )
 
 inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
 
-DESCRIPTION="3D Creation/Animation/Publishing System"
-HOMEPAGE="https://www.blender.org"
+DESCRIPTION="Custom build of blender with some extra NPR features."
+HOMEPAGE="
+	https://github.com/dillongoostudios/goo-engine
+	https://www.blender.org
+"
 
-EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
+EGIT_REPO_URI="https://github.com/dillongoostudios/goo-engine.git"
+ADDONS_EGIT_REPO_URI="https://github.com/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 if [[ ${PV} = *9999* ]] ; then
-	EGIT_BRANCH="main"
+	EGIT_BRANCH="goo-engine-main"
+	ADDONS_EGIT_BRANCH="refs/heads/main"
 else
-	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
+	EGIT_BRANCH="goo-engine-v$(ver_cut 1-2)-release"
+	ADDONS_EGIT_BRANCH="refs/heads/blender-v$(ver_cut 1-2)-release"
 	KEYWORDS="~amd64 ~arm ~arm64"
 fi
 
@@ -167,6 +164,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-openvdb-11.patch"
+	"${FILESDIR}/${PN}-${PV}-goo-paths.patch"
 )
 
 blender_check_requirements() {
@@ -199,7 +197,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "refs/heads/${EGIT_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
+	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${ADDONS_EGIT_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
 }
@@ -216,31 +214,31 @@ src_prepare() {
 
 	# Prepare icons and .desktop files for slotting.
 	sed \
-		-e "s|blender.svg|blender-${BV}.svg|" \
-		-e "s|blender-symbolic.svg|blender-${BV}-symbolic.svg|" \
-		-e "s|blender.desktop|blender-${BV}.desktop|" \
-		-e "s|org.blender.Blender.metainfo.xml|blender-${BV}.metainfo.xml|" \
+		-e "s|blender.svg|goo-engine-${BV}.svg|" \
+		-e "s|blender-symbolic.svg|goo-engine-${BV}-symbolic.svg|" \
+		-e "s|blender.desktop|goo-engine-${BV}.desktop|" \
+		-e "s|org.blender.Blender.metainfo.xml|goo-engine-${BV}.metainfo.xml|" \
 		-i source/creator/CMakeLists.txt || die
 
 	sed \
-		-e "s|Name=Blender|Name=Blender ${BV}|" \
-		-e "s|Exec=blender|Exec=blender-${BV}|" \
-		-e "s|Icon=blender|Icon=blender-${BV}|" \
+		-e "s|Name=Blender|Name=Goo Engine ${BV}|" \
+		-e "s|Exec=blender|Exec=goo-engine-${BV}|" \
+		-e "s|Icon=blender|Icon=goo-engine-${BV}|" \
 		-i release/freedesktop/blender.desktop || die
 
 	mv \
 		release/freedesktop/icons/scalable/apps/blender.svg \
-		"release/freedesktop/icons/scalable/apps/blender-${BV}.svg" || die
+		"release/freedesktop/icons/scalable/apps/goo-engine-${BV}.svg" || die
 	mv \
 		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg \
-		"release/freedesktop/icons/symbolic/apps/blender-${BV}-symbolic.svg" || die
-	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
-	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml"
-	mv release/freedesktop/org.blender.Blender.appdata.xml "release/freedesktop/blender-${BV}.appdata.xml"
+		"release/freedesktop/icons/symbolic/apps/goo-engine-${BV}-symbolic.svg" || die
+	mv release/freedesktop/blender.desktop "release/freedesktop/goo-engine-${BV}.desktop" || die
+	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/goo-engine-${BV}.metainfo.xml"
+	mv release/freedesktop/org.blender.Blender.appdata.xml "release/freedesktop/goo-engine-${BV}.appdata.xml"
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-    fi
+	fi
 }
 
 src_configure() {
@@ -277,7 +275,7 @@ src_configure() {
 		-DWITH_DOC_MANPAGE=$(usex man)
 		-DWITH_FFTW3=$(usex fftw)
 		-DWITH_GHOST_WAYLAND=$(usex wayland)
-		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"
+		-DWITH_GHOST_WAYLAND_APP_ID="goo-engine-${BV}"
 		-DWITH_GHOST_WAYLAND_DYNLOAD=no
 		-DWITH_GHOST_WAYLAND_LIBDECOR=no
 		-DWITH_GHOST_X11=$(usex X)
@@ -370,14 +368,14 @@ src_install() {
 
 	if use man; then
 		# Slot the man page
-		mv "${ED}/usr/share/man/man1/blender.1" "${ED}/usr/share/man/man1/blender-${BV}.1" || die
+		mv "${ED}/usr/share/man/man1/blender.1" "${ED}/usr/share/man/man1/goo-engine-${BV}.1" || die
 	fi
 
 	if use doc; then
 		# Define custom blender data/script file paths. Otherwise Blender will not be able to find them during doc building.
 		# (Because the data is in the image directory and it will default to look in /usr/share)
-		export BLENDER_SYSTEM_SCRIPTS=${ED}/usr/share/blender/${BV}/scripts
-		export BLENDER_SYSTEM_DATAFILES=${ED}/usr/share/blender/${BV}/datafiles
+		export BLENDER_SYSTEM_SCRIPTS=${ED}/usr/share/goo-engine/${BV}/scripts
+		export BLENDER_SYSTEM_DATAFILES=${ED}/usr/share/goo-engine/${BV}/datafiles
 
 		# Workaround for binary drivers.
 		addpredict /dev/ati
@@ -403,26 +401,29 @@ src_install() {
 		dodoc -r "${CMAKE_USE_DIR}"/doc/doxygen/html/.
 	fi
 
+	mv "${ED}"/usr/share/blender "${ED}"/usr/share/goo-engine || die
+
 	# Fix doc installdir
 	docinto html
 	dodoc "${CMAKE_USE_DIR}"/release/text/readme.html
-	rm -r "${ED}"/usr/share/doc/blender || die
+	rm -r "${ED}"/usr/share/doc/blender
+	rm -r "${ED}"/usr/share/doc/goo-engine
 
-	python_optimize "${ED}/usr/share/blender/${BV}/scripts"
+	python_optimize "${ED}/usr/share/goo-engine/${BV}/scripts"
 
-	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/blender-${BV}-thumbnailer" || die
-	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/blender-${BV}" || die
+	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/goo-engine-${BV}-thumbnailer" || die
+	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/goo-engine-${BV}" || die
 }
 
 pkg_postinst() {
 	elog
-	elog "Blender uses python integration. As such, may have some"
+	elog "Goo Engine uses python integration. As such, may have some"
 	elog "inherent risks with running unknown python scripts."
 	elog
-	elog "It is recommended to change your blender temp directory"
+	elog "It is recommended to change your goo engine temp directory"
 	elog "from /tmp to /home/user/tmp or another tmp file under your"
-	elog "home directory. This can be done by starting blender, then"
-	elog "changing the 'Temporary Files' directory in Blender preferences."
+	elog "home directory. This can be done by starting goo engine, then"
+	elog "changing the 'Temporary Files' directory in goo engine preferences."
 	elog
 
 	if use osl; then
@@ -434,7 +435,7 @@ pkg_postinst() {
 	fi
 
 	if ! use python_single_target_python3_10; then
-		elog "You are building Blender with a newer python version than"
+		elog "You are building Goo Engine with a newer python version than"
 		elog "supported by this version upstream."
 		elog "If you experience breakages with e.g. plugins, please switch to"
 		elog "python_single_target_python3_10 instead."
