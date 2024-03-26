@@ -13,8 +13,8 @@ HOMEPAGE="https://github.com/apple/swift
 	https://www.swift.org/
 	https://developer.apple.com/swift/"
 SRC_URI="
-amd64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9.tar.gz )
-arm64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9-aarch64/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9-aarch64.tar.gz )
+	amd64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9.tar.gz )
+	arm64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9-aarch64/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9-aarch64.tar.gz )
 "
 
 QA_PREBUILT="*"
@@ -27,7 +27,6 @@ RESTRICT="test bindist mirror strip"
 
 RDEPEND="
 	sys-devel/binutils[gold]
-	sys-devel/llvm:17
 	dev-libs/icu
 	sys-libs/timezone-data
 	sys-libs/zlib

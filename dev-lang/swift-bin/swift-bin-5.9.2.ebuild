@@ -27,7 +27,6 @@ RESTRICT="test bindist mirror strip"
 
 RDEPEND="
 	sys-devel/binutils[gold]
-	sys-devel/llvm:15
 	dev-libs/icu
 	sys-libs/timezone-data
 	sys-libs/zlib
