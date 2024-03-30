@@ -19,4 +19,5 @@ S="${WORKDIR}"/${PN}-${MY_COMMIT}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64"
-RESTRICT="test"
+
+RESTRICT="test" # dev-python/nose got removed
