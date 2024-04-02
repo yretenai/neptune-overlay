@@ -68,13 +68,7 @@ If you use this overlay's blender you should mask Gentoo's ebuilds for blender
 media-gfx/blender::gentoo
 ```
 
-Similarly, you should probably mask any embree version above version 4 as they're still slotted for version 3.
-
-```
->=media-libs/embree-4.0.0::gentoo
-```
-
-and OIDN if you use HIP
+OIDN if you use HIP
 
 ```
 media-libs/oidn::gentoo
