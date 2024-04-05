@@ -1,29 +1,28 @@
 #!/bin/zsh
 ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
-DOTNET_6_0_VERSION=$(./dotnet-version.sh Runtime "6.0")
-DOTNET_7_0_VERSION=$(./dotnet-version.sh Runtime "7.0")
-DOTNET_8_0_VERSION=$(./dotnet-version.sh Runtime "8.0")
-DOTNET_9_0_VERSION=$(./dotnet-version.sh Runtime "9.0")
+DOTNET_6_0_VERSION=$(./dotnet-version.sh runtime "6.0")
+DOTNET_7_0_VERSION=$(./dotnet-version.sh runtime "7.0")
+DOTNET_8_0_VERSION=$(./dotnet-version.sh runtime "8.0")
+DOTNET_9_0_VERSION=$(./dotnet-version-preview.sh Runtime "9.0")
 DOTNET_9_0_VERSION_SAFE=${DOTNET_9_0_VERSION/-rc/}
 DOTNET_9_0_VERSION_SAFE=${DOTNET_9_0_VERSION_SAFE/-preview/}
 
 echo runtime versions: $DOTNET_6_0_VERSION $DOTNET_7_0_VERSION $DOTNET_8_0_VERSION $DOTNET_9_0_VERSION
 
-DOTNET_6_0_ASP_VERSION=$(./dotnet-version.sh aspnetcore/Runtime "6.0")
-DOTNET_7_0_ASP_VERSION=$(./dotnet-version.sh aspnetcore/Runtime "7.0")
-DOTNET_8_0_ASP_VERSION=$(./dotnet-version.sh aspnetcore/Runtime "8.0")
-DOTNET_9_0_ASP_VERSION=$(./dotnet-version.sh aspnetcore/Runtime "9.0")
-DOTNET_9_0_ASP_VERSION=$(./dotnet-version.sh aspnetcore/Runtime "9.0")
+DOTNET_6_0_ASP_VERSION=$DOTNET_6_0_VERSION
+DOTNET_7_0_ASP_VERSION=$DOTNET_7_0_VERSION
+DOTNET_8_0_ASP_VERSION=$DOTNET_8_0_VERSION
+DOTNET_9_0_ASP_VERSION=$(./dotnet-version-preview.sh aspnetcore/Runtime "9.0")
 DOTNET_9_0_ASP_VERSION_SAFE=${DOTNET_9_0_ASP_VERSION/-rc/}
 DOTNET_9_0_ASP_VERSION_SAFE=${DOTNET_9_0_ASP_VERSION_SAFE/-preview/}
 
 echo aspnet versions: $DOTNET_6_0_ASP_VERSION $DOTNET_7_0_ASP_VERSION $DOTNET_8_0_ASP_VERSION $DOTNET_9_0_ASP_VERSION
 
-DOTNET_6_0_SDK_VERSION=$(./dotnet-version.sh Sdk "6.0")
-DOTNET_7_0_SDK_VERSION=$(./dotnet-version.sh Sdk "7.0")
-DOTNET_8_0_SDK_VERSION=$(./dotnet-version.sh Sdk "8.0")
-DOTNET_9_0_SDK_VERSION=$(./dotnet-version.sh Sdk "9.0")
+DOTNET_6_0_SDK_VERSION=$(./dotnet-version.sh sdk "6.0")
+DOTNET_7_0_SDK_VERSION=$(./dotnet-version.sh sdk "7.0")
+DOTNET_8_0_SDK_VERSION=$(./dotnet-version.sh sdk "8.0")
+DOTNET_9_0_SDK_VERSION=$(./dotnet-version-preview.sh Sdk "9.0")
 DOTNET_9_0_SDK_VERSION_SAFE=${DOTNET_9_0_SDK_VERSION/-rc/}
 DOTNET_9_0_SDK_VERSION_SAFE=${DOTNET_9_0_SDK_VERSION_SAFE/-preview/}
 
