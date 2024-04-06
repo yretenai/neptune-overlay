@@ -97,7 +97,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=dev-libs/imath-3.1.4-r2:=
 		>=media-libs/openexr-3:0=
 	)
-	openpgl? ( >=media-libs/openpgl-0.5.0 )
+	openpgl? ( >=media-libs/openpgl-0.6.0 )
 	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
@@ -123,11 +123,11 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-    	media-libs/shaderc
-        dev-util/spirv-tools
-        dev-util/glslang
-    	media-libs/vulkan-loader
-    )
+		media-libs/shaderc
+		dev-util/spirv-tools
+		dev-util/glslang
+		media-libs/vulkan-loader
+	)
 	otf? (
 		media-libs/harfbuzz
 	)
@@ -157,9 +157,9 @@ BDEPEND="
 		dev-texlive/texlive-latexextra
 	)
 	vulkan? (
-        dev-util/spirv-headers
+		dev-util/spirv-headers
 		dev-util/vulkan-headers
-    )
+	)
 	nls? ( sys-devel/gettext )
 	wayland? (
 		dev-util/wayland-scanner
@@ -241,7 +241,7 @@ src_prepare() {
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-    fi
+	fi
 }
 
 src_configure() {
