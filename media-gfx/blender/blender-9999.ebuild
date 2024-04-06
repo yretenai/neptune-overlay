@@ -13,6 +13,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
+EGIT_LFS="yes"
 
 inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
 
