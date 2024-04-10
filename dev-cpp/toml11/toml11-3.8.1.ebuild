@@ -23,3 +23,7 @@ SLOT="0"
 DEPEND=""
 RDEPEND=""
 BDEPEND=""
+
+PATCHES=(
+	"${FILESDIR}/${PV}-remove-cxx_standard-related-stuff.patch"
+)
