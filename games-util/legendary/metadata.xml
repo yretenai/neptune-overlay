@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="webview">
+            Use 
+			<pkg>dev-python/pywebview</pkg>
+            for the sign-in process.
+        </flag>
+	</use>
+</pkgmetadata>

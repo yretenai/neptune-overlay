@@ -79,5 +79,11 @@
 		<flag name="vulkan">
 			Add support for the experimental Vulkan viewport backend
 		</flag>
+		<flag name="hip">
+			Build Blender with AMD HIP support.
+		</flag>
+		<flag name="renderdoc">
+			Build Blender with renderdoc support.
+		</flag>
 	</use>
 </pkgmetadata>

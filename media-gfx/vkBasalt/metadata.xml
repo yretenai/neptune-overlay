@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="reshade-shaders">
+			Install
+			<pkg>media-gfx/reshade-shaders</pkg>
+			as built-in shaders.
+		</flag>
+    </use>
+</pkgmetadata>
