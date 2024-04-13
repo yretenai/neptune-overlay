@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="hip">
+			Build OIDN with AMD HIP support.
+		</flag>
+		<flag name="sycl">
+			Build OIDN with Intel oneAPI SyCL support.
+		</flag>
+		<flag name="hip-safe">
+			Build OIDN with every AMD HIP kernel.
+		</flag>
+		<flag name="openimageio">
+			Build OpenImageIO examples
+		</flag>
+	</use>
+</pkgmetadata>

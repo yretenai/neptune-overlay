@@ -25,10 +25,10 @@ else
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 fi
 
-IUSE="hip cuda sycl examples openimageio"
+IUSE="hip -hip-safe cuda sycl examples openimageio"
 LICENSE="Apache-2.0"
 SLOT="0"
-REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} )"
+REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} ) hip-safe? ( hip )"
 
 RDEPEND="${PYTHON_DEPS}
 	examples? ( openimageio? ( media-libs/openimageio ) )
@@ -69,8 +69,14 @@ src_configure() {
 			-DOIDN_DEVICE_HIP_COMPILER="$(get_llvm_prefix ${LLVM_MAX_SLOT})/bin/clang++"
 			-DROCM_PATH="$(hipconfig -R)"
 			-DOIDN_DEVICE_HIP_COMPILER="$(hipconfig -p)/bin/hipcc"
-			-DAMDGPU_TARGETS="$(get_amdgpu_flags)" # unsure if these are used, they're SET() not OPTION()
 		)
+
+		if ! use hip-safe; then
+			mycmakeargs+=(
+				-DAMDGPU_TARGETS="$(get_amdgpu_flags)"
+			)
+			sed -e "s/CACHE INTERNAL/CACHE STRING/" -i devices/hip/CMakeLists.txt || die
+		fi
 	fi
 
 	cmake_src_configure
@@ -84,3 +90,14 @@ src_install() {
 	fi
 }
 
+pkg_postinst() {
+	if use hip; then
+		if ! use hip-safe; then
+			ewarn ""
+			ewarn "Please ensure that OIDN is built for all GPUs present on the system it is going to run on."
+			ewarn "The HIP runtime has a bug that causes a crash if no kernel is valid for each GPU present."
+			ewarn "Enable the USE flag 'hip-safe' to build all kernels if you observe crashes."
+			ewarn ""
+		fi
+	fi 
+}

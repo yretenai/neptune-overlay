@@ -1,1 +1,1 @@
-oidn-2.2.0.ebuild
+oidn-2.2.2.ebuild
