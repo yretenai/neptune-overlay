@@ -23,14 +23,8 @@ SLOT="0"
 RDEPEND=""
 DEPEND="${RDEPEND}"
 
-src_compile() {
-	python build.py
-	echo "#!/usr/bin/env sh
-env -S ${EPYTHON} \"${EPREFIX}/usr/bin/wwiser.pyz\"
-" > bin/wwiser
-}
-
 src_install() {
-	dobin bin/wwiser.pyz
-	dobin bin/wwiser
+	python_domodule wwiser
+	python_newscript wwiser.py wwiser
+	dodoc -r doc
 }
