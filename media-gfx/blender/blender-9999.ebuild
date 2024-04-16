@@ -12,7 +12,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{11..12} )
 EGIT_LFS="yes"
 
 inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
@@ -92,19 +92,19 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? ( >=media-libs/oidn-2.0.0 )
+	oidn? ( >=media-libs/oidn-2.1.0 )
 	openexr? (
 		>=dev-libs/imath-3.1.4-r2:=
 		>=media-libs/openexr-3:0=
 	)
-	openpgl? ( >=media-libs/openpgl-0.6.0 )
+	openpgl? ( media-libs/openpgl:= )
 	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( <dev-libs/optix-7.5.0 )
-	osl? ( >media-libs/osl-1.13 )
+	osl? ( media-libs/osl:= )
 	pdf? ( media-libs/libharu )
 	potrace? ( media-gfx/potrace )
 	pugixml? ( dev-libs/pugixml )
@@ -245,6 +245,7 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-lto
 	append-lfs-flags
 	blender_get_version
 
@@ -256,44 +257,46 @@ src_configure() {
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DWITH_ALEMBIC=$(usex alembic)
 		-DWITH_BOOST=yes
-		-DWITH_EXPERIMENTAL_FEATURES=$(usex experimental)
-		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
-		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
-		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
+		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
 		-DWITH_CYCLES_HIP_BINARIES=$(usex hip $(usex cycles-bin-kernels))
+		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
 		-DWITH_CYCLES_ONEAPI_BINARIES=no
 		-DWITH_CYCLES_OSL=$(usex osl)
 		-DWITH_CYCLES_PATH_GUIDING=$(usex openpgl)
-		-DWITH_CYCLES_STANDALONE=no
 		-DWITH_CYCLES_STANDALONE_GUI=no
-		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
+		-DWITH_CYCLES_STANDALONE=no
+		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_DOC_MANPAGE=$(usex man)
+		-DWITH_DRACO=no # TODO: Package Draco
+		-DWITH_EXPERIMENTAL_FEATURES=$(usex experimental)
 		-DWITH_FFTW3=$(usex fftw)
-		-DWITH_GHOST_WAYLAND=$(usex wayland)
 		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"
 		-DWITH_GHOST_WAYLAND_DYNLOAD=no
 		-DWITH_GHOST_WAYLAND_LIBDECOR=no
+		-DWITH_GHOST_WAYLAND=$(usex wayland)
 		-DWITH_GHOST_X11=$(usex X)
 		-DWITH_GMP=$(usex gmp)
 		-DWITH_GTESTS=no
-		-DWITH_HARU=$(usex pdf)
 		-DWITH_HARFBUZZ=$(usex otf)
+		-DWITH_HARU=$(usex pdf)
 		-DWITH_HEADLESS=$($(use X || use wayland) && echo OFF || echo ON)
-		-DWITH_INSTALL_PORTABLE=no
+		-DWITH_HYDRA=no # TODO: Package Hydra
 		-DWITH_IMAGE_OPENEXR=$(usex openexr)
 		-DWITH_IMAGE_OPENJPEG=$(usex jpeg2k)
 		-DWITH_IMAGE_WEBP=$(usex webp)
 		-DWITH_INPUT_NDOF=$(usex ndof)
+		-DWITH_INSTALL_PORTABLE=no
 		-DWITH_INTERNATIONAL=$(usex nls)
 		-DWITH_JACK=$(usex jack)
+		-DWITH_LLVM=$(usex osl)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
 		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
@@ -306,24 +309,24 @@ src_configure() {
 		-DWITH_OPENIMAGEDENOISE=$(usex oidn)
 		-DWITH_OPENMP=$(usex openmp)
 		-DWITH_OPENSUBDIV=$(usex opensubdiv)
-		-DWITH_OPENVDB=$(usex openvdb)
 		-DWITH_OPENVDB_BLOSC=$(usex openvdb)
+		-DWITH_OPENVDB=$(usex openvdb)
 		-DWITH_POTRACE=$(usex potrace)
 		-DWITH_PUGIXML=$(usex pugixml)
 		-DWITH_PULSEAUDIO=$(usex pulseaudio)
-		-DWITH_PYTHON_INSTALL=no
-		-DWITH_DRACO=no # TODO: Package Draco
 		-DWITH_PYTHON_INSTALL_NUMPY=no
 		-DWITH_PYTHON_INSTALL_ZSTANDARD=no
+		-DWITH_PYTHON_INSTALL=no
+		-DWITH_RENDERDOC=$(usex renderdoc)
 		-DWITH_SDL=$(usex sdl)
 		-DWITH_STATIC_LIBS=no
+		-DWITH_STRICT_BUILD_OPTIONS=yes
 		-DWITH_SYSTEM_EIGEN3=yes
 		-DWITH_SYSTEM_FREETYPE=yes
 		-DWITH_SYSTEM_LZO=yes
 		-DWITH_TBB=$(usex tbb)
 		-DWITH_USD=no # TODO: Package USD
-		-DWITH_HYDRA=no # TODO: Package Hydra
-		-DWITH_RENDERDOC=$(usex renderdoc)
+		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_XR_OPENXR=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 	)
@@ -434,11 +437,11 @@ pkg_postinst() {
 		ewarn ""
 	fi
 
-	if ! use python_single_target_python3_10; then
+	if ! use python_single_target_python3_11; then
 		elog "You are building Blender with a newer python version than"
 		elog "supported by this version upstream."
 		elog "If you experience breakages with e.g. plugins, please switch to"
-		elog "python_single_target_python3_10 instead."
+		elog "python_single_target_python3_11 instead."
 		elog "Bug: https://bugs.gentoo.org/737388"
 		elog
 	fi

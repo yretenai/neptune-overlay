@@ -245,6 +245,7 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-lto
 	append-lfs-flags
 	blender_get_version
 
