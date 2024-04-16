@@ -82,6 +82,9 @@
 		<flag name="hip">
 			Build Blender with AMD HIP support.
 		</flag>
+		<flag name="hiprt">
+			Build Blender with AMD HIP RT support.
+		</flag>
 		<flag name="renderdoc">
 			Build Blender with renderdoc support.
 		</flag>
