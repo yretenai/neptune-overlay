@@ -25,7 +25,7 @@ EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
-if [[ ${PV} = *9999* ]] ; then
+if [[ ${PV} = *9999* ]]; then
 	EGIT_BRANCH="main"
 else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
@@ -34,7 +34,7 @@ fi
 
 SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
-IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm clang
+IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
@@ -51,8 +51,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
-	osl? ( cycles pugixml llvm )
-	clang? ( llvm )"
+	osl? ( cycles pugixml llvm )"
 
 # Library versions for official builds can be found in the blender source directory in:
 # build_files/build_environment/install_deps.sh
@@ -190,7 +189,7 @@ blender_check_requirements() {
 blender_get_version() {
 	# Get blender version from blender itself.
 	BV=$(grep "BLENDER_VERSION " source/blender/blenkernel/BKE_blender_version.h | cut -d " " -f 3; assert)
-	if ((${BV:0:1} < 3)) ; then
+	if ((${BV:0:1} < 3)); then
 		# Add period (290 -> 2.90).
 		BV=${BV:0:1}.${BV:1}
 	else
@@ -208,9 +207,6 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 
 	if use llvm; then
-		if use clang; then
-			export CC=clang CXX=clang CPP="clang -E" LD="clang"
-		fi
 		llvm-r1_pkg_setup
 	fi
 }
@@ -363,7 +359,7 @@ src_configure() {
 	append-cflags $(usex debug '-DDEBUG' '-DNDEBUG')
 	append-cppflags $(usex debug '-DDEBUG' '-DNDEBUG')
 
-	if tc-is-gcc ; then
+	if tc-is-gcc; then
 		# These options only exist when GCC is detected.
 		# We disable these to respect the user's choice of linker.
 		mycmakeargs+=(
