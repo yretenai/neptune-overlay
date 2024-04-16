@@ -13,9 +13,10 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..12} )
+LLVM_COMPAT=( {16..18} )
 EGIT_LFS="yes"
 
-inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
+inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1 llvm-utils
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
@@ -33,7 +34,7 @@ fi
 
 SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
-IUSE="+bullet +fluid +openexr +tbb vulkan experimental
+IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm clang
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
@@ -44,13 +45,14 @@ RESTRICT="test"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	alembic? ( openexr )
 	cuda? ( cycles )
-	cycles? ( openexr tiff )
+	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles )
 	nanovdb? ( openvdb )
-	openvdb? ( tbb )
+	openvdb? ( tbb openexr )
 	optix? ( cuda )
-	osl? ( cycles )"
+	osl? ( cycles pugixml llvm )
+	clang? ( llvm )"
 
 # Library versions for official builds can be found in the blender source directory in:
 # build_files/build_environment/install_deps.sh
@@ -78,11 +80,11 @@ RDEPEND="${PYTHON_DEPS}
 	collada? ( >=media-libs/opencollada-1.6.68 )
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	embree? ( >=media-libs/embree-3.13.0[raymask] )
+	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
 	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?,vpx,vorbis,opus,xvid] )
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
-	hip? ( dev-util/hip )
+	hip? ( >=dev-util/hip-5.7.1 )
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
@@ -113,7 +115,7 @@ RDEPEND="${PYTHON_DEPS}
 	sndfile? ( media-libs/libsndfile )
 	tbb? ( dev-cpp/tbb:= )
 	tiff? ( media-libs/tiff:= )
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=dev-libs/wayland-1.12
 		>=dev-libs/wayland-protocols-1.15
@@ -138,6 +140,12 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libX11
 		x11-libs/libXi
 		x11-libs/libXxf86vm
+	)
+	llvm? (
+		$(llvm_gen_dep '
+			sys-devel/clang:${LLVM_SLOT}
+			sys-devel/llvm:${LLVM_SLOT}
+		')
 	)
 "
 
@@ -168,6 +176,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-openvdb-11.patch"
+	"${FILESDIR}/${PN}-9999-clang.patch"
 )
 
 blender_check_requirements() {
@@ -197,6 +206,13 @@ pkg_pretend() {
 pkg_setup() {
 	blender_check_requirements
 	python-single-r1_pkg_setup
+
+	if use llvm; then
+		if use clang; then
+			export CC=clang CXX=clang CPP="clang -E" LD="clang"
+		fi
+		llvm-r1_pkg_setup
+	fi
 }
 
 src_unpack() {
@@ -246,6 +262,7 @@ src_prepare() {
 
 src_configure() {
 	filter-lto
+	append-ldflags $(test-flags-CCLD -Wl,--undefined-version)
 	append-lfs-flags
 	blender_get_version
 
@@ -258,8 +275,10 @@ src_configure() {
 		-DWITH_ALEMBIC=$(usex alembic)
 		-DWITH_BOOST=yes
 		-DWITH_BULLET=$(usex bullet)
+		-DWITH_CLANG=$(usex llvm)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
+		-DWITH_CPU_CHECK=no
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
@@ -296,7 +315,7 @@ src_configure() {
 		-DWITH_INSTALL_PORTABLE=no
 		-DWITH_INTERNATIONAL=$(usex nls)
 		-DWITH_JACK=$(usex jack)
-		-DWITH_LLVM=$(usex osl)
+		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
 		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
@@ -351,15 +370,10 @@ src_configure() {
 			-DWITH_LINKER_GOLD=no
 			-DWITH_LINKER_LLD=no
 		)
-		# Ease compiling with required gcc similar to cuda_sanitize but for cmake
-		use cuda && use cycles-bin-kernels && mycmakeargs+=( -DCUDA_HOST_COMPILER="$(cuda_gccdir)" )
 	fi
-	if tc-is-clang ; then
-		mycmakeargs+=(
-			-DWITH_CLANG=yes
-			-DWITH_LLVM=yes
-		)
-	fi
+
+	# Ease compiling with required gcc similar to cuda_sanitize but for cmake
+	use cuda && use cycles-bin-kernels && mycmakeargs+=( -DCUDA_HOST_COMPILER="$(cuda_gccdir)" )
 
 	cmake_src_configure
 }
