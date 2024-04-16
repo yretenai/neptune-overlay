@@ -36,7 +36,7 @@ SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
+	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind wayland +webp X +otf renderdoc"
@@ -48,6 +48,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles )
+	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -146,6 +147,9 @@ RDEPEND="${PYTHON_DEPS}
 			sys-devel/llvm:${LLVM_SLOT}
 		')
 	)
+	hiprt? (
+		dev-util/hiprt
+	)
 "
 
 DEPEND="${RDEPEND}
@@ -176,6 +180,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-openvdb-11.patch"
 	"${FILESDIR}/${PN}-9999-clang.patch"
+	"${FILESDIR}/${PN}-9999-hiprt.patch"
 )
 
 blender_check_requirements() {
@@ -263,8 +268,9 @@ src_configure() {
 	blender_get_version
 
 	local mycmakeargs=(
-		-DWITH_LIBS_PRECOMPILED=no
 		-DBUILD_SHARED_LIBS=no
+		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
+		-DHIPRT_ROOT_DIR=/opt/hiprt
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -278,6 +284,7 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
+		-DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
@@ -311,6 +318,7 @@ src_configure() {
 		-DWITH_INSTALL_PORTABLE=no
 		-DWITH_INTERNATIONAL=$(usex nls)
 		-DWITH_JACK=$(usex jack)
+		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
 		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
@@ -343,7 +351,6 @@ src_configure() {
 		-DWITH_USD=no # TODO: Package USD
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_XR_OPENXR=no
-		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 	)
 
 	if use optix; then
