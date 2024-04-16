@@ -85,5 +85,8 @@
 		<flag name="renderdoc">
 			Build Blender with renderdoc support.
 		</flag>
+		<flag name="llvm">
+			Compile with LLVM support (needed for OSL.)
+		</flag>
 	</use>
 </pkgmetadata>
