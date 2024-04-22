@@ -2,8 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 # TODO(???): Check CUDA, I (Ada) do not have a CUDA-capable GPU to test this on.
-# TODO(ada): Fix AMDGPU_TARGETS being hardcoded -> https://github.com/OpenImageDenoise/oidn/blob/v2.1.0/devices/hip/CMakeLists.txt#L24-L29
-# TODO(ada): Only use openimageio if examples is also set.
 
 EAPI=8
 
@@ -25,7 +23,7 @@ else
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 fi
 
-IUSE="hip -hip-safe cuda sycl examples openimageio"
+IUSE="hip hip-safe cuda sycl examples openimageio"
 LICENSE="Apache-2.0"
 SLOT="0"
 REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} ) hip-safe? ( hip )"
@@ -99,5 +97,5 @@ pkg_postinst() {
 			ewarn "Enable the USE flag 'hip-safe' to build all kernels if you observe crashes."
 			ewarn ""
 		fi
-	fi 
+	fi
 }
