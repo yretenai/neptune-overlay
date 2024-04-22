@@ -64,7 +64,6 @@ src_configure() {
 
 	if use hip; then
 		mycmakeargs+=(
-			-DOIDN_DEVICE_HIP_COMPILER="$(get_llvm_prefix ${LLVM_MAX_SLOT})/bin/clang++"
 			-DROCM_PATH="$(hipconfig -R)"
 			-DOIDN_DEVICE_HIP_COMPILER="$(hipconfig -p)/bin/hipcc"
 		)
