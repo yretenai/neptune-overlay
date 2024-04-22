@@ -38,6 +38,7 @@ find "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime" -iname "*.ebuild" -print -del
 find "${ADADOTNET_ROOT}/dotnet-runtime" -iname "*.ebuild" -print -delete
 find "${ADADOTNET_ROOT}/dotnet-sdk" -iname "*.ebuild" -print -delete
 find "${ADADOTNET_ROOT}/dotnet-cli-bin" -iname "*.ebuild" -print -delete
+find "${ADADOTNET_ROOT}/dotnet-man" -iname "*.ebuild" -print -delete
 find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -print -delete
 
 cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_6_0_ASP_VERSION}.ebuild"
@@ -62,6 +63,8 @@ cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${LATE
 cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${NEXT_VERSION_SAFE}.ebuild"
 sed -i "/\${PV}/s//${NEXT_VERSION}/g" "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${NEXT_VERSION_SAFE}.ebuild"
 
+cp dotnet-man.ebuild ${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${LATEST_SDK_VERSION}.ebuild
+
 cp netstandard.ebuild ${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild
 sed -i "/__DOTNET_VERSION__/s//${LATEST_SDK_VERSION}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild"
 
@@ -69,4 +72,5 @@ ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${
 ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${LATEST_VERSION}.ebuild" manifest
 ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${LATEST_SDK_VERSION}.ebuild" manifest
 ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${LATEST_VERSION}.ebuild" manifest
+ebuild "${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${LATEST_SDK_VERSION}.ebuild" manifest
 ebuild "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild" manifest
