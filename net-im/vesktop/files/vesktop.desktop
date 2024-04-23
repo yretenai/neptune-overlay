@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Vencord
+StartupWMClass=vencord-desktop
+Comment=Vesktop is a custom Discord App aiming to give you better performance and improve linux support
+GenericName=Internet Messenger
+Exec=/usr/bin/vesktop
+Icon=vencord
+Type=Application
+Categories=Network;InstantMessaging;
+Keywords=discord;vencord;
