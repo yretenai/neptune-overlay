@@ -8,7 +8,7 @@ HOMEPAGE="https://github.com/dotnet/sdk"
 
 SRC_URI="https://github.com/dotnet/sdk/archive/refs/tags/v${PV}.tar.gz"
 
-KEYWORDS="amd64 arm arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 LICENSE="MIT"
 SLOT="0"
 

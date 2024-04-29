@@ -28,14 +28,14 @@ LICENSE="MIT"
 SDK_SLOT="$(ver_cut 1-2)"
 RUNTIME_SLOT="${SDK_SLOT}.0"
 SLOT="${SDK_SLOT}/${RUNTIME_SLOT}"
-KEYWORDS="amd64 arm arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"
 S="${WORKDIR}"
 
 RDEPEND="
-	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
+	neptune-dotnet/dotnet-cli-bin
 	neptune-dotnet/dotnet-runtime:${SLOT}
 	neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 	neptune-dotnet/netstandard:2.1
