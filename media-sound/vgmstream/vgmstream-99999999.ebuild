@@ -18,7 +18,7 @@ SRC_URI="
     )
 "
 
-if [[ "${PV}" != *9999* ]]; then
+if [[ "${PV}" != *99999999* ]]; then
 	EGIT_COMMIT="r${PV}"
 	KEYWORDS="~amd64"
 fi
