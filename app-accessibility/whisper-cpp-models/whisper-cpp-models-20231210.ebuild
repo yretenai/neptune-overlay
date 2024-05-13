@@ -8,15 +8,10 @@ inherit check-reqs
 DESCRIPTION="OpenAI's Whisper models converted to ggml format"
 HOMEPAGE="https://huggingface.co/ggerganov/whisper.cpp"
 
+S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-
-DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND=""
-
-S="${WORKDIR}"
 
 RESTRICT="bindist mirror"
 
@@ -30,15 +25,15 @@ MODELS=(
 
 REQUIRED_USE="|| ("
 for i in ${MODELS[@]}; do
-	use_default=""
+	USE_DEFAULT=""
 	if [ "$i" == "base" ]; then
-		use_default="+"
+		USE_DEFAULT="+"
 	elif [ "$i" == "base-en" ]; then
-		use_default="+"
+		USE_DEFAULT="+"
 	elif [ "$i" == "large*" ]; then
-		use_default="-"
+		USE_DEFAULT="-"
 	fi
-	IUSE="${IUSE} ${use_default}whisper_models_${i/./-}"
+	IUSE="${IUSE} ${USE_DEFAULT}whisper_models_${i/./-}"
 	REQUIRED_USE="${REQUIRED_USE} whisper_models_${i/./-}"
 	SRC_URI="${SRC_URI} whisper_models_${i/./-}? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/d15393806e24a74f60827e23e986f0c10750b358/ggml-${i}.bin -> whisper-ggml-${i}.bin )"
 done

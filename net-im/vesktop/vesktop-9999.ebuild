@@ -3,9 +3,9 @@
 
 EAPI=8
 
-inherit chromium-2 desktop optfeature xdg
+inherit desktop xdg
 
-DESCRIPTION="Vesktop is a custom Discord App aiming to give you better performance and improve linux support"
+DESCRIPTION="Vesktop is a custom Discord App"
 HOMEPAGE="https://github.com/Vencord
 	https://github.com/Vencord/Vesktop
 	https://vencord.dev/"
@@ -30,7 +30,6 @@ RDEPEND="
 	x11-misc/xdg-utils
 "
 
-
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
 	sys-apps/pnpm-bin
@@ -40,7 +39,7 @@ DESTDIR="/opt/${PN}"
 
 src_prepare() {
 	default
-	
+
 	pnpm-bin config set store-dir "${T}/pnpm" || die
 	sed -i -e "s/\"pnpm /\"pnpm-bin /" package.json || die
 	sed -i -e "s|\"appId\":|\"electronDownload\": { \"cache\": \"${T}/electron\" },\"appId\":|" package.json || die
@@ -49,7 +48,7 @@ src_prepare() {
 
 src_compile() {
 	pnpm-bin package:dir || die
-	cp "${FILESDIR}/vesktop.desktop" "${PN}.desktop" 
+	cp "${FILESDIR}/vesktop.desktop" "${PN}.desktop"
 	if use wayland ; then
 		sed -i "/Exec/s/${PN}/${PN} --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto/" "${PN}.desktop" || die "sed failed for wayland"
 	fi
@@ -75,7 +74,6 @@ src_install() {
 
 	dosym "${DESTDIR}/${PN}" "/usr/bin/${PN}"
 }
-
 
 pkg_postinst() {
 	xdg_pkg_postinst

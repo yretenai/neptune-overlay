@@ -9,7 +9,6 @@ DESCRIPTION="A collection of post-processing shaders written for ReShade."
 HOMEPAGE="https://github.com/crosire/reshade-shaders"
 
 EGIT_REPO_URI="https://github.com/crosire/${PN}.git"
-KEYWORDS=""
 LICENSE="CC0-1.0 BSD MIT"
 SLOT="0"
 

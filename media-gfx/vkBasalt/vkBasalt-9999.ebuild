@@ -11,7 +11,6 @@ HOMEPAGE="https://github.com/DadSchoorse/vkBasalt"
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/DadSchoorse/${PN}.git"
-	KEYWORDS=""
 else
 	SRC_URI="https://github.com/DadSchoorse/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
@@ -19,16 +18,12 @@ fi
 
 LICENSE="ZLIB"
 SLOT="0"
-RESTRICT="test"
-
 IUSE="+reshade-shaders"
+RESTRICT="test"
 
 RDEPEND="
 	reshade-shaders? ( media-gfx/reshade-shaders )
 	x11-libs/libX11
-"
-
-DEPEND="
 "
 
 BDEPEND="

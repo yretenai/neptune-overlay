@@ -5,7 +5,7 @@ EAPI=8
 inherit meson
 
 DESCRIPTION="pretty view of star constellations"
-HOMEPAGE="git.vlhl.dev/navi/stargaze"
+HOMEPAGE="https://git.vlhl.dev/navi/stargaze"
 
 if [[ ${PV} = *9999* ]] ; then
 	inherit git-r3

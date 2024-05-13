@@ -5,14 +5,14 @@ EAPI=8
 
 DESCRIPTION="Patterns for app-forensics/imhex"
 HOMEPAGE="https://imhex.werwolv.net/"
+
+S="${WORKDIR}/${P}"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="amd64 arm arm64"
 
 inherit git-r3 vcs-clean
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex-Patterns.git"
-S="${WORKDIR}/${P}"
-
-LICENSE="GPL-2"
 
 RDEPEND="
 	app-forensics/imhex

@@ -35,6 +35,9 @@ DESCRIPTION="A hex editor for reverse engineers, programmers, and eyesight"
 HOMEPAGE="https://github.com/WerWolv/ImHex"
 
 SRC_URI="${NUGET_URIS}"
+LICENSE="GPL-2"
+SLOT="0"
+
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
@@ -43,11 +46,9 @@ else
 	https://github.com/WerWolv/ImHex/releases/download/v${PV}/Full.Sources.tar.gz -> ${P}.tar.gz
 	${SRC_URI}
 	"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="~amd64"
 fi
 
-SLOT="0"
-LICENSE="GPL-2"
 IUSE="+system-llvm lto"
 
 DEPEND="

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person">
-		<email>ada@chronovore.dev</email>
-		<name>Ada Ahmed</name>
-		</maintainer>
 	<upstream>
 		<changelog>https://github.com/apple/swift/releases</changelog>
 		<bugs-to>https://github.com/apple/swift/issues</bugs-to>
 		<remote-id type="github">apple/swift</remote-id>
-		<remote-id type="homepage">https://www.swift.org/</remote-id>
 	</upstream>
 </pkgmetadata>

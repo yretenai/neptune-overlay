@@ -3,13 +3,17 @@
 
 EAPI=8
 
-inherit chromium-2 desktop optfeature xdg
+inherit desktop optfeature xdg
 
 DESCRIPTION="Revolt is an open source user-first chat platform."
 HOMEPAGE="https://github.com/revoltchat
 	https://github.com/revoltchat/desktop
 	https://revolt.chat/"
 
+LICENSE="Apache-2.0 MIT CC0-1.0 0BSD ISC BSD BSD-2 PSF-2 WTFPL"
+SLOT="0"
+IUSE="appindicator +seccomp wayland"
+RESTRICT="network-sandbox strip test"
 
 if [[ "${PV}" == *9999 ]]; then
 	inherit git-r3
@@ -17,22 +21,13 @@ if [[ "${PV}" == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/revoltchat/desktop"
 	S="${WORKDIR}/${PN}-${PV}"
 else
-	SRC_URI="https://github.com/revoltchat/desktop/archive/refs/tags/v${PV}.tar.gz"
+	SRC_URI="https://github.com/revoltchat/desktop/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/desktop-${PV}"
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="Apache-2.0 MIT CC0-1.0 0BSD ISC BSD BSD-2-Clause PSF-2 WTFPL"
-SLOT="0"
-IUSE="appindicator +seccomp wayland"
-
-# Requires network access (https) as long as NPM dependencies aren't packaged
-RESTRICT="network-sandbox strip test"
-
-
 RDEPEND="
 	app-accessibility/at-spi2-core:2
-	app-accessibility/at-spi2-atk:2
 	dev-libs/expat
 	dev-libs/glib
 	dev-libs/nspr
@@ -57,7 +52,6 @@ RDEPEND="
 	appindicator? ( dev-libs/libayatana-appindicator )
 "
 
-
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
 	sys-apps/yarn
@@ -71,7 +65,7 @@ src_unpack() {
 	[[ "${PV}" == *9999 ]] && git-r3_src_unpack
 
 	cd "${S}" || die
-	
+
 	eapply "${FILESDIR}/electron-builder-cache.patch" || die "can't add electron cache path"
 
 	sed -i 's|"electron": "^.*",|"electron": "^29.1.0",|g' package.json || die "electron update failed"
@@ -136,7 +130,6 @@ src_install() {
 		dosym ../../usr/lib64/libayatana-appindicator3.so "${DESTDIR}/libappindicator3.so"
 	fi
 }
-
 
 pkg_postinst() {
 	xdg_pkg_postinst

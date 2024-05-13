@@ -8,10 +8,9 @@ HOMEPAGE="http://github.com/selmf/unarr"
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/selmf/${PN}.git"
-	KEYWORDS=""
 else
 	SRC_URI="https://github.com/selmf/${PN}/releases/download/v${PV}/${P}.tar.xz"
-	KEYWORDS="amd64 ~arm"
+	KEYWORDS="amd64"
 fi
 
 LICENSE="LGPL-3"
@@ -23,4 +22,3 @@ DEPEND="
 	app-arch/xz-utils
 "
 RDEPEND="${DEPEND}"
-BDEPEND=""

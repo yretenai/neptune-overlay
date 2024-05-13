@@ -3,9 +3,13 @@
 <pkgmetadata>
 	<use>
 		<flag name="webview">
-            Use 
+			Use 
 			<pkg>dev-python/pywebview</pkg>
-            for the sign-in process.
-        </flag>
+			for the sign-in process.
+		</flag>
 	</use>
+	<upstream>
+		<bugs-to>https://github.com/derrod/legendary/issues</bugs-to>
+		<remote-id type="github">derrod/legendary</remote-id>
+	</upstream>
 </pkgmetadata>

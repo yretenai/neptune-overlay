@@ -36,7 +36,7 @@ DEPEND="
 	>=media-libs/libpng-1.6.40-r1
 	>=sys-apps/dbus-1.15.6
 	>=sys-apps/util-linux-2.38.1-r2
-	>=sys-libs/glibc-2.37-r7
+	>=sys-libs/glibc-2.37-r10
 	>=sys-libs/zlib-1.2.13-r1
 	>=x11-libs/cairo-1.17.8
 	>=x11-libs/gdk-pixbuf-2.42.10-r1
@@ -62,7 +62,7 @@ DEPEND="
 QA_PREBUILT="usr/bin/tixati"
 
 src_install() {
-	exeinto "${EPREFIX}"/usr/bin/
+	exeinto /usr/bin/
 	doexe tixati
 	sed -i 's/Internet/X-Internet/' tixati.desktop || die
 	domenu tixati.desktop

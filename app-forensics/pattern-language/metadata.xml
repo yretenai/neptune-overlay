@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<bugs-to>https://github.com/WerWolv/PatternLanguage/issues</bugs-to>
+		<remote-id type="github">WerWolv/PatternLanguage</remote-id>
+	</upstream>
+</pkgmetadata>

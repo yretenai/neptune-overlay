@@ -10,19 +10,17 @@ inherit cmake llvm toolchain-funcs
 
 DESCRIPTION="The Pattern Language used by the ImHex Hex Editor"
 HOMEPAGE="https://github.com/WerWolv/PatternLanguage"
+LICENSE="LGPL-2.1"
 
-SRC_URI="${NUGET_URIS}"
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/WerWolv/PatternLanguage.git"
 else
 	SRC_URI="https://github.com/WerWolv/PatternLanguage/archive/refs/tags/ImHex-v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="~amd64"
 fi
 
 SLOT="0"
-LICENSE="LGPL-2.1"
-IUSE=""
 
 DEPEND="
 	>=dev-cpp/nlohmann_json-3.10.2

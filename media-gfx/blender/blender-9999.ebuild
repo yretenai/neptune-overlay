@@ -12,11 +12,11 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..12} )
+PYTHON_COMPAT=( python3_{11..13} )
 LLVM_COMPAT=( {16..18} )
 EGIT_LFS="yes"
 
-inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1 llvm-utils
+inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
@@ -29,14 +29,14 @@ if [[ ${PV} = *9999* ]]; then
 	EGIT_BRANCH="main"
 else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="~amd64"
 fi
 
-SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
+SLOT="${PV%.*}"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip -hiprt jack jemalloc jpeg2k
+	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind wayland +webp X +otf renderdoc"

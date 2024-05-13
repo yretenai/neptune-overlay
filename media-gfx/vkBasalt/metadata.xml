@@ -7,5 +7,9 @@
 			<pkg>media-gfx/reshade-shaders</pkg>
 			as built-in shaders.
 		</flag>
-    </use>
+	</use>
+	<upstream>
+		<bugs-to>https://github.com/DadSchoorse/vkBasalt/issues</bugs-to>
+		<remote-id type="github">DadSchoorse/vkBasalt</remote-id>
+	</upstream>
 </pkgmetadata>

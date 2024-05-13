@@ -3,29 +3,27 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 
 inherit cmake git-r3 python-single-r1 xdg-utils
 
 DESCRIPTION="A cycle-accurate Nintendo Game Boy Advance emulator"
 HOMEPAGE="https://github.com/nba-emu/NanoBoyAdvance"
+LICENSE="GPL-3"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/nba-emu/${PN}.git"
 GLAD_EGIT_COMMIT="adc3d7a1d704e099581ca25bc5bbdf728c2db67b"
 GLAD_EGIT_REPO_URI="https://github.com/Dav1dde/glad.git"
 GLAD_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-glad"
 
-KEYWORDS=""
 IUSE="qt6 +qt5"
-REQUIRED_USE="^^ ( qt6 qt5 )"
+REQUIRED_USE="^^ ( qt6 qt5 ) ${PYTHON_REQUIRED_USE}"
 
 PATCHES=(
 	"${FILESDIR}/9999-add-algorithms.patch"
 	"${FILESDIR}/9999-load-glad.patch"
 )
-
-LICENSE="GPL-3"
-SLOT="0"
 
 DEPEND="
 	media-libs/libsdl2
@@ -43,6 +41,7 @@ DEPEND="
 		dev-qt/qtbase:6[gui,opengl,widgets]
 		dev-qt/qt5compat:6
 	)
+	${PYTHON_DEPS}
 "
 RDEPEND="${DEPEND}"
 BDEPEND="

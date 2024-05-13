@@ -4,11 +4,12 @@
 EAPI=8
 
 PYTHON_REQ_USE="tk"
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit python-single-r1
 
 DESCRIPTION="Wwise .bnk explorer and audio simulator"
 HOMEPAGE="https://github.com/bnnm/wwiser"
+LICENSE="GPL-2"
 
 if [[ "${PV}" == *99999999* ]]; then
 	inherit git-r3
@@ -18,9 +19,9 @@ else
 	KEYWORDS="~amd64"
 fi
 
-LICENSE=""
 SLOT="0"
-RDEPEND=""
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+RDEPEND="${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"
 
 src_install() {

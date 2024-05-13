@@ -12,7 +12,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 EGIT_LFS="yes"
 
 inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
@@ -28,11 +28,11 @@ if [[ ${PV} = *9999* ]] ; then
 	EGIT_BRANCH="main"
 else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="~amd64"
 fi
 
-SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
+SLOT="${PV%.*}"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
@@ -113,7 +113,7 @@ RDEPEND="${PYTHON_DEPS}
 	sndfile? ( media-libs/libsndfile )
 	tbb? ( dev-cpp/tbb:= )
 	tiff? ( media-libs/tiff:= )
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=dev-libs/wayland-1.12
 		>=dev-libs/wayland-protocols-1.15

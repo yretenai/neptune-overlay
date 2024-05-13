@@ -5,7 +5,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..12} )
+PYTHON_COMPAT=( python3_{9..13} )
 LLVM_MAX_SLOT=17
 ROCM_VERSION="5.7.1"
 
@@ -20,12 +20,12 @@ if [[ ${PV} = *9999 ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://github.com/OpenImageDenoise/${PN}/releases/download/v${PV}/${P}.src.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
-IUSE="hip hip-safe cuda sycl examples openimageio"
 LICENSE="Apache-2.0"
 SLOT="0"
+IUSE="hip hip-safe cuda sycl examples openimageio"
 REQUIRED_USE="${PYTHON_REQUIRED_USE} hip? ( ${ROCM_REQUIRED_USE} ) hip-safe? ( hip )"
 
 RDEPEND="${PYTHON_DEPS}

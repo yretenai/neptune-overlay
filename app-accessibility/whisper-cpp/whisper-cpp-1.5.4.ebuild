@@ -7,12 +7,14 @@ inherit cmake
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++ "
 HOMEPAGE="https://github.com/ggerganov/whisper.cpp"
-SRC_URI="https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v${PV}.tar.gz -> ${PN}.tar.gz"
+SRC_URI="https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 
+S="${WORKDIR}/whisper.cpp-${PV}"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~arm ~ppc64"
-IUSE="-hip -opencl -cuda openblas torch +models sdl2 test cpu_flags_x86_avx2 cpu_flags_x86_avx cpu_flags_x86_fma3 cpu_flags_x86_f16c"
+KEYWORDS="~amd64"
+IUSE="hip opencl cuda openblas torch +models sdl2 test cpu_flags_x86_avx2 cpu_flags_x86_avx cpu_flags_x86_fma3 cpu_flags_x86_f16c"
+RESTRICT="!test? ( test )"
 
 # HIP Disabled because it still links to CUDA???
 # I don't want to taint my system with NVidia's nerfarious drivers
@@ -34,10 +36,6 @@ RDEPEND="
 	${DEPEND}
 	models? ( app-accessibility/whisper-cpp-models )
 "
-
-BDEPEND=""
-
-S="${WORKDIR}/whisper.cpp-${PV}"
 
 REQUIRED_USE="
 	^^ ( hip cuda openblas opencl )

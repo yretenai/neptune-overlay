@@ -3,8 +3,7 @@
 
 EAPI=8
 
-
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 
 inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils
 
@@ -24,11 +23,11 @@ if [[ ${PV} = *9999* ]] ; then
 else
 	EGIT_BRANCH="goo-engine-v$(ver_cut 1-2)-release"
 	ADDONS_EGIT_BRANCH="refs/heads/blender-v$(ver_cut 1-2)-release"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="~amd64"
 fi
 
-SLOT="${PV%.*}"
 LICENSE="|| ( GPL-3 BL )"
+SLOT="${PV%.*}"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
@@ -109,7 +108,7 @@ RDEPEND="${PYTHON_DEPS}
 	sndfile? ( media-libs/libsndfile )
 	tbb? ( dev-cpp/tbb:= )
 	tiff? ( media-libs/tiff:= )
-	valgrind? ( dev-util/valgrind )
+	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=dev-libs/wayland-1.12
 		>=dev-libs/wayland-protocols-1.15
@@ -119,11 +118,11 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-    	media-libs/shaderc
-        dev-util/spirv-tools
-        dev-util/glslang
-    	media-libs/vulkan-loader
-    )
+		media-libs/shaderc
+		dev-util/spirv-tools
+		dev-util/glslang
+		media-libs/vulkan-loader
+	)
 	otf? (
 		media-libs/harfbuzz
 	)
@@ -153,9 +152,9 @@ BDEPEND="
 		dev-texlive/texlive-latexextra
 	)
 	vulkan? (
-        dev-util/spirv-headers
+		dev-util/spirv-headers
 		dev-util/vulkan-headers
-    )
+	)
 	nls? ( sys-devel/gettext )
 	wayland? (
 		dev-util/wayland-scanner
@@ -209,7 +208,7 @@ src_prepare() {
 
 	# Disable MS Windows help generation. The variable doesn't do what it
 	# it sounds like.
-	sed -e "s|GENERATE_HTMLHELP      = YES|GENERATE_HTMLHELP      = NO|" \
+	sed -e "s|GENERATE_HTMLHELP	  = YES|GENERATE_HTMLHELP	  = NO|" \
 		-i doc/doxygen/Doxyfile || die
 
 	# Prepare icons and .desktop files for slotting.

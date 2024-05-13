@@ -24,6 +24,7 @@ SRC_URI="
 	)
 "
 
+S="${WORKDIR}"
 LICENSE="MIT"
 SDK_SLOT="$(ver_cut 1-2)"
 RUNTIME_SLOT="${SDK_SLOT}.0"
@@ -32,7 +33,6 @@ KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"
-S="${WORKDIR}"
 
 RDEPEND="
 	neptune-dotnet/dotnet-cli-bin
@@ -44,7 +44,7 @@ src_install() {
 	local dest="opt/neptune-dotnet"
 	dodir "${dest%/*}"
 	insinto "${dest}/shared"
-	
+
 	# install aspnet pack
 	doins -r shared/Microsoft.AspNetCore.App
 }
