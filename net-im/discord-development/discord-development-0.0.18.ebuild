@@ -65,7 +65,6 @@ DESTDIR="/opt/${MY_PN}"
 QA_PREBUILT="*"
 
 CONFIG_CHECK="~USER_NS"
-
 src_unpack() {
 	unpack ${MY_PN}-${MY_PV}.tar.gz
 }
