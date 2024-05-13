@@ -24,6 +24,7 @@ SRC_URI="
 	)
 "
 
+S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64"
@@ -37,7 +38,6 @@ RDEPEND="
 "
 
 QA_PREBUILT="*"
-S="${WORKDIR}"
 
 src_install() {
 	local dest="opt/neptune-dotnet"
