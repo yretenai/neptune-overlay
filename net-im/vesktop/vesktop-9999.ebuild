@@ -40,6 +40,7 @@ DESTDIR="/opt/${PN}"
 src_prepare() {
 	default
 
+	export COREPACK_ENABLE_STRICT=0
 	pnpm-bin config set store-dir "${T}/pnpm" || die
 	sed -i -e "s/\"pnpm /\"pnpm-bin /" package.json || die
 	sed -i -e "s|\"appId\":|\"electronDownload\": { \"cache\": \"${T}/electron\" },\"appId\":|" package.json || die
