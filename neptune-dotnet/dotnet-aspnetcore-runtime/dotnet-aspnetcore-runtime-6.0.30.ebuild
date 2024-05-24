@@ -35,7 +35,7 @@ RESTRICT="bindist mirror strip test"
 QA_PREBUILT="*"
 
 RDEPEND="
-	neptune-dotnet/dotnet-cli-bin
+	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
 	neptune-dotnet/dotnet-runtime:${SLOT}
 "
 
