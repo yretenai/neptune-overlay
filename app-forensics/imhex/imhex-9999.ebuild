@@ -6,28 +6,7 @@ EAPI=8
 DOTNET_PKG_COMPAT="8.0"
 CMAKE_BUILD_TYPE="Release"
 CMAKE_MAKEFILE_GENERATOR="emake"
-NUGETS="
-microsoft.aspnetcore.app.ref@7.0.14
-microsoft.aspnetcore.app.runtime.linux-arm64@7.0.14
-microsoft.aspnetcore.app.runtime.linux-arm@7.0.14
-microsoft.aspnetcore.app.runtime.linux-musl-arm64@7.0.14
-microsoft.aspnetcore.app.runtime.linux-musl-arm@7.0.14
-microsoft.aspnetcore.app.runtime.linux-musl-x64@7.0.14
-microsoft.aspnetcore.app.runtime.linux-x64@7.0.14
-microsoft.netcore.app.host.linux-arm64@7.0.14
-microsoft.netcore.app.host.linux-arm@7.0.14
-microsoft.netcore.app.host.linux-musl-arm64@7.0.14
-microsoft.netcore.app.host.linux-musl-arm@7.0.14
-microsoft.netcore.app.host.linux-musl-x64@7.0.14
-microsoft.netcore.app.host.linux-x64@7.0.14
-microsoft.netcore.app.ref@7.0.14
-microsoft.netcore.app.runtime.linux-arm64@7.0.14
-microsoft.netcore.app.runtime.linux-arm@7.0.14
-microsoft.netcore.app.runtime.linux-musl-arm64@7.0.14
-microsoft.netcore.app.runtime.linux-musl-arm@7.0.14
-microsoft.netcore.app.runtime.linux-musl-x64@7.0.14
-microsoft.netcore.app.runtime.linux-x64@7.0.14
-"
+NUGETS=""
 
 inherit dotnet-pkg cmake llvm toolchain-funcs desktop vcs-clean
 
@@ -38,14 +17,13 @@ SRC_URI="${NUGET_URIS}"
 LICENSE="GPL-2"
 SLOT="0"
 
-if [[ ${PV} == *9999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
+inherit git-r3
+EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
+
+if [[ ${PV} = *9999* ]]; then
+	EGIT_BRANCH="master"
 else
-	SRC_URI="
-	https://github.com/WerWolv/ImHex/releases/download/v${PV}/Full.Sources.tar.gz -> ${P}.tar.gz
-	${SRC_URI}
-	"
+	EGIT_BRANCH="v${PV}"
 	KEYWORDS="~amd64"
 fi
 
@@ -70,20 +48,24 @@ DEPEND="
 	virtual/libiconv
 	virtual/libintl
 "
-RDEPEND="${DEPEND}"
+RDEPEND="
+	${DEPEND}	
+	${DOTNET_PKG_RDEPS}
+"
 BDEPEND="
 	system-llvm? ( <sys-devel/llvm-17 )
 	app-admin/chrpath
 	gnome-base/librsvg
 	sys-devel/lld
 	dev-util/ccache
+	${DOTNET_PKG_BDEPS}
 "
 
 PATCHES=(
 	"${FILESDIR}/yara-shared.patch"
 )
 
-DOTNET_PKG_PROJECTS=( "${S}/plugins/script_loader/dotnet/AssemblyLoader/AssemblyLoader.csproj" )
+DOTNET_PKG_PROJECTS=( "${S}/plugins/script_loader/support/dotnet/AssemblyLoader/AssemblyLoader.csproj" )
 
 pkg_pretend() {
 	if tc-is-gcc && [[ $(gcc-major-version) -lt 12 ]]; then
@@ -106,7 +88,7 @@ src_prepare() {
 	sed -e "s| -Werror||g" -i cmake/build_helpers.cmake || die
 	sed -e "s| -Werror||g" -i lib/external/pattern_language/lib/CMakeLists.txt || die
 	sed -e "s| -Werror||g" -i lib/external/pattern_language/cli/CMakeLists.txt || die
-	sed -e "s|^add_dotnet_assembly|#|g" -i plugins/script_loader/dotnet/CMakeLists.txt || die
+	sed -e "s|^add_dotnet_assembly|#|g" -i plugins/script_loader/support/dotnet/CMakeLists.txt || die
 	sed -e "s|add_dependencies|#|g" -i plugins/script_loader/CMakeLists.txt || die
 
 	cmake_src_prepare
@@ -132,7 +114,7 @@ src_configure() {
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
 		-D IMHEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
 		-D IMHEX_STRICT_WARNINGS=OFF \
-		-D IMHEX_BUNDLE_DOTNET=OFF \
+		-D IMHEX_BUNDLE_DOTNET=ON \
 		-D IMHEX_ENABLE_LTO=$(usex lto) \
 		-D IMHEX_ENABLE_UNITY_BUILD=OFF \
 		-D IMHEX_VERSION="${PV}" \
@@ -158,6 +140,6 @@ src_compile() {
 
 src_install() {
 	cmake_src_install
-	dotnet-pkg-base_install "/usr/$(get_libdir)/imhex/plugins/"
+	dotnet-pkg-base_install "/usr/share/imhex/plugins/"
 	domenu "${S}/dist/${PN}.desktop"
 }
