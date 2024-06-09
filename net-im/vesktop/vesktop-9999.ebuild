@@ -51,7 +51,7 @@ src_compile() {
 	pnpm-bin package:dir || die
 	cp "${FILESDIR}/vesktop.desktop" "${PN}.desktop"
 	if use wayland ; then
-		sed -i "/Exec/s/${PN}/${PN} --enable-features=UseOzonePlatform,WaylandWindowDecorations --ozone-platform-hint=auto/" "${PN}.desktop" || die "sed failed for wayland"
+		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime --use-gl=egl/" "${PN}.desktop" || die "sed failed for wayland"
 	fi
 }
 

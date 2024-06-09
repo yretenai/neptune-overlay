@@ -89,7 +89,7 @@ src_prepare() {
 	fi
 
 	if use wayland ; then
-		sed -i "/Exec/s/${PN}/${PN} --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --ozone-platform-hint=auto/" \
+		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime --use-gl=egl/" \
 			"${PN}.desktop" \
 			|| die "sed failed for wayland"
 	fi
