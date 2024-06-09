@@ -33,7 +33,7 @@ IUSE="+bullet +fluid +openexr +tbb vulkan experimental
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
-	+sndfile +tiff valgrind wayland +webp X +otf renderdoc"
+	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
 RESTRICT="test"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}

@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/revoltchat
 
 LICENSE="Apache-2.0 MIT CC0-1.0 0BSD ISC BSD BSD-2 PSF-2 WTFPL"
 SLOT="0"
-IUSE="appindicator +seccomp wayland"
+IUSE="appindicator +seccomp +wayland"
 RESTRICT="network-sandbox strip test"
 
 if [[ "${PV}" == *9999 ]]; then
