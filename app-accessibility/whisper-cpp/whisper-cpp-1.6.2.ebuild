@@ -13,7 +13,7 @@ S="${WORKDIR}/whisper.cpp-${PV}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="hip opencl cuda openblas torch +models sdl2 test cpu_flags_x86_avx2 cpu_flags_x86_avx cpu_flags_x86_fma3 cpu_flags_x86_f16c"
+IUSE="hip opencl cuda mkl oneapi openblas openblas64 torch +models sdl2 test cpu_flags_x86_avx512dq cpu_flags_x86_avx512_vbmi2 cpu_flags_x86_avx512_vnni cpu_flags_x86_avx2 cpu_flags_x86_avx cpu_flags_x86_fma3 cpu_flags_x86_f16c"
 RESTRICT="!test? ( test )"
 
 # HIP Disabled because it still links to CUDA???
@@ -25,7 +25,9 @@ DEPEND="
 		sys-devel/clang
 		dev-util/nvidia-cuda-toolkit
 	)
+	mkl? ( sci-libs/mkl )
 	cuda? ( dev-util/nvidia-cuda-toolkit )
+	oneapi? ( dev-libs/intel-compute-runtime )
 	opencl? ( sci-libs/clblast )
 	openblas? ( sci-libs/openblas )
 	sdl2? ( media-libs/libsdl2 )
@@ -39,15 +41,24 @@ RDEPEND="
 
 REQUIRED_USE="
 	^^ ( hip cuda openblas opencl )
+	openblas64? ( openblas )
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-shared-blas.patch"
-	"${FILESDIR}/${PN}-openblas.patch"
-	"${FILESDIR}/${PN}-paths.patch"
 )
 
 src_configure() {
+	sed -e "s|models/ggml-base.en.bin|${EPREFIX}/usr/share/whisper/ggml-models/base.en.bin|" \
+		-i "${S}/examples/bench/bench.cpp" \
+		-i "${S}/examples/lsp/lsp.cpp" \
+		-i "${S}/examples/server/server.cpp" \
+		-i "${S}/examples/talk-llama/talk-llama.cpp" \
+		-i "${S}/examples/talk/talk.cpp" \
+		-i "${S}/examples/command/command.cpp" \
+		-i "${S}/examples/wchess/wchess.cmd/wchess.cmd.cpp" \
+		-i "${S}/examples/main/main.cpp" \
+		-i "${S}/examples/stream/stream.cpp" || die "can't fix default model path"
+
 	USE_BLAS="NO"
 	if use openblas || use cuda || use hip || use opencl; then
 		USE_BLAS="YES"
@@ -58,14 +69,21 @@ src_configure() {
 		-DWHISPER_BUILD_TESTS=$(usex test)
 		-DWHISPER_BLAS=${USE_BLAS}
 		-DWHISPER_OPENBLAS=$(usex openblas)
-		-DWHISPER_CUBLAS=$(usex cuda)
+		-DWHISPER_OPENBLAS_INTERFACE64=$(usex openblas64)
+		-DWHISPER_CUDA=$(usex cuda)
 		-DWHISPER_HIPBLAS=$(usex hip)
 		-DWHISPER_CLBLAST=$(usex opencl)
+		-DWHISPER_MKL=$(usex mkl)
+		-DWHISPER_SYCL=$(usex oneapi)
 		-DWHISPER_SDL2=$(usex sdl2)
+		-DWHISPER_NO_AVX512=$(usex !cpu_flags_x86_avx512dq)
+		-DWHISPER_NO_AVX512_VBMI=$(usex !cpu_flags_x86_avx512_vbmi2)
+		-DWHISPER_NO_AVX512_VNNI=$(usex !cpu_flags_x86_avx512_vnni)
 		-DWHISPER_NO_AVX2=$(usex !cpu_flags_x86_avx2)
 		-DWHISPER_NO_AVX=$(usex !cpu_flags_x86_avx)
 		-DWHISPER_NO_FMA=$(usex !cpu_flags_x86_fma3)
 		-DWHISPER_NO_F16C=$(usex !cpu_flags_x86_f16c)
+		-DWHISPER_STATIC=OFF
 		-DWHISPER_OPENVINO=OFF # TODO: Add OpenVINO ebuild
 	)
 
