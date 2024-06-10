@@ -3,7 +3,7 @@
 
 EAPI=8
 
-ROCM_VERSION="5.7.1"
+ROCM_VERSION="6.0.0"
 
 inherit rocm git-r3
 
