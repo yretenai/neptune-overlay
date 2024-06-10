@@ -34,3 +34,12 @@ src_install() {
 	doicon "${FILESDIR}/runelite.png"
 	make_desktop_entry "${CANONICAL_NAME}" "RuneLite" "runelite" "Game" "StartupWMClass=net-runelite-launcher-Launcher"
 }
+
+pkg_postrm() {
+	ewarn ""
+	ewarn "The RuneLite launcher will download client files to:"
+	ewarn "\t~/.runelite"
+	ewarn "If you no longer desire to use RuneLite;"
+	ewarn "After removal it is safe to remove that directory."
+	ewarn ""
+}
