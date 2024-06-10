@@ -3,16 +3,19 @@
 
 EAPI=8
 
-inherit cmake
+inherit cmake git-r3
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++ "
 HOMEPAGE="https://github.com/ggerganov/whisper.cpp"
-SRC_URI="https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+EGIT_REPO_URI="https://github.com/ggerganov/whisper.cpp"
 
-S="${WORKDIR}/whisper.cpp-${PV}"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64"
+fi
+
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
 IUSE="hip opencl cuda mkl oneapi openblas openblas64 torch +models sdl2 test cpu_flags_x86_avx512dq cpu_flags_x86_avx512_vbmi2 cpu_flags_x86_avx512_vnni cpu_flags_x86_avx2 cpu_flags_x86_avx cpu_flags_x86_fma3 cpu_flags_x86_f16c"
 RESTRICT="!test? ( test )"
 
@@ -49,15 +52,15 @@ PATCHES=(
 
 src_configure() {
 	sed -e "s|models/ggml-base.en.bin|${EPREFIX}/usr/share/whisper/ggml-models/base.en.bin|" \
-		-i "${S}/examples/bench/bench.cpp" \
-		-i "${S}/examples/lsp/lsp.cpp" \
-		-i "${S}/examples/server/server.cpp" \
-		-i "${S}/examples/talk-llama/talk-llama.cpp" \
-		-i "${S}/examples/talk/talk.cpp" \
-		-i "${S}/examples/command/command.cpp" \
-		-i "${S}/examples/wchess/wchess.cmd/wchess.cmd.cpp" \
-		-i "${S}/examples/main/main.cpp" \
-		-i "${S}/examples/stream/stream.cpp" || die "can't fix default model path"
+		-i "examples/bench/bench.cpp" \
+		-i "examples/lsp/lsp.cpp" \
+		-i "examples/server/server.cpp" \
+		-i "examples/talk-llama/talk-llama.cpp" \
+		-i "examples/talk/talk.cpp" \
+		-i "examples/command/command.cpp" \
+		-i "examples/wchess/wchess.cmd/wchess.cmd.cpp" \
+		-i "examples/main/main.cpp" \
+		-i "examples/stream/stream.cpp" || die "can't fix default model path"
 
 	USE_BLAS="NO"
 	if use openblas || use cuda || use hip || use opencl; then

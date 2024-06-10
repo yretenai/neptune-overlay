@@ -1,16 +1,14 @@
 EAPI=8
 
-inherit cmake
+inherit cmake git-r3
 
 DESCRIPTION="A decompression library for rar, tar, zip and 7z archives"
 HOMEPAGE="http://github.com/selmf/unarr"
+EGIT_REPO_URI="https://github.com/selmf/unarr.git"
 
-if [[ ${PV} == 9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/selmf/${PN}.git"
-else
-	SRC_URI="https://github.com/selmf/${PN}/releases/download/v${PV}/${P}.tar.xz"
-	KEYWORDS="amd64"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64"
 fi
 
 LICENSE="LGPL-3"

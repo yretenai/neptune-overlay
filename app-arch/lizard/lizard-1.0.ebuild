@@ -3,11 +3,16 @@
 
 EAPI=8
 
-inherit toolchain-funcs
+inherit toolchain-funcs git-r3
 
 DESCRIPTION="An efficient compressor with very fast decompression, formerly known as LZ5"
 HOMEPAGE="https://github.com/inikep/lizard"
-SRC_URI="https://github.com/inikep/lizard/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+EGIT_REPO_URI="https://github.com/inikep/lizard.git"
+
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64"
+fi
 
 LICENSE="GPL-2 BSD-2"
 SLOT="0/2"

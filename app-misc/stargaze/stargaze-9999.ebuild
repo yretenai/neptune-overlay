@@ -2,16 +2,14 @@
 # Distributed under the terms of the GNU General Public License v2
 EAPI=8
 
-inherit meson
+inherit meson git-r3
 
 DESCRIPTION="pretty view of star constellations"
 HOMEPAGE="https://git.vlhl.dev/navi/stargaze"
+EGIT_REPO_URI="https://git.vlhl.dev/navi/stargaze.git"
 
-if [[ ${PV} = *9999* ]] ; then
-	inherit git-r3
-	EGIT_REPO_URI="https://git.vlhl.dev/navi/stargaze.git"
-else
-	SRC_URI="https://files.vlhl.dev/src/${P}.tar.gz"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 

@@ -8,18 +8,15 @@ EAPI=8
 PYTHON_COMPAT=( python3_{9..13} )
 LLVM_MAX_SLOT=17
 ROCM_VERSION="5.7.1"
+EGIT_LFS=1
 
-inherit rocm cuda cmake python-single-r1 llvm
-
+inherit rocm cuda cmake python-single-r1 llvm git-r3
 DESCRIPTION="Intel(R) Open Image Denoise library"
 HOMEPAGE="https://www.openimagedenoise.org/"
+EGIT_REPO_URI="https://github.com/OpenImageDenoise/oidn.git"
 
-if [[ ${PV} = *9999 ]]; then
-	EGIT_REPO_URI="https://github.com/OpenImageDenoise/oidn.git"
-	EGIT_BRANCH="master"
-	inherit git-r3
-else
-	SRC_URI="https://github.com/OpenImageDenoise/${PN}/releases/download/v${PV}/${P}.src.tar.gz -> ${P}.tar.gz"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 

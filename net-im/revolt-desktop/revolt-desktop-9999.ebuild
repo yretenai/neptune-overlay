@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit desktop optfeature xdg
+inherit desktop optfeature xdg git-r3
 
 DESCRIPTION="Revolt is an open source user-first chat platform."
 HOMEPAGE="https://github.com/revoltchat
@@ -15,16 +15,14 @@ SLOT="0"
 IUSE="appindicator +seccomp +wayland"
 RESTRICT="network-sandbox strip test"
 
-if [[ "${PV}" == *9999 ]]; then
-	inherit git-r3
-	EGIT_SUBMODULES=()
-	EGIT_REPO_URI="https://github.com/revoltchat/desktop"
-	S="${WORKDIR}/${PN}-${PV}"
-else
-	SRC_URI="https://github.com/revoltchat/desktop/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/desktop-${PV}"
+EGIT_SUBMODULES=()
+EGIT_REPO_URI="https://github.com/revoltchat/desktop.git"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
+
+S="${WORKDIR}/${PN}-${PV}"
 
 RDEPEND="
 	app-accessibility/at-spi2-core:2
@@ -61,8 +59,7 @@ DESTDIR="/opt/${PN}"
 
 src_unpack() {
 	default
-
-	[[ "${PV}" == *9999 ]] && git-r3_src_unpack
+	git-r3_src_unpack
 
 	cd "${S}" || die
 

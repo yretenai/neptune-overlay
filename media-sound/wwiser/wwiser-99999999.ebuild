@@ -5,17 +5,15 @@ EAPI=8
 
 PYTHON_REQ_USE="tk"
 PYTHON_COMPAT=( python3_{10..13} )
-inherit python-single-r1
+inherit python-single-r1 git-r3
 
 DESCRIPTION="Wwise .bnk explorer and audio simulator"
 HOMEPAGE="https://github.com/bnnm/wwiser"
 LICENSE="GPL-2"
+EGIT_REPO_URI="https://github.com/bnnm/${PN}.git"
 
-if [[ "${PV}" == *99999999* ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/bnnm/${PN}.git"
-else
-	SRC_URI="https://github.com/bnnm/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 

@@ -3,16 +3,14 @@
 
 EAPI=8
 
-inherit optfeature xdg
+inherit optfeature xdg git-r3
 
 DESCRIPTION="Wrapper script for Steam custom launch options"
 HOMEPAGE="https://github.com/frostworx/steamtinkerlaunch"
+EGIT_REPO_URI="https://github.com/frostworx/${PN}.git"
 
-if [[ ${PV} == 9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/frostworx/${PN}.git"
-else
-	SRC_URI="https://github.com/frostworx/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 

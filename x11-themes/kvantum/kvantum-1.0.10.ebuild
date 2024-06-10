@@ -7,8 +7,11 @@ inherit cmake xdg multibuild
 
 DESCRIPTION="SVG-based theme engine for Qt5, KDE Plasma and LXQt"
 HOMEPAGE="https://github.com/tsujan/Kvantum"
-SRC_URI="https://github.com/tsujan/${PN^}/archive/V${PV}.tar.gz -> ${P}.tar.gz"
-S="${WORKDIR}/${PN^}-${PV}/${PN^}"
+EGIT_REPO_URI="https://github.com/tsujan/Kvantum.git"
+if [[ "${PV}" != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64"
+fi
 
 LICENSE="GPL-3"
 SLOT="0"
