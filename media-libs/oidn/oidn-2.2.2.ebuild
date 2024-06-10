@@ -1,4 +1,4 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 2023-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # TODO(???): Check CUDA, I (Ada) do not have a CUDA-capable GPU to test this on.
