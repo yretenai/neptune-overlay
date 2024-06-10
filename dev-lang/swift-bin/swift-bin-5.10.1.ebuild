@@ -74,7 +74,7 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-plugin-server"
 
-	newbin "${WORKDIR}/${SWIFTDIR}/usr/bin/plutil swift-plutil"
+	newbin "${WORKDIR}/${SWIFTDIR}/usr/bin/plutil" "swift-plutil"
 
 	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift"
 	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift-api-digester"
@@ -131,8 +131,8 @@ pkg_postrm() {
 	ewarn ""
 	ewarn "Swift has a built-in package manager that has several global stores."
 	ewarn "You may want to remove the following directories:"
-	ewarn "~/.cache/org.swift.swiftpm"
-	ewarn "~/.swiftpm"
+	ewarn "\t~/.cache/org.swift.swiftpm"
+	ewarn "\t~/.swiftpm"
 	ewarn "It may contain (significant) debris."
 	ewarn ""
 }
