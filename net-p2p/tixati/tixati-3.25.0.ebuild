@@ -5,7 +5,7 @@ EAPI=8
 
 inherit desktop xdg
 
-T_PV="3.24-1"
+T_PV="3.25-1"
 
 DESCRIPTION="Tixati is a New and Powerful P2P System"
 HOMEPAGE="https://www.tixati.com/"
