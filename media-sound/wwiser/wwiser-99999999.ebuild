@@ -12,7 +12,7 @@ HOMEPAGE="https://github.com/bnnm/wwiser"
 LICENSE="GPL-2"
 EGIT_REPO_URI="https://github.com/bnnm/${PN}.git"
 
-if [[ "${PV}" != *9999* ]]; then
+if [[ "${PV}" != *99999999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
