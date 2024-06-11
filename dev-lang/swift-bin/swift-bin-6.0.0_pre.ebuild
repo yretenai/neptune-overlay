@@ -100,8 +100,6 @@ src_install() {
 
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/SourceKit"
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/swift"
-
-	headerinfo /usr/local/include
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/local/include/indexstore"
 
 	insinto /usr/lib
