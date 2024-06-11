@@ -42,7 +42,7 @@ RDEPEND="
 
 SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9"
 
-if [[ ARCH == arm64 ]]; then
+if [[ "$ARCH" == "arm64" ]]; then
 	SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9-aarch64"
 fi
 
@@ -105,16 +105,12 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so"
 
-	if [[ ARCH == amd64 ]]; then
-		dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so.15git"
-		dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so"
-		dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
-		dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
+	local clang_version=${LLVM_SLOT}
+	if [[ ! -e "/usr/lib/clang/${LLVM_SLOT}" ]]; then
+		clang_version=$(best_version sys-devel/clang:${LLVM_SLOT})
+		clang_version=${clang_version#*/*-} # reduce it to ${PV}-${PR}
+		clang_version=${clang_version%%[_-]*} # main version without beta/pre/patch/revision
 	fi
-
-	local clang_version=$(best_version sys-devel/clang:${LLVM_SLOT})
-	clang_version=${clang_version#*/*-} # reduce it to ${PV}-${PR}
-	clang_version=${clang_version%%[_-]*} # main version without beta/pre/patch/revision
 
 	dosym "../clang/${clang_version}" "/usr/lib/swift/clang"
 	dosym "../clang/${clang_version}" "/usr/lib/swift_static/clang"
@@ -137,7 +133,9 @@ pkg_postrm() {
 	ewarn "\t~/.swiftpm"
 	ewarn "It may contain (significant) debris."
 	ewarn ""
-	ewarn "If you are upgrading Swift versions;"
-	ewarn "you MUST erase this directory and rebuild all projects that use swift."
-	ewarn ""
+	if [[ -z "${REPLACING_VERSIONS}" ]]; then
+		ewarn "If you are upgrading major Swift versions;"
+		ewarn "You MUST erase this directory and rebuild all projects that use swift."
+		ewarn ""
+	fi
 }
