@@ -105,10 +105,12 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so"
 
-	dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so.15git"
-	dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so"
-	dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
-	dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
+	if [[ ARCH == amd64 ]]; then
+		dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so.15git"
+		dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so"
+		dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
+		dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
+	fi
 
 	local clang_version=$(best_version sys-devel/clang:${LLVM_SLOT})
 	clang_version=${clang_version#*/*-} # reduce it to ${PV}-${PR}

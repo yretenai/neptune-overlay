@@ -110,10 +110,12 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so"
 
-	dosym "../lib64/libIndexStore.so.17" "/usr/lib/libIndexStore.so.17"
-	dosym "../lib64/libIndexStore.so.17" "/usr/lib/libIndexStore.so"
-	dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
-	dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
+	if [[ ARCH == amd64 ]]; then
+		dosym "../lib64/libIndexStore.so.17" "/usr/lib/libIndexStore.so.17"
+		dosym "../lib64/libIndexStore.so.17" "/usr/lib/libIndexStore.so"
+		dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
+		dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
+	fi
 
 	dosym "../clang/${LLVM_SLOT}" "/usr/lib/swift/clang"
 	dosym "../clang/${LLVM_SLOT}" "/usr/lib/swift_static/clang"
