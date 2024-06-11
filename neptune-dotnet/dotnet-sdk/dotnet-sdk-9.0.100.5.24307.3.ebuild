@@ -11,16 +11,16 @@ DESCRIPTION="dotnet sdk"
 HOMEPAGE="https://github.com/dotnet/sdk"
 SRC_URI="
 	amd64? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.4.24267.66/dotnet-sdk-9.0.100-preview.4.24267.66-linux-x64.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.4.24267.66/dotnet-sdk-9.0.100-preview.4.24267.66-linux-musl-x64.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.5.24307.3/dotnet-sdk-9.0.100-preview.5.24307.3-linux-x64.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.5.24307.3/dotnet-sdk-9.0.100-preview.5.24307.3-linux-musl-x64.tar.gz )
 	)
 	arm? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.4.24267.66/dotnet-sdk-9.0.100-preview.4.24267.66-linux-arm.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.4.24267.66/dotnet-sdk-9.0.100-preview.4.24267.66-linux-musl-arm.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.5.24307.3/dotnet-sdk-9.0.100-preview.5.24307.3-linux-arm.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.5.24307.3/dotnet-sdk-9.0.100-preview.5.24307.3-linux-musl-arm.tar.gz )
 	)
 	arm64? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.4.24267.66/dotnet-sdk-9.0.100-preview.4.24267.66-linux-arm64.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.4.24267.66/dotnet-sdk-9.0.100-preview.4.24267.66-linux-musl-arm64.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.5.24307.3/dotnet-sdk-9.0.100-preview.5.24307.3-linux-arm64.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/9.0.100-preview.5.24307.3/dotnet-sdk-9.0.100-preview.5.24307.3-linux-musl-arm64.tar.gz )
 	)
 "
 
