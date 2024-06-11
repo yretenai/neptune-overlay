@@ -3,7 +3,7 @@
 
 EAPI=8
 
-LLVM_SLOT=15
+LLVM_SLOT=17
 
 MY_PN="${PN/-bin*/}"
 MY_PV="${PV/-r*/}"
@@ -13,15 +13,14 @@ HOMEPAGE="https://github.com/apple/swift
 	https://www.swift.org/
 	https://developer.apple.com/swift/"
 SRC_URI="
-	amd64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9.tar.gz )
-	arm64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9-aarch64/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9-aarch64.tar.gz )
+	amd64? ( https://download.swift.org/development/ubi9/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9.tar.gz )
+	arm64? ( https://download.swift.org/development/ubi9-aarch64/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9-aarch64.tar.gz )
 "
 
 QA_PREBUILT="*"
 S="${WORKDIR}"
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
 RESTRICT="test bindist mirror strip"
 
 RDEPEND="
@@ -32,7 +31,6 @@ RDEPEND="
 	dev-vcs/git
 	dev-db/sqlite
 	net-misc/curl
-	dev-lang/python:2.7
 	dev-libs/libedit
 	dev-libs/libxml2
 	dev-libs/libbsd
@@ -41,17 +39,17 @@ RDEPEND="
 	sys-devel/llvm:${LLVM_SLOT}
 "
 
-SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9"
+SWIFTDIR="${MY_PN}-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9"
 
 if [[ ARCH == arm64 ]]; then
-	SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9-aarch64"
+	SWIFTDIR="${MY_PN}-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9-aarch64"
 fi
 
 src_prepare() {
 	default
 
 	pushd ${SWIFTDIR}/usr/bin
-	rm clang* ll* ld* wasm*
+	rm clang* ll* ld* wasm* *.cfg
 	cd ../lib
 	rm -rf clang* libLTO.so* liblldb.so*
 	rm swift/clang swift_static/clang
@@ -61,30 +59,40 @@ src_prepare() {
 }
 
 src_install() {
-	dobin "${WORKDIR}/${SWIFTDIR}/usr/bin/repl_swift" \
+	dobin "${WORKDIR}/${SWIFTDIR}/usr/bin/docc" \
+		"${WORKDIR}/${SWIFTDIR}/usr/bin/repl_swift" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/sourcekit-lsp" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-api-checker.py" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build-sdk-interfaces" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build-tool" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-demangle" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-driver" \
+		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-format" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-frontend" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-help" \
 		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package-collection" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-run" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-test"
+		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-plugin-server"
 
-	newbin "${WORKDIR}/${SWIFTDIR}/usr/bin/plutil" plutil
+	newbin "${WORKDIR}/${SWIFTDIR}/usr/bin/plutil" "swift-plutil"
 
-	dosym "swift-frontend" "/usr/bin/swift"
 	dosym "swift-frontend" "/usr/bin/swift-api-digester"
 	dosym "swift-frontend" "/usr/bin/swift-api-extract"
 	dosym "swift-frontend" "/usr/bin/swift-autolink-extract"
-	dosym "swift-frontend" "/usr/bin/swiftc"
+	dosym "swift-frontend" "/usr/bin/swift-cache-tool"
+	dosym "swift-frontend" "/usr/bin/swift-legacy-driver"
 	dosym "swift-frontend" "/usr/bin/swift-symbolgraph-extract"
-	dosym "swift-frontend" "/usr/bin/swift-symbolgraph-extract"
+	dosym "swift-frontend" "/usr/bin/swiftc-legacy-driver"
+
+	dosym "swift-package" "/usr/bin/swift-build"
+	dosym "swift-package" "/usr/bin/swift-experimental-sdk"
+	dosym "swift-package" "/usr/bin/swift-package-collection"
+	dosym "swift-package" "/usr/bin/swift-package-registry"
+	dosym "swift-package" "/usr/bin/swift-run"
+	dosym "swift-package" "/usr/bin/swift-sdk"
+	dosym "swift-package" "/usr/bin/swift-test"
+
+	dosym "swift-driver" "/usr/bin/swift"
+	dosym "swift-driver" "/usr/bin/swiftc"
 
 	exeinto /usr/libexec/swift/linux
 	doexe "${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace" \
@@ -93,29 +101,30 @@ src_install() {
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/SourceKit"
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/swift"
 
+	headerinfo /usr/local/include
+	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/local/include/indexstore"
+
 	insinto /usr/lib
 	doins -r "${WORKDIR}/${SWIFTDIR}/usr/lib/swift" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/swift_static"
 
-	dolib.so "${WORKDIR}/${SWIFTDIR}/usr/lib/libIndexStore.so.13git" \
+	dolib.so "${WORKDIR}/${SWIFTDIR}/usr/lib/libIndexStore.so.17" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so"
 
-	dosym "../lib64/libIndexStore.so.13git" "/usr/lib/libIndexStore.so"
-	dosym "../lib64/libIndexStore.so.13git" "/usr/lib/libIndexStore.so.13git"
+	dosym "../lib64/libIndexStore.so.17" "/usr/lib/libIndexStore.so.17"
+	dosym "../lib64/libIndexStore.so.17" "/usr/lib/libIndexStore.so"
 	dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
 	dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
 
-	local clang_version=$(best_version sys-devel/clang:${LLVM_SLOT})
-	clang_version=${clang_version#*/*-} # reduce it to ${PV}-${PR}
-	clang_version=${clang_version%%[_-]*} # main version without beta/pre/patch/revision
-
-	dosym "../clang/${clang_version}" "/usr/lib/swift/clang"
-	dosym "../clang/${clang_version}" "/usr/lib/swift_static/clang"
+	dosym "../clang/${LLVM_SLOT}" "/usr/lib/swift/clang"
+	dosym "../clang/${LLVM_SLOT}" "/usr/lib/swift_static/clang"
 
 	insinto /usr/share
 	doins -r "${WORKDIR}/${SWIFTDIR}/usr/share/icuswift" \
-		"${WORKDIR}/${SWIFTDIR}/usr/share/swift"
+		"${WORKDIR}/${SWIFTDIR}/usr/share/swift" \
+		"${WORKDIR}/${SWIFTDIR}/usr/share/docc" \
+		"${WORKDIR}/${SWIFTDIR}/usr/share/pm"
 
 	dodoc -r "${WORKDIR}/${SWIFTDIR}/usr/share/doc/swift"
 	doman "${WORKDIR}/${SWIFTDIR}/usr/share/man/man1/swift.1"
@@ -125,8 +134,8 @@ pkg_postrm() {
 	ewarn ""
 	ewarn "Swift has a built-in package manager that has several global stores."
 	ewarn "You may want to remove the following directories:"
-	ewarn "~/.cache/org.swift.swiftpm"
-	ewarn "~/.swiftpm"
+	ewarn "\t~/.cache/org.swift.swiftpm"
+	ewarn "\t~/.swiftpm"
 	ewarn "It may contain (significant) debris."
 	ewarn ""
 	ewarn "If you are upgrading Swift versions;"

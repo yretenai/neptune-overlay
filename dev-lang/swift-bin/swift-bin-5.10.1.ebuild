@@ -75,20 +75,20 @@ src_install() {
 
 	newbin "${WORKDIR}/${SWIFTDIR}/usr/bin/plutil" "swift-plutil"
 
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift"
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift-api-digester"
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift-api-extract"
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift-autolink-extract"
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift-cache-tool"
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swift-symbolgraph-extract"
-	dosym "${EPREFIX}/usr/bin/swift-frontend" "${EPREFIX}/usr/bin/swiftc"
+	dosym "swift-frontend" "/usr/bin/swift"
+	dosym "swift-frontend" "/usr/bin/swift-api-digester"
+	dosym "swift-frontend" "/usr/bin/swift-api-extract"
+	dosym "swift-frontend" "/usr/bin/swift-autolink-extract"
+	dosym "swift-frontend" "/usr/bin/swift-cache-tool"
+	dosym "swift-frontend" "/usr/bin/swift-symbolgraph-extract"
+	dosym "swift-frontend" "/usr/bin/swiftc"
 
-	dosym "${EPREFIX}/usr/bin/swift-package" "${EPREFIX}/usr/bin/swift-build"
-	dosym "${EPREFIX}/usr/bin/swift-package" "${EPREFIX}/usr/bin/swift-experimental-sdk"
-	dosym "${EPREFIX}/usr/bin/swift-package" "${EPREFIX}/usr/bin/swift-package-collection"
-	dosym "${EPREFIX}/usr/bin/swift-package" "${EPREFIX}/usr/bin/swift-package-registry"
-	dosym "${EPREFIX}/usr/bin/swift-package" "${EPREFIX}/usr/bin/swift-run"
-	dosym "${EPREFIX}/usr/bin/swift-package" "${EPREFIX}/usr/bin/swift-test"
+	dosym "swift-package" "/usr/bin/swift-build"
+	dosym "swift-package" "/usr/bin/swift-experimental-sdk"
+	dosym "swift-package" "/usr/bin/swift-package-collection"
+	dosym "swift-package" "/usr/bin/swift-package-registry"
+	dosym "swift-package" "/usr/bin/swift-run"
+	dosym "swift-package" "/usr/bin/swift-test"
 
 	exeinto /usr/libexec/swift/linux
 	doexe "${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace" \
@@ -105,16 +105,17 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so"
 
-	dosym "../lib64/libIndexStore.so.15git" "${EPREFIX}/usr/lib/libIndexStore.so"
-	dosym "../lib64/libsourcekitdInProc.so" "${EPREFIX}/usr/lib/libsourcekitdInProc.so"
-	dosym "../lib64/libswiftDemangle.so" "${EPREFIX}/usr/lib/libswiftDemangle.so"
+	dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so.15git"
+	dosym "../lib64/libIndexStore.so.15git" "/usr/lib/libIndexStore.so"
+	dosym "../lib64/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
+	dosym "../lib64/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
 
 	local clang_version=$(best_version sys-devel/clang:${LLVM_SLOT})
 	clang_version=${clang_version#*/*-} # reduce it to ${PV}-${PR}
 	clang_version=${clang_version%%[_-]*} # main version without beta/pre/patch/revision
 
-	dosym "${EPREFIX}/usr/lib/clang/${clang_version}" "${EPREFIX}/usr/lib/swift/clang"
-	dosym "${EPREFIX}/usr/lib/clang/${clang_version}" "${EPREFIX}/usr/lib/swift_static/clang"
+	dosym "../clang/${clang_version}" "/usr/lib/swift/clang"
+	dosym "../clang/${clang_version}" "/usr/lib/swift_static/clang"
 
 	insinto /usr/share
 	doins -r "${WORKDIR}/${SWIFTDIR}/usr/share/icuswift" \
@@ -133,5 +134,8 @@ pkg_postrm() {
 	ewarn "\t~/.cache/org.swift.swiftpm"
 	ewarn "\t~/.swiftpm"
 	ewarn "It may contain (significant) debris."
+	ewarn ""
+	ewarn "If you are upgrading Swift versions;"
+	ewarn "you MUST erase this directory and rebuild all projects that use swift."
 	ewarn ""
 }
