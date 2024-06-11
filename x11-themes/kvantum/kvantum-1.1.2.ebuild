@@ -10,12 +10,11 @@ HOMEPAGE="https://github.com/tsujan/Kvantum"
 EGIT_REPO_URI="https://github.com/tsujan/Kvantum.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="V${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
 fi
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
 IUSE="qt6"
 
 DEPEND="

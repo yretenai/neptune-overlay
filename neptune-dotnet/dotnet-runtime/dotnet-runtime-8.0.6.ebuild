@@ -4,6 +4,7 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
+DOTNET_PV="${PV}"
 
 inherit unpacker
 
@@ -11,16 +12,16 @@ DESCRIPTION="dotnet runtime"
 HOMEPAGE="https://github.com/dotnet/runtime"
 SRC_URI="
 	amd64? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${PV}/dotnet-runtime-${PV}-linux-x64.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${PV}/dotnet-runtime-${PV}-linux-musl-x64.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-x64.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-x64.tar.gz )
 	)
 	arm? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${PV}/dotnet-runtime-${PV}-linux-arm.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${PV}/dotnet-runtime-${PV}-linux-musl-arm.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-arm.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-arm.tar.gz )
 	)
 	arm64? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${PV}/dotnet-runtime-${PV}-linux-arm64.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${PV}/dotnet-runtime-${PV}-linux-musl-arm64.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-arm64.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-arm64.tar.gz )
 	)
 "
 

@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit cmake git-r3
+
 DESCRIPTION="A library for playback of various streamed audio formats used in video games"
 HOMEPAGE="
 	https://github.com/vgmstream/vgmstream
@@ -29,12 +31,10 @@ if [[ "${PV}" != *99999999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-inherit cmake git-r3
-
 LICENSE="GPL-2 MIT"
 SLOT="0"
 
-IUSE="+mp3 +vorbis +speex +ffmpeg +g7221 +g719 +atrac9 +celt +json +cli player audacious"
+IUSE="+mp3 +vorbis +speex +ffmpeg +g7221 +g719 +atrac9 +celt +json +tools player audacious"
 
 DEPEND="
 	json? ( dev-libs/jansson )
@@ -89,7 +89,7 @@ src_configure() {
 		-DCELT_0110_PATH="${WORKDIR}/celt-0.11.0"
 		-DUSE_SPEEX=$(usex speex)
 		-DUSE_JANSSON=$(usex json)
-		-DBUILD_CLI=$(usex cli)
+		-DBUILD_CLI=$(usex tools)
 		-DBUILD_V123=$(usex player)
 		-DBUILD_AUDACIOUS=$(usex audacious)
 	)

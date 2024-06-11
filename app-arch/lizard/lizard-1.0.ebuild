@@ -16,7 +16,6 @@ fi
 
 LICENSE="GPL-2 BSD-2"
 SLOT="0/2"
-KEYWORDS="~amd64"
 
 PATCHES=(
 	"${FILESDIR}/libdir-fix.patch"

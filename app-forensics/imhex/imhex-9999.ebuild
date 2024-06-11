@@ -49,7 +49,7 @@ DEPEND="
 	virtual/libintl
 "
 RDEPEND="
-	${DEPEND}	
+	${DEPEND}
 	${DOTNET_PKG_RDEPS}
 "
 BDEPEND="

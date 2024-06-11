@@ -5,4 +5,30 @@
 		<bugs-to>https://github.com/vgmstream/vgmstream/issues</bugs-to>
 		<remote-id type="github">vgmstream/vgmstream</remote-id>
 	</upstream>
+	<use>
+		<flag name="atrac9">
+			Add support for ATRAC9 decoding.
+		</flag>
+		<flag name="audacious">
+			Build plugin for <pkg>media-sound/audacious</pkg>.
+		</flag>
+		<flag name="celt">
+			Add support for FMOD CELT decoding.
+		</flag>
+		<flag name="g719">
+			Add support for G.719 decoding.
+		</flag>
+		<flag name="g7221">
+			Add support for G.7221 decoding.
+		</flag>
+		<flag name="json">
+			Add support for outputting json data.
+		</flag>
+		<flag name="player">
+			Build audio player sample.
+		</flag>
+		<flag name="tools">
+			Build command line tools.
+		</flag>
+	</use>
 </pkgmetadata>

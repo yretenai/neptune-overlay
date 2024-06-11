@@ -6,4 +6,28 @@
 		<bugs-to>https://github.com/ggerganov/whisper.cpp/issues</bugs-to>
 		<remote-id type="github">ggerganov/whisper.cpp</remote-id>
 	</upstream>
+	<use>
+		<flag name="whisper-models-tiny">Download whisper tiny model data</flag>
+		<flag name="whisper-models-tiny-q5-1">Download whisper tiny (Q5.1) model data</flag>
+		<flag name="whisper-models-tiny-en">Download whisper tiny (English) model data</flag>
+		<flag name="whisper-models-tiny-en-q5-1">Download whisper tiny (English, Q5.1) model data</flag>
+		<flag name="whisper-models-tiny-en-q8-0">Download whisper tiny (English, Q8.0) model data</flag>
+		<flag name="whisper-models-base">Download whisper base model data</flag>
+		<flag name="whisper-models-base-q5-1">Download whisper base (Q5.1) model data</flag>
+		<flag name="whisper-models-base-en">Download whisper base (English) model data</flag>
+		<flag name="whisper-models-base-en-q5-1">Download whisper base (English, Q5.1) model data</flag>
+		<flag name="whisper-models-small">Download whisper small model data</flag>
+		<flag name="whisper-models-small-q5-1">Download whisper small (Q5.1) model data</flag>
+		<flag name="whisper-models-small-en">Download whisper small (English) model data</flag>
+		<flag name="whisper-models-small-en-q5-1">Download whisper small (English, Q5.1) model data</flag>
+		<flag name="whisper-models-medium">Download whisper medium model data</flag>
+		<flag name="whisper-models-medium-q5-0">Download whisper medium (Q5.0) model data</flag>
+		<flag name="whisper-models-medium-en">Download whisper medium (English) model data</flag>
+		<flag name="whisper-models-medium-en-q5-0">Download whisper medium (English, Q5.0) model data</flag>
+		<flag name="whisper-models-large-v1">Download whisper large v1 model data</flag>
+		<flag name="whisper-models-large-v2">Download whisper large v2 model data</flag>
+		<flag name="whisper-models-large-v2-q5-0">Download whisper large v2 (Q5.0) model data</flag>
+		<flag name="whisper-models-large-v3">Download whisper large v3 model data</flag>
+		<flag name="whisper-models-large-v3-q5-0">Download whisper large v3 (Q5.0) model data</flag>
+	</use>
 </pkgmetadata>
