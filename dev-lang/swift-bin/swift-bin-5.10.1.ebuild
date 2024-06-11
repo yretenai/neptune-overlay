@@ -32,7 +32,6 @@ RDEPEND="
 	dev-vcs/git
 	dev-db/sqlite
 	net-misc/curl
-	dev-lang/python:2.7
 	dev-libs/libedit
 	dev-libs/libxml2
 	dev-libs/libbsd
