@@ -31,3 +31,4 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
+REQUIRED_USE="webview? ( || ( python_single_target_python3_10 python_single_target_python3_11 ) )"
