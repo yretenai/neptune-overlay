@@ -31,12 +31,13 @@ else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	KEYWORDS="~amd64"
 fi
+EGIT_ADDONS_BRANCH="main"
 
 LICENSE="|| ( GPL-3 BL )"
 SLOT="${PV%.*}"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
+	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
@@ -48,7 +49,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles )
-	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -147,9 +147,6 @@ RDEPEND="${PYTHON_DEPS}
 			sys-devel/llvm:${LLVM_SLOT}
 		')
 	)
-	hiprt? (
-		dev-util/hiprt
-	)
 "
 
 DEPEND="${RDEPEND}
@@ -178,9 +175,9 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-openvdb-11.patch"
+	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
 	"${FILESDIR}/${PN}-9999-clang.patch"
-	"${FILESDIR}/${PN}-9999-hiprt.patch"
+	# "${FILESDIR}/${PN}-9999-hiprt.patch"
 )
 
 blender_check_requirements() {
@@ -217,7 +214,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "refs/heads/${EGIT_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
+	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "refs/heads/${EGIT_ADDONS_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
 }
@@ -270,7 +267,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		-DHIPRT_ROOT_DIR=/opt/hiprt
+		# -DHIPRT_ROOT_DIR=/opt/hiprt
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -284,7 +281,7 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
-		-DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
+		# -DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
