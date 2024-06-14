@@ -24,12 +24,8 @@ EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
-if [[ ${PV} = *9999* ]] ; then
-	EGIT_BRANCH="main"
-else
-	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-	KEYWORDS="~amd64"
-fi
+EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
+KEYWORDS="~amd64"
 
 LICENSE="|| ( GPL-3 BL )"
 SLOT="${PV%.*}"

@@ -27,7 +27,6 @@ ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_BRANCH="main"
-	EGIT_ADDONS_BRANCH="main"
 else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	KEYWORDS="~amd64"
