@@ -98,7 +98,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3:0=
 	)
 	openpgl? ( <media-libs/openpgl-0.6.0 )
-	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
+	opensubdiv? ( >=media-libs/opensubdiv-3.5.0[opengl,glew,cuda?,openmp?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
@@ -459,4 +459,11 @@ pkg_postrm() {
 	ewarn "~/.config/${PN}/${BV}/cache/"
 	ewarn "It may contain extra render kernels not tracked by portage"
 	ewarn ""
+	if use opensubdiv; then
+		ewarn "GPU Viewport Subdivision will sometimes segfault."
+		ewarn "Please disable GPU Viewport Subdivision by navigating to:"
+		ewarn "\tEdit > Preferences > Viewport > Subdivision"
+		ewarn "And unchecking \"GPU Subdivision\""
+		ewarn ""
+	fi
 }

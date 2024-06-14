@@ -27,17 +27,23 @@ ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_BRANCH="main"
+	EGIT_ADDONS_BRANCH="main"
 else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	KEYWORDS="~amd64"
 fi
-EGIT_ADDONS_BRANCH="main"
+
+if [[ ${PV} = 4.2.* ]]; then
+	EGIT_ADDONS_BRANCH="main"
+else
+	EGIT_ADDONS_BRANCH=${EGIT_BRANCH}
+fi
 
 LICENSE="|| ( GPL-3 BL )"
 SLOT="${PV%.*}"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
+	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
@@ -49,6 +55,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles )
+	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -100,7 +107,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
+	opensubdiv? ( >=media-libs/opensubdiv-3.6.0[opengl,glew,cuda?,openmp?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
@@ -475,4 +482,11 @@ pkg_postrm() {
 	ewarn "~/.config/${PN}/${BV}/cache/"
 	ewarn "It may contain extra render kernels not tracked by portage"
 	ewarn ""
+	if use opensubdiv; then
+		ewarn "GPU Viewport Subdivision will sometimes segfault."
+		ewarn "Please disable GPU Viewport Subdivision by navigating to:"
+		ewarn "\tEdit > Preferences > Viewport > Subdivision"
+		ewarn "And unchecking \"GPU Subdivision\"."
+		ewarn ""
+	fi
 }
