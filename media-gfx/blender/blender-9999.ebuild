@@ -22,20 +22,12 @@ DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
-ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 if [[ ${PV} = *9999* ]]; then
 	EGIT_BRANCH="main"
 else
 	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	KEYWORDS="~amd64"
-fi
-
-if [[ ${PV} = 4.2.* ]]; then
-	EGIT_ADDONS_BRANCH="main"
-else
-	EGIT_ADDONS_BRANCH=${EGIT_BRANCH}
 fi
 
 LICENSE="|| ( GPL-3 BL )"
@@ -217,12 +209,6 @@ pkg_setup() {
 	if use llvm; then
 		llvm-r1_pkg_setup
 	fi
-}
-
-src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "refs/heads/${EGIT_ADDONS_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_src_unpack
 }
 
 src_prepare() {
