@@ -6,15 +6,15 @@ EAPI=8
 LLVM_SLOT=17
 
 MY_PN="${PN/-bin*/}"
-MY_PV="${PV/-r*/}"
+MY_PV="swift-6.0-DEVELOPMENT-SNAPSHOT-2024-06-13-a"
 
 DESCRIPTION="Swift is a general-purpose programming language"
 HOMEPAGE="https://github.com/apple/swift
 	https://www.swift.org/
 	https://developer.apple.com/swift/"
 SRC_URI="
-	amd64? ( https://download.swift.org/development/ubi9/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9.tar.gz )
-	arm64? ( https://download.swift.org/development/ubi9-aarch64/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a/swift-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9-aarch64.tar.gz )
+	amd64? ( https://download.swift.org/swift-6.0-branch/ubi9/${MY_PV}/${MY_PV}-ubi9.tar.gz )
+	arm64? ( https://download.swift.org/swift-6.0-branch/ubi9-aarch64/${MY_PV}/${MY_PV}-ubi9-aarch64.tar.gz )
 "
 
 QA_PREBUILT="*"
@@ -39,10 +39,10 @@ RDEPEND="
 	sys-devel/llvm:${LLVM_SLOT}
 "
 
-SWIFTDIR="${MY_PN}-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9"
+SWIFTDIR="${MY_PV}-ubi9"
 
 if [[ "$ARCH" == "arm64" ]]; then
-	SWIFTDIR="${MY_PN}-DEVELOPMENT-SNAPSHOT-2024-06-08-a-ubi9-aarch64"
+	SWIFTDIR="${MY_PV}-ubi9-aarch64"
 fi
 
 src_prepare() {
