@@ -108,7 +108,8 @@ src_install() {
 
 	dolib.so "${WORKDIR}/${SWIFTDIR}/usr/lib/libIndexStore.so.17" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
-		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so"
+		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so" \
+		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftGenericMetadataBuilder.so"
 
 	local clang_version=${LLVM_SLOT}
 	if [[ ! -e "/usr/lib/clang/${LLVM_SLOT}" ]]; then
