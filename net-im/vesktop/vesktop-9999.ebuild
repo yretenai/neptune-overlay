@@ -41,7 +41,7 @@ BDEPEND="
 DESTDIR="/opt/${PN}"
 
 src_prepare() {
-	default
+	electron-builder-utils_src_prepare
 	sed -i -e "s/\"pnpm /\"pnpm-bin /" package.json || die
 }
 

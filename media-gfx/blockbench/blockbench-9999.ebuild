@@ -28,6 +28,8 @@ RESTRICT="network-sandbox strip test"
 RDEPEND="
 	x11-libs/libnotify
 	x11-misc/xdg-utils
+	media-libs/imlib2
+	media-libs/giblib
 "
 
 BDEPEND="
