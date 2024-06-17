@@ -3,7 +3,10 @@
 
 EAPI=8
 
-inherit desktop xdg
+ELECTRON_VER="28.1.1"
+ELECTRON_WVCUS="1"
+
+inherit desktop xdg electron-builder-utils git-r3
 
 DESCRIPTION="Web version of Tidal running in electron with Hi-Fi support thanks to Widevine."
 HOMEPAGE="https://github.com/Mastermindzh/tidal-hifi"
@@ -14,10 +17,9 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-inherit git-r3
-
 LICENSE="MIT"
 SLOT="0"
+IUSE="+seccomp +wayland"
 
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox strip test"
@@ -55,13 +57,18 @@ RDEPEND="
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
+	${ELECTRON_BDEPEND}
 "
 
 DESTDIR="/opt/${PN}"
 
 src_prepare() {
 	default
-	sed -i -e "s|electronDownload:|electronDownload:\n  cache: \"${T}/electron\"|" build/electron-builder.base.yml || die
+	sed -i -e "s|electronDownload:|electronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
+}
+
+src_configure() {
+	export COREPACK_ENABLE_STRICT=0
 	npm i || die
 }
 
@@ -73,6 +80,14 @@ src_install() {
 	newicon "build/icon.png" tidal-hifi.png
 
 	EXEC="/usr/bin/tidal-hifi"
+
+	if ! use seccomp ; then
+		EXEC="${EXEC} --disable-seccomp-filter-sandbox"
+	fi
+
+	if use wayland ; then
+		EXEC="${EXEC} --ozone-platform-hint=auto --enable-wayland-ime"
+	fi
 
 	make_desktop_entry "$EXEC" "TIDAL Hi-Fi" ${PN} "Network;AudioVideo;Audio;Video"
 

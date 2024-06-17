@@ -3,7 +3,10 @@
 
 EAPI=8
 
-inherit desktop xdg
+ELECTRON_VER="31.0.1"
+ELECTRON_BUILDER_VER="24.13.3"
+
+inherit desktop xdg electron-builder-utils git-r3
 
 DESCRIPTION="Vesktop is a custom Discord App"
 HOMEPAGE="https://github.com/Vencord
@@ -15,8 +18,6 @@ if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-inherit git-r3
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -34,17 +35,19 @@ RDEPEND="
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
 	sys-apps/pnpm-bin
+	${ELECTRON_BDEPEND}
 "
 
 DESTDIR="/opt/${PN}"
 
 src_prepare() {
 	default
+	sed -i -e "s/\"pnpm /\"pnpm-bin /" package.json || die
+}
 
+src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	pnpm-bin config set store-dir "${T}/pnpm" || die
-	sed -i -e "s/\"pnpm /\"pnpm-bin /" package.json || die
-	sed -i -e "s|\"appId\":|\"electronDownload\": { \"cache\": \"${T}/electron\" },\"appId\":|" package.json || die
 	pnpm-bin i || die
 }
 

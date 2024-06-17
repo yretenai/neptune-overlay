@@ -3,9 +3,10 @@
 
 EAPI=8
 
-inherit desktop xdg
-
 ELECTRON_VER="31.0.1"
+ELECTRON_BUILDER_VER="24.13.3"
+
+inherit desktop xdg electron-builder-utils git-r3
 
 DESCRIPTION="Blockbench - A low poly 3D model editor"
 HOMEPAGE="https://github.com/JannisX11/blockbench
@@ -16,14 +17,6 @@ if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64 ~arm64 ~arm"
 fi
-
-SRC_URI="
-	amd64? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-x64.zip )
-	arm64? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-arm64.zip )
-	arm? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-armv7l.zip )
-"
-
-inherit git-r3
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -39,24 +32,13 @@ RDEPEND="
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
-	app-misc/jq
+	${ELECTRON_BDEPEND}
 "
 
 DESTDIR="/opt/${PN}"
 
-src_unpack() {
-	git-r3_src_unpack
-}
-
-src_prepare() {
-	default
-	
+src_configure() {
 	export COREPACK_ENABLE_STRICT=0
-
-	echo "$(jq --arg cache "${DISTDIR}" '.build.electronDownload.cache = $cache' package.json)" > package.json
-	echo "$(jq 'del(.dependencies.electron)' package.json)" > package.json
-	echo "$(jq --arg version "${ELECTRON_VER}" '.devDependencies.electron = $version' package.json)" > package.json
-	
 	npm i || die
 }
 

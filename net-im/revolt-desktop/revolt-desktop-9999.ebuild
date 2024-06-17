@@ -3,14 +3,16 @@
 
 EAPI=8
 
-inherit desktop optfeature xdg git-r3
+ELECTRON_VER="31.0.1"
+ELECTRON_BUILDER_VER="24.13.3"
+
+inherit desktop optfeature xdg electron-builder-utils git-r3
 
 DESCRIPTION="Revolt is an open source user-first chat platform."
 HOMEPAGE="https://github.com/revoltchat
 	https://github.com/revoltchat/desktop
 	https://revolt.chat/"
 
-S="${WORKDIR}/${PN}-${PV}"
 LICENSE="Apache-2.0 MIT CC0-1.0 0BSD ISC BSD BSD-2 PSF-2 WTFPL"
 SLOT="0"
 IUSE="appindicator +seccomp +wayland"
@@ -51,49 +53,30 @@ RDEPEND="
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
 	sys-apps/yarn
+	${ELECTRON_BDEPEND}
 "
 
 DESTDIR="/opt/${PN}"
 RESTRICT="network-sandbox strip test"
 
-src_unpack() {
-	default
-	git-r3_src_unpack
-
-	cd "${S}" || die
-
-	eapply "${FILESDIR}/electron-builder-cache.patch" || die "can't add electron cache path"
-
-	sed -i 's|"electron": "^.*",|"electron": "^29.1.0",|g' package.json || die "electron update failed"
-	sed -i 's|"electron-builder": "^.*",|"electron-builder": "^24.9.1",|g' package.json || die "electron builder update failed"
-
-	sed -i "s|__T__|${T}|g" package.json || die "cache patch filed for electron builder"
-
+src_configure() {
 	yarn config set --home enableTelemetry 0 || die
 	yarn config set cacheFolder "${T}/yarn" || die
 	mkdir "${T}/yarn" || die
 	yarn install || die
 }
 
-src_prepare() {
-	default
-
-	if ! use seccomp ; then
-		sed -i "/Exec/s/${PN}/${PN} --disable-seccomp-filter-sandbox/" \
-			"${PN}.desktop" \
-			|| die "sed failed for seccomp"
-	fi
-
-	if use wayland ; then
-		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime --use-gl=egl/" \
-			"${PN}.desktop" \
-			|| die "sed failed for wayland"
-	fi
-}
-
 src_compile() {
 	yarn run build:bundle || die
 	yarn run eb -l dir || die
+
+	if ! use seccomp ; then
+		sed -i "/Exec/s/${PN}/${PN} --disable-seccomp-filter-sandbox/" "${PN}.desktop" || die "sed failed for seccomp"
+	fi
+
+	if use wayland ; then
+		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime/" "${PN}.desktop" || die "sed failed for wayland"
+	fi
 }
 
 src_install() {
