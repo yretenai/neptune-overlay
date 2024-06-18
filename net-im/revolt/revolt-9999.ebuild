@@ -3,7 +3,7 @@
 
 EAPI=8
 
-ELECTRON_VER="31.0.1"
+ELECTRON_VER="30.1.1"
 ELECTRON_BUILDER_VER="24.13.3"
 
 inherit desktop optfeature xdg electron-builder-utils git-r3
@@ -70,6 +70,8 @@ src_compile() {
 	yarn run build:bundle || die
 	yarn run eb -l dir || die
 
+	mv revolt-desktop.desktop "${PN}.desktop"
+
 	if ! use seccomp ; then
 		sed -i "/Exec/s/${PN}/${PN} --disable-seccomp-filter-sandbox/" "${PN}.desktop" || die "sed failed for seccomp"
 	fi
@@ -84,6 +86,8 @@ src_install() {
 	newicon -s 256 "assets/icon.png" revolt-desktop.png
 
 	cd dist/linux-unpacked || die
+
+	mv "revolt-desktop" "${PN}"
 
 	exeinto "${DESTDIR}"
 
