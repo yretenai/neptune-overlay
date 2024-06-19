@@ -53,7 +53,7 @@ RDEPEND="
 	${DOTNET_PKG_RDEPS}
 "
 BDEPEND="
-	system-llvm? ( <sys-devel/llvm-17 )
+	system-llvm? ( sys-devel/llvm )
 	app-admin/chrpath
 	gnome-base/librsvg
 	sys-devel/lld
