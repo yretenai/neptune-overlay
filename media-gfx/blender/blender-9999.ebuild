@@ -15,8 +15,9 @@ EAPI=8
 PYTHON_COMPAT=( python3_{11..13} )
 LLVM_COMPAT=( {16..18} )
 EGIT_LFS="yes"
+ROCM_VERSION="5.7.1"
 
-inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
@@ -278,6 +279,7 @@ src_configure() {
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
 		-DWITH_CYCLES_HIP_BINARIES=$(usex hip $(usex cycles-bin-kernels))
+		-DCYCLES_HIP_BINARIES_ARCH="$(get_amdgpu_flags)"
 		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
 		-DWITH_CYCLES_ONEAPI_BINARIES=no
 		-DWITH_CYCLES_OSL=$(usex osl)
