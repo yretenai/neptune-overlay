@@ -6,7 +6,7 @@ EAPI=8
 LLVM_SLOT=17
 
 MY_PN="${PN/-bin*/}"
-MY_PV="swift-6.0-DEVELOPMENT-SNAPSHOT-2024-06-18-a"
+MY_PV="swift-6.0-DEVELOPMENT-SNAPSHOT-2024-06-19-a"
 
 DESCRIPTION="Swift is a general-purpose programming language"
 HOMEPAGE="https://github.com/apple/swift
