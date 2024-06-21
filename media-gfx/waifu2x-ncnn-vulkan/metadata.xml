@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="system-ncnn">
+			Use <pkg>dev-libs/ncnn</pkg>
+		</flag>
+		<flag name="system-webp">
+			Use <pkg>media-libs/libwebp</pkg>
+		</flag>
+	</use>
+	<upstream>
+		<bugs-to>https://github.com/nihui/waifu2x-ncnn-vulkan/issues</bugs-to>
+		<remote-id type="github">nihui/waifu2x-ncnn-vulkan</remote-id>
+	</upstream>
+</pkgmetadata>
