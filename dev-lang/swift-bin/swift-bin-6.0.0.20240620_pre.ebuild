@@ -49,7 +49,7 @@ src_prepare() {
 	default
 
 	pushd ${SWIFTDIR}/usr/bin
-	rm clang* ll* ld* wasm* *.cfg
+	rm clang* ll* ld* wasm*
 	cd ../lib
 	rm -rf clang* libLTO.so* liblldb.so*
 	rm swift/clang swift_static/clang
@@ -102,6 +102,12 @@ src_install() {
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/swift"
 	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/local/include/indexstore"
 
+	insinto /etc/clang
+	doins "${WORKDIR}/${SWIFTDIR}/usr/bin/aarch64-swift-linux-musl-clang.cfg" \
+		"${WORKDIR}/${SWIFTDIR}/usr/bin/x86_64-swift-linux-musl-clang.cfg"
+	dosym "aarch64-swift-linux-musl-clang.cfg" "/etc/clang/aarch64-swift-linux-musl-clang++.cfg"
+	dosym "x86_64-swift-linux-musl-clang.cfg" "/etc/clang/x86_64-swift-linux-musl-clang++.cfg"
+
 	insinto /usr/lib
 	doins -r "${WORKDIR}/${SWIFTDIR}/usr/lib/swift" \
 		"${WORKDIR}/${SWIFTDIR}/usr/lib/swift_static"
@@ -126,6 +132,9 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/share/swift" \
 		"${WORKDIR}/${SWIFTDIR}/usr/share/docc" \
 		"${WORKDIR}/${SWIFTDIR}/usr/share/pm"
+
+	insinto /usr/share/clang
+	doins "${WORKDIR}/${SWIFTDIR}/usr/share/clang/features.json"
 
 	dodoc -r "${WORKDIR}/${SWIFTDIR}/usr/share/doc/swift"
 	doman "${WORKDIR}/${SWIFTDIR}/usr/share/man/man1/swift.1"

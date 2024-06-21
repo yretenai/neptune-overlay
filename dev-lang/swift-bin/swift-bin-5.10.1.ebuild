@@ -121,6 +121,9 @@ src_install() {
 		"${WORKDIR}/${SWIFTDIR}/usr/share/docc" \
 		"${WORKDIR}/${SWIFTDIR}/usr/share/pm"
 
+	insinto /usr/share/clang
+	doins "${WORKDIR}/${SWIFTDIR}/usr/share/clang/features.json"
+
 	dodoc -r "${WORKDIR}/${SWIFTDIR}/usr/share/doc/swift"
 	doman "${WORKDIR}/${SWIFTDIR}/usr/share/man/man1/swift.1"
 }
