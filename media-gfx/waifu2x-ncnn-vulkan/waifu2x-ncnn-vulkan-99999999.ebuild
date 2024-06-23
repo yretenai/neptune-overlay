@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/nihui/waifu2x-ncnn-vulkan.git"
 
 if [[ "${PV}" != *99999999* ]]; then
 	EGIT_COMMIT="${PV}"
-	KEYWORDS="amd64 ~x86"
+	KEYWORDS="amd64 x86"
 fi
 
 LICENSE="MIT"

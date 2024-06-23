@@ -15,7 +15,7 @@ HOMEPAGE="https://github.com/JannisX11/blockbench
 EGIT_REPO_URI="https://github.com/JannisX11/blockbench.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64 ~arm64 ~arm"
+	KEYWORDS="~amd64 ~arm ~arm64"
 fi
 
 LICENSE="GPL-3"
@@ -61,7 +61,7 @@ src_compile() {
 src_install() {
 	domenu "${PN}.desktop"
 	newicon build/icon.png "${PN}.png"
-	
+
 	insinto "/usr/share/mime/packages"
 	doins bbmodel.xml
 

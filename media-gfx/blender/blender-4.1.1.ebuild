@@ -26,10 +26,10 @@ ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-KEYWORDS="~amd64"
 
 LICENSE="|| ( GPL-3 BL )"
 SLOT="${PV%.*}"
+KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k

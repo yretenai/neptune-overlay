@@ -672,7 +672,7 @@ xunit@2.8.0
 
 inherit desktop dotnet-pkg xdg git-r3
 
-DESCRIPTION="Nexus Mods App is a mod installer, creator and manager for all your popular games"
+DESCRIPTION="Nexus Mods App is a mod manager for games"
 HOMEPAGE="
 	https://nexus-mods.github.io/NexusMods.App/
 	https://github.com/Nexus-Mods/NexusMods.App

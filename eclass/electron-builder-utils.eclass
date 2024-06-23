@@ -4,6 +4,10 @@
 # @ECLASS: electron-builder-utils.eclass
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Eclass for patching electron-builder
+# @MAINTAINER:
+# Ada <ada@chronvoore.dev>
+# @AUTHOR:
+# Ada <ada@chronvoore.dev>
 
 # @ECLASS_VARIABLE: ELECTRON_VER
 # @PRE_INHERIT
@@ -22,8 +26,19 @@
 # @DESCRIPTION:
 # If set, use Electron with support for Widevine 
 
+# @ECLASS_VARIABLE: ELECTRON_BDEPEND
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Set by eclass, list of bdepends that are required.
+
+# @ECLASS_VARIABLE: ELECTRON_SRC_URI
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Set by eclass, list of src uris for the selecetd electron version.
+
 ELECTRON_BDEPEND="
 	app-misc/jq
+	app-arch/unzip
 "
 
 if [[ ${ELECTRON_WVCUS} ]]; then

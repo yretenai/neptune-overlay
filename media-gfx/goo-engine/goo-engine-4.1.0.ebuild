@@ -93,7 +93,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3:0=
 	)
 	openpgl? ( >=media-libs/openpgl-0.5.0 )
-	opensubdiv? ( >=media-libs/opensubdiv-3.5.0 )
+	opensubdiv? ( >=media-libs/opensubdiv-3.6.0[opengl,glew,cuda?,openmp?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=

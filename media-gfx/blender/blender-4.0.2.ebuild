@@ -25,10 +25,10 @@ ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-KEYWORDS="~amd64"
 
 LICENSE="|| ( GPL-3 BL )"
 SLOT="${PV%.*}"
+KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
@@ -94,7 +94,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3:0=
 	)
 	openpgl? ( <media-libs/openpgl-0.6.0 )
-	opensubdiv? ( >=media-libs/opensubdiv-3.5.0[opengl,glew,cuda?,openmp?,tbb?] )
+	opensubdiv? ( >=media-libs/opensubdiv-3.6.0[opengl,glew,cuda?,openmp?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
