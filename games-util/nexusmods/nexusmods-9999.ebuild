@@ -741,9 +741,9 @@ src_unpack() {
 }
 
 # error MSB1001 due to --filter switch not being recognized??
-# -> edotnet fucks something up?
+# -> dotnet-pkg-base fucks something up with it's flags?
 src_test() {
-	dotnet test -c Release --filter "RequiresNetworking==True" --no-restore
+	edotnet test -c Release --filter "RequiresNetworking==True" --no-restore
 }
 
 src_compile() {
