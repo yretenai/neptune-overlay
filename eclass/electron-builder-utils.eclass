@@ -5,9 +5,9 @@
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Eclass for patching electron-builder
 # @MAINTAINER:
-# Ada <ada@chronvoore.dev>
+# Ada <ada@chronovore.dev>
 # @AUTHOR:
-# Ada <ada@chronvoore.dev>
+# Ada <ada@chronovore.dev>
 
 # @ECLASS_VARIABLE: ELECTRON_VER
 # @PRE_INHERIT
