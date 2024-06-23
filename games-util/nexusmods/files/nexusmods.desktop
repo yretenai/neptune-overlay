@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=NexusMods.App
+Icon=nexus-logo
+Comment=A mod installer, creator and manager for all your popular games
+Exec=nexusmods
+TryExec=nexusmods
+NoDisplay=false
+X-AppImage-Integrate=true
+Terminal=false
+Categories=Utility
+MimeType=
+Keywords=nmm;vortex;mods;modding
