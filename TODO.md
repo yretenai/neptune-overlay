@@ -9,3 +9,5 @@ Things left to do for neptune-overlay:
 - [ ] compile www-misc(? app-misc?)/electron
 - [ ] make virtual/electron (when electron and electron-bin)
 - [ ] virtual/swift (when dev-lang/swift)
+- [ ] migrate neptune-scripts (zsh) to neptune-util (C#)
+- [ ] neptune-util: neptune-check update checker for git based ebuilds
