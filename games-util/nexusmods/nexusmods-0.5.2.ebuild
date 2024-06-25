@@ -689,11 +689,13 @@ fi
 SRC_URI="${NUGET_URIS}"
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
 SLOT="0"
+IUSE="p7zip"
 
 # jemalloc causes a TLS issue?
 RDEPEND="
 	>=dev-libs/rocksdb-8.11.3[-jemalloc]
-	app-arch/7zip
+	!p7zip? ( app-arch/7zip )
+	p7zip? ( app-arch/p7zip )
 	app-arch/brotli
 	dev-libs/elfutils
 	dev-libs/expat
@@ -720,6 +722,10 @@ RDEPEND="
 	x11-libs/libxshmfence
 "
 
+PATCHES=(
+	"${FILESDIR}/${PN}-${PV}-use-system-7z.patch"
+)
+
 DOTNET_PKG_PROJECTS=(
 	"src/NexusMods.App/NexusMods.App.csproj"
 )
@@ -743,16 +749,18 @@ src_unpack() {
 	git-r3_src_unpack
 }
 
+src_configure() {
+	if use p7zip; then
+		sed -e "s|onLinux: () => \"7zz\",|onLinux: () => \"7z\",|" -i "src/ArchiveManagement/NexusMods.FileExtractor/Extractors/SevenZipExtractor.cs"
+	fi
+
+	dotnet-pkg_src_configure
+}
+
 # error MSB1001 due to --filter switch not being recognized??
 # -> dotnet-pkg-base fucks something up with it's flags?
 src_test() {
 	edotnet test -c Release --filter "RequiresNetworking==True" --no-restore
-}
-
-src_compile() {
-	export NEXUSMODS_APP_USE_SYSTEM_EXTRACTOR=1
-	export INSTALLATION_METHOD_PACKAGE_MANAGER
-	dotnet-pkg_src_compile
 }
 
 src_install() {

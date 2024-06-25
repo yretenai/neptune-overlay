@@ -1,0 +1,16 @@
+diff --git a/src/ArchiveManagement/NexusMods.FileExtractor/Extractors/SevenZipExtractor.cs b/src/ArchiveManagement/NexusMods.FileExtractor/Extractors/SevenZipExtractor.cs
+index 05006edc..a19edda1 100644
+--- a/src/ArchiveManagement/NexusMods.FileExtractor/Extractors/SevenZipExtractor.cs
++++ b/src/ArchiveManagement/NexusMods.FileExtractor/Extractors/SevenZipExtractor.cs
+@@ -218,10 +218,5 @@ private static string GetExtractorExecutable(IFileSystem fileSystem)
+     /// <remarks>
+     /// See https://github.com/Nexus-Mods/NexusMods.App/issues/1306 for details.
+     /// </remarks>
+-    private const bool UseSystemExtractor =
+-#if USE_SYSTEM_EXTRACTOR
+-        true;
+-#else
+-        false;
+-#endif
++    private const bool UseSystemExtractor = true;
+ }
