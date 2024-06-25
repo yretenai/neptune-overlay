@@ -5,7 +5,6 @@ EAPI=8
 
 DOTNET_PKG_COMPAT=8.0
 NUGETS="
-
 argon@0.11.0
 argon@0.17.0
 autofixture.xunit2@4.18.1
@@ -678,8 +677,9 @@ SRC_URI="${NUGET_URIS}"
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
 SLOT="0"
 
+# jemalloc causes a TLS issue?
 RDEPEND="
-	>=dev-libs/rocksdb-8.11.3
+	>=dev-libs/rocksdb-8.11.3[-jemalloc]
 	app-arch/7zip
 	app-arch/brotli
 	dev-libs/elfutils
@@ -747,7 +747,7 @@ src_install() {
 		"${DOTNET_PKG_OUTPUT}/librocksdb-musl.so" \
 		"${DOTNET_PKG_OUTPUT}/librocksdb-jemalloc.so"
 	dotnet-pkg-base_install
-	dotnet-pkg-base_dolauncher "/usr/share/${P}/nexusmods" "nexusmods"
+	dotnet-pkg-base_dolauncher "/usr/share/${P}/NexusMods.App" "nexusmods"
 
 	doicon -s scalable src/NexusMods.App.UI/Assets/nexus-logo.svg
 	domenu "${FILESDIR}/${PN}-nxm.desktop"
