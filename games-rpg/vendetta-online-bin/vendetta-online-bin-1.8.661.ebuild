@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 2023-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -22,7 +22,7 @@ S="${WORKDIR}"
 LICENSE="guild"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
-RESTRICT="mirror strip"
+RESTRICT="test mirror bindist strip"
 
 RDEPEND="
 	media-libs/alsa-lib
@@ -67,7 +67,7 @@ src_install() {
 
 	insinto ${dir}
 	doins -r *
-	fperms +x ${dir}/{vendetta,install/{demo.rlb,media.rlb,media6.rlb,update.rlb,vendetta}}
+	fperms +x ${dir}/{vendetta,install/{demos.rlb,media.rlb,media6.rlb,update.rlb,vendetta}}
 
 	sed \
 		-e "s:DATADIR:${dir}:" \
@@ -75,6 +75,6 @@ src_install() {
 		|| die "sed failed"
 
 	dobin "${T}"/vendetta
-	newicon install/manual/images/ships.valkyrie.jpg ${PN}.jpg
-	make_desktop_entry vendetta "Vendetta Online" ${PN}
+	doicon "${FILESDIR}/vendetta-online.png"
+	make_desktop_entry vendetta "Vendetta Online" "vendetta-online" "Game"
 }
