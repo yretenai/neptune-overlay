@@ -9,11 +9,11 @@ DESCRIPTION="Space-based MMORPG"
 HOMEPAGE="https://www.vendetta-online.com"
 SRC_URI="
 	amd64? (
-		http://mirror.cle.vendetta-online.com/vendetta-linux-amd64-installer.sh
+		http://cdn.vendetta-online.com/vendetta-linux-amd64-installer.sh
 			-> ${P}-amd64.sh
 	)
 	x86? (
-		http://mirror.cle.vendetta-online.com/vendetta-linux-ia32-installer.sh
+		http://cdn.vendetta-online.com/vendetta-linux-ia32-installer.sh
 			-> ${P}-x86.sh
 	)
 "
@@ -29,15 +29,23 @@ RDEPEND="
 	media-libs/libpulse
 	virtual/glu
 	virtual/opengl
-	x11-libs/gtk+:2
+	x86? ( x11-libs/gtk+:2 )
+	amd64? ( x11-libs/gtk+:3 )
 "
 BDEPEND="dev-util/patchelf"
 
 QA_FLAGS_IGNORED="
 	opt/vendetta-online-bin/install/drivers/.*.so
+	opt/vendetta-online-bin/install/demos.rlb
+	opt/vendetta-online-bin/install/media.rlb
+	opt/vendetta-online-bin/install/media6.rlb
 	opt/vendetta-online-bin/install/update.rlb
 	opt/vendetta-online-bin/install/vendetta
 	opt/vendetta-online-bin/vendetta
+"
+
+REQUIRED_USE="
+	elibc_glibc
 "
 
 src_unpack() {
@@ -59,7 +67,7 @@ src_install() {
 
 	insinto ${dir}
 	doins -r *
-	fperms +x ${dir}/{vendetta,install/{media.rlb,update.rlb,vendetta}}
+	fperms +x ${dir}/{vendetta,install/{demo.rlb,media.rlb,media6.rlb,update.rlb,vendetta}}
 
 	sed \
 		-e "s:DATADIR:${dir}:" \
@@ -68,5 +76,5 @@ src_install() {
 
 	dobin "${T}"/vendetta
 	newicon install/manual/images/ships.valkyrie.jpg ${PN}.jpg
-	make_desktop_entry vendetta "Vendetta Online" /usr/share/pixmaps/${PN}.jpg
+	make_desktop_entry vendetta "Vendetta Online" ${PN}
 }
