@@ -3,7 +3,7 @@
 
 EAPI=8
 
-DESCRIPTION="Patterns for app-forensics/imhex"
+DESCRIPTION="Patterns for app-editors/imhex"
 HOMEPAGE="https://imhex.werwolv.net/"
 
 S="${WORKDIR}/${P}"
@@ -15,7 +15,7 @@ inherit git-r3 vcs-clean
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex-Patterns.git"
 
 RDEPEND="
-	app-forensics/imhex
+	app-editors/imhex
 "
 
 src_prepare() {

@@ -31,7 +31,7 @@ IUSE="+system-llvm lto"
 
 DEPEND="
 	app-forensics/yara
-	app-forensics/pattern-language
+	dev-libs/pattern-language
 	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/capstone
 	dev-libs/nativefiledialog-extended

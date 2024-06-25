@@ -67,7 +67,7 @@ OIDN if you use HIP
 media-libs/oidn::gentoo
 ```
 
-Mask Guru's imhex if you use neptune's imhex (`app-forensics/imhex`)
+Mask Guru's imhex if you use neptune's imhex (`app-editors/imhex`)
 
 ```
 app-editors/imhex::guru
