@@ -761,3 +761,13 @@ src_install() {
 	domenu "${FILESDIR}/${PN}-nxm.desktop"
 	domenu "${FILESDIR}/${PN}.desktop"
 }
+
+pkg_postrm() {
+	ewarn ""
+	ewarn "NexusMods.App stores full copies of game archives for repairing."
+	ewarn "You may want to remove the following directories:"
+	ewarn "\t~/.local/state/NexusMods.App"
+	ewarn "\t~/.local/share/NexusMods.App"
+	ewarn "It may contain (significant) debris."
+	ewarn ""
+}
