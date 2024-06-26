@@ -16,7 +16,7 @@
 		</flag>
 	</use>
 	<upstream>
-		<bugs-to>https://github.com/OpenImageDenoise/oidn/issues</bugs-to>
-		<remote-id type="github">OpenImageDenoise/oidn</remote-id>
+		<bugs-to>https://github.com/RenderKit/oidn/issues</bugs-to>
+		<remote-id type="github">RenderKit/oidn</remote-id>
 	</upstream>
 </pkgmetadata>

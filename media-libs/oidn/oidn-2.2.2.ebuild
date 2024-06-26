@@ -13,7 +13,7 @@ EGIT_LFS=1
 inherit rocm cuda cmake python-single-r1 llvm git-r3
 DESCRIPTION="Intel(R) Open Image Denoise library"
 HOMEPAGE="https://www.openimagedenoise.org/"
-EGIT_REPO_URI="https://github.com/OpenImageDenoise/oidn.git"
+EGIT_REPO_URI="https://github.com/RenderKit/oidn.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
