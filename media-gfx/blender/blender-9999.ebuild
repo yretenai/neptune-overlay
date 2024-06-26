@@ -182,9 +182,13 @@ PATCHES=(
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 
-	if use doc; then
-		CHECKREQS_DISK_BUILD="4G" check-reqs_pkg_pretend
-	fi
+	REQ_TOT=2
+
+	use debug && ((REQ_TOT += 1))
+	[[ ${MERGE_TYPE} != binary ]] && has splitdebug $FEATURES && ((REQ_TOT += 9))
+	use doc && ((REQ_TOT += 2))
+
+	CHECKREQS_DISK_BUILD="${REQ_TOT}G" check-reqs_pkg_pretend
 }
 
 blender_get_version() {
