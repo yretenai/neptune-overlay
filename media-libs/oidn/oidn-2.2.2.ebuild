@@ -31,14 +31,11 @@ RDEPEND="${PYTHON_DEPS}
 		virtual/opencl
 		dev-libs/intel-compute-runtime
 	)
-	hip? ( >=dev-util/hip-5.5.0:= )
+	hip? ( dev-util/hip:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	dev-cpp/tbb:=
 	dev-lang/ispc"
 DEPEND="${RDEPEND}"
-BDEPEND="
-	hip? ( dev-util/hip:= )
-"
 
 PATCHES=(
 	"${FILESDIR}/fix-hip.patch"
