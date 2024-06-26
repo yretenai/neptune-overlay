@@ -24,7 +24,7 @@ RESTRICT="!test? ( test )"
 
 DEPEND="
 	hip? (
-		sci-libs/hipBLAS
+		sci-libs/hipBLAS:=
 		sys-devel/clang
 		dev-util/nvidia-cuda-toolkit
 	)
@@ -32,7 +32,7 @@ DEPEND="
 	cuda? ( dev-util/nvidia-cuda-toolkit )
 	oneapi? ( dev-libs/intel-compute-runtime )
 	opencl? ( sci-libs/clblast )
-	openblas? ( sci-libs/openblas )
+	openblas? ( sci-libs/openblas:= )
 	sdl2? ( media-libs/libsdl2 )
 	torch? ( sci-libs/pytorch )
 "
