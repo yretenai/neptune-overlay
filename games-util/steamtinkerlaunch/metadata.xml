@@ -2,8 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/frostworx/steamtinkerlaunch/issues</bugs-to>
-		<changelog>https://github.com/frostworx/steamtinkerlaunch/wiki/Changelog</changelog>
-		<remote-id type="github">frostworx/steamtinkerlaunch</remote-id>
+		<bugs-to>https://github.com/sonic2kk/steamtinkerlaunch/issues</bugs-to>
+		<changelog>https://github.com/sonic2kk/steamtinkerlaunch/wiki/Changelog</changelog>
+		<remote-id type="github">sonic2kk/steamtinkerlaunch</remote-id>
 	</upstream>
 </pkgmetadata>
