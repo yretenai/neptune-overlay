@@ -2,8 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<changelog>https://github.com/apple/swift/releases</changelog>
-		<bugs-to>https://github.com/apple/swift/issues</bugs-to>
-		<remote-id type="github">apple/swift</remote-id>
+		<changelog>https://github.com/aswiftlangpple/swift/releases</changelog>
+		<bugs-to>https://github.com/swiftlang/swift/issues</bugs-to>
+		<remote-id type="github">swiftlang/swift</remote-id>
 	</upstream>
 </pkgmetadata>
