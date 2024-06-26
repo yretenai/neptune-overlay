@@ -9,7 +9,7 @@ MY_PN="${PN/-bin*/}"
 MY_PV="__SWIFT_VERSION__"
 
 DESCRIPTION="Swift is a general-purpose programming language"
-HOMEPAGE="https://github.com/apple/swift
+HOMEPAGE="https://github.com/swiftlang/swift
 	https://www.swift.org/
 	https://developer.apple.com/swift/"
 SRC_URI="
