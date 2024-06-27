@@ -466,7 +466,11 @@ pkg_postinst() {
 
 	if use osl; then
 		ewarn ""
-		ewarn "OSL is know to cause runtime segfaults if Mesa has been linked to"
+		if use hip; then
+			ewarn "OSL is know to cause runtime segfaults if Mesa and HIP has been linked to"
+		else 
+			ewarn "OSL is know to cause runtime segfaults if Mesa has been linked to"
+		fi
 		ewarn "an other LLVM version than what OSL is linked to."
 		ewarn "See https://bugs.gentoo.org/880671 for more details"
 		ewarn ""
