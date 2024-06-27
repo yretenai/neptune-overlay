@@ -356,6 +356,7 @@ src_configure() {
 		mycmakeargs+=(
 			-DWITH_CLANG=yes
 			-DWITH_LLVM=yes
+			-DLLVM_LIBRARY="$(llvm-config --libdir)"
 		)
 	fi
 

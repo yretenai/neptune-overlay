@@ -46,7 +46,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cuda? ( cycles )
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
-	hip? ( cycles )
+	hip? ( cycles llvm )
 	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
@@ -83,7 +83,12 @@ RDEPEND="${PYTHON_DEPS}
 	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?,vpx,vorbis,opus,xvid] )
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
-	hip? ( >=dev-util/hip-5.7.1:= )
+	hip? (
+		>=dev-util/hip-5.7.1:=
+		$(llvm_gen_dep '
+			>=dev-util/hip-5.7.1[llvm_slot_${LLVM_SLOT}]
+		')
+	)
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
@@ -105,7 +110,13 @@ RDEPEND="${PYTHON_DEPS}
 		dev-libs/c-blosc:=
 	)
 	optix? ( <dev-libs/optix-7.5.0 )
-	osl? ( media-libs/osl:= )
+	osl? (
+		media-libs/osl:=
+		$(llvm_gen_dep '
+			media-libs/osl[llvm_slot_${LLVM_SLOT}]
+			media-libs/mesa[llvm_slot_${LLVM_SLOT}]
+		')
+	)
 	pdf? ( media-libs/libharu )
 	potrace? ( media-gfx/potrace )
 	pugixml? ( dev-libs/pugixml )
@@ -170,6 +181,12 @@ BDEPEND="
 	nls? ( sys-devel/gettext )
 	wayland? (
 		dev-util/wayland-scanner
+	)
+	llvm? (
+		$(llvm_gen_dep '
+			sys-devel/clang:${LLVM_SLOT}
+			sys-devel/llvm:${LLVM_SLOT}
+		')
 	)
 "
 
@@ -352,6 +369,12 @@ src_configure() {
 		mycmakeargs+=(
 			-DCYCLES_RUNTIME_OPTIX_ROOT_DIR="${EPREFIX}"/opt/optix
 			-DOPTIX_ROOT_DIR="${EPREFIX}"/opt/optix
+		)
+	fi
+
+	if use llvm; then
+		mycmakeargs+=(
+			-DLLVM_LIBRARY="$(llvm-config --libdir)"
 		)
 	fi
 
