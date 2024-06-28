@@ -36,9 +36,6 @@ BDEPEND="dev-util/patchelf"
 
 QA_FLAGS_IGNORED="
 	opt/vendetta-online-bin/install/drivers/.*.so
-	opt/vendetta-online-bin/install/demos.rlb
-	opt/vendetta-online-bin/install/media.rlb
-	opt/vendetta-online-bin/install/media6.rlb
 	opt/vendetta-online-bin/install/update.rlb
 	opt/vendetta-online-bin/install/vendetta
 	opt/vendetta-online-bin/vendetta
@@ -67,7 +64,7 @@ src_install() {
 
 	insinto ${dir}
 	doins -r *
-	fperms +x ${dir}/{vendetta,install/{demos.rlb,media.rlb,media6.rlb,update.rlb,vendetta}}
+	fperms +x ${dir}/{vendetta,install/{update.rlb,vendetta}}
 
 	sed \
 		-e "s:DATADIR:${dir}:" \
