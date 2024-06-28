@@ -242,8 +242,7 @@ HOMEPAGE="https://github.com/goatcorp/XIVLauncher.Core"
 EGIT_REPO_URI="https://github.com/goatcorp/XIVLauncher.Core.git"
 
 if [[ "${PV}" != *9999* ]]; then
-	# use commit for 1.0.9, reasoning: updates to NET 8
-	EGIT_COMMIT="833fb9b2879304ccfe022bd1ced2b5e87c6ae29e" # "${PV}"
+	EGIT_COMMIT="${PV}"
 	KEYWORDS="~amd64"
 fi
 
