@@ -272,7 +272,7 @@ RDEPEND="
 	x11-libs/libSM
 "
 
-DOTNET_PKG_PROJECTS=( 
+DOTNET_PKG_PROJECTS=(
 	"src/XIVLauncher.Core/XIVLauncher.Core.csproj"
 )
 

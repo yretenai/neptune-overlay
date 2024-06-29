@@ -467,24 +467,37 @@ pkg_postinst() {
 	elog
 
 	if use osl; then
-		ewarn ""
+		ewarn
 		if use hip; then
-			ewarn "OSL is know to cause runtime segfaults if Mesa and HIP has been linked to"
-		else 
+			ewarn "OSL is know to cause runtime segfaults if Mesa and/or HIP have been"
+			ewarn "linked to an other LLVM version than what OSL is linked to."
+		else
 			ewarn "OSL is know to cause runtime segfaults if Mesa has been linked to"
+			ewarn "an other LLVM version than what OSL is linked to."
 		fi
-		ewarn "an other LLVM version than what OSL is linked to."
-		ewarn "See https://bugs.gentoo.org/880671 for more details"
-		ewarn ""
+		ewarn "Bug: https://bugs.gentoo.org/880671"
+		ewarn
 	fi
 
 	if ! use python_single_target_python3_11; then
-		elog "You are building Blender with a newer python version than"
-		elog "supported by this version upstream."
-		elog "If you experience breakages with e.g. plugins, please switch to"
-		elog "python_single_target_python3_11 instead."
-		elog "Bug: https://bugs.gentoo.org/737388"
-		elog
+		ewarn
+		ewarn "You are building Blender with a newer python version than"
+		ewarn "supported by this version upstream."
+		ewarn "If you experience breakages with e.g. plugins, please switch to"
+		ewarn "python_single_target_python3_11 instead."
+		ewarn "Bug: https://bugs.gentoo.org/737388"
+		ewarn
+	fi
+
+	if use opensubdiv; then
+		ewarn
+		ewarn "GPU Viewport Subdivision will likely segfault."
+		ewarn "Please disable GPU Viewport Subdivision by navigating to:"
+		ewarn "\tEdit > Preferences > Viewport > Subdivision"
+		ewarn "And unchecking \"GPU Subdivision\"."
+		ewarn "Blender Issue: https://projects.blender.org/blender/blender/issues/97737"
+		ewarn "Blender Issue: https://projects.blender.org/blender/blender/issues/103464"
+		ewarn
 	fi
 
 	xdg_icon_cache_update
@@ -497,16 +510,9 @@ pkg_postrm() {
 	xdg_mimeinfo_database_update
 	xdg_desktop_database_update
 
-	ewarn ""
+	ewarn
 	ewarn "You may want to remove the following directory."
 	ewarn "~/.config/${PN}/${BV}/cache/"
 	ewarn "It may contain extra render kernels not tracked by portage"
-	ewarn ""
-	if use opensubdiv; then
-		ewarn "GPU Viewport Subdivision will sometimes segfault."
-		ewarn "Please disable GPU Viewport Subdivision by navigating to:"
-		ewarn "\tEdit > Preferences > Viewport > Subdivision"
-		ewarn "And unchecking \"GPU Subdivision\"."
-		ewarn ""
-	fi
+	ewarn
 }

@@ -24,7 +24,7 @@
 # @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# If set, use Electron with support for Widevine 
+# If set, use Electron with support for Widevine
 
 # @ECLASS_VARIABLE: ELECTRON_BDEPEND
 # @DEFAULT_UNSET
