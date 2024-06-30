@@ -5,9 +5,6 @@
 		<flag name="hip">
 			Build OIDN with AMD HIP support.
 		</flag>
-		<flag name="sycl">
-			Build OIDN with Intel oneAPI SyCL support.
-		</flag>
 		<flag name="hip-safe">
 			Build OIDN with every AMD HIP kernel.
 		</flag>
