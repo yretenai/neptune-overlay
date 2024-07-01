@@ -18,7 +18,6 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
 
 DEPEND+="
 	dev-python/darkdetect[${PYTHON_USEDEP}]

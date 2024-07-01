@@ -83,11 +83,11 @@ src_configure() {
 			-DOIDN_DEVICE_HIP_COMPILER="$(get_llvm_prefix)/bin/clang++" # use HIPHOSTCOMPILER
 		)
 
-       if ! use hip-safe; then
-           mycmakeargs+=(
-               -DAMDGPU_TARGETS="$(get_amdgpu_flags)"
-           )
-       fi
+	   if ! use hip-safe; then
+		   mycmakeargs+=(
+			   -DAMDGPU_TARGETS="$(get_amdgpu_flags)"
+		   )
+	   fi
 	fi
 
 	cmake_src_configure

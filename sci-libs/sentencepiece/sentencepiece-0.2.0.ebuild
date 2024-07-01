@@ -39,6 +39,7 @@ BDEPEND+="
 	>=dev-build/cmake-3.8.0
 	virtual/pkgconfig
 	python? (
+		${DISTUTILS_DEPS}
 		${PYTHON_DEPS}
 	)
 "
@@ -80,7 +81,7 @@ src_configure() {
 		-DSPM_ENABLE_SHARED=OFF # will fail as long as absl is outdated
 		-DBUILD_SHARED_LIBS=OFF # ""
 	)
-	
+
 	cmake_src_configure
 
 	if use python ; then

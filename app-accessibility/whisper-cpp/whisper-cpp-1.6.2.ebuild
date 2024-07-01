@@ -47,9 +47,6 @@ REQUIRED_USE="
 	openblas64? ( openblas )
 "
 
-PATCHES=(
-)
-
 src_configure() {
 	sed -e "s|models/ggml-base.en.bin|${EPREFIX}/usr/share/whisper/ggml-models/base.en.bin|" \
 		-i "examples/bench/bench.cpp" \

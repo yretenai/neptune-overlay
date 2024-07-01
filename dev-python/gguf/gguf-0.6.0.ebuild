@@ -7,11 +7,11 @@ PYTHON_COMPAT=( python3_{8..13} )
 DISTUTILS_USE_PEP517=poetry
 inherit distutils-r1
 
-DESCRIPTION="This is a Python package for writing binary files in the GGUF (GGML Universal File) format."
+DESCRIPTION="IO library for the GGUF (GGML Universal File) format."
 HOMEPAGE="https://pypi.org/project/gguf"
 
 SRC_URI="
-	https://files.pythonhosted.org/packages/f3/ad/535c8afa732ee70ff4643d34655676db689fcf9b673470adb9faeac36937/gguf-0.6.0.tar.gz
+	https://files.pythonhosted.org/packages/f3/ad/535c8afa732ee70ff4643d34655676db689fcf9b673470adb9faeac36937/${P}.tar.gz
 "
 
 LICENSE="MIT"

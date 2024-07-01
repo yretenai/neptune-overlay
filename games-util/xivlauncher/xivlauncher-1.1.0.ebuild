@@ -249,7 +249,6 @@ fi
 SRC_URI="${NUGET_URIS}"
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64"
 
 IUSE="+aria2 +libsecret"
 

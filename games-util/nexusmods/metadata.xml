@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<use>
+		<flag name="p7zip">
+			Use 
+			<pkg>app-arch/p7zip</pkg>
+			instead of
+			<pkg>app-arch/7zip</pkg>.
+		</flag>
+	</use>
 	<upstream>
 		<bugs-to>https://github.com/Nexus-Mods/NexusMods.App/issues</bugs-to>
 		<remote-id type="github">Nexus-Mods/NexusMods.App</remote-id>

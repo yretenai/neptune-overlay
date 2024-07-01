@@ -13,7 +13,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} )
-LLVM_COMPAT=( {16..18} )
+LLVM_COMPAT=( 18 )
 EGIT_LFS="yes"
 ROCM_VERSION="5.7.1"
 
@@ -84,9 +84,8 @@ RDEPEND="${PYTHON_DEPS}
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
 	hip? (
-		>=dev-util/hip-5.7.1:=
 		$(llvm_gen_dep '
-			>=dev-util/hip-5.7.1[llvm_slot_${LLVM_SLOT}]
+			>=dev-util/hip-6.1.1:=[llvm_slot_${LLVM_SLOT}]
 		')
 	)
 	jack? ( virtual/jack )
@@ -98,7 +97,11 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? ( >=media-libs/oidn-2.1.0:= )
+	oidn? (
+		$(llvm_gen_dep '
+			>=media-libs/oidn-2.3.0:=[llvm_slot_${LLVM_SLOT}]
+		')
+	)
 	openexr? (
 		>=dev-libs/imath-3.1.4-r2:=
 		>=media-libs/openexr-3:0=
@@ -111,10 +114,9 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	optix? ( <dev-libs/optix-7.5.0 )
 	osl? (
-		media-libs/osl:=
 		$(llvm_gen_dep '
-			media-libs/osl[llvm_slot_${LLVM_SLOT}]
-			media-libs/mesa[llvm_slot_${LLVM_SLOT}]
+			>=media-libs/osl-1.13.10.0:=[llvm_slot_${LLVM_SLOT}]
+			>=media-libs/mesa-24.1.2[llvm_slot_${LLVM_SLOT}]
 		')
 	)
 	pdf? ( media-libs/libharu )

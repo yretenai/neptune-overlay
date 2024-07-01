@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <use>
-    <flag name="libsecret">Enable secrets/password storage support.</flag>
-    <flag name="aria2">Enable Aria2 support.</flag>
-  </use>
-  <upstream>
+	<use>
+		<flag name="libsecret">Enable secrets/password storage support.</flag>
+		<flag name="aria2">Enable Aria2 support.</flag>
+	</use>
+	<upstream>
 		<bugs-to>https://github.com/goatcorp/XIVLauncher.Core/issues</bugs-to>
-    <remote-id type="github">goatcorp/XIVLauncher.Core</remote-id>
-  </upstream>
+		<remote-id type="github">goatcorp/XIVLauncher.Core</remote-id>
+	</upstream>
 </pkgmetadata>

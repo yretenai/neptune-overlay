@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<bugs-to>https://github.com/ggerganov/llama.cpp/issues</bugs-to>
+		<remote-id type="github">ggerganov/llama.cpp</remote-id>
+		<remote-id type="pypi">gguf</remote-id>
+	</upstream>
+</pkgmetadata>

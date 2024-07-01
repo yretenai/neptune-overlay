@@ -11,6 +11,9 @@
 		<flag name="openimageio">
 			Build OpenImageIO examples
 		</flag>
+		<flag name="apps">
+			Build example applications
+		</flag>
 	</use>
 	<upstream>
 		<bugs-to>https://github.com/RenderKit/oidn/issues</bugs-to>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<bugs-to>https://github.com/TomSchimansky/CustomTkinter/issues</bugs-to>
+		<remote-id type="github">TomSchimansky/CustomTkinter</remote-id>
+		<remote-id type="pypi">customtkinter</remote-id>
+	</upstream>
+</pkgmetadata>
