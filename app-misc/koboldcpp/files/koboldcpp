@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd EPREFIX/opt/koboldcpp
+EPYTHON "koboldcpp.py" "$@"
