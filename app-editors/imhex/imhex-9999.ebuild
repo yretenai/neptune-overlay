@@ -20,10 +20,8 @@ SLOT="0"
 inherit git-r3
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 
-if [[ ${PV} = *9999* ]]; then
-	EGIT_BRANCH="master"
-else
-	EGIT_BRANCH="v${PV}"
+if [[ ${PV} != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 
