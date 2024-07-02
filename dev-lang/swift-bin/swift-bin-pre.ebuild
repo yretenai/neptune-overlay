@@ -53,6 +53,7 @@ src_prepare() {
 	cd ../lib
 	rm -rf clang* libLTO.so* liblldb.so*
 	rm swift/clang swift_static/clang
+	patchelf --remove-rpath swift/linux/libicudataswift.so.69.1
 	cd ../include
 	rm -rf llvm-c* unicode*
 	popd
