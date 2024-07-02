@@ -17,8 +17,16 @@ SRC_URI="
 	arm64? ( https://download.swift.org/swift-6.0-branch/ubi9-aarch64/${MY_PV}/${MY_PV}-ubi9-aarch64.tar.gz )
 "
 
+IUSE="+plutil"
+
+SWIFTDIR="${MY_PV}-ubi9"
+
+if [[ "$ARCH" == "arm64" ]]; then
+	SWIFTDIR="${MY_PV}-ubi9-aarch64"
+fi
+
 QA_PREBUILT="*"
-S="${WORKDIR}"
+S="${WORKDIR}/${SWIFTDIR}"
 LICENSE="Apache-2.0"
 SLOT="0"
 RESTRICT="test bindist mirror strip"
@@ -39,16 +47,10 @@ RDEPEND="
 	sys-devel/llvm:${LLVM_SLOT}
 "
 
-SWIFTDIR="${MY_PV}-ubi9"
-
-if [[ "$ARCH" == "arm64" ]]; then
-	SWIFTDIR="${MY_PV}-ubi9-aarch64"
-fi
-
 src_prepare() {
 	default
 
-	pushd ${SWIFTDIR}/usr/bin
+	pushd usr/bin
 	rm clang* ll* ld* wasm*
 	cd ../lib
 	rm -rf clang* libLTO.so* liblldb.so*
@@ -60,21 +62,25 @@ src_prepare() {
 }
 
 src_install() {
-	dobin "${WORKDIR}/${SWIFTDIR}/usr/bin/docc" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/repl_swift" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/sourcekit-lsp" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-api-checker.py" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build-sdk-interfaces" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-build-tool" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-demangle" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-driver" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-format" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-frontend" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-help" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-package" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/swift-plugin-server"
+	dobin "usr/bin/docc" \
+		"usr/bin/repl_swift" \
+		"usr/bin/sourcekit-lsp" \
+		"usr/bin/swift-api-checker.py" \
+		"usr/bin/swift-build-sdk-interfaces" \
+		"usr/bin/swift-build-tool" \
+		"usr/bin/swift-demangle" \
+		"usr/bin/swift-driver" \
+		"usr/bin/swift-format" \
+		"usr/bin/swift-frontend" \
+		"usr/bin/swift-help" \
+		"usr/bin/swift-package" \
+		"usr/bin/swift-plugin-server"
 
-	newbin "${WORKDIR}/${SWIFTDIR}/usr/bin/plutil" "swift-plutil"
+	newbin "usr/bin/plutil" "swift-plutil"
+
+	if use plutil; then
+		dosym "swift-plutil" "/usr/bin/plutil"
+	fi
 
 	dosym "swift-frontend" "/usr/bin/swift-api-digester"
 	dosym "swift-frontend" "/usr/bin/swift-api-extract"
@@ -96,27 +102,27 @@ src_install() {
 	dosym "swift-driver" "/usr/bin/swiftc"
 
 	exeinto /usr/libexec/swift/linux
-	doexe "${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace" \
-		"${WORKDIR}/${SWIFTDIR}/usr/libexec/swift/linux/swift-backtrace-static"
+	doexe "usr/libexec/swift/linux/swift-backtrace" \
+		"usr/libexec/swift/linux/swift-backtrace-static"
 
-	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/SourceKit"
-	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/include/swift"
-	doheader -r "${WORKDIR}/${SWIFTDIR}/usr/local/include/indexstore"
+	doheader -r "usr/include/SourceKit"
+	doheader -r "usr/include/swift"
+	doheader -r "usr/local/include/indexstore"
 
 	insinto /etc/clang
-	doins "${WORKDIR}/${SWIFTDIR}/usr/bin/aarch64-swift-linux-musl-clang.cfg" \
-		"${WORKDIR}/${SWIFTDIR}/usr/bin/x86_64-swift-linux-musl-clang.cfg"
+	doins "usr/bin/aarch64-swift-linux-musl-clang.cfg" \
+		"usr/bin/x86_64-swift-linux-musl-clang.cfg"
 	dosym "aarch64-swift-linux-musl-clang.cfg" "/etc/clang/aarch64-swift-linux-musl-clang++.cfg"
 	dosym "x86_64-swift-linux-musl-clang.cfg" "/etc/clang/x86_64-swift-linux-musl-clang++.cfg"
 
 	insinto /usr/lib
-	doins -r "${WORKDIR}/${SWIFTDIR}/usr/lib/swift" \
-		"${WORKDIR}/${SWIFTDIR}/usr/lib/swift_static"
+	doins -r "usr/lib/swift" \
+		"usr/lib/swift_static"
 
-	dolib.so "${WORKDIR}/${SWIFTDIR}/usr/lib/libIndexStore.so.17" \
-		"${WORKDIR}/${SWIFTDIR}/usr/lib/libsourcekitdInProc.so" \
-		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftDemangle.so" \
-		"${WORKDIR}/${SWIFTDIR}/usr/lib/libswiftGenericMetadataBuilder.so"
+	dolib.so "usr/lib/libIndexStore.so.17" \
+		"usr/lib/libsourcekitdInProc.so" \
+		"usr/lib/libswiftDemangle.so" \
+		"usr/lib/libswiftGenericMetadataBuilder.so"
 
 	local clang_version=${LLVM_SLOT}
 	if [[ ! -e "/usr/lib/clang/${LLVM_SLOT}" ]]; then
@@ -129,16 +135,26 @@ src_install() {
 	dosym "../clang/${clang_version}" "/usr/lib/swift_static/clang"
 
 	insinto /usr/share
-	doins -r "${WORKDIR}/${SWIFTDIR}/usr/share/icuswift" \
-		"${WORKDIR}/${SWIFTDIR}/usr/share/swift" \
-		"${WORKDIR}/${SWIFTDIR}/usr/share/docc" \
-		"${WORKDIR}/${SWIFTDIR}/usr/share/pm"
+	doins -r "usr/share/icuswift" \
+		"usr/share/swift" \
+		"usr/share/docc" \
+		"usr/share/pm"
 
 	insinto /usr/share/clang
-	doins "${WORKDIR}/${SWIFTDIR}/usr/share/clang/features.json"
+	doins "usr/share/clang/features.json"
 
-	dodoc -r "${WORKDIR}/${SWIFTDIR}/usr/share/doc/swift"
-	doman "${WORKDIR}/${SWIFTDIR}/usr/share/man/man1/swift.1"
+	dodoc -r "usr/share/doc/swift"
+	doman "usr/share/man/man1/swift.1"
+}
+
+pkg_postinst() {
+	ewarn
+	ewarn "'swift repl' is known to error with 'multiple possible languages'"
+	ewarn "there unfortunately is no workaround without isolating swift into"
+	ewarn "it's own environment folder."
+	ewarn "However, this also copies clang and requires a specific python"
+	ewarn "version to be installed."
+	ewarn
 }
 
 pkg_postrm() {
