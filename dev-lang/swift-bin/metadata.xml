@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<use>
+		<flag name="plutil">
+			Install swift's plutil as plutil (conflicts with <pkg>gnustep-base/gnustep-base</pkg>)
+		</flag>
+	</use>
 	<upstream>
 		<changelog>https://github.com/aswiftlangpple/swift/releases</changelog>
 		<bugs-to>https://github.com/swiftlang/swift/issues</bugs-to>
