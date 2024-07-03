@@ -23,7 +23,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="AGPL-3.0"
+LICENSE="AGPL-3"
 SLOT="0"
 IUSE="openblas clblast cuda hip vulkan"
 RESTRICT="test"
@@ -73,7 +73,7 @@ BDEPEND="
 
 src_prepare() {
 	eapply_user
-	
+
 	if use cuda; then
 		cuda_src_prepare
 	fi

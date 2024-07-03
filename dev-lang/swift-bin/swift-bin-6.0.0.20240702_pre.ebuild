@@ -17,8 +17,6 @@ SRC_URI="
 	arm64? ( https://download.swift.org/swift-6.0-branch/ubi9-aarch64/${MY_PV}/${MY_PV}-ubi9-aarch64.tar.gz )
 "
 
-IUSE="+plutil"
-
 SWIFTDIR="${MY_PV}-ubi9"
 
 if [[ "$ARCH" == "arm64" ]]; then
@@ -29,6 +27,7 @@ QA_PREBUILT="*"
 S="${WORKDIR}/${SWIFTDIR}"
 LICENSE="Apache-2.0"
 SLOT="0"
+IUSE="+plutil"
 RESTRICT="test bindist mirror strip"
 
 RDEPEND="
