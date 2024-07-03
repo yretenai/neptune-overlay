@@ -32,7 +32,7 @@ DEPEND="
 	dev-libs/pattern-language
 	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/capstone
-	dev-libs/nativefiledialog-extended
+	>=dev-libs/nativefiledialog-extended-1.2.0
 	>=dev-libs/libfmt-8.0.0:=
 	media-libs/freetype
 	media-libs/glfw
@@ -112,7 +112,7 @@ src_configure() {
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
 		-D IMHEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
 		-D IMHEX_STRICT_WARNINGS=OFF \
-		-D IMHEX_BUNDLE_DOTNET=ON \
+		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_ENABLE_LTO=$(usex lto) \
 		-D IMHEX_ENABLE_UNITY_BUILD=OFF \
 		-D IMHEX_VERSION="${PV}" \
