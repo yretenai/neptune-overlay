@@ -117,7 +117,8 @@ src_install() {
 	insinto /opt/koboldcpp
 	exeinto /opt/koboldcpp
 
-	doins \
+	doins -r \
+		kcpp_adapters \
 		niko.ico \
 		nikogreen.ico \
 		kcpp_docs.embd \
