@@ -3,7 +3,7 @@
 
 EAPI=8
 
-ELECTRON_VER="30.1.1"
+ELECTRON_VER="31.2.0"
 ELECTRON_BUILDER_VER="24.13.3"
 
 inherit desktop xdg electron-builder-utils git-r3
