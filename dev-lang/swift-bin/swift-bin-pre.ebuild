@@ -31,7 +31,7 @@ IUSE="+plutil"
 RESTRICT="test bindist mirror strip"
 
 RDEPEND="
-	sys-devel/binutils[gold]
+	arm64? ( sys-devel/binutils[gold] )
 	dev-libs/icu
 	sys-libs/timezone-data
 	sys-libs/zlib
