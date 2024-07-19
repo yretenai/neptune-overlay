@@ -144,6 +144,10 @@ src_install() {
 
 	dodoc -r "usr/share/doc/swift"
 	doman "usr/share/man/man1/swift.1"
+
+	if [[ "$ARCH" == "amd64" ]]; then
+		dosym ld /usr/bin/ld.gold
+	fi
 }
 
 pkg_postinst() {
