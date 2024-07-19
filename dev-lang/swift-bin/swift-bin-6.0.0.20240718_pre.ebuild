@@ -6,7 +6,7 @@ EAPI=8
 LLVM_SLOT=17
 
 MY_PN="${PN/-bin*/}"
-MY_PV="swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-17-a"
+MY_PV="swift-6.0-DEVELOPMENT-SNAPSHOT-2024-07-18-a"
 
 DESCRIPTION="Swift is a general-purpose programming language"
 HOMEPAGE="https://github.com/swiftlang/swift
@@ -31,7 +31,7 @@ IUSE="+plutil"
 RESTRICT="test bindist mirror strip"
 
 RDEPEND="
-	sys-devel/binutils[gold]
+	arm64? ( sys-devel/binutils[gold] )
 	dev-libs/icu
 	sys-libs/timezone-data
 	sys-libs/zlib
@@ -144,6 +144,10 @@ src_install() {
 
 	dodoc -r "usr/share/doc/swift"
 	doman "usr/share/man/man1/swift.1"
+
+	if [[ "$ARCH" == "amd64" ]]; then
+		dosym ld /usr/bin/ld.gold
+	fi
 }
 
 pkg_postinst() {
