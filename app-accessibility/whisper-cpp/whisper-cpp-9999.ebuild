@@ -46,6 +46,11 @@ REQUIRED_USE="
 	hipuma? ( hip )
 "
 
+PATCHES="
+	${FILESDIR}/prefix-whisper-name.patch
+	${FILESDIR}/install-examples.patch
+"
+
 src_configure() {
 	# fix hardcoded model path to the one installed by us
 	sed -e "s|models/ggml-base.en.bin|${EPREFIX}/usr/share/whisper/ggml-models/base.en.bin|" \
@@ -127,31 +132,7 @@ src_install() {
 		dodoc models/ggml_to_pt.py
 	fi
 
-	cd "${BUILD_DIR}" || die
-
-	dolib.so \
-		src/libwhisper.so.1.6.2 \
-		ggml/src/libggml.so
-	dosym "${EPREFIX}/usr/lib64/libwhisper.so.1.6.2" "usr/lib64/libwhisper.so.1"
-	dosym "${EPREFIX}/usr/lib64/libwhisper.so.1" "usr/lib64/libwhisper.so"
-	newbin bin/main whisper
-	newbin bin/bench whisper-bench
-	newbin bin/quantize whisper-quantize
-	newbin bin/server whisper-server
-
-	if use sdl; then
-		newbin bin/command whisper-command
-		newbin bin/lsp whisper-lsp
-		newbin bin/stream whsiper-stream
-		newbin bin/talk whisper-talk
-		newbin bin/talk-llama whisper-talk-llama
-		newbin bin/wchess whisper-wchess
-	fi
-
-	insinto /usr/share/cmake/whisper
-	doins whisper-config.cmake whisper-version.cmake
-	insinto /usr/share/pkgconfig
-	doins whisper.pc
+	cmake_src_install
 }
 
 pkg_postinst() {

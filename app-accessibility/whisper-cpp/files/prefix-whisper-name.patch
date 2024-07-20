@@ -1,0 +1,130 @@
+diff --git a/examples/bench/CMakeLists.txt b/examples/bench/CMakeLists.txt
+index f8a72ff..0d7df3c 100644
+--- a/examples/bench/CMakeLists.txt
++++ b/examples/bench/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ set(TARGET bench)
+ add_executable(${TARGET} bench.cpp)
++set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+ include(DefaultTargetOptions)
+ 
+diff --git a/examples/command/CMakeLists.txt b/examples/command/CMakeLists.txt
+index 40f278c..5b423c3 100644
+--- a/examples/command/CMakeLists.txt
++++ b/examples/command/CMakeLists.txt
+@@ -2,6 +2,7 @@ if (WHISPER_SDL2)
+     # command
+     set(TARGET command)
+     add_executable(${TARGET} command.cpp)
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+     include(DefaultTargetOptions)
+ 
+diff --git a/examples/lsp/CMakeLists.txt b/examples/lsp/CMakeLists.txt
+index 15b5be1..8c76c05 100644
+--- a/examples/lsp/CMakeLists.txt
++++ b/examples/lsp/CMakeLists.txt
+@@ -2,6 +2,7 @@ if (WHISPER_SDL2)
+     # stream
+     set(TARGET lsp)
+     add_executable(${TARGET} lsp.cpp)
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+     include(DefaultTargetOptions)
+ 
+diff --git a/examples/main/CMakeLists.txt b/examples/main/CMakeLists.txt
+index 1e66e4b..d903a7e 100644
+--- a/examples/main/CMakeLists.txt
++++ b/examples/main/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ set(TARGET main)
+ add_executable(${TARGET} main.cpp)
++set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper")
+ 
+ include(DefaultTargetOptions)
+ 
+diff --git a/examples/quantize/CMakeLists.txt b/examples/quantize/CMakeLists.txt
+index 8d2d2e4..5b4157a 100644
+--- a/examples/quantize/CMakeLists.txt
++++ b/examples/quantize/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ set(TARGET quantize)
+ add_executable(${TARGET} quantize.cpp)
++set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+ include(DefaultTargetOptions)
+ 
+diff --git a/examples/server/CMakeLists.txt b/examples/server/CMakeLists.txt
+index 96dd97f..63f2213 100644
+--- a/examples/server/CMakeLists.txt
++++ b/examples/server/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ set(TARGET server)
+ add_executable(${TARGET} server.cpp httplib.h)
++set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+ include(DefaultTargetOptions)
+ 
+diff --git a/examples/stream/CMakeLists.txt b/examples/stream/CMakeLists.txt
+index 312d52c..9fa4d51 100644
+--- a/examples/stream/CMakeLists.txt
++++ b/examples/stream/CMakeLists.txt
+@@ -2,6 +2,7 @@ if (WHISPER_SDL2)
+     # stream
+     set(TARGET stream)
+     add_executable(${TARGET} stream.cpp)
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+     include(DefaultTargetOptions)
+ 
+diff --git a/examples/sycl/CMakeLists.txt b/examples/sycl/CMakeLists.txt
+index 3b5721f..2a606d9 100644
+--- a/examples/sycl/CMakeLists.txt
++++ b/examples/sycl/CMakeLists.txt
+@@ -4,6 +4,7 @@
+ 
+ set(TARGET ls-sycl-device)
+ add_executable(${TARGET} ls-sycl-device.cpp)
++set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ install(TARGETS ${TARGET} RUNTIME)
+ target_link_libraries(${TARGET} PRIVATE common llama ${CMAKE_THREAD_LIBS_INIT})
+-target_compile_features(${TARGET} PRIVATE cxx_std_17)
+\ No newline at end of file
++target_compile_features(${TARGET} PRIVATE cxx_std_17)
+diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
+index f95ec37..2d832b1 100644
+--- a/examples/talk-llama/CMakeLists.txt
++++ b/examples/talk-llama/CMakeLists.txt
+@@ -2,6 +2,7 @@ if (WHISPER_SDL2)
+     # talk-llama
+     set(TARGET talk-llama)
+     add_executable(${TARGET} talk-llama.cpp llama.cpp unicode.cpp unicode-data.cpp)
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+     target_include_directories(${TARGET} PRIVATE ${SDL2_INCLUDE_DIRS})
+ 
+     if (WHISPER_CLBLAST)
+diff --git a/examples/talk/CMakeLists.txt b/examples/talk/CMakeLists.txt
+index e099e2c..6bc018e 100644
+--- a/examples/talk/CMakeLists.txt
++++ b/examples/talk/CMakeLists.txt
+@@ -2,6 +2,7 @@ if (WHISPER_SDL2)
+     # talk
+     set(TARGET talk)
+     add_executable(${TARGET} talk.cpp gpt-2.cpp)
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+     target_link_libraries(${TARGET} PRIVATE common common-sdl whisper ${CMAKE_THREAD_LIBS_INIT})
+ 
+     include(DefaultTargetOptions)
+diff --git a/examples/wchess/wchess.cmd/CMakeLists.txt b/examples/wchess/wchess.cmd/CMakeLists.txt
+index 7e107c8..054fa4c 100644
+--- a/examples/wchess/wchess.cmd/CMakeLists.txt
++++ b/examples/wchess/wchess.cmd/CMakeLists.txt
+@@ -1,6 +1,7 @@
+ if (WHISPER_SDL2)
+     set(TARGET wchess)
+     add_executable(${TARGET} wchess.cmd.cpp)
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+ 
+     include(DefaultTargetOptions)
+ 
