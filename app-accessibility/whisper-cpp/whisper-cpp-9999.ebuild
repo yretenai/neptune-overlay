@@ -43,7 +43,6 @@ RDEPEND="
 "
 
 REQUIRED_USE="
-	^^ ( hip cuda openblas vulkan )
 	hipuma? ( hip )
 "
 
@@ -131,8 +130,10 @@ src_install() {
 	cd "${BUILD_DIR}" || die
 
 	dolib.so \
-		src/libwhisper.so \
+		src/libwhisper.so.1.6.2 \
 		ggml/src/libggml.so
+	dosym "${EPREFIX}/usr/lib64/libwhisper.so.1.6.2" "usr/lib64/libwhisper.so.1"
+	dosym "${EPREFIX}/usr/lib64/libwhisper.so.1" "usr/lib64/libwhisper.so"
 	newbin bin/main whisper
 	newbin bin/bench whisper-bench
 	newbin bin/quantize whisper-quantize
