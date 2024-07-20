@@ -98,26 +98,26 @@ src_install() {
 
 	newins "${DISTDIR}/whisper-ggml-base.en.bin" base.en.bin
 	use whisper-models-tiny && newins "${DISTDIR}/whisper-ggml-tiny.bin" tiny.bin
-	use whisper-models-tiny-q5-1 && newins "${DISTDIR}/whisper-ggml-tiny-q5_1.bin" tiny-q5_1.bin
+	use whisper-models-tiny-q5-1 && newins "${DISTDIR}/whisper-ggml-tiny-q5-1.bin" tiny-q5-1.bin
 	use whisper-models-tiny-en && newins "${DISTDIR}/whisper-ggml-tiny.en.bin" tiny.en.bin
-	use whisper-models-tiny-en-q5-1 && newins "${DISTDIR}/whisper-ggml-tiny.en-q5_1.bin" tiny.en-q5_1.bin
-	use whisper-models-tiny-en-q8-0 && newins "${DISTDIR}/whisper-ggml-tiny.en-q8_0.bin" tiny.en-q8_0.bin
+	use whisper-models-tiny-en-q5-1 && newins "${DISTDIR}/whisper-ggml-tiny.en-q5-1.bin" tiny.en-q5-1.bin
+	use whisper-models-tiny-en-q8-0 && newins "${DISTDIR}/whisper-ggml-tiny.en-q8-0.bin" tiny.en-q8-0.bin
 	use whisper-models-base && newins "${DISTDIR}/whisper-ggml-base.bin" base.bin
-	use whisper-models-base-q5-1 && newins "${DISTDIR}/whisper-ggml-base-q5_1.bin" base-q5_1.bin
-	use whisper-models-base-en-q5-1 && newins "${DISTDIR}/whisper-ggml-base.en-q5_1.bin" base.en-q5_1.bin
+	use whisper-models-base-q5-1 && newins "${DISTDIR}/whisper-ggml-base-q5-1.bin" base-q5-1.bin
+	use whisper-models-base-en-q5-1 && newins "${DISTDIR}/whisper-ggml-base.en-q5-1.bin" base.en-q5-1.bin
 	use whisper-models-small && newins "${DISTDIR}/whisper-ggml-small.bin" small.bin
-	use whisper-models-small-q5-1 && newins "${DISTDIR}/whisper-ggml-small-q5_1.bin" small-q5_1.bin
+	use whisper-models-small-q5-1 && newins "${DISTDIR}/whisper-ggml-small-q5-1.bin" small-q5-1.bin
 	use whisper-models-small-en && newins "${DISTDIR}/whisper-ggml-small.en.bin" small.en.bin
-	use whisper-models-small-en-q5-1 && newins "${DISTDIR}/whisper-ggml-small.en-q5_1.bin" small.en-q5_1.bin
+	use whisper-models-small-en-q5-1 && newins "${DISTDIR}/whisper-ggml-small.en-q5-1.bin" small.en-q5-1.bin
 	use whisper-models-medium && newins "${DISTDIR}/whisper-ggml-medium.bin" medium.bin
-	use whisper-models-medium-q5-0 && newins "${DISTDIR}/whisper-ggml-medium-q5_0.bin" medium-q5_0.bin
+	use whisper-models-medium-q5-0 && newins "${DISTDIR}/whisper-ggml-medium-q5-0.bin" medium-q5-0.bin
 	use whisper-models-medium-en && newins "${DISTDIR}/whisper-ggml-medium.en.bin" medium.en.bin
-	use whisper-models-medium-en-q5-0 && newins "${DISTDIR}/whisper-ggml-medium.en-q5_0.bin" medium.en-q5_0.bin
+	use whisper-models-medium-en-q5-0 && newins "${DISTDIR}/whisper-ggml-medium.en-q5-0.bin" medium.en-q5-0.bin
 	use whisper-models-large-v1 && newins "${DISTDIR}/whisper-ggml-large-v1.bin" large-v1.bin
 	use whisper-models-large-v2 && newins "${DISTDIR}/whisper-ggml-large-v2.bin" large-v2.bin
-	use whisper-models-large-v2-q5-0 && newins "${DISTDIR}/whisper-ggml-large-v2-q5_0.bin" large-v2-q5_0.bin
+	use whisper-models-large-v2-q5-0 && newins "${DISTDIR}/whisper-ggml-large-v2-q5-0.bin" large-v2-q5-0.bin
 	use whisper-models-large-v3 && newins "${DISTDIR}/whisper-ggml-large-v3.bin" large-v3.bin
-	use whisper-models-large-v3-q5-0 && newins "${DISTDIR}/whisper-ggml-large-v3-q5_0.bin" large-v3-q5_0.bin
+	use whisper-models-large-v3-q5-0 && newins "${DISTDIR}/whisper-ggml-large-v3-q5-0.bin" large-v3-q5-0.bin
 }
 
 pkg_postinst() {
