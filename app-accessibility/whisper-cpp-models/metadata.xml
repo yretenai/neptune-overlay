@@ -14,7 +14,6 @@
 		<flag name="whisper-models-tiny-en-q8-0">Download whisper tiny (English, Q8.0) model data</flag>
 		<flag name="whisper-models-base">Download whisper base model data</flag>
 		<flag name="whisper-models-base-q5-1">Download whisper base (Q5.1) model data</flag>
-		<flag name="whisper-models-base-en">Download whisper base (English) model data</flag>
 		<flag name="whisper-models-base-en-q5-1">Download whisper base (English, Q5.1) model data</flag>
 		<flag name="whisper-models-small">Download whisper small model data</flag>
 		<flag name="whisper-models-small-q5-1">Download whisper small (Q5.1) model data</flag>

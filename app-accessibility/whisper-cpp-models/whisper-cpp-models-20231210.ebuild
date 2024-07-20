@@ -10,6 +10,7 @@ HOMEPAGE="https://huggingface.co/ggerganov/whisper.cpp"
 HUGGINGFACE_REV="d15393806e24a74f60827e23e986f0c10750b358"
 
 SRC_URI="
+	https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-base.en.bin -> whisper-ggml-base.en.bin
 	whisper-models-tiny? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-tiny.bin -> whisper-ggml-tiny.bin )
 	whisper-models-tiny-q5-1? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-tiny-q5_1.bin -> whisper-ggml-tiny-q5-1.bin )
 	whisper-models-tiny-en? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-tiny.en.bin -> whisper-ggml-tiny.en.bin )
@@ -17,7 +18,6 @@ SRC_URI="
 	whisper-models-tiny-en-q8-0? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-tiny.en-q8_0.bin -> whisper-ggml-tiny.en-q8-0.bin )
 	whisper-models-base? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-base.bin -> whisper-ggml-base.bin )
 	whisper-models-base-q5-1? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-base-q5_1.bin -> whisper-ggml-base-q5-1.bin )
-	whisper-models-base-en? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-base.en.bin -> whisper-ggml-base.en.bin )
 	whisper-models-base-en-q5-1? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-base.en-q5_1.bin -> whisper-ggml-base.en-q5-1.bin )
 	whisper-models-small? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-small.bin -> whisper-ggml-small.bin )
 	whisper-models-small-q5-1? ( https://huggingface.co/ggerganov/whisper.cpp/resolve/${HUGGINGFACE_REV}/ggml-small-q5_1.bin -> whisper-ggml-small-q5-1.bin )
@@ -41,29 +41,20 @@ KEYWORDS="~amd64"
 
 IUSE="
 	whisper-models-tiny whisper-models-tiny-q5-1 whisper-models-tiny-en whisper-models-tiny-en-q5-1 whisper-models-tiny-en-q8-0
-	+whisper-models-base whisper-models-base-q5-1 whisper-models-base-en whisper-models-base-en-q5-1
+	whisper-models-base whisper-models-base-q5-1 whisper-models-base-en-q5-1
 	whisper-models-small whisper-models-small-q5-1 whisper-models-small-en whisper-models-small-en-q5-1
 	whisper-models-medium whisper-models-medium-q5-0 whisper-models-medium-en whisper-models-medium-en-q5-0
 	whisper-models-large-v1 whisper-models-large-v2 whisper-models-large-v2-q5-0 whisper-models-large-v3 whisper-models-large-v3-q5-0
 "
 
-REQUIRED_USE="|| (
-	whisper-models-tiny whisper-models-tiny-q5-1 whisper-models-tiny-en whisper-models-tiny-en-q5-1 whisper-models-tiny-en-q8-0
-	whisper-models-base whisper-models-base-q5-1 whisper-models-base-en whisper-models-base-en-q5-1
-	whisper-models-small whisper-models-small-q5-1 whisper-models-small-en whisper-models-small-en-q5-1
-	whisper-models-medium whisper-models-medium-q5-0 whisper-models-medium-en whisper-models-medium-en-q5-0
-	whisper-models-large-v1 whisper-models-large-v2 whisper-models-large-v2-q5-0 whisper-models-large-v3 whisper-models-large-v3-q5-0
-)"
-
 RESTRICT="bindist mirror"
 
 whisper_check-reqs() {
-	req=0
+	req=150
 
 	use whisper-models-base-q5-1 && ((req += 60))
 	use whisper-models-base && ((req += 150))
 	use whisper-models-base-en-q5-1 && ((req += 60))
-	use whisper-models-base-en && ((req += 150))
 	use whisper-models-large-v1 && ((req += 3100))
 	use whisper-models-large-v2-q5-0 && ((req += 1100))
 	use whisper-models-large-v2 && ((req += 3100))
@@ -105,6 +96,7 @@ src_unpack() {
 src_install() {
 	insinto /usr/share/whisper/ggml-models
 
+	newins "${DISTDIR}/whisper-ggml-base.en.bin" base.en.bin
 	use whisper-models-tiny && newins "${DISTDIR}/whisper-ggml-tiny.bin" tiny.bin
 	use whisper-models-tiny-q5-1 && newins "${DISTDIR}/whisper-ggml-tiny-q5_1.bin" tiny-q5_1.bin
 	use whisper-models-tiny-en && newins "${DISTDIR}/whisper-ggml-tiny.en.bin" tiny.en.bin
@@ -112,7 +104,6 @@ src_install() {
 	use whisper-models-tiny-en-q8-0 && newins "${DISTDIR}/whisper-ggml-tiny.en-q8_0.bin" tiny.en-q8_0.bin
 	use whisper-models-base && newins "${DISTDIR}/whisper-ggml-base.bin" base.bin
 	use whisper-models-base-q5-1 && newins "${DISTDIR}/whisper-ggml-base-q5_1.bin" base-q5_1.bin
-	use whisper-models-base-en && newins "${DISTDIR}/whisper-ggml-base.en.bin" base.en.bin
 	use whisper-models-base-en-q5-1 && newins "${DISTDIR}/whisper-ggml-base.en-q5_1.bin" base.en-q5_1.bin
 	use whisper-models-small && newins "${DISTDIR}/whisper-ggml-small.bin" small.bin
 	use whisper-models-small-q5-1 && newins "${DISTDIR}/whisper-ggml-small-q5_1.bin" small-q5_1.bin
