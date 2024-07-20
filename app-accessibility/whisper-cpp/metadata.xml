@@ -8,12 +8,9 @@
 	</upstream>
 	<use>
 		<flag name="hip">Enable ROCM HIP support (computation on GPU)</flag>
-		<flag name="mkl">Enable Intel Math Kernel Library support</flag>
-		<flag name="oneapi">Enable Intel oneApi support</flag>
-		<flag name="models">Download Whisper GGML models</flag>
-		<flag name="openblas">Enable openBLAS support (computation on GPU)</flag>
-		<flag name="openblas64">Enable openBLAS 64-bit interfaces support (computation on GPU)</flag>
-		<flag name="sdl2">Enable SDL2 example programs</flag>
+		<flag name="hipuma">Enable ROCM HIP Unified Memory Architecture support</flag>
+		<flag name="models">Emerge Whisper GGML models</flag>
+		<flag name="openblas">Enable openBLAS support (computation on CPU/GPU)</flag>
 		<flag name="torch">Install scripts for use with PyTorch</flag>
 	</use>
 </pkgmetadata>
