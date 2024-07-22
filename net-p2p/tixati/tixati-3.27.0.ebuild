@@ -5,7 +5,7 @@ EAPI=8
 
 inherit desktop xdg
 
-T_PV="3.25-1"
+T_PV="3.27-1"
 
 DESCRIPTION="Tixati is a New and Powerful P2P System"
 HOMEPAGE="https://www.tixati.com/"
@@ -59,6 +59,7 @@ DEPEND="
 	>=x11-libs/pixman-0.42.2
 "
 
+RESTRICT="bindist mirror"
 QA_PREBUILT="usr/bin/tixati"
 
 src_install() {
