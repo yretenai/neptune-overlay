@@ -419,9 +419,9 @@ src_install() {
 		export BLENDER_SYSTEM_DATAFILES=${ED}/usr/share/blender/${BV}/datafiles
 
 		# Workaround for binary drivers.
-		addpredict /dev/ati
-		addpredict /dev/dri
-		addpredict /dev/nvidiactl
+		addwrite /dev/ati
+		addwrite /dev/dri
+		addwrite /dev/nvidiactl
 
 		einfo "Generating Blender C/C++ API docs ..."
 		cd "${CMAKE_USE_DIR}"/doc/doxygen || die
