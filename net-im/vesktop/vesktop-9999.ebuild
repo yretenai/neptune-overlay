@@ -34,7 +34,7 @@ RDEPEND="
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1
-	sys-apps/pnpm-bin
+	>=sys-apps/pnpm-bin-9.5.0
 	${ELECTRON_BDEPEND}
 "
 
@@ -42,17 +42,16 @@ DESTDIR="/opt/${PN}"
 
 src_prepare() {
 	electron-builder-utils_src_prepare
-	sed -i -e "s/\"pnpm /\"pnpm-bin /" package.json || die
 }
 
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
-	pnpm-bin config set store-dir "${T}/pnpm" || die
-	pnpm-bin i || die
+	pnpm config set store-dir "${T}/pnpm" || die
+	pnpm i || die
 }
 
 src_compile() {
-	pnpm-bin package:dir || die
+	pnpm package:dir || die
 	cp "${FILESDIR}/vesktop.desktop" "${PN}.desktop"
 
 	if ! use seccomp ; then
