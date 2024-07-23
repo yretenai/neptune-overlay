@@ -657,6 +657,7 @@ SRC_URI="${NUGET_URIS}"
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
 SLOT="0"
 IUSE="p7zip"
+RESTRICT="mirror"
 
 # jemalloc causes a TLS issue?
 RDEPEND="

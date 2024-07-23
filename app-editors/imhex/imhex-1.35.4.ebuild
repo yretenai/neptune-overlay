@@ -26,6 +26,7 @@ if [[ ${PV} != *9999* ]]; then
 fi
 
 IUSE="+system-llvm lto"
+RESTRICT="mirror"
 
 DEPEND="
 	app-forensics/yara
