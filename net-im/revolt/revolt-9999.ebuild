@@ -21,7 +21,7 @@ EGIT_SUBMODULES=()
 EGIT_REPO_URI="https://github.com/revoltchat/desktop.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="${ELECTRON_KEYWORDS}"
 fi
 
 RDEPEND="

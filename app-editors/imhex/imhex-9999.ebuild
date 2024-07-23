@@ -22,7 +22,7 @@ EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64 -*"
 fi
 
 IUSE="+system-llvm lto"

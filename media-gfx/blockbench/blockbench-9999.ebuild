@@ -15,7 +15,7 @@ HOMEPAGE="https://github.com/JannisX11/blockbench
 EGIT_REPO_URI="https://github.com/JannisX11/blockbench.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="${ELECTRON_KEYWORDS}"
 fi
 
 LICENSE="GPL-3"

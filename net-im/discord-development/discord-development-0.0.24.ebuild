@@ -24,7 +24,7 @@ SRC_URI="https://dl-${MY_BRANCH}.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${M
 S="${WORKDIR}/${MY_PN_UC}"
 LICENSE="all-rights-reserved"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="amd64 -*"
 IUSE="appindicator +seccomp"
 RESTRICT="bindist mirror strip test"
 
