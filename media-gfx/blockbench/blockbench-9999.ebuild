@@ -23,7 +23,7 @@ SLOT="0"
 IUSE="+seccomp +wayland"
 
 # Requires network access (https) as long as NPM dependencies aren't packaged
-RESTRICT="network-sandbox strip test"
+RESTRICT="network-sandbox mirror strip test"
 
 RDEPEND="
 	x11-libs/libnotify

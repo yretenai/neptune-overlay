@@ -57,7 +57,7 @@ BDEPEND="
 "
 
 DESTDIR="/opt/${PN}"
-RESTRICT="network-sandbox strip test"
+RESTRICT="network-sandbox mirror strip test"
 
 src_configure() {
 	yarn config set --home enableTelemetry 0 || die
