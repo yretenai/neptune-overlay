@@ -3,7 +3,8 @@
 
 EAPI=8
 
-ELECTRON_VER="28.1.1"
+ELECTRON_VER_BASE="31.1.0"
+ELECTRON_VER=${ELECTRON_VER_BASE}
 ELECTRON_WVCUS="1"
 
 inherit desktop xdg electron-builder-utils git-r3
@@ -22,7 +23,7 @@ SLOT="0"
 IUSE="+seccomp +wayland"
 
 # Requires network access (https) as long as NPM dependencies aren't packaged
-RESTRICT="network-sandbox strip test"
+RESTRICT="network-sandbox mirror strip test"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -65,6 +66,8 @@ DESTDIR="/opt/${PN}"
 src_prepare() {
 	default
 	sed -i -e "s|electronDownload:|electronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
+	sed -i -e "s|electronVersion:.*$|electronVersion: ${ELECTRON_VER_BASE}|" build/electron-builder.base.yml || die
+	sed -i -e "s|version: .*+wvcus|version: ${ELECTRON_VER}|" build/electron-builder.base.yml || die
 }
 
 src_configure() {
