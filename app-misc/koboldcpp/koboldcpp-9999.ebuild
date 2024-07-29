@@ -77,8 +77,6 @@ src_prepare() {
 	if use cuda; then
 		cuda_src_prepare
 	fi
-
-	llvm-r1_src_prepare
 }
 
 pkg_setup() {
