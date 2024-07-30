@@ -1,0 +1,81 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a69ca8bb..39372c68 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -41,7 +41,7 @@ if(BUILD_BENCHMARKS)
+     list(APPEND VCPKG_MANIFEST_FEATURES "benchmarks")
+ endif()
+ 
+-project(chatterino 
++project(chatterino7
+     VERSION 7.5.1
+     DESCRIPTION "Chat client for twitch.tv"
+     HOMEPAGE_URL "https://chatterino.com/"
+diff --git a/resources/com.chatterino.chatterino.desktop b/resources/com.chatterino.chatterino.desktop
+index ece81f5c..210abb70 100644
+--- a/resources/com.chatterino.chatterino.desktop
++++ b/resources/com.chatterino.chatterino.desktop
+@@ -1,10 +1,10 @@
+ [Desktop Entry]
+ Type=Application
+ Version=1.0
+-Name=Chatterino
++Name=Chatterino7
+ Comment=Chat client for Twitch
+-Exec=chatterino
+-Icon=com.chatterino.chatterino
++Exec=chatterino7
++Icon=com.SevenTV.chatterino7
+ Terminal=false
+ Categories=Network;InstantMessaging;
+-StartupWMClass=chatterino
++StartupWMClass=chatterino7
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 287ae553..a2c91d72 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -922,11 +922,12 @@ if (BUILD_APP)
+                 )
+ 
+         install(FILES ${CMAKE_SOURCE_DIR}/resources/com.chatterino.chatterino.desktop
++                RENAME com.SevenTV.chatterino7.desktop
+                 DESTINATION share/applications
+                 )
+ 
+         install(FILES ${CMAKE_SOURCE_DIR}/resources/icon.png
+-                RENAME com.chatterino.chatterino.png
++                RENAME com.SevenTV.chatterino7.png
+                 DESTINATION share/icons/hicolor/256x256/apps
+                 )
+     endif ()
+diff --git a/src/singletons/NativeMessaging.cpp b/src/singletons/NativeMessaging.cpp
+index 6150cd8f..2c0d9762 100644
+--- a/src/singletons/NativeMessaging.cpp
++++ b/src/singletons/NativeMessaging.cpp
+@@ -48,7 +48,7 @@ void registerNmHost(const Paths &paths)
+ 
+     auto getBaseDocument = [] {
+         return QJsonObject{
+-            {u"name"_s, "com.chatterino.chatterino"_L1},
++            {u"name"_s, "com.SevenTV.chatterino7"_L1},
+             {u"description"_s, "Browser interaction with chatterino."_L1},
+             {u"path"_s, QCoreApplication::applicationFilePath()},
+             {u"type"_s, "stdio"_L1},
+@@ -64,7 +64,7 @@ void registerNmHost(const Paths &paths)
+ 
+         registerNmManifest(paths, "/native-messaging-manifest-chrome.json",
+                            "HKCU\\Software\\Google\\Chrome\\NativeMessagingHost"
+-                           "s\\com.chatterino.chatterino",
++                           "s\\com.SevenTV.chatterino7",
+                            QJsonDocument(obj));
+     }
+ 
+@@ -76,7 +76,7 @@ void registerNmHost(const Paths &paths)
+ 
+         registerNmManifest(paths, "/native-messaging-manifest-firefox.json",
+                            "HKCU\\Software\\Mozilla\\NativeMessagingHosts\\com."
+-                           "chatterino.chatterino",
++                           "SevenTV.chatterino7",
+                            QJsonDocument(obj));
+     }
+ }
