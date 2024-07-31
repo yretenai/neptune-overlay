@@ -14,7 +14,7 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64 ~arm64 ~x86"
 fi
 
-S=${WORKDIR}/chatterino7-${PV}
+S="${WORKDIR}/chatterino7-${PV}"
 
 LICENSE="MIT"
 SLOT="0"
