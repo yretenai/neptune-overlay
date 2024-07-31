@@ -25,7 +25,7 @@ HOMEPAGE="https://www.blender.org"
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 
 if [[ ${PV} != *9999* ]]; then
-	EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
+	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 

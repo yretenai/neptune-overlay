@@ -25,7 +25,7 @@ EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
-EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
+EGIT_COMMIT="v${PV}"
 
 LICENSE="|| ( GPL-3 BL )"
 SLOT="${PV%.*}"
