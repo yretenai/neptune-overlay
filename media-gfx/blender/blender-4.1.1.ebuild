@@ -233,7 +233,7 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "refs/heads/${EGIT_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
+	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_COMMIT}" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
 }
