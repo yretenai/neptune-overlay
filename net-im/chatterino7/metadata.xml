@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <upstream>
-    <remote-id type="github">Chatterino/chatterino2</remote-id>
+    <remote-id type="github">SevenTV/chatterino7</remote-id>
   </upstream>
 </pkgmetadata>
