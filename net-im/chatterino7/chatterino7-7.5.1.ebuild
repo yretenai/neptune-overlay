@@ -16,6 +16,7 @@ fi
 
 S="${WORKDIR}/chatterino7-${PV}"
 
+IUSE="debug"
 LICENSE="MIT"
 SLOT="0"
 
@@ -42,7 +43,16 @@ src_configure() {
 		-DUSE_SYSTEM_QTKEYCHAIN=ON
 		-DBUILD_WITH_QT6=ON
 	)
-	cmake_src_configure
+
+	# Chatterino uses NDEBUG extensively to disable debug code paths.
+	if ! use debug; then
+		mycmakeargs+=(
+			-DCMAKE_C_FLAGS="${CFLAGS} -DNDEBUG"
+			-DCMAKE_CXX_FLAGS="${CXXFLAGS} -DNDEBUG"
+		)
+	fi
+
+	CMAKE_BUILD_TYPE=$(usex debug Debug Release) cmake_src_configure
 }
 
 pkg_postinst() {
