@@ -21,11 +21,13 @@ LICENSE="MIT"
 SLOT="0"
 
 RDEPEND="
+	>media-libs/libavif-1.0.0:=
 	dev-libs/openssl:=
 	dev-libs/qtkeychain:=[qt6]
 	dev-qt/qtbase:6[concurrent,dbus,gui,network,widgets]
-	dev-qt/qt5compat:6
+	dev-qt/qt5compat:6[icu]
 	dev-qt/qtmultimedia:6
+	dev-qt/qtimageformats:6
 	dev-qt/qtsvg:6
 "
 DEPEND="
