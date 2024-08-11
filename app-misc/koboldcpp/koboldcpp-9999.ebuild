@@ -71,8 +71,12 @@ BDEPEND="
 	)
 "
 
+PATCHES="
+	${FILESDIR}/mathfix-1.72.0.0.ebuild
+"
+
 src_prepare() {
-	eapply_user
+	default
 
 	if use cuda; then
 		cuda_src_prepare
