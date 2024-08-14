@@ -13,6 +13,7 @@ S="${WORKDIR}/sdk-${PV}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 -*"
+RESTRICT="mirror"
 
 src_install() {
 	cd documentation/manpages/sdk

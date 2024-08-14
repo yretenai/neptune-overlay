@@ -37,6 +37,8 @@ QA_PREBUILT="*"
 
 RDEPEND="
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
+	!neptune-dotnet/dotnet-sdk:${SLOT}
+	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 "
 
 src_install() {
