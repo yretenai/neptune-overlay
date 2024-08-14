@@ -4,7 +4,7 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DN_PV="9.0.100-preview.6.24328.19"
+DN_PV="9.0.100-preview.7.24407.12"
 
 inherit unpacker
 
@@ -36,10 +36,10 @@ RESTRICT="bindist mirror strip test"
 QA_PREBUILT="*"
 
 RDEPEND="
+	neptune-dotnet/netstandard
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
-	neptune-dotnet/dotnet-runtime:${SLOT}
-	neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
-	neptune-dotnet/netstandard:2.1
+	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
+	!neptune-dotnet/dotnet-runtime:${SLOT}
 "
 
 src_install() {
@@ -55,7 +55,9 @@ src_install() {
 	mkdir -p "${S}/${workloads}" || die
 	touch "${S}/${workloads}/userlocal" || die
 
-	# install sdk packs
+	# remove netstandard
 	rm -rf packs/NETStandard.Library.Ref
-	doins -r packs sdk-manifests sdk templates metadata
+
+	# install dotnet packs
+	doins -r host packs sdk sdk-manifests shared templates
 }

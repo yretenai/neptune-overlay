@@ -37,15 +37,17 @@ QA_PREBUILT="*"
 
 RDEPEND="
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
-	neptune-dotnet/dotnet-runtime:${SLOT}
+	!neptune-dotnet/dotnet-sdk:${SLOT}
+	!neptune-dotnet/dotnet-runtime:${SLOT}
 "
 
 src_install() {
 	# install into existing dotnet env
 	local dest="opt/neptune-dotnet"
 	dodir "${dest%/*}"
-	insinto "${dest}/shared"
 
-	# install aspnet pack
-	doins -r shared/Microsoft.AspNetCore.App
+	insinto "${dest}"
+
+	# install dotnet packs
+	doins -r host shared
 }

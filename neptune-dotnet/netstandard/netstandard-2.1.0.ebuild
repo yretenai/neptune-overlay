@@ -4,7 +4,7 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DOTNET_PV="8.0.303"
+DOTNET_PV="8.0.400"
 
 inherit unpacker
 
@@ -27,9 +27,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SDK_SLOT="$(ver_cut 1-2)"
-RUNTIME_SLOT="${SDK_SLOT}.0"
-SLOT="${SDK_SLOT}/${RUNTIME_SLOT}"
+SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 -*"
 RESTRICT="bindist mirror strip test"
 
