@@ -51,6 +51,12 @@ PATCHES="
 	${FILESDIR}/install-examples.patch
 "
 
+src_prepare() {
+	# :(
+	dos2unix "${S}/examples/sycl/CMakeLists.txt"
+	cmake_src_prepare
+}
+
 src_configure() {
 	# fix hardcoded model path to the one installed by us
 	sed -e "s|models/ggml-base.en.bin|${EPREFIX}/usr/share/whisper/ggml-models/base.en.bin|" \

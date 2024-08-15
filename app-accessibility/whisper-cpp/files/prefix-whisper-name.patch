@@ -79,7 +79,7 @@ index 312d52c..9fa4d51 100644
      include(DefaultTargetOptions)
  
 diff --git a/examples/sycl/CMakeLists.txt b/examples/sycl/CMakeLists.txt
-index 3b5721f..2a606d9 100644
+index 3b5721f..a6c898f 100644
 --- a/examples/sycl/CMakeLists.txt
 +++ b/examples/sycl/CMakeLists.txt
 @@ -4,6 +4,7 @@
@@ -89,21 +89,19 @@ index 3b5721f..2a606d9 100644
 +set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
  install(TARGETS ${TARGET} RUNTIME)
  target_link_libraries(${TARGET} PRIVATE common llama ${CMAKE_THREAD_LIBS_INIT})
--target_compile_features(${TARGET} PRIVATE cxx_std_17)
-\ No newline at end of file
-+target_compile_features(${TARGET} PRIVATE cxx_std_17)
+ target_compile_features(${TARGET} PRIVATE cxx_std_17)
 diff --git a/examples/talk-llama/CMakeLists.txt b/examples/talk-llama/CMakeLists.txt
-index f95ec37..2d832b1 100644
+index 56b4d0d..d75bffe 100644
 --- a/examples/talk-llama/CMakeLists.txt
 +++ b/examples/talk-llama/CMakeLists.txt
-@@ -2,6 +2,7 @@ if (WHISPER_SDL2)
-     # talk-llama
-     set(TARGET talk-llama)
-     add_executable(${TARGET} talk-llama.cpp llama.cpp unicode.cpp unicode-data.cpp)
-+    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
+@@ -9,6 +9,7 @@ if (WHISPER_SDL2)
+         unicode.cpp
+         unicode-data.cpp)
      target_include_directories(${TARGET} PRIVATE ${SDL2_INCLUDE_DIRS})
++    set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME "whisper-${TARGET}")
  
      if (WHISPER_CLBLAST)
+         set(CLBLAST_LIBNAME clblast)
 diff --git a/examples/talk/CMakeLists.txt b/examples/talk/CMakeLists.txt
 index e099e2c..6bc018e 100644
 --- a/examples/talk/CMakeLists.txt
