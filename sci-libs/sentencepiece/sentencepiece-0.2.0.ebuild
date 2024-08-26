@@ -13,8 +13,6 @@ DESCRIPTION="Unsupervised text tokenizer for Neural Network-based text generatio
 HOMEPAGE="https://github.com/google/sentencepiece"
 
 EGIT_REPO_URI="https://github.com/google/sentencepiece.git"
-ABSEIL_EGIT_REPO_URI="https://github.com/abseil/abseil-cpp.git"
-ABSEIL_EGIT_COMMIT="20240116.2"
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
@@ -68,18 +66,10 @@ src_prepare() {
 	fi
 }
 
-src_unpack() {
-	git-r3_fetch "${ABSEIL_EGIT_REPO_URI}" "${ABSEIL_EGIT_COMMIT}"
-	git-r3_checkout "${ABSEIL_EGIT_REPO_URI}" "${S}/third_party/abseil-cpp"
-	git-r3_src_unpack
-}
-
 src_configure() {
 	local mycmakeargs=(
-		-DSPM_PROTOBUF_PROVIDER="internal" # "package" is outdated -> needs 26.1
-		-DSPM_ABSL_PROVIDER="module" # "package" is oudated -> needs >= 20240000
-		-DSPM_ENABLE_SHARED=OFF # will fail as long as absl is outdated
-		-DBUILD_SHARED_LIBS=OFF # ""
+		-DSPM_PROTOBUF_PROVIDER="internal"
+		-DSPM_ABSL_PROVIDER="internal"
 	)
 
 	cmake_src_configure
