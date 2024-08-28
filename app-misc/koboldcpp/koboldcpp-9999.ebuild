@@ -71,10 +71,6 @@ BDEPEND="
 	)
 "
 
-PATCHES="
-	${FILESDIR}/mathfix-1.72.0.0.ebuild
-"
-
 src_prepare() {
 	default
 
