@@ -11,7 +11,7 @@ DESCRIPTION="IO library for the GGUF (GGML Universal File) format."
 HOMEPAGE="https://pypi.org/project/gguf"
 
 SRC_URI="
-	https://files.pythonhosted.org/packages/f3/ad/535c8afa732ee70ff4643d34655676db689fcf9b673470adb9faeac36937/${P}.tar.gz
+	https://files.pythonhosted.org/packages/0e/c4/a159e9f842b0e8b8495b2689af6cf3426f002cf01207ca8134db82fc4088/${P}.tar.gz
 "
 
 LICENSE="MIT"
@@ -20,7 +20,9 @@ KEYWORDS="~amd64"
 RESTRICT="bindist mirror"
 
 DEPEND+="
-	dev-python/numpy[${PYTHON_USEDEP}]
+	>=dev-python/numpy-1.17[${PYTHON_USEDEP}]
+	>=dev-python/tqdm-4.27[${PYTHON_USEDEP}]
+	>=dev-python/pyyaml-5.1[${PYTHON_USEDEP}]
 "
 
 RDEPEND="
