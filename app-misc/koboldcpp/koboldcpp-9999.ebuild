@@ -90,11 +90,12 @@ pkg_setup() {
 
 src_compile() {
 	if use cuda; then
-		addpredict /dev/nvidiactl
+		addwrite /dev/nvidiactl
 		MAKEOPTS+=" LLAMA_CUBLAS=1"
 	fi
 	if use hip; then
-		addpredict /dev/kfd
+		addwrite /dev/kfd
+		addwrite /dev/dri
 		MAKEOPTS+=" LLAMA_HIPBLAS=1"
 	fi
 	if use openblas; then
