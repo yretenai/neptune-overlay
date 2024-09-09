@@ -136,8 +136,9 @@ src_install() {
 		rwkv_vocab.embd \
 		rwkv_world_vocab.embd \
 		taesd.embd \
-		taesd_xl.embd \
-		koboldcpp.py \
+		taesd_xl.embd
+
+	doexe koboldcpp.py \
 		convert_hf_to_gguf.py \
 		convert_hf_to_gguf_update.py \
 		convert_llama_ggml_to_gguf.py \
