@@ -3,8 +3,7 @@
 
 EAPI=8
 
-ELECTRON_VER="31.2.0"
-ELECTRON_BUILDER_VER="24.13.3"
+inherit electron-version
 
 inherit desktop xdg electron-builder-utils git-r3
 
@@ -33,7 +32,7 @@ RDEPEND="
 "
 
 BDEPEND="
-	>=net-libs/nodejs-20.6.1
+	>=net-libs/nodejs-20.6.1[npm]
 	>=sys-apps/pnpm-bin-9.5.0
 	${ELECTRON_BDEPEND}
 "
