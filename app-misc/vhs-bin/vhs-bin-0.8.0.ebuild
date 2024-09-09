@@ -30,6 +30,14 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86 ~arm -*"
 
+DEPEND="
+    www-apps/ttyd
+"
+
+RDEPEND="
+    ${DEPEND}
+"
+
 BDEPEND="
 	app-alternatives/gzip
 "
