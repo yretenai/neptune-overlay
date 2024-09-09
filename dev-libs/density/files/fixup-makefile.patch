@@ -1,0 +1,79 @@
+diff --git a/Makefile b/Makefile
+index ac5db2a..f97fb84 100644
+--- a/Makefile
++++ b/Makefile
+@@ -34,11 +34,9 @@
+ 
+ recursive_wildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call recursive_wildcard,$d/,$2))
+ 
+-UPDATE_SUBMODULES := $(shell git submodule update --init --recursive)
+-
+ TARGET = libdensity
+-CFLAGS = -Ofast -flto -std=c99 -Wall
+-LFLAGS = -flto
++CFLAGS += -std=c99 -Wall
++LFLAGS = ${LDFLAGS}
+ 
+ BUILD_DIRECTORY = build
+ DENSITY_BUILD_DIRECTORY = $(BUILD_DIRECTORY)/density
+@@ -48,32 +46,6 @@ TARGET_TRIPLE := $(subst -, ,$(shell $(CC) -dumpmachine))
+ TARGET_ARCH   := $(word 1,$(TARGET_TRIPLE))
+ TARGET_OS     := $(word 3,$(TARGET_TRIPLE))
+ 
+-ifeq ($(TARGET_OS),mingw32)
+-else ifeq ($(TARGET_OS),cygwin)
+-else
+-	CFLAGS += -fpic
+-endif
+-
+-ifeq ($(ARCH),)
+-	ifeq ($(NATIVE),)
+-		ifeq ($(TARGET_ARCH),powerpc)
+-			CFLAGS += -mtune=native
+-		else
+-			CFLAGS += -march=native
+-		endif
+-	endif
+-else
+-	ifeq ($(ARCH),32)
+-		CFLAGS += -m32
+-		LFLAGS += -m32
+-	endif
+-
+-	ifeq ($(ARCH),64)
+-		CFLAGS += -m64
+-		LFLAGS += -m64
+-	endif
+-endif
+-
+ ifeq ($(OS),Windows_NT)
+ 	bold =
+ 	normal =
+@@ -93,9 +65,6 @@ else
+ 	endif
+ 	BENCHMARK_EXTENSION =
+ 	SEPARATOR = /
+-	ifeq ($(shell lsb_release -a 2>/dev/null | grep Distributor | awk '{ print $$3 }'),Ubuntu)
+-		CFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
+-	endif
+ endif
+ STATIC_EXTENSION = .a
+ 
+@@ -104,7 +73,7 @@ DENSITY_OBJ = $(patsubst $(SRC_DIRECTORY)%.c, $(DENSITY_BUILD_DIRECTORY)%.o, $(D
+ 
+ .PHONY: pre-compile post-compile pre-link post-link library benchmark
+ 
+-all: benchmark
++all: library
+ 
+ $(DENSITY_BUILD_DIRECTORY)/%.o: $(SRC_DIRECTORY)/%.c
+ 	@mkdir -p "$(@D)"
+@@ -124,7 +93,7 @@ pre-link : post-compile
+ 
+ link: pre-link $(DENSITY_OBJ)
+ 	$(AR) crs $(BUILD_DIRECTORY)/$(TARGET)$(STATIC_EXTENSION) $(DENSITY_OBJ)
+-	$(CC) $(LFLAGS) -shared -o $(BUILD_DIRECTORY)/$(TARGET)$(EXTENSION) $(BUILD_DIRECTORY)/$(TARGET)$(STATIC_EXTENSION)
++	$(CC) $(LFLAGS) -shared -Wl,-soname,libdensity.so -o $(BUILD_DIRECTORY)/$(TARGET)$(EXTENSION) $(BUILD_DIRECTORY)/$(TARGET)$(STATIC_EXTENSION)
+ 
+ post-link: link
+ 	@echo Done.
