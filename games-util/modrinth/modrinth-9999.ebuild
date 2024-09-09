@@ -41,11 +41,6 @@ BDEPEND="
 	>=sys-apps/pnpm-bin-9.5.0
 "
 
-src_prepare() {
-	default
-	sed -e "s|name = \"theseus_gui\"|name = \"modrinth\"|" -i "Cargo.toml" || die "can't patch theseus_gui name"
-}
-
 src_configure() {
 	cargo_src_configure
 	cd "${S_FRONTEND}"
@@ -68,4 +63,9 @@ src_unpack() {
 	else
 		cargo_live_src_unpack
 	fi
+}
+
+src_install() {
+    cargo_src_install
+    dosym theseus_gui "${EPREFIX}/usr/bin/modrinth"
 }
