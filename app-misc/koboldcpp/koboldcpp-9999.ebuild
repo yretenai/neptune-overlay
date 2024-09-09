@@ -71,6 +71,10 @@ BDEPEND="
 	)
 "
 
+PATCHES="
+    ${FILESDIR}/system-gguf.patch
+"
+
 src_prepare() {
 	default
 
@@ -114,6 +118,12 @@ src_install() {
 
 	insinto /opt/koboldcpp
 	exeinto /opt/koboldcpp
+	sed -e "s|/usr/bin/env python3|/usr/bin/env ${EPYTHON}|" \
+		-i koboldcpp.py \
+		-i convert_hf_to_gguf.py \
+		-i convert_hf_to_gguf_update.py \
+		-i convert_llama_ggml_to_gguf.py \
+		-i convert_lora_to_gguf.py
 
 	doins -r \
 		kcpp_adapters \
@@ -126,7 +136,11 @@ src_install() {
 		rwkv_world_vocab.embd \
 		taesd.embd \
 		taesd_xl.embd \
-		koboldcpp.py
+		koboldcpp.py \
+		convert_hf_to_gguf.py \
+		convert_hf_to_gguf_update.py \
+		convert_llama_ggml_to_gguf.py \
+		convert_lora_to_gguf.py
 
 	doexe koboldcpp_default.so
 	if use cuda; then

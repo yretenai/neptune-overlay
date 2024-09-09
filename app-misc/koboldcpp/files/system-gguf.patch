@@ -1,0 +1,39 @@
+diff --git a/convert_hf_to_gguf.py b/convert_hf_to_gguf.py
+index caa41aee..cca13bbe 100644
+--- a/convert_hf_to_gguf.py
++++ b/convert_hf_to_gguf.py
+@@ -22,8 +22,6 @@ import torch
+ if TYPE_CHECKING:
+     from torch import Tensor
+ 
+-if 'NO_LOCAL_GGUF' not in os.environ:
+-    sys.path.insert(1, str(Path(__file__).parent / 'gguf-py'))
+ import gguf
+ 
+ logger = logging.getLogger("hf-to-gguf")
+diff --git a/convert_llama_ggml_to_gguf.py b/convert_llama_ggml_to_gguf.py
+index 29b14e98..a93fab0d 100755
+--- a/convert_llama_ggml_to_gguf.py
++++ b/convert_llama_ggml_to_gguf.py
+@@ -11,8 +11,6 @@ from pathlib import Path
+ 
+ import numpy as np
+ 
+-if 'NO_LOCAL_GGUF' not in os.environ:
+-    sys.path.insert(1, str(Path(__file__).parent / 'gguf-py'))
+ import gguf
+ 
+ logger = logging.getLogger("ggml-to-gguf")
+diff --git a/convert_lora_to_gguf.py b/convert_lora_to_gguf.py
+index ddd347a2..3c73f715 100755
+--- a/convert_lora_to_gguf.py
++++ b/convert_lora_to_gguf.py
+@@ -18,8 +18,6 @@ import torch
+ if TYPE_CHECKING:
+     from torch import Tensor
+ 
+-if 'NO_LOCAL_GGUF' not in os.environ:
+-    sys.path.insert(1, str(Path(__file__).parent / 'gguf-py'))
+ import gguf
+ 
+ # reuse model definitions from convert_hf_to_gguf.py
