@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index ac5db2a..f97fb84 100644
+index ac5db2a..49ed6fe 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -34,11 +34,9 @@
@@ -11,7 +11,7 @@ index ac5db2a..f97fb84 100644
  TARGET = libdensity
 -CFLAGS = -Ofast -flto -std=c99 -Wall
 -LFLAGS = -flto
-+CFLAGS += -std=c99 -Wall
++CFLAGS += -std=c99 -Wall -fPIC
 +LFLAGS = ${LDFLAGS}
  
  BUILD_DIRECTORY = build
@@ -73,7 +73,7 @@ index ac5db2a..f97fb84 100644
  link: pre-link $(DENSITY_OBJ)
  	$(AR) crs $(BUILD_DIRECTORY)/$(TARGET)$(STATIC_EXTENSION) $(DENSITY_OBJ)
 -	$(CC) $(LFLAGS) -shared -o $(BUILD_DIRECTORY)/$(TARGET)$(EXTENSION) $(BUILD_DIRECTORY)/$(TARGET)$(STATIC_EXTENSION)
-+	$(CC) $(LFLAGS) -shared -Wl,-soname,libdensity.so -o $(BUILD_DIRECTORY)/$(TARGET)$(EXTENSION) $(BUILD_DIRECTORY)/$(TARGET)$(STATIC_EXTENSION)
++	$(CC) $(LFLAGS) -shared -Wl,-soname,libdensity.so -o $(BUILD_DIRECTORY)/$(TARGET)$(EXTENSION) $(DENSITY_OBJ)
  
  post-link: link
  	@echo Done.
