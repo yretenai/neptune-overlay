@@ -25,7 +25,7 @@ fi
 
 LICENSE="AGPL-3"
 SLOT="0"
-IUSE="openblas clblast cuda hip vulkan tools"
+IUSE="openblas clblast cuda hip vulkan tools debug"
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -95,19 +95,27 @@ src_compile() {
 		addwrite /dev/nvidiactl
 		MAKEOPTS+=" LLAMA_CUBLAS=1"
 	fi
+
 	if use hip; then
 		addwrite /dev/kfd
 		addwrite /dev/dri
 		MAKEOPTS+=" LLAMA_HIPBLAS=1"
 	fi
+
 	if use openblas; then
 		MAKEOPTS+=" LLAMA_OPENBLAS=1"
 	fi
+
 	if use clblast; then
 		MAKEOPTS+=" LLAMA_CLBLAST=1"
 	fi
+
 	if use vulkan; then
 		MAKEOPTS+=" LLAMA_VULKAN=1"
+	fi
+
+	if use debug; then
+		MAKEOPTS+=" KCPP_DEBUG=1"
 	fi
 
 	default
@@ -150,15 +158,19 @@ src_install() {
 	if use cuda; then
 		doexe koboldcpp_cublas.so
 	fi
+
 	if use hip; then
 		doexe koboldcpp_hipblas.so
 	fi
+
 	if use openblas; then
 		doexe koboldcpp_openblas.so
 	fi
+
 	if use clblast; then
 		doexe koboldcpp_clblast.so
 	fi
+
 	if use vulkan; then
 		doexe koboldcpp_vulkan.so
 	fi
