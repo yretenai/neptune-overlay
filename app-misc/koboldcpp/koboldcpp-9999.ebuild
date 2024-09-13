@@ -25,7 +25,7 @@ fi
 
 LICENSE="AGPL-3"
 SLOT="0"
-IUSE="openblas clblast cuda hip vulkan"
+IUSE="openblas clblast cuda hip vulkan tools"
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -72,7 +72,9 @@ BDEPEND="
 "
 
 PATCHES="
-    ${FILESDIR}/system-gguf.patch
+    ${FILESDIR}/makefile.patch
+    ${FILESDIR}/examples.patch
+    ${FILESDIR}/gguf.patch
 "
 
 src_prepare() {
@@ -109,6 +111,10 @@ src_compile() {
 	fi
 
 	default
+
+	if use tools; then
+		emake tools
+	fi
 }
 
 src_install() {
@@ -139,12 +145,8 @@ src_install() {
 		taesd_xl.embd
 
 	doexe koboldcpp.py \
-		convert_hf_to_gguf.py \
-		convert_hf_to_gguf_update.py \
-		convert_llama_ggml_to_gguf.py \
-		convert_lora_to_gguf.py
+		koboldcpp_default.so
 
-	doexe koboldcpp_default.so
 	if use cuda; then
 		doexe koboldcpp_cublas.so
 	fi
@@ -159,5 +161,23 @@ src_install() {
 	fi
 	if use vulkan; then
 		doexe koboldcpp_vulkan.so
+	fi
+
+	if use tools; then
+		exeinto /opt/koboldcpp/tools
+		doexe convert_hf_to_gguf.py \
+			convert_hf_to_gguf_update.py \
+			convert_llama_ggml_to_gguf.py \
+			convert_lora_to_gguf.py \
+			export_lora \
+			gguf-split \
+			quantize_clip \
+			quantize_gguf \
+			quantize_gpt2 \
+			quantize_gptj \
+			quantize_mpt \
+			quantize_neox \
+			sdmain \
+			whispermain
 	fi
 }
