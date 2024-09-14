@@ -1,0 +1,4 @@
+move app-misc/koboldcpp app-tensor/koboldcpp
+move app-accessibility/whisper-cpp app-tensor/whisper-cpp
+move app-accessibility/whisper-cpp-models dev-misc/whisper-cpp-models
+move app-editors/imhex-patterns dev-misc/imhex-patterns
