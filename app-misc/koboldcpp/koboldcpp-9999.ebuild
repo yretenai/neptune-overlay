@@ -59,6 +59,9 @@ RDEPEND="
 		dev-util/vulkan-headers
 		media-libs/vulkan-loader
 	)
+	tools? (
+		sci-libs/pytorch
+	)
 "
 
 DEPEND="${RDEPEND}
