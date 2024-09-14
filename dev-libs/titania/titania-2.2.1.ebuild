@@ -9,10 +9,6 @@ DESCRIPTION="a vulkan post processing layer for linux"
 HOMEPAGE="https://git.sr.ht/~chronovore/titania"
 EGIT_REPO_URI="https://git.sr.ht/~chronovore/titania"
 
-EGIT_VLHL_JSON_COMMIT="c0bcb33d99ff939eb75758f80c948a10ea6733d2"
-EGIT_VLHL_JSON_REPO="https://git.vlhl.dev/navi/json.git"
-EGIT_VLHL_JSON_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-json"
-
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
@@ -25,6 +21,9 @@ RESTRICT="test"
 
 RDEPEND="
 	>=dev-libs/hidapi-0.13.0
+	cli? (
+		>=dev-libs/libjson-navi-0.0.10
+	)
 "
 
 BDEPEND="
@@ -34,12 +33,6 @@ BDEPEND="
 		virtual/pandoc
 	)
 "
-
-src_unpack() {
-	git-r3_fetch "${EGIT_VLHL_JSON_REPO}" "${EGIT_VLHL_JSON_COMMIT}" "${EGIT_VLHL_JSON_LOCAL_ID}"
-	git-r3_checkout "${EGIT_VLHL_JSON_REPO}" "${S}/subprojects/libjson" "${EGIT_VLHL_JSON_LOCAL_ID}"
-	git-r3_src_unpack
-}
 
 src_configure() {
 	local emesonargs=()
