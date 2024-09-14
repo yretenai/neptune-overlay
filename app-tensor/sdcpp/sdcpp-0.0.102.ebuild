@@ -69,7 +69,7 @@ src_configure() {
 		-D SD_SYCL=OFF # todo figure out sycl support / $(usex sycl)
 		-D SD_FLASH_ATTN=$(usex flash-attenuation)
 		-D SD_FAST_SOFTMAX=$(usex softmax)
-		-D SD_BUILD_SHARED_LIBS=OFF
+		-D SD_BUILD_SHARED_LIBS=ON
 		-D CMAKE_HIP_COMPILER_ROCM_ROOT="${EPREFIX}/usr"
 	)
 	
@@ -88,4 +88,5 @@ src_configure() {
 src_install() {
 	cd $BUILD_DIR
 	dobin bin/sd
+	dolib.so bin/libstable-diffusion.so
 }
