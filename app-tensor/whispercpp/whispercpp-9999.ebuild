@@ -39,7 +39,7 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	vulkan? ( dev-util/vulkan-headers )
-	models? ( dev-misc/whisper-cpp-models )
+	models? ( dev-misc/whispercpp-models )
 "
 
 REQUIRED_USE="
