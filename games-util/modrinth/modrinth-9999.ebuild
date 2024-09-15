@@ -60,6 +60,8 @@ src_compile() {
 
 src_unpack() {
 	git-r3_src_unpack
+	cd "${S}"
+	cargo generate-lockfile
 	if [[ ${PV} != *9999* ]]; then
 		cargo_src_unpack
 	else
