@@ -5,6 +5,9 @@
 		<flag name="plutil">
 			Install swift's plutil as plutil (conflicts with <pkg>gnustep-base/gnustep-base</pkg>)
 		</flag>
+		<flag name="sym-gold">
+			Symlink ld to ld.gold
+		</flag>
 	</use>
 	<upstream>
 		<changelog>https://github.com/aswiftlangpple/swift/releases</changelog>

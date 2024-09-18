@@ -6,27 +6,28 @@ EAPI=8
 LLVM_SLOT=17
 
 MY_PN="${PN/-bin*/}"
-MY_PV="swift-6.0-DEVELOPMENT-SNAPSHOT-2024-09-11-a"
+MY_PV="${PV/-r*/}"
 
 DESCRIPTION="Swift is a general-purpose programming language"
 HOMEPAGE="https://github.com/swiftlang/swift
 	https://www.swift.org/
 	https://developer.apple.com/swift/"
 SRC_URI="
-	amd64? ( https://download.swift.org/swift-6.0-branch/ubi9/${MY_PV}/${MY_PV}-ubi9.tar.gz )
-	arm64? ( https://download.swift.org/swift-6.0-branch/ubi9-aarch64/${MY_PV}/${MY_PV}-ubi9-aarch64.tar.gz )
+	amd64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9.tar.gz )
+	arm64? ( https://download.swift.org/swift-${MY_PV}-release/ubi9-aarch64/swift-${MY_PV}-RELEASE/swift-${MY_PV}-RELEASE-ubi9-aarch64.tar.gz )
 "
 
-SWIFTDIR="${MY_PV}-ubi9"
+SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9"
 
 if [[ "$ARCH" == "arm64" ]]; then
-	SWIFTDIR="${MY_PV}-ubi9-aarch64"
+	SWIFTDIR="${MY_PN}-${MY_PV}-RELEASE-ubi9-aarch64"
 fi
 
 QA_PREBUILT="*"
 S="${WORKDIR}/${SWIFTDIR}"
 LICENSE="Apache-2.0"
 SLOT="0"
+KEYWORDS="~amd64 ~arm64 -*"
 IUSE="+plutil +sym-gold"
 RESTRICT="test bindist mirror strip"
 
