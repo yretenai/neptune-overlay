@@ -27,11 +27,11 @@ QA_PREBUILT="*"
 S="${WORKDIR}/${SWIFTDIR}"
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="+plutil"
+IUSE="+plutil +sym-gold"
 RESTRICT="test bindist mirror strip"
 
 RDEPEND="
-	arm64? ( sys-devel/binutils[gold] )
+	sym-gold? ( sys-devel/binutils )
 	dev-libs/icu
 	sys-libs/timezone-data
 	sys-libs/zlib
@@ -145,7 +145,7 @@ src_install() {
 	dodoc -r "usr/share/doc/swift"
 	doman "usr/share/man/man1/swift.1"
 
-	if [[ "$ARCH" == "amd64" ]]; then
+	if use sym-gold; then
 		dosym ld /usr/bin/ld.gold
 	fi
 }
