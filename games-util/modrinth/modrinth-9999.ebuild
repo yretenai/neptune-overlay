@@ -70,9 +70,22 @@ src_unpack() {
 }
 
 src_install() {
-	cargo_src_install
+	# cargo_src_install # fucks up because codegen regenerates a frozen file. i love rust, truly.
 	cd "${S_ROOT}"
-	dosym theseus_gui "${EPREFIX}/usr/bin/modrinth"
+
+	if [[ "$ARCH" == "amd64" ]]; then
+		R_TARGET="$(usex elibc_musl "x86_64-unknown-linux-musl" "x86_64-unknown-linux-gnu")"
+	elif [[ "$ARCH" == "x86" ]]; then
+		R_TARGET="i686-unknown-linux-gnu"
+	elif [[ "$ARCH" == "arm64" ]]; then
+		R_TARGET="$(usex elibc_musl "aarch64-unknown-linux-musl" "aarch64-unknown-linux-gnu")"
+	elif [[ "$ARCH" == "arm" ]]; then
+		R_TARGET="armv7-unknown-linux-gnueabihf"
+	else
+		die "invalid ARCH (${ARCH})"
+	fi
+
+	newbin "target/${R_TARGET}/release/theseus_gui" modrinth
 	make_desktop_entry modrinth "Modrinth App" modrinth Game "MimeType=application/zip+mrpack;x-scheme-handler/modrinth"
 	newicon "apps/app/icons/icon.png" modrinth.png
 }
