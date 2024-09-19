@@ -105,7 +105,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.6.0[opengl,cuda?,openmp?,tbb?] )
+	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,openmp?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
@@ -484,17 +484,6 @@ pkg_postinst() {
 		ewarn "If you experience breakages with e.g. plugins, please switch to"
 		ewarn "python_single_target_python3_11 instead."
 		ewarn "Bug: https://bugs.gentoo.org/737388"
-		ewarn
-	fi
-
-	if use opensubdiv; then
-		ewarn
-		ewarn "GPU Viewport Subdivision will likely segfault."
-		ewarn "Please disable GPU Viewport Subdivision by navigating to:"
-		ewarn "\tEdit > Preferences > Viewport > Subdivision"
-		ewarn "And unchecking \"GPU Subdivision\"."
-		ewarn "Blender Issue: https://projects.blender.org/blender/blender/issues/97737"
-		ewarn "Blender Issue: https://projects.blender.org/blender/blender/issues/103464"
 		ewarn
 	fi
 
