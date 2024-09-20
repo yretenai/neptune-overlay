@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 xdg
 
 DESCRIPTION="Professional open-source non-linear video editor"
 HOMEPAGE="
@@ -63,8 +63,17 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/fix-opencolorio-2.3.patch"
-	"${FILESDIR}/fix-qtstring.patch"
 )
+
+src_prepare() {
+	eapply_user
+
+	if use qt6; then
+		eapply "${FILESDIR}/fix-qtstring.patch"
+	fi
+
+	cmake_src_prepare
+}
 
 src_configure() {
 	local mycmakeargs=(
