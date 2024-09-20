@@ -72,7 +72,7 @@ src_configure() {
 		-D SD_BUILD_SHARED_LIBS=ON
 		-D CMAKE_HIP_COMPILER_ROCM_ROOT="${EPREFIX}/usr"
 	)
-	
+
 	if use cuda; then
 		addwrite /dev/nvidiactl
 	fi

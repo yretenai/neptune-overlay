@@ -57,11 +57,11 @@ src_prepare() {
 	addwrite /dev/ati
 	addwrite /dev/dri
 	addwrite /dev/kfd
-	
+
 	MAX_JOBS=$(makeopts_jobs)
 	MAKEOPTS=-j1
 	export MAKEOPTS MAX_JOBS
-	
+
 	if use cuda; then
 		FORCE_CUDA=1
 		NVCC_FLAGS="$(cuda_gccdir -f | tr -d \")"

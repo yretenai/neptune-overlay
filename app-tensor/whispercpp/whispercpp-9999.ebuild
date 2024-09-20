@@ -69,7 +69,7 @@ src_configure() {
 		-i "examples/wchess/wchess.cmd/wchess.cmd.cpp" \
 		-i "examples/main/main.cpp" \
 		-i "examples/stream/stream.cpp" || die "can't fix default model path"
-	
+
 	# fix hardcoded macOS specific path
 	sed -e "s|/System/Library/Fonts/Supplemental/Courier New Bold.ttf|${EPREFIX}/usr/share/fonts/roboto/Roboto-Bold.ttf|" \
 		-i "examples/server/server.cpp" \
@@ -78,7 +78,7 @@ src_configure() {
 	# fix ffmpeg 3.0 requirement
 	if use ffmpeg; then
 		sed -e "s|av_register_all|// av_register_all|" \
-			-i "examples/ffmpeg-transcode.cpp" || die "can't fix ffmpeg" 
+			-i "examples/ffmpeg-transcode.cpp" || die "can't fix ffmpeg"
 	fi
 
 	local mycmakeargs=(
