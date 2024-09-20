@@ -61,6 +61,11 @@ BDEPEND="
 	doc? ( app-text/doxygen[dot] )
 "
 
+PATCHES=(
+	"${FILESDIR}/fix-opencolorio-2.3.patch"
+	"${FILESDIR}/fix-qtstring.patch"
+)
+
 src_configure() {
 	local mycmakeargs=(
 		-DBUILD_QT6="$(usex qt6)"
@@ -76,4 +81,12 @@ src_install() {
 		docinto html
 		dodoc -r "${BUILD_DIR}"/docs/html/*
 	fi
+}
+
+pkg_postinst() {
+	xdg_pkg_postinst
+}
+
+pkg_postrm() {
+	xdg_pkg_postrm
 }
