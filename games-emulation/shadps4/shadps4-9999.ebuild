@@ -72,6 +72,10 @@ BDEPEND="
 	sys-devel/clang
 "
 
+PATCHES=(
+	"${FILESDIR}/install.patch"
+)
+
 src_configure() {
 	CC="${CHOST}-clang"
 	CXX="${CHOST}-clang++"
