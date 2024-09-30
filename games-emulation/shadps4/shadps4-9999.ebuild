@@ -23,7 +23,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64 ~ppc64 ~x86"
 fi
 
-IUSE="qt6"
+IUSE="+qt6 +hacks"
 LICENSE="GPL-2"
 SLOT="0"
 
@@ -76,6 +76,16 @@ PATCHES=(
 	"${FILESDIR}/install.patch"
 	"${FILESDIR}/datadir.patch"
 )
+
+src_prepare() {
+	eapply_user
+
+	if use hacks; then
+		eapply "${FILESDIR}/hacks.patch"
+	fi
+
+	cmake_src_prepare
+}
 
 src_configure() {
 	CC="${CHOST}-clang"
