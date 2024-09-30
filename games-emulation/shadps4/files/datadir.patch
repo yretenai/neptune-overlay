@@ -1,0 +1,44 @@
+diff --git a/src/common/path_util.cpp b/src/common/path_util.cpp
+index d7274fc7..ad487270 100644
+--- a/src/common/path_util.cpp
++++ b/src/common/path_util.cpp
+@@ -85,19 +85,28 @@ static std::filesystem::path GetBundleParentDirectory() {
+ #endif
+ 
+ static auto UserPaths = [] {
+-#ifdef __APPLE__
+     // Start by assuming the base directory is the bundle's parent directory.
+-    std::filesystem::path base_dir = GetBundleParentDirectory();
++    std::filesystem::path base_dir = 
++#ifdef __APPLE__
++        GetBundleParentDirectory();
++#else
++        std::filesystem::current_path();
++#endif
+     std::filesystem::path user_dir = base_dir / PORTABLE_DIR;
+     // Check if the "user" directory exists in the current path:
+     if (!std::filesystem::exists(user_dir)) {
+         // If it doesn't exist, use the new hardcoded path:
++#ifdef __APPLE__
+         user_dir =
+             std::filesystem::path(getenv("HOME")) / "Library" / "Application Support" / "shadPS4";
+-    }
+ #else
+-    const auto user_dir = std::filesystem::current_path() / PORTABLE_DIR;
++        if (getenv("XDG_DATA_HOME")) {
++            user_dir = std::filesystem::path(getenv("XDG_DATA_HOME")) / "shadPS4";
++        } else {
++            user_dir = std::filesystem::path(getenv("HOME")) / ".local" / "share" / "shadPS4";
++        }
+ #endif
++    }
+ 
+     std::unordered_map<PathType, fs::path> paths;
+ 
+@@ -187,4 +196,4 @@ std::filesystem::path PathFromQString(const QString& path) {
+ }
+ #endif
+ 
+-} // namespace Common::FS
+\ No newline at end of file
++} // namespace Common::FS
