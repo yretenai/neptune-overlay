@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="JIT assembler for x86(IA-32)/x64(AMD64, x86-64)"
 HOMEPAGE="https://github.com/herumi/xbyak"
@@ -17,16 +17,19 @@ fi
 
 LICENSE="BSD"
 SLOT="0"
+IUSE="clang"
 
 BDEPEND="
-	sys-devel/clang
+	clang? ( sys-devel/clang )
 "
 
 src_configure() {
-	CC="${CHOST}-clang"
-	CXX="${CHOST}-clang++"
-	AR=llvm-ar
-	LDFLAGS="-fuse-ld=lld ${LDFLAGS}"
+	if use clang; then
+		CC="${CHOST}-clang"
+		CXX="${CHOST}-clang++"
+		AR=llvm-ar
+		append-ldflags "-fuse-ld=lld"
+	fi
 
 	cmake_src_configure
 }

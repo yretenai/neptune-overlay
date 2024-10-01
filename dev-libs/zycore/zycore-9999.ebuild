@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="Internal library providing platform independent types, macros and a fallback for environments without LibC."
 HOMEPAGE="https://github.com/zyantific/zycore-c"
@@ -18,16 +18,19 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
+IUSE="clang"
 
 BDEPEND="
-	sys-devel/clang
+	clang? ( sys-devel/clang )
 "
 
 src_configure() {
-	CC="${CHOST}-clang"
-	CXX="${CHOST}-clang++"
-	AR=llvm-ar
-	LDFLAGS="-fuse-ld=lld ${LDFLAGS}"
+	if use clang; then
+		CC="${CHOST}-clang"
+		CXX="${CHOST}-clang++"
+		AR=llvm-ar
+		append-ldflags "-fuse-ld=lld"
+	fi
 
 	local mycmakeargs=(
 		-D ZYCORE_BUILD_SHARED_LIB=ON

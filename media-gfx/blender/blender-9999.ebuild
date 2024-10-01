@@ -278,6 +278,13 @@ src_configure() {
 	append-lfs-flags
 	blender_get_version
 
+	if use llvm; then
+		CC="${CHOST}-clang"
+		CXX="${CHOST}-clang++"
+		AR=llvm-ar
+		append-ldflags "-fuse-ld=lld"
+	fi
+
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"

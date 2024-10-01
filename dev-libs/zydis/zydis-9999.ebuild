@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION=" Fast and lightweight x86/x86-64 disassembler and code generation library"
 HOMEPAGE="https://github.com/zyantific/zydis"
@@ -16,13 +16,13 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64 ~ppc64 ~x86"
 fi
 
-IUSE="man doc"
+IUSE="man doc clang"
 
 LICENSE="MIT"
 SLOT="0"
 
 DEPEND="
-	>=dev-libs/zycore-1.5.0
+	>=dev-libs/zycore-1.5.0[clang?]
 "
 
 RDEPEND="
@@ -30,13 +30,9 @@ RDEPEND="
 "
 
 BDEPEND="
-	man? (
-		app-text/ronn-ng
-	)
-	doc? (
-		app-text/doxygen
-	)
-	sys-devel/clang
+	man? ( app-text/ronn-ng )
+	doc? ( app-text/doxygen )
+	clang? ( sys-devel/clang )
 "
 
 PATCHES=(
@@ -44,10 +40,12 @@ PATCHES=(
 )
 
 src_configure() {
-	CC="${CHOST}-clang"
-	CXX="${CHOST}-clang++"
-	AR=llvm-ar
-	LDFLAGS="-fuse-ld=lld ${LDFLAGS}"
+	if use clang; then
+		CC="${CHOST}-clang"
+		CXX="${CHOST}-clang++"
+		AR=llvm-ar
+		append-ldflags "-fuse-ld=lld"
+	fi
 
 	local mycmakeargs=(
 		-D ZYDIS_BUILD_SHARED_LIB=ON

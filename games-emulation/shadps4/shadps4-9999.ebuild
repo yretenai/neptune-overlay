@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="PS4 Emulator"
 HOMEPAGE="https://github.com/shadps4-emu/shadPS4"
@@ -23,7 +23,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64 ~ppc64 ~x86"
 fi
 
-IUSE="+qt6 +hacks"
+IUSE="+qt6 +hacks clang"
 LICENSE="GPL-2"
 SLOT="0"
 
@@ -45,7 +45,7 @@ DEPEND="
 	media-gfx/renderdoc
 	dev-util/glslang
 	>=dev-cpp/robin-map-1.3.0
-	>=dev-libs/xbyak-7.07.1
+	>=dev-libs/xbyak-7.07.1[clang?]
 	dev-cpp/toml11
 	>=dev-libs/xxhash-0.8.2
 	>=dev-libs/pugixml-1.14
@@ -53,7 +53,7 @@ DEPEND="
 	media-sound/sndio
 	=virtual/jack-2
 	media-libs/openal
-	>=dev-libs/zydis-5.0.0
+	>=dev-libs/zydis-5.0.0[clang?]
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
 		dev-qt/qtmultimedia:6[ffmpeg,vulkan]
@@ -88,10 +88,12 @@ src_prepare() {
 }
 
 src_configure() {
-	CC="${CHOST}-clang"
-	CXX="${CHOST}-clang++"
-	AR=llvm-ar
-	LDFLAGS="-fuse-ld=lld ${LDFLAGS}"
+	if use clang; then
+		CC="${CHOST}-clang"
+		CXX="${CHOST}-clang++"
+		AR=llvm-ar
+		append-ldflags "-fuse-ld=lld"
+	fi
 
 	local mycmakeargs=(
 		-D ENABLE_QT_GUI=$(usex qt6)
