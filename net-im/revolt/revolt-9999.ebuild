@@ -12,10 +12,8 @@ DESCRIPTION="Revolt is an open source user-first chat platform."
 HOMEPAGE="https://github.com/revoltchat
 	https://github.com/revoltchat/desktop
 	https://revolt.chat/"
-
 LICENSE="Apache-2.0 MIT CC0-1.0 0BSD ISC BSD BSD-2 PSF-2 WTFPL"
 SLOT="0"
-IUSE="appindicator +seccomp +wayland"
 
 EGIT_SUBMODULES=()
 EGIT_REPO_URI="https://github.com/revoltchat/desktop.git"
@@ -23,6 +21,8 @@ if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="${ELECTRON_KEYWORDS}"
 fi
+
+IUSE="appindicator +seccomp +wayland"
 
 RDEPEND="
 	app-accessibility/at-spi2-core:2

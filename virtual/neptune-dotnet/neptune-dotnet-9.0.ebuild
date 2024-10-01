@@ -3,19 +3,14 @@
 
 EAPI=8
 
-inherit multilib-build
+# inherit multilib-build
 
 DESCRIPTION="Virtual for neptune-dotnet"
 
-LICENSE=""
-
-IUSE="+sdk asp doc"
-
 RUNTIME_SLOT="${PV}.0"
 SLOT="${PV}/${RUNTIME_SLOT}"
-KEYWORDS="~amd64 ~arm ~arm64 -*"
-
-BDEPEND=""
+KEYWORDS="-* ~amd64 ~arm ~arm64"
+IUSE="+sdk asp doc"
 
 # sdk includes asp, asp includes runtime
 RDEPEND="

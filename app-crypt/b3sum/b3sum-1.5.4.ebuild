@@ -76,9 +76,15 @@ inherit cargo git-r3
 DESCRIPTION="A simple one-file way to run various GGML models with KoboldAI's UI"
 HOMEPAGE="https://github.com/BLAKE3-team/BLAKE3"
 
-SRC_URI="
-	${CARGO_CRATE_URIS}
+SRC_URI="${CARGO_CRATE_URIS}"
+S="${WORKDIR}/${P}/b3sum"
+LICENSE="|| ( Apache-2.0 Apache-2.0-with-LLVM-exceptions CC0-1.0 )"
+# Dependent crate licenses
+LICENSE+="
+	BSD-2 MIT Unicode-DFS-2016
+	|| ( Apache-2.0 CC0-1.0 MIT-0 )
 "
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/BLAKE3-team/BLAKE3.git"
 
@@ -87,16 +93,6 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-S="${WORKDIR}/${P}/b3sum"
-
-LICENSE="|| ( Apache-2.0 Apache-2.0-with-LLVM-exceptions CC0-1.0 )"
-# Dependent crate licenses
-LICENSE+="
-	BSD-2 MIT Unicode-DFS-2016
-	|| ( Apache-2.0 CC0-1.0 MIT-0 )
-"
-
-SLOT="0"
 RESTRICT="test"
 
 src_unpack() {

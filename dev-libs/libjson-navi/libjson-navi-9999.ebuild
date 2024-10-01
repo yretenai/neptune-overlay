@@ -7,15 +7,15 @@ inherit meson git-r3
 
 DESCRIPTION="a json parser and json-ld preprocessor"
 HOMEPAGE="https://git.vlhl.dev/navi/json"
+LICENSE="GPL-3"
+SLOT="0"
+
 EGIT_REPO_URI="https://git.vlhl.dev/navi/json.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-LICENSE="GPL-3"
-SLOT="0"
 
 BDEPEND="
 	dev-build/meson

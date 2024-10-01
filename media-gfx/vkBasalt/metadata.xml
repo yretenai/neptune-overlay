@@ -9,7 +9,6 @@
 		</flag>
 	</use>
 	<upstream>
-		<bugs-to>https://github.com/DadSchoorse/vkBasalt/issues</bugs-to>
 		<remote-id type="github">DadSchoorse/vkBasalt</remote-id>
 	</upstream>
 </pkgmetadata>

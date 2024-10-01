@@ -7,15 +7,15 @@ inherit cmake git-r3
 
 DESCRIPTION="waifu2x converter using ncnn and vulkan"
 HOMEPAGE="https://github.com/nihui/waifu2x-ncnn-vulkan"
+LICENSE="MIT"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/nihui/waifu2x-ncnn-vulkan.git"
 
 if [[ "${PV}" != *99999999* ]]; then
 	EGIT_COMMIT="${PV}"
 	KEYWORDS="amd64 x86"
 fi
-
-LICENSE="MIT"
-SLOT="0"
 
 IUSE="+system-webp system-ncnn"
 

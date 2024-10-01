@@ -12,6 +12,8 @@ inherit cmake cuda llvm-r1 python-any-r1 rocm git-r3
 
 DESCRIPTION="Intel® Open Image Denoise library"
 HOMEPAGE="https://www.openimagedenoise.org https://github.com/RenderKit/oidn"
+LICENSE="Apache-2.0"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/RenderKit/oidn.git"
 
@@ -20,12 +22,10 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 fi
 
-LICENSE="Apache-2.0"
-SLOT="0"
+IUSE="apps cuda hip hip-safe openimageio test"
 REQUIRED_USE="
 	test? ( apps )
 "
-IUSE="apps cuda hip hip-safe openimageio test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
@@ -83,11 +83,11 @@ src_configure() {
 			-DOIDN_DEVICE_HIP_COMPILER="$(get_llvm_prefix)/bin/clang++" # use HIPHOSTCOMPILER
 		)
 
-	   if ! use hip-safe; then
-		   mycmakeargs+=(
-			   -DAMDGPU_TARGETS="$(get_amdgpu_flags)"
-		   )
-	   fi
+		if ! use hip-safe; then
+			mycmakeargs+=(
+				-DAMDGPU_TARGETS="$(get_amdgpu_flags)"
+			)
+		fi
 	fi
 
 	cmake_src_configure

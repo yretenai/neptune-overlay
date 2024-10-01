@@ -10,7 +10,6 @@
 		</flag>
 	</use>
 	<upstream>
-		<bugs-to>https://github.com/Nexus-Mods/NexusMods.App/issues</bugs-to>
 		<remote-id type="github">Nexus-Mods/NexusMods.App</remote-id>
 	</upstream>
 </pkgmetadata>

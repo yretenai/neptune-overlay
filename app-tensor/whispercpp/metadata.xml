@@ -3,7 +3,6 @@
 <pkgmetadata>
 	<upstream>
 		<changelog>https://github.com/ggerganov/whisper.cpp/releases</changelog>
-		<bugs-to>https://github.com/ggerganov/whisper.cpp/issues</bugs-to>
 		<remote-id type="github">ggerganov/whisper.cpp</remote-id>
 	</upstream>
 	<use>

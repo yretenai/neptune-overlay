@@ -11,10 +11,12 @@
 		<flag name="openblas">
 			Enable openBLAS support
 		</flag>
+		<flag name="tools">
+			Install utility tools
+		</flag>
 	</use>
 	<upstream>
 		<changelog>https://github.com/YellowRoseCx/koboldcpp-rocm/releases</changelog>
-		<bugs-to>https://github.com/YellowRoseCx/koboldcpp-rocm/issues</bugs-to>
 		<remote-id type="github">YellowRoseCx/koboldcpp-rocm</remote-id>
 	</upstream>
 </pkgmetadata>

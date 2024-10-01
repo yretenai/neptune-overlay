@@ -8,7 +8,6 @@
 	</use>
 	<upstream>
 		<changelog>https://github.com/charmbracelet/vhs/releases</changelog>
-		<bugs-to>https://github.com/charmbracelet/vhs/issues</bugs-to>
 		<remote-id type="github">charmbracelet/vhs</remote-id>
 	</upstream>
 </pkgmetadata>

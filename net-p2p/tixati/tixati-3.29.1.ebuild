@@ -13,9 +13,9 @@ SRC_URI="https://download2.tixati.com/download/${PN}-${T_PV}.x86_64.manualinstal
 S="${WORKDIR}/${PN}-${T_PV}.x86_64.manualinstall/"
 
 LICENSE="all-rights-reserved"
-
 SLOT="0"
-KEYWORDS="~amd64 -*"
+KEYWORDS="-* ~amd64"
+
 DEPEND="
 	>=app-accessibility/at-spi2-core-2.48.3
 	>=app-arch/brotli-1.1.0

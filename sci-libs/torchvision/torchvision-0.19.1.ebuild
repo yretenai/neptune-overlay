@@ -12,6 +12,8 @@ inherit cuda distutils-r1 multiprocessing git-r3
 
 DESCRIPTION="Datasets, transforms and models to specific to computer vision"
 HOMEPAGE="https://github.com/pytorch/vision"
+LICENSE="BSD"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/pytorch/vision.git"
 if [[ "${PV}" != *9999* ]]; then
@@ -19,9 +21,6 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="BSD"
-SLOT="0"
-KEYWORDS="~amd64"
 IUSE="cuda"
 
 # shellcheck disable=SC2016

@@ -8,14 +8,14 @@ MY_PV="${PV/-r*/}"
 
 inherit desktop unpacker xdg
 
-DESCRIPTION="Organize and execute REST, GraphQL, and gRPC requests in a simple and intuitive app"
+DESCRIPTION="Organize and execute REST requests in a simple and intuitive app"
 HOMEPAGE="https://yaak.app"
 SRC_URI="https://github.com/yaakapp/app/releases/download/v${MY_PV}/yaak_${MY_PV}_amd64.deb"
 
 S="${WORKDIR}/usr"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 -*"
+KEYWORDS="-* amd64"
 RESTRICT="bindist mirror strip test"
 
 RDEPEND="

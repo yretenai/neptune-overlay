@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="clang">
+			Enforce usage of Clang for build
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">zyantific/zydis</remote-id>
+	</upstream>
+</pkgmetadata>

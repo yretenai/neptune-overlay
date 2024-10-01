@@ -8,7 +8,6 @@
 	</use>
 	<upstream>
 		<changelog>https://github.com/charmbracelet/skate/releases</changelog>
-		<bugs-to>https://github.com/charmbracelet/skate/issues</bugs-to>
 		<remote-id type="github">charmbracelet/skate</remote-id>
 	</upstream>
 </pkgmetadata>

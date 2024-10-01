@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/runelite/launcher/issues</bugs-to>
 		<remote-id type="github">runelite/launcher</remote-id>
 	</upstream>
 </pkgmetadata>

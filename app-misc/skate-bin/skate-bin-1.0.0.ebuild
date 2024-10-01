@@ -5,13 +5,16 @@ EAPI=8
 
 DESCRIPTION=" A personal key value store"
 HOMEPAGE="https://github.com/charmbracelet/skate"
+
 SRC_URI="
 	amd64? ( https://github.com/charmbracelet/skate/releases/download/v${PV}/skate_${PV}_Linux_x86_64.tar.gz -> ${P}-amd64.tar.gz )
 	x86? ( https://github.com/charmbracelet/skate/releases/download/v${PV}/skate_${PV}_Linux_i386.tar.gz -> ${P}-x86.tar.gz )
 	arm64? ( https://github.com/charmbracelet/skate/releases/download/v${PV}/skate_${PV}_Linux_arm64.tar.gz -> ${P}-arm64.tar.gz )
 	arm? ( https://github.com/charmbracelet/skate/releases/download/v${PV}/skate_${PV}_Linux_arm.tar.gz -> ${P}-arm.tar.gz )
 "
-
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="-* ~amd64 ~arm ~arm64 ~x86"
 IUSE="fish-completion zsh-completion bash-completion"
 
 if [[ "$ARCH" == "amd64" ]]; then
@@ -23,12 +26,8 @@ elif [[ "$ARCH" == "arm64" ]]; then
 elif [[ "$ARCH" == "arm" ]]; then
 	S="${WORKDIR}/skate_${PV}_Linux_arm"
 else
-	die "invalid ARCH (${ARCH})"
+	S="${WORKDIR}/skate_${PV}_Linux_x86_64"
 fi
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86 ~arm -*"
 
 BDEPEND="
 	app-alternatives/gzip

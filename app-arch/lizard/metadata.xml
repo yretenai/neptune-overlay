@@ -3,7 +3,6 @@
 <pkgmetadata>
 	<upstream>
 		<changelog>https://github.com/inikep/lizard/releases</changelog>
-		<bugs-to>https://github.com/inikep/lizard/issues</bugs-to>
 		<remote-id type="github">inikep/lizard</remote-id>
 	</upstream>
 </pkgmetadata>

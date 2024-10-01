@@ -86,7 +86,6 @@
 		</flag>
 	</use>
 	<upstream>
-		<bugs-to>https://projects.blender.org/blender/blender/issues</bugs-to>
 		<changelog>https://developer.blender.org/docs/release_notes/</changelog>
 		<remote-id type="github">blender/blender</remote-id>
 	</upstream>

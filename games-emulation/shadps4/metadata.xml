@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<remote-id type="github">shadps4-emu/shadPS4</remote-id>
+	</upstream>
+	<use>
+		<flag name="hacks">
+			Patch common bugs with the emulator for specific games, may break the emulator for other game
+		</flag>
+		<flag name="clang">
+			Enforce usage of Clang for build
+		</flag>
+	</use>
+</pkgmetadata>

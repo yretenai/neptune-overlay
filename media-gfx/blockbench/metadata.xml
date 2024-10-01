@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/JannisX11/blockbench/issues</bugs-to>
 		<remote-id type="github">JannisX11/blockbench</remote-id>
 	</upstream>
 </pkgmetadata>

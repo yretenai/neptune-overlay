@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/revoltchat/desktop/issues</bugs-to>
 		<remote-id type="github">revoltchat/desktop</remote-id>
 	</upstream>
 </pkgmetadata>

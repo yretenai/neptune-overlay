@@ -7,6 +7,8 @@ inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="JIT assembler for x86(IA-32)/x64(AMD64, x86-64)"
 HOMEPAGE="https://github.com/herumi/xbyak"
+LICENSE="BSD"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/herumi/xbyak.git"
 
@@ -15,8 +17,6 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64 ~ppc64 ~x86"
 fi
 
-LICENSE="BSD"
-SLOT="0"
 IUSE="clang"
 
 BDEPEND="

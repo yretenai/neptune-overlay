@@ -6,19 +6,19 @@ EAPI=8
 CMAKE_BUILD_TYPE="Release"
 CMAKE_MAKEFILE_GENERATOR="emake"
 
-inherit cmake llvm toolchain-funcs git-r3
+inherit cmake toolchain-funcs git-r3
 
 DESCRIPTION="The Pattern Language used by the ImHex Hex Editor"
 HOMEPAGE="https://github.com/WerWolv/PatternLanguage"
 LICENSE="LGPL-2.1"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/WerWolv/PatternLanguage.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-SLOT="0"
 
 DEPEND="
 	>=dev-cpp/nlohmann_json-3.10.2

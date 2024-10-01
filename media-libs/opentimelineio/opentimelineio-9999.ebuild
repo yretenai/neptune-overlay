@@ -8,8 +8,11 @@ inherit cmake git-r3
 DESCRIPTION="Open Source API and interchange format for editorial timeline information."
 HOMEPAGE="
 	https://opentimeline.io
-	https://github.com/AcademySoftwareFoundation/OpenTimelineIO.git
+	https://github.com/AcademySoftwareFoundation/OpenTimelineIO
 "
+LICENSE="Apache-2.0"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/AcademySoftwareFoundation/OpenTimelineIO.git"
 
 if [[ "${PV}" != *9999* ]]; then
@@ -17,14 +20,8 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="Apache-2.0"
-SLOT="0"
-
 DEPEND="
-	|| (
-		dev-libs/imath
-		media-libs/ilmbase
-	)
+	dev-libs/imath
 "
 RDEPEND="${DEPEND}"
 

@@ -10,7 +10,6 @@
 		</flag>
 	</use>
 	<upstream>
-		<bugs-to>https://github.com/nihui/waifu2x-ncnn-vulkan/issues</bugs-to>
 		<remote-id type="github">nihui/waifu2x-ncnn-vulkan</remote-id>
 	</upstream>
 </pkgmetadata>

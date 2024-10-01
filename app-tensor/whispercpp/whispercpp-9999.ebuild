@@ -7,6 +7,8 @@ inherit cmake git-r3
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++ "
 HOMEPAGE="https://github.com/ggerganov/whisper.cpp"
+LICENSE="MIT"
+SLOT="0"
 EGIT_REPO_URI="https://github.com/ggerganov/whisper.cpp"
 
 if [[ "${PV}" != *9999* ]]; then
@@ -14,8 +16,6 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="MIT"
-SLOT="0"
 IUSE="hip hipuma cuda openblas vulkan torch ffmpeg +models sdl test cpu_flags_x86_avx512dq cpu_flags_x86_avx512_vbmi2 cpu_flags_x86_avx512_vnni cpu_flags_x86_avx2 cpu_flags_x86_avx cpu_flags_x86_fma3 cpu_flags_x86_f16c"
 RESTRICT="!test? ( test )"
 
@@ -145,12 +145,12 @@ pkg_postinst() {
 	elog "The main binary has been installed as \"whisper\""
 	elog
 	elog "The main binary will look for models installed in"
-	elog "   ${EROOT}/usr/share/whisper/ggml-models"
+	elog "\t${EROOT}/usr/share/whisper/ggml-models"
 	elog
 	if use torch; then
 		elog
 		elog "Python scripts to convert custom models have been installed in"
-		elog "   ${EROOT}/usr/share/doc/${P}/tools"
+		elog "\t${EROOT}/usr/share/doc/${P}/tools"
 		elog
 	fi
 }

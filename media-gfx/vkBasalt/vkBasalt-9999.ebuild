@@ -7,6 +7,9 @@ inherit meson git-r3
 
 DESCRIPTION="a vulkan post processing layer for linux"
 HOMEPAGE="https://github.com/DadSchoorse/vkBasalt"
+LICENSE="ZLIB"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/DadSchoorse/${PN}.git"
 
 if [[ "${PV}" != *9999* ]]; then
@@ -14,8 +17,6 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="ZLIB"
-SLOT="0"
 IUSE="+reshade-shaders"
 RESTRICT="test"
 

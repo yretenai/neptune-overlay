@@ -7,9 +7,11 @@ inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION="PS4 Emulator"
 HOMEPAGE="https://github.com/shadps4-emu/shadPS4"
+LICENSE="GPL-2"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/shadps4-emu/shadPS4.git"
-EGIT_SUBMODULES=( 
+EGIT_SUBMODULES=(
 	"externals/dear_imgui"
 	"externals/tracy"
 	"externals/vma"
@@ -24,12 +26,10 @@ if [[ ${PV} != *9999* ]]; then
 fi
 
 IUSE="+qt6 +hacks clang"
-LICENSE="GPL-2"
-SLOT="0"
 
 # missing dependencies:
 # fmt 10.2.0 or newer is required
-# sdl3 -- wait on gentoo 
+# sdl3 -- wait on gentoo
 # vma
 
 # mandatory bundled:
@@ -51,7 +51,7 @@ DEPEND="
 	>=dev-libs/pugixml-1.14
 	media-libs/vulkan-layers
 	media-sound/sndio
-	=virtual/jack-2
+	virtual/jack
 	media-libs/openal
 	>=dev-libs/zydis-5.0.0[clang?]
 	qt6? (

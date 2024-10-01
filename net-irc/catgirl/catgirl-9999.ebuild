@@ -3,14 +3,14 @@
 
 EAPI=8
 
-inherit edo git-r3  readme.gentoo-r1 toolchain-funcs
+inherit edo git-r3 readme.gentoo-r1 toolchain-funcs
 
 DESCRIPTION="TLS-only terminal IRC client"
 HOMEPAGE="https://git.causal.agency/catgirl/about/"
-EGIT_REPO_URI="https://git.causal.agency/catgirl"
-
 LICENSE="GPL-3+"
 SLOT="0"
+
+EGIT_REPO_URI="https://git.causal.agency/catgirl"
 KEYWORDS="~amd64 ~x86"
 
 DEPEND="

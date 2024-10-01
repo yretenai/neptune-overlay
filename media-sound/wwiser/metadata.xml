@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/bnnm/wwiser/issues</bugs-to>
 		<remote-id type="github">bnnm/wwiser</remote-id>
 	</upstream>
 </pkgmetadata>

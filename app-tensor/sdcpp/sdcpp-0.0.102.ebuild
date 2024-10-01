@@ -15,9 +15,9 @@ HOMEPAGE="https://github.com/leejet/stable-diffusion.cpp"
 EGIT_REPO_URI="https://github.com/leejet/stable-diffusion.cpp.git"
 EGIT_COMMIT="master-e410aeb"
 
-KEYWORDS="~amd64 ~arm64"
 LICENSE="MIT"
 SLOT="0"
+KEYWORDS="~amd64 ~arm64"
 IUSE="flash-attenuation softmax cuda hip vulkan"
 RESTRICT="test"
 
@@ -86,7 +86,7 @@ src_configure() {
 }
 
 src_install() {
-	cd $BUILD_DIR
+	cd "${BUILD_DIR}"
 	dobin bin/sd
 	dolib.so bin/libstable-diffusion.so
 }

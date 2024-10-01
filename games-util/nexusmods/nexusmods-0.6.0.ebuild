@@ -670,6 +670,11 @@ HOMEPAGE="
 	https://nexus-mods.github.io/NexusMods.App/
 	https://github.com/Nexus-Mods/NexusMods.App
 "
+
+SRC_URI="${NUGET_URIS}"
+LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/Nexus-Mods/NexusMods.App.git"
 
 if [[ "${PV}" != *9999* ]]; then
@@ -677,9 +682,6 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-SRC_URI="${NUGET_URIS}"
-LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
-SLOT="0"
 IUSE="p7zip"
 RESTRICT="mirror"
 

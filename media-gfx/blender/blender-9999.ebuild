@@ -21,6 +21,8 @@ inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
+LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
+SLOT="${PV%.*}"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 
@@ -29,8 +31,6 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="|| ( GPL-3 BL )"
-SLOT="${PV%.*}"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k

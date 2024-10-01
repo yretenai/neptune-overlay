@@ -30,7 +30,7 @@ LICENSE="MIT"
 SDK_SLOT="$(ver_cut 1-2)"
 RUNTIME_SLOT="${SDK_SLOT}.0"
 SLOT="${SDK_SLOT}/${RUNTIME_SLOT}"
-KEYWORDS="~amd64 ~arm ~arm64 -*"
+KEYWORDS="-* ~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"
@@ -49,7 +49,7 @@ src_install() {
 	insinto "${dest}"
 
 	# Create a magic workloads file, bug #841896
-	local featureband="$(( $(ver_cut 3) / 100 * 100 ))"       # e.g. 404 -> 400
+	local featureband="$(( $(ver_cut 3) / 100 * 100 ))" # e.g. 404 -> 400
 	local workloads="metadata/workloads/${SDK_SLOT}.${featureband}"
 
 	mkdir -p "${S}/${workloads}" || die

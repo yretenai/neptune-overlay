@@ -11,7 +11,9 @@ SRC_URI="
 	arm64? ( https://github.com/charmbracelet/gum/releases/download/v${PV}/gum_${PV}_Linux_arm64.tar.gz -> ${P}-arm64.tar.gz )
 	arm? ( https://github.com/charmbracelet/gum/releases/download/v${PV}/gum_${PV}_Linux_armv7.tar.gz -> ${P}-arm.tar.gz )
 "
-
+LICENSE="MIT"
+SLOT="0"
+KEYWORDS="-* ~amd64 ~arm ~arm64 ~x86"
 IUSE="fish-completion zsh-completion bash-completion"
 
 if [[ "$ARCH" == "amd64" ]]; then
@@ -23,12 +25,8 @@ elif [[ "$ARCH" == "arm64" ]]; then
 elif [[ "$ARCH" == "arm" ]]; then
 	S="${WORKDIR}/gum_${PV}_Linux_armv7"
 else
-	die "invalid ARCH (${ARCH})"
+	S="${WORKDIR}/gum_${PV}_Linux_x86_64"
 fi
-
-LICENSE="MIT"
-SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86 ~arm -*"
 
 BDEPEND="
 	app-alternatives/gzip

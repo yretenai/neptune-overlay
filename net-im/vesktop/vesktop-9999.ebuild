@@ -5,6 +5,9 @@ EAPI=8
 
 inherit electron-version
 
+ELECTRON_VER="${LATEST_ELECTRON_VER}"
+ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
+
 inherit desktop xdg electron-builder-utils git-r3
 
 DESCRIPTION="Vesktop is a custom Discord App"

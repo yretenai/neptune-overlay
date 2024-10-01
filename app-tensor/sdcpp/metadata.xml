@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="flash-attenuation">
+			Use flash attention for x4 less memory usage
+		</flag>
+		<flag name="hip">
+			Use ROCm HIP backend
+		</flag>
+		<flag name="softmax">
+			x1.5 faster softmax, indeterministic, CUDA only
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">leejet/stable-diffusion.cpp</remote-id>
+	</upstream>
+</pkgmetadata>

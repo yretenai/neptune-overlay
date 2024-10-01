@@ -3,7 +3,6 @@
 <pkgmetadata>
 	<upstream>
 		<changelog>https://github.com/nba-emu/NanoBoyAdvance/releases</changelog>
-		<bugs-to>https://github.com/nba-emu/NanoBoyAdvance/issues</bugs-to>
 		<remote-id type="github">nba-emu/NanoBoyAdvance</remote-id>
 	</upstream>
 </pkgmetadata>

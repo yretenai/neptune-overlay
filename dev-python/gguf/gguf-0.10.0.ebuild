@@ -9,13 +9,12 @@ inherit distutils-r1
 
 DESCRIPTION="IO library for the GGUF (GGML Universal File) format."
 HOMEPAGE="https://pypi.org/project/gguf"
-
 SRC_URI="
 	https://files.pythonhosted.org/packages/0e/c4/a159e9f842b0e8b8495b2689af6cf3426f002cf01207ca8134db82fc4088/${P}.tar.gz
 "
-
 LICENSE="MIT"
 SLOT="0"
+
 KEYWORDS="~amd64"
 RESTRICT="bindist mirror"
 

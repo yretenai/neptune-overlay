@@ -3,7 +3,6 @@
 <pkgmetadata>
 	<upstream>
 		<changelog>https://github.com/btzy/nativefiledialog-extended/releases</changelog>
-		<bugs-to>https://github.com/btzy/nativefiledialog-extended/issues</bugs-to>
 		<remote-id type="github">btzy/nativefiledialog-extended</remote-id>
 	</upstream>
 </pkgmetadata>

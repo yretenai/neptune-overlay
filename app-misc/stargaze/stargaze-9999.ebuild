@@ -6,15 +6,14 @@ inherit meson git-r3
 
 DESCRIPTION="pretty view of star constellations"
 HOMEPAGE="https://git.vlhl.dev/navi/stargaze"
+LICENSE="GPL-3"
+SLOT="0"
+
 EGIT_REPO_URI="https://git.vlhl.dev/navi/stargaze.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-LICENSE="GPL-3"
-
-SLOT="0"
 
 DEPEND="dev-cpp/notcurses"

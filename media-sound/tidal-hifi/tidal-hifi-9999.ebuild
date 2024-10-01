@@ -4,7 +4,8 @@
 EAPI=8
 
 inherit electron-version
-ELECTRON_VER="${ELECTRON_WVCUS_VER}"
+
+ELECTRON_VER="${LATEST_ELECTRON_WVCUS_VER}"
 ELECTRON_VER_BASE="${ELECTRON_VER}"
 ELECTRON_WVCUS="1"
 
@@ -12,6 +13,8 @@ inherit desktop xdg electron-builder-utils git-r3
 
 DESCRIPTION="Web version of Tidal running in electron with Hi-Fi support thanks to Widevine."
 HOMEPAGE="https://github.com/Mastermindzh/tidal-hifi"
+LICENSE="MIT"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
 if [[ "${PV}" != *9999* ]]; then
@@ -19,8 +22,6 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="${ELECTRON_KEYWORDS}"
 fi
 
-LICENSE="MIT"
-SLOT="0"
 IUSE="+seccomp +wayland"
 
 # Requires network access (https) as long as NPM dependencies aren't packaged

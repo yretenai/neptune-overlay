@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/Vencord/Vesktop/issues</bugs-to>
 		<remote-id type="github">Vencord/Vesktop</remote-id>
 	</upstream>
 </pkgmetadata>

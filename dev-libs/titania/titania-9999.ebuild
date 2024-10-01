@@ -7,15 +7,15 @@ inherit meson git-r3
 
 DESCRIPTION="a vulkan post processing layer for linux"
 HOMEPAGE="https://git.sr.ht/~chronovore/titania"
+LICENSE="MPL-2.0 GPL-3"
+SLOT="0"
+
 EGIT_REPO_URI="https://git.sr.ht/~chronovore/titania"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-LICENSE="MPL-2.0 GPL-3"
-SLOT="0"
 IUSE="+doc +cli debug"
 RESTRICT="test"
 

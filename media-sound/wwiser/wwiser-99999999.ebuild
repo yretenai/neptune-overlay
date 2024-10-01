@@ -10,6 +10,8 @@ inherit python-single-r1 git-r3
 DESCRIPTION="Wwise .bnk explorer and audio simulator"
 HOMEPAGE="https://github.com/bnnm/wwiser"
 LICENSE="GPL-2"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/bnnm/${PN}.git"
 
 if [[ "${PV}" != *99999999* ]]; then
@@ -17,7 +19,6 @@ if [[ "${PV}" != *99999999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-SLOT="0"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 RDEPEND="${PYTHON_DEPS}"
 DEPEND="${RDEPEND}"

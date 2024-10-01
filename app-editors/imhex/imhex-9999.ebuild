@@ -7,8 +7,9 @@ DOTNET_PKG_COMPAT="8.0"
 CMAKE_BUILD_TYPE="Release"
 CMAKE_MAKEFILE_GENERATOR="emake"
 NUGETS=""
+LLVM_COMPAT=( {16..18} )
 
-inherit dotnet-pkg cmake llvm toolchain-funcs desktop vcs-clean
+inherit dotnet-pkg cmake llvm-r1 toolchain-funcs desktop vcs-clean
 
 DESCRIPTION="A hex editor for reverse engineers, programmers, and eyesight"
 HOMEPAGE="https://github.com/WerWolv/ImHex"
@@ -22,7 +23,7 @@ EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64 ~arm64 -*"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 IUSE="+system-llvm lto"
@@ -52,7 +53,12 @@ RDEPEND="
 	${DOTNET_PKG_RDEPS}
 "
 BDEPEND="
-	system-llvm? ( sys-devel/llvm )
+	system-llvm? (
+		$(llvm_gen_dep '
+			sys-devel/clang:${LLVM_SLOT}=
+			sys-devel/llvm:${LLVM_SLOT}=
+		')
+	)
 	app-admin/chrpath
 	gnome-base/librsvg
 	sys-devel/lld

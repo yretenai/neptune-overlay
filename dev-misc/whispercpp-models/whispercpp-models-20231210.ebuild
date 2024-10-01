@@ -122,5 +122,5 @@ src_install() {
 
 pkg_postinst() {
 	elog "The models have been installed in"
-	elog "   ${EPREFIX}/usr/share/whisper/ggml-models"
+	elog "\t${EPREFIX}/usr/share/whisper/ggml-models"
 }

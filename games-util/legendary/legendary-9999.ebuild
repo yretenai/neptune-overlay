@@ -10,6 +10,9 @@ inherit distutils-r1 git-r3
 
 DESCRIPTION="A free and open-source replacement for the Epic Games Launcher"
 HOMEPAGE="https://github.com/derrod/legendary"
+LICENSE="GPL-3+"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/derrod/legendary.git"
 
 if [[ "${PV}" != *9999* ]]; then
@@ -17,8 +20,6 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="GPL-3+"
-SLOT="0"
 IUSE="webview"
 
 # NOTE: dev-python/pywebview[qt5] is not much tested and does not function

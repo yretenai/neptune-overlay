@@ -9,15 +9,14 @@ inherit distutils-r1 git-r3
 
 DESCRIPTION="A modern and customizable python UI-library based on Tkinter"
 HOMEPAGE="https://github.com/TomSchimansky/CustomTkinter"
+LICENSE="MIT"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/TomSchimansky/CustomTkinter.git"
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-LICENSE="MIT"
-SLOT="0"
 
 DEPEND+="
 	dev-python/darkdetect[${PYTHON_USEDEP}]

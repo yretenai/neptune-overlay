@@ -9,16 +9,15 @@ inherit cmake git-r3 python-any-r1
 
 DESCRIPTION="The WebAssembly Binary Toolkit"
 HOMEPAGE="https://github.com/WebAssembly/wabt"
+LICENSE="Apache-2.0"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/WebAssembly/wabt.git"
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="${PV}"
-	KEYWORDS="~amd64 ~arm64 -*"
+	KEYWORDS="-* ~amd64 ~arm64"
 fi
 
-LICENSE="Apache-2.0"
-SLOT="0"
-KEYWORDS="~amd64"
 IUSE="test"
 
 RESTRICT="!test? ( test )"

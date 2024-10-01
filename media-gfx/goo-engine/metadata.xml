@@ -86,7 +86,6 @@
 		</flag>
 	</use>
 	<upstream>
-		<bugs-to>https://github.com/dillongoostudios/goo-engine/issues</bugs-to>
 		<remote-id type="github">dillongoostudios/goo-engine</remote-id>
 	</upstream>
 </pkgmetadata>

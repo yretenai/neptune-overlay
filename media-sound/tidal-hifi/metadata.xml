@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/Mastermindzh/tidal-hifi/issues</bugs-to>
 		<remote-id type="github">Mastermindzh/tidal-hifi</remote-id>
 	</upstream>
 </pkgmetadata>

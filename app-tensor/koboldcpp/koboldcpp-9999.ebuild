@@ -11,6 +11,8 @@ inherit cuda rocm git-r3 python-single-r1 llvm-r1
 
 DESCRIPTION="A simple one-file way to run various GGML models with KoboldAI's UI"
 HOMEPAGE="https://github.com/YellowRoseCx/koboldcpp-rocm"
+LICENSE="AGPL-3"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/YellowRoseCx/koboldcpp-rocm.git"
 
@@ -23,8 +25,6 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="AGPL-3"
-SLOT="0"
 IUSE="openblas clblast cuda hip vulkan tools debug"
 RESTRICT="test"
 
@@ -75,9 +75,9 @@ BDEPEND="
 "
 
 PATCHES="
-    ${FILESDIR}/makefile.patch
-    ${FILESDIR}/examples.patch
-    ${FILESDIR}/gguf.patch
+	${FILESDIR}/makefile.patch
+	${FILESDIR}/examples.patch
+	${FILESDIR}/gguf.patch
 "
 
 src_prepare() {

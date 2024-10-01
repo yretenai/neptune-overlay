@@ -4,14 +4,9 @@
 EAPI=8
 
 DESCRIPTION="Electron Virtual"
-HOMEPAGE="
-	https://www.electronjs.org/
-	https://github.com/electron/electron
-"
 
-KEYWORDS="~amd64"
-LICENSE="MIT"
 SLOT="0"
+KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="test"
 
 src_unpack() {

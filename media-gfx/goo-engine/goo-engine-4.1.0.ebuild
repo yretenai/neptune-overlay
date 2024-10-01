@@ -14,6 +14,8 @@ HOMEPAGE="
 	https://github.com/dillongoostudios/goo-engine
 	https://www.blender.org
 "
+LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
+SLOT="${PV%.*}"
 
 EGIT_REPO_URI="https://github.com/dillongoostudios/goo-engine.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
@@ -22,8 +24,6 @@ EGIT_BRANCH="goo-engine-v$(ver_cut 1-2)-release"
 ADDONS_EGIT_BRANCH="refs/heads/blender-v$(ver_cut 1-2)-release"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
-LICENSE="|| ( GPL-3 BL )"
-SLOT="${PV%.*}"
 KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels

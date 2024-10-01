@@ -8,7 +8,6 @@
 	</use>
 	<upstream>
 		<changelog>https://github.com/charmbracelet/gum/releases</changelog>
-		<bugs-to>https://github.com/charmbracelet/gum/issues</bugs-to>
 		<remote-id type="github">charmbracelet/gum</remote-id>
 	</upstream>
 </pkgmetadata>

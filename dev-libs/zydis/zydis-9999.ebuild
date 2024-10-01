@@ -7,6 +7,8 @@ inherit cmake git-r3 flag-o-matic
 
 DESCRIPTION=" Fast and lightweight x86/x86-64 disassembler and code generation library"
 HOMEPAGE="https://github.com/zyantific/zydis"
+LICENSE="MIT"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/zyantific/zydis.git"
 EGIT_SUBMODULES=( )
@@ -17,9 +19,6 @@ if [[ ${PV} != *9999* ]]; then
 fi
 
 IUSE="man doc clang"
-
-LICENSE="MIT"
-SLOT="0"
 
 DEPEND="
 	>=dev-libs/zycore-1.5.0[clang?]

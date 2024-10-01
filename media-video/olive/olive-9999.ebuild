@@ -10,15 +10,15 @@ HOMEPAGE="
 	https://olivevideoeditor.org/
 	https://github.com/olive-editor/olive/
 "
+LICENSE="GPL-3"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/olive-editor/olive.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-LICENSE="GPL-3"
-SLOT="0"
 
 IUSE="test qt5 qt6 doc"
 RESTRICT="

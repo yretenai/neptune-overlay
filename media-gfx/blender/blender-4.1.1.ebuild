@@ -20,6 +20,8 @@ inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 too
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
+LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
+SLOT="${PV%.*}"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
@@ -27,8 +29,6 @@ ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 
 EGIT_COMMIT="v${PV}"
 
-LICENSE="|| ( GPL-3 BL )"
-SLOT="${PV%.*}"
 KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels

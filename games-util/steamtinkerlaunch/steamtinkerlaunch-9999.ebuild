@@ -7,15 +7,15 @@ inherit optfeature xdg git-r3
 
 DESCRIPTION="Wrapper script for Steam custom launch options"
 HOMEPAGE="https://github.com/sonic2kk/steamtinkerlaunch"
+LICENSE="GPL-3"
+SLOT="0"
+
 EGIT_REPO_URI="https://github.com/sonic2kk/${PN}.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
-
-LICENSE="GPL-3"
-SLOT="0"
 
 RDEPEND="
 	app-arch/unzip

@@ -29,7 +29,7 @@ S="${WORKDIR}"
 LICENSE="MIT"
 SDK_SLOT="$(ver_cut 1-2)"
 SLOT="0/${SDK_SLOT}"
-KEYWORDS="~amd64 ~arm ~arm64 -*"
+KEYWORDS="-* ~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
 RDEPEND="

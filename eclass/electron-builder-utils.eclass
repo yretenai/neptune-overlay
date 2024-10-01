@@ -36,6 +36,11 @@
 # @DESCRIPTION:
 # Set by eclass, list of src uris for the selecetd electron version.
 
+# @ECLASS_VARIABLE: ELECTRON_KEYWORDS
+# @DESCRIPTION:
+# Package Keywords that are at least valid for Electron
+
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-arch/unzip
@@ -46,14 +51,14 @@ if [[ ${ELECTRON_WVCUS} ]]; then
 	ELECTRON_SRC_URI="
 		amd64? ( https://github.com/castlabs/electron-releases/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-x64.zip )
 	"
-	ELECTRON_KEYWORDS="~amd64 -*"
+	ELECTRON_KEYWORDS="-* ~amd64"
 else
 	ELECTRON_SRC_URI="
 		amd64? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-x64.zip )
 		arm64? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-arm64.zip )
 		arm? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-armv7l.zip )
 	"
-	ELECTRON_KEYWORDS="~amd64 ~arm64 ~arm -*"
+	ELECTRON_KEYWORDS="-* ~amd64 ~arm ~arm64"
 fi
 
 SRC_URI="${ELECTRON_SRC_URI}"

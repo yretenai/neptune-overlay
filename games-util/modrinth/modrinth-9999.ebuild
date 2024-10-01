@@ -15,13 +15,6 @@ SRC_URI="
 	${CARGO_CRATE_URIS}
 "
 
-EGIT_REPO_URI="https://github.com/modrinth/code.git"
-
-if [[ ${PV} != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64"
-fi
-
 S_ROOT="${WORKDIR}/${P}"
 S="${S_ROOT}/apps/app"
 S_FRONTEND="${S_ROOT}/apps/app-frontend"
@@ -32,8 +25,15 @@ LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CC0-1.0 ISC MIT
 	MPL-2.0 Unicode-DFS-2016
 "
-
 SLOT="0"
+
+EGIT_REPO_URI="https://github.com/modrinth/code.git"
+
+if [[ ${PV} != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64"
+fi
+
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror test"
 

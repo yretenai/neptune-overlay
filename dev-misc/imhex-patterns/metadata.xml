@@ -2,7 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<bugs-to>https://github.com/WerWolv/ImHex-Patterns/issues</bugs-to>
 		<remote-id type="github">WerWolv/ImHex-Patterns</remote-id>
 	</upstream>
 </pkgmetadata>

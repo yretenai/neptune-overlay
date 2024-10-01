@@ -11,6 +11,8 @@ inherit distutils-r1 git-r3 cmake
 
 DESCRIPTION="Unsupervised text tokenizer for Neural Network-based text generation."
 HOMEPAGE="https://github.com/google/sentencepiece"
+LICENSE="Apache-2.0"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/google/sentencepiece.git"
 
@@ -19,8 +21,6 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="Apache-2.0"
-SLOT="0"
 IUSE="python"
 
 DEPEND+="
