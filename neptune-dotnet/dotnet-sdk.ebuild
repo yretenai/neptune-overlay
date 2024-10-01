@@ -49,7 +49,7 @@ src_install() {
 	insinto "${dest}"
 
 	# Create a magic workloads file, bug #841896
-	local featureband="$(( $(ver_cut 3) / 100 * 100 ))"       # e.g. 404 -> 400
+	local featureband="$(( $(ver_cut 3) / 100 * 100 ))" # e.g. 404 -> 400
 	local workloads="metadata/workloads/${SDK_SLOT}.${featureband}"
 
 	mkdir -p "${S}/${workloads}" || die
