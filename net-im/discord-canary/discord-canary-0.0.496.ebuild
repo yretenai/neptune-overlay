@@ -5,6 +5,9 @@ EAPI=8
 
 MY_PN="${PN/-bin/}"
 MY_PV="${PV/-r*/}"
+MY_BRANCH="${MY_PN/discord-/}"
+MY_PN_RAW="${MY_PN/-${MY_BRANCH}/}"
+MY_PN_UC="${MY_PN_RAW^}${MY_BRANCH^}"
 
 CHROMIUM_LANGS="
 	af am ar bg bn ca cs da de el en-GB en-US es es-419 et fa fi fil fr gu he hi
@@ -16,12 +19,12 @@ inherit chromium-2 desktop linux-info optfeature unpacker xdg
 
 DESCRIPTION="All-in-one voice and text chat for gamers"
 HOMEPAGE="https://discordapp.com"
-SRC_URI="https://dl.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
+SRC_URI="https://dl-${MY_BRANCH}.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
 
-S="${WORKDIR}/${MY_PN^}"
+S="${WORKDIR}/${MY_PN_UC}"
 LICENSE="all-rights-reserved"
 SLOT="0"
-KEYWORDS="-* amd64"
+KEYWORDS="amd64 -*"
 IUSE="appindicator +seccomp"
 RESTRICT="bindist mirror strip test"
 
@@ -62,7 +65,6 @@ DESTDIR="/opt/${MY_PN}"
 QA_PREBUILT="*"
 
 CONFIG_CHECK="~USER_NS"
-
 src_unpack() {
 	unpack ${MY_PN}-${MY_PV}.tar.gz
 }
@@ -81,15 +83,17 @@ src_prepare() {
 	chromium_remove_language_paks
 	popd >/dev/null || die "location reset for language cleanup failed"
 	# fix .desktop exec location
-	sed -i "/Exec/s:/usr/share/discord/Discord:${DESTDIR}/${MY_PN^}:" \
+	sed -i "/Exec/s:/usr/share/${MY_PN}/${MY_PN_UC}:${DESTDIR}/${MY_PN_UC}:" \
 		"${MY_PN}.desktop" ||
 		die "fixing of exec location on .desktop failed"
 	# USE seccomp
 	if ! use seccomp; then
-		sed -i '/Exec/s/Discord/Discord --disable-seccomp-filter-sandbox/' \
+		sed -i "/Exec/s/${MY_PN_UC}/${MY_PN_UC} --disable-seccomp-filter-sandbox/" \
 			"${MY_PN}.desktop" ||
 			die "sed failed for seccomp"
 	fi
+	# fix icon path
+	mv "${MY_PN_RAW}.png" "${MY_PN}.png"
 }
 
 src_install() {
@@ -100,7 +104,7 @@ src_install() {
 
 	exeinto "${DESTDIR}"
 
-	doexe "${MY_PN^}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
+	doexe "${MY_PN_UC}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
 
 	insinto "${DESTDIR}"
 	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin
@@ -116,11 +120,11 @@ src_install() {
 	# See #903616 and #890595
 	[[ -x chrome_crashpad_handler ]] && doins chrome_crashpad_handler
 
-	dosym "${DESTDIR}/${MY_PN^}" "/usr/bin/${MY_PN}"
+	dosym "${DESTDIR}/${MY_PN_UC}" "/usr/bin/${MY_PN}"
 
 	# https://bugs.gentoo.org/898912
 	if use appindicator; then
-		dosym ../../usr/lib64/libayatana-appindicator3.so /opt/discord/libappindicator3.so
+		dosym ../../usr/lib64/libayatana-appindicator3.so ${DESTDIR}/libappindicator3.so
 	fi
 }
 
