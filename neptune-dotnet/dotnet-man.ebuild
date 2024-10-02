@@ -12,7 +12,7 @@ SRC_URI="https://github.com/dotnet/sdk/archive/refs/tags/v${DOTNET_PV}.tar.gz ->
 S="${WORKDIR}/sdk-${PV}"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm ~arm64"
+KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="mirror"
 
 src_install() {
