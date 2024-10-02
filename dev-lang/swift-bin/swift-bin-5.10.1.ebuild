@@ -26,7 +26,7 @@ fi
 QA_PREBUILT="*"
 S="${WORKDIR}/${SWIFTDIR}"
 LICENSE="Apache-2.0"
-SLOT="0"
+SLOT="0/$(ver_cut 1)"
 KEYWORDS="-* ~amd64 ~arm64"
 IUSE="+plutil"
 RESTRICT="test bindist mirror strip"
