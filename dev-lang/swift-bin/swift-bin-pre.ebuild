@@ -13,8 +13,8 @@ HOMEPAGE="https://github.com/swiftlang/swift
 	https://www.swift.org/
 	https://developer.apple.com/swift/"
 SRC_URI="
-	amd64? ( https://download.swift.org/swift-6.0-branch/ubi9/${MY_PV}/${MY_PV}-ubi9.tar.gz )
-	arm64? ( https://download.swift.org/swift-6.0-branch/ubi9-aarch64/${MY_PV}/${MY_PV}-ubi9-aarch64.tar.gz )
+	amd64? ( https://download.swift.org/__BRANCH__/ubi9/${MY_PV}/${MY_PV}-ubi9.tar.gz )
+	arm64? ( https://download.swift.org/__BRANCH__/ubi9-aarch64/${MY_PV}/${MY_PV}-ubi9-aarch64.tar.gz )
 "
 
 SWIFTDIR="${MY_PV}-ubi9"
