@@ -32,10 +32,10 @@ src_unpack() {
 
 src_install() {
 	doicon "share/icons/hicolor/256x256@2/apps/${MY_PN}-app.png"
-	domenu "share/applications/${MY_PN}-app.desktop"
+	domenu "share/applications/${MY_PN}.desktop"
 
-	insinto "/usr/lib/yaak-app"
-	doins -r lib/yaak-app/*
+	insinto "/usr/lib/yaak"
+	doins -r lib/yaak/*
 
 	cd bin
 	dobin yaak-app yaaknode yaakprotoc
