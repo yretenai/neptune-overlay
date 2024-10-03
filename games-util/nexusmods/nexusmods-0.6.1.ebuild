@@ -759,10 +759,6 @@ src_unpack() {
 }
 
 src_configure() {
-	if use p7zip; then
-		sed -e "s|onLinux: () => \"7zz\",|onLinux: () => \"7z\",|" -i "src/ArchiveManagement/NexusMods.FileExtractor/Extractors/SevenZipExtractor.cs" || die "Can't patch 7zip usage"
-	fi
-
 	dotnet-pkg_src_configure
 }
 
