@@ -25,7 +25,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-IUSE="openblas clblast cuda hip vulkan tools debug"
+IUSE="clblast cuda hip vulkan tools debug"
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -54,7 +54,6 @@ RDEPEND="
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	clblast? ( sci-libs/clblast:=[cuda?] )
-	openblas? ( sci-libs/openblas:= )
 	vulkan? (
 		dev-util/vulkan-headers
 		media-libs/vulkan-loader
@@ -104,10 +103,6 @@ src_compile() {
 		addwrite /dev/kfd
 		addwrite /dev/dri
 		MAKEOPTS+=" LLAMA_HIPBLAS=1"
-	fi
-
-	if use openblas; then
-		MAKEOPTS+=" LLAMA_OPENBLAS=1"
 	fi
 
 	if use clblast; then
@@ -165,10 +160,6 @@ src_install() {
 
 	if use hip; then
 		doexe koboldcpp_hipblas.so
-	fi
-
-	if use openblas; then
-		doexe koboldcpp_openblas.so
 	fi
 
 	if use clblast; then
