@@ -24,6 +24,7 @@ avalonia.labs.panels@11.1.0
 avalonia.native@11.1.3
 avalonia.reactiveui@11.1.3
 avalonia.remote.protocol@11.0.0
+avalonia.remote.protocol@11.1.0
 avalonia.remote.protocol@11.1.3
 avalonia.skia@11.0.0
 avalonia.skia@11.1.0
@@ -34,6 +35,7 @@ avalonia.themes.simple@11.1.3
 avalonia.win32@11.1.3
 avalonia.x11@11.1.3
 avalonia@11.0.0
+avalonia@11.1.0
 avalonia@11.1.3
 avaloniaedit.textmate@11.1.0
 benchmarkdotnet.annotations@0.13.12
@@ -95,6 +97,10 @@ harfbuzzsharp.nativeassets.win32@7.3.0.2
 harfbuzzsharp@2.8.2.3
 harfbuzzsharp@7.3.0
 harfbuzzsharp@7.3.0.2
+hotchocolate.language.syntaxtree@13.9.12
+hotchocolate.transport.abstractions@13.9.12
+hotchocolate.transport.http@13.9.12
+hotchocolate.utilities@13.9.12
 htmlagilitypack@1.11.52
 humanizer.core.af@2.14.1
 humanizer.core.ar@2.14.1
@@ -246,6 +252,7 @@ microsoft.extensions.logging.eventsource@8.0.0
 microsoft.extensions.logging@2.0.0
 microsoft.extensions.logging@2.1.1
 microsoft.extensions.logging@8.0.0
+microsoft.extensions.objectpool@8.0.0
 microsoft.extensions.objectpool@8.0.6
 microsoft.extensions.objectpool@8.0.7
 microsoft.extensions.objectpool@8.0.8
@@ -298,9 +305,9 @@ newtonsoft.json@13.0.3
 newtonsoft.json@9.0.1
 nexusmods.archives.nx@0.5.0
 nexusmods.hashing.xxhash64@2.0.1
-nexusmods.mnemonicdb.abstractions@0.9.80
-nexusmods.mnemonicdb.sourcegenerator@0.9.80
-nexusmods.mnemonicdb@0.9.80
+nexusmods.mnemonicdb.abstractions@0.9.81
+nexusmods.mnemonicdb.sourcegenerator@0.9.81
+nexusmods.mnemonicdb@0.9.81
 nexusmods.paths.extensions.nx@0.10.0
 nexusmods.paths.testinghelpers@0.9.5
 nexusmods.paths@0.10.0
@@ -319,8 +326,8 @@ nuget.packaging@5.6.0
 nuget.protocol@5.6.0
 nuget.resolver@5.6.0
 nuget.versioning@5.6.0
-observablecollections.r3@2.2.0
-observablecollections@2.2.0
+observablecollections.r3@3.0.1
+observablecollections@3.0.1
 oneof.extended@2.1.125
 oneof@2.1.125
 oneof@3.0.271
@@ -337,6 +344,7 @@ polly.ratelimiting@8.4.1
 polly@8.4.1
 projektanker.icons.avalonia.materialdesign@9.3.0
 projektanker.icons.avalonia@9.3.0
+r3@1.0.0
 r3@1.2.8
 r3extensions.avalonia@1.2.8
 reactiveui.fody@19.5.41
@@ -418,6 +426,11 @@ splat@14.4.1
 splat@14.8.12
 splat@15.0.1
 splat@15.1.1
+strawberryshake.core@13.9.12
+strawberryshake.resources@13.9.12
+strawberryshake.server@13.9.12
+strawberryshake.transport.http@13.9.12
+strawberryshake.transport.websockets@13.9.12
 svg.custom@2.0.0
 svg.model@2.0.0
 svg.skia@2.0.0
@@ -512,6 +525,7 @@ system.memory@4.5.1
 system.memory@4.5.3
 system.memory@4.5.4
 system.memory@4.5.5
+system.net.http.json@8.0.0
 system.net.http@4.1.0
 system.net.http@4.3.0
 system.net.nameresolution@4.3.0
@@ -606,6 +620,7 @@ system.text.json@8.0.4
 system.text.regularexpressions@4.1.0
 system.text.regularexpressions@4.3.0
 system.threading.channels@7.0.0
+system.threading.channels@8.0.0
 system.threading.ratelimiting@8.0.0
 system.threading.tasks.dataflow@4.6.0
 system.threading.tasks.extensions@4.0.0
