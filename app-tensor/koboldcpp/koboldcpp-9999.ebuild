@@ -77,7 +77,6 @@ PATCHES="
 	${FILESDIR}/makefile.patch
 	${FILESDIR}/examples.patch
 	${FILESDIR}/gguf.patch
-	${FILESDIR}/lora-dir.patch
 "
 
 src_prepare() {
