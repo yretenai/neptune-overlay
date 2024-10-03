@@ -75,10 +75,9 @@ BDEPEND="
 "
 
 PATCHES="
-	${FILESDIR}/makefile.patch
+	${FILESDIR}/makefile-${PV}.patch
 	${FILESDIR}/examples.patch
 	${FILESDIR}/gguf.patch
-	${FILESDIR}/lora-dir.patch
 "
 
 src_prepare() {

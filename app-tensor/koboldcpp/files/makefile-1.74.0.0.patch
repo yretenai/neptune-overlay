@@ -1,28 +1,28 @@
 diff --git a/Makefile b/Makefile
-index 97eb9b63..2d724e01 100644
+index 7b117eca..3fd7eb17 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -2,7 +2,7 @@
  -include $(abspath $(lastword ${MAKEFILE_LIST})).local
  
- default: koboldcpp_default koboldcpp_failsafe koboldcpp_noavx2 koboldcpp_clblast koboldcpp_clblast_noavx2 koboldcpp_cublas koboldcpp_hipblas koboldcpp_vulkan koboldcpp_vulkan_noavx2
+ default: koboldcpp_default koboldcpp_failsafe koboldcpp_openblas koboldcpp_noavx2 koboldcpp_clblast koboldcpp_clblast_noavx2 koboldcpp_cublas koboldcpp_hipblas koboldcpp_vulkan koboldcpp_vulkan_noavx2
 -tools: quantize_gpt2 quantize_gptj quantize_gguf quantize_neox quantize_mpt quantize_clip whispermain sdmain gguf-split llama-bench perplexity 
 +tools: quantize_gpt2 quantize_gptj quantize_gguf quantize_neox quantize_mpt quantize_clip whispermain sdmain gguf-split export_lora
  dev: koboldcpp_openblas
  dev2: koboldcpp_clblast
  dev3: koboldcpp_vulkan
 @@ -51,8 +51,8 @@ endif
- CFLAGS   += -I. -Iggml/include -Iggml/src -Iinclude -Isrc -I./include -I./include/CL -I./otherarch -I./otherarch/tools -I./otherarch/sdcpp -I./otherarch/sdcpp/thirdparty -I./include/vulkan -O3 -fno-finite-math-only -std=c11 -fPIC -DLOG_DISABLE_LOGS -D_GNU_SOURCE
- CXXFLAGS += -I. -Iggml/include -Iggml/src -Iinclude -Isrc -I./common -I./include -I./include/CL -I./otherarch -I./otherarch/tools -I./otherarch/sdcpp -I./otherarch/sdcpp/thirdparty -I./include/vulkan -O3 -fno-finite-math-only -std=c++11 -fPIC -DLOG_DISABLE_LOGS -D_GNU_SOURCE
+ CFLAGS   += -I. -Iggml/include -Iggml/src -Iinclude -Isrc -I./include -I./include/CL -I./otherarch -I./otherarch/tools -I./otherarch/sdcpp -I./otherarch/sdcpp/thirdparty -I./include/vulkan -O3 -fno-finite-math-only -std=c11 -fPIC -DLOG_DISABLE_LOGS -D_GNU_SOURCE -DGGML_USE_LLAMAFILE
+ CXXFLAGS += -I. -Iggml/include -Iggml/src -Iinclude -Isrc -I./common -I./include -I./include/CL -I./otherarch -I./otherarch/tools -I./otherarch/sdcpp -I./otherarch/sdcpp/thirdparty -I./include/vulkan -O3 -fno-finite-math-only -std=c++11 -fPIC -DLOG_DISABLE_LOGS -D_GNU_SOURCE -DGGML_USE_LLAMAFILE
  ifndef KCPP_DEBUG
 -	CFLAGS += -DNDEBUG -s
 -	CXXFLAGS += -DNDEBUG -s
 +	CFLAGS += -DNDEBUG
 +	CXXFLAGS += -DNDEBUG
  endif
- ifdef LLAMA_NO_LLAMAFILE
- GGML_NO_LLAMAFILE := 1
-@@ -697,10 +697,12 @@ quantize_mpt: otherarch/tools/mpt_quantize.cpp otherarch/tools/common-ggml.cpp g
+ 
+ #lets try enabling everything
+@@ -716,10 +716,12 @@ quantize_mpt: otherarch/tools/mpt_quantize.cpp otherarch/tools/common-ggml.cpp g
  	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
  quantize_clip: examples/llava/clip.cpp examples/llava/clip.h examples/llava/quantclip.cpp ggml_v3.o ggml.o llama.o ggml-backend_default.o $(OBJS_FULL)
  	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
@@ -31,7 +31,7 @@ index 97eb9b63..2d724e01 100644
  	$(CXX) $(CXXFLAGS) $(filter-out %.h,$^) -o $@ $(LDFLAGS) $(HIPLDFLAGS)
  llama-bench: examples/llama-bench/llama-bench.cpp build-info.h ggml_cublas.o ggml_v2_cublas.o ggml_v1.o expose.o common.o gpttype_adapter_cublas.o k_quants.o ggml-alloc.o $(CUBLAS_OBJS) $(HIP_OBJS) $(OBJS)
  	$(CXX) $(CXXFLAGS) $(filter-out %.h,$^) -o $@ $(LDFLAGS) $(HIPLDFLAGS)
-+export_lora: examples/export-lora/export-lora.cpp common/json-schema-to-grammar.cpp common/arg.cpp ggml_v3.o ggml.o llama.o llavaclip_default.o llava.o ggml-backend_default.o $(OBJS_FULL)
++export_lora: examples/export-lora/export-lora.cpp ggml.o llama.o llavaclip_default.o llava.o ggml-backend_default.o $(OBJS_FULL)
 +	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
  
  #window simple clinfo
