@@ -732,7 +732,7 @@ RDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-use-system-7z.patch"
+	"${FILESDIR}/use-system-7z.patch"
 )
 
 DOTNET_PKG_PROJECTS=(
