@@ -45,12 +45,8 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-D CMAKE_BUILD_TYPE="Release" \
-		-D CMAKE_C_COMPILER_LAUNCHER=ccache \
-		-D CMAKE_CXX_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_C_FLAGS="-fuse-ld=lld ${CFLAGS}" \
 		-D CMAKE_CXX_FLAGS="-fuse-ld=lld ${CXXFLAGS}" \
-		-D CMAKE_OBJC_COMPILER_LAUNCHER=ccache \
-		-D CMAKE_OBJCXX_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_SKIP_RPATH=ON \
 		-D LIBPL_SHARED_LIBRARY=ON \
 		-D LIBPL_ENABLE_TESTS=OFF \
