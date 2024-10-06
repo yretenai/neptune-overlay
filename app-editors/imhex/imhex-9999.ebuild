@@ -62,7 +62,6 @@ BDEPEND="
 	app-admin/chrpath
 	gnome-base/librsvg
 	sys-devel/lld
-	dev-util/ccache
 	${DOTNET_PKG_BDEPS}
 "
 
@@ -102,12 +101,8 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-D CMAKE_BUILD_TYPE="Release" \
-		-D CMAKE_C_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_C_FLAGS="-fuse-ld=lld ${CFLAGS}" \
-		-D CMAKE_CXX_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_CXX_FLAGS="-fuse-ld=lld ${CXXFLAGS}" \
-		-D CMAKE_OBJC_COMPILER_LAUNCHER=ccache \
-		-D CMAKE_OBJCXX_COMPILER_LAUNCHER=ccache \
 		-D CMAKE_SKIP_RPATH=ON \
 		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
