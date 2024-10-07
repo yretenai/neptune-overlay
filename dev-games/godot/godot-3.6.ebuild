@@ -15,7 +15,7 @@ LICENSE="
 	Apache-2.0 BSD Boost-1.0 CC0-1.0 Unlicense ZLIB
 	gui? ( CC-BY-4.0 ) tools? ( BitstreamVera OFL-1.1 )
 "
-SLOT="3"
+SLOT="${PV}"
 EGIT_REPO_URI="https://github.com/godotengine/godot.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="${PV}-stable"
@@ -75,7 +75,6 @@ BDEPEND="virtual/pkgconfig"
 PATCHES=(
 	"${FILESDIR}"/${PN}-${PV}-musl.patch
 	"${FILESDIR}"/${PN}-${PV}-scons.patch
-	"${FILESDIR}"/${PN}-${PV}-gcc13.patch
 )
 
 src_prepare() {
@@ -162,8 +161,8 @@ src_compile() {
 
 		# let *FLAGS handle these, e.g. can pass -flto as-is
 		debug_symbols=no
+		lto=none
 		optimize=none
-		use_lto=no
 		use_static_cpp=no
 	)
 
@@ -215,7 +214,4 @@ src_install() {
 	newbashcomp misc/dist/shell/godot.bash-completion ${s}
 	newfishcomp misc/dist/shell/godot.fish ${s}.fish
 	newzshcomp misc/dist/shell/_godot.zsh-completion _${s}
-	
-	sed -e "s/app_id = \"org.godotengine.[^\"]+/&${SLOT}/" \
-		-i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 }

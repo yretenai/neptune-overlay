@@ -15,7 +15,7 @@ LICENSE="
 	Apache-2.0 BSD Boost-1.0 CC0-1.0 Unlicense ZLIB
 	gui? ( CC-BY-4.0 ) tools? ( OFL-1.1 )
 "
-SLOT="4"
+SLOT="${PV}"
 EGIT_REPO_URI="https://github.com/godotengine/godot.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="${PV}-stable"
@@ -104,6 +104,9 @@ src_prepare() {
 		-i misc/dist/shell/{godot.bash-completion,godot.fish,_godot.zsh-completion} || die
 
 	sed -i "s|pkg-config |$(tc-getPKG_CONFIG) |" platform/linuxbsd/detect.py || die
+	sed -e "s/app_id = \"org.godotengine.Editor\"/app_id = \"org.godotengine.Editor${SLOT}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
+	sed -e "s/app_id = \"org.godotengine.ProjectManager\"/app_id = \"org.godotengine.ProjectManager${SLOT}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
+	sed -e "s/app_id = \"org.godotengine.Godot\"/app_id = \"org.godotengine.Godot${SLOT}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 
 	# use of builtin_ switches can be messy (see below), delete to be sure
 	local unbundle=(
@@ -250,7 +253,4 @@ src_install() {
 	newbashcomp misc/dist/shell/godot.bash-completion ${s}
 	newfishcomp misc/dist/shell/godot.fish ${s}.fish
 	newzshcomp misc/dist/shell/_godot.zsh-completion _${s}
-	
-	sed -e "s/app_id = \"org.godotengine.[^\"]+/&${SLOT}/" \
-		-i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 }
