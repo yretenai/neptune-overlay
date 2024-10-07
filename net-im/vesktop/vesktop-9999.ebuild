@@ -18,7 +18,7 @@ HOMEPAGE="https://github.com/Vencord
 EGIT_REPO_URI="https://github.com/Vencord/Vesktop.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="${ELECTRON_KEYWORDS}"
+	KEYWORDS="-* ~amd64 ~arm64"
 fi
 
 LICENSE="GPL-3"
@@ -31,6 +31,8 @@ RESTRICT="network-sandbox mirror strip test"
 RDEPEND="
 	x11-libs/libnotify
 	x11-misc/xdg-utils
+	media-libs/libpulse
+	media-video/pipewire
 	appindicator? ( dev-libs/libayatana-appindicator )
 "
 
@@ -79,6 +81,14 @@ src_install() {
 	insinto "${DESTDIR}"
 	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json
 	insopts -m0755
+
+	# todo: build this manually.
+	if [[ "$ARCH" == "amd64" ]]; then
+		rm -rfv "resources/app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/"
+	elif [[ "$ARCH" == "arm64" ]]; then
+		rm -rfv "resources/app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/"
+	fi
+
 	doins -r locales resources
 
 	fowners root "${DESTDIR}/chrome-sandbox"
