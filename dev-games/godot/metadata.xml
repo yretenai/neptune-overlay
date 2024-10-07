@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="deprecated">Enable support for deprecated features</flag>
+		<flag name="raycast">Enable the raycast Editor module using <pkg>media-libs/embree</pkg></flag>
+		<flag name="runner">Build an additional binary optimized for running games (only relevant with USE=tools)</flag>
+		<flag name="tools">Enable the Godot Editor for game development</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">godotengine/godot</remote-id>
+	</upstream>
+</pkgmetadata>
