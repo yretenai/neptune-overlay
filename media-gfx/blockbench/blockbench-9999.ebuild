@@ -42,6 +42,7 @@ BDEPEND="
 "
 
 DESTDIR="/opt/${PN}"
+QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
 
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0

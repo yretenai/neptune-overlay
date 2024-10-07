@@ -57,6 +57,7 @@ BDEPEND="
 "
 
 DESTDIR="/opt/${PN}"
+QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
 RESTRICT="network-sandbox mirror strip test"
 
 src_configure() {

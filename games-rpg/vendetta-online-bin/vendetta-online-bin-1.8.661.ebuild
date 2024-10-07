@@ -60,11 +60,11 @@ src_prepare() {
 }
 
 src_install() {
-	local dir=/opt/${PN}
+	local dir="/opt/${PN}"
 
-	insinto ${dir}
+	insinto "${dir}"
 	doins -r *
-	fperms +x ${dir}/{vendetta,install/{update.rlb,vendetta}}
+	fperms +x "${dir}/"{vendetta,install/{update.rlb,vendetta}}
 
 	sed \
 		-e "s:DATADIR:${dir}:" \

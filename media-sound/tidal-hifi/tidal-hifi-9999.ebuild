@@ -64,6 +64,7 @@ BDEPEND="
 "
 
 DESTDIR="/opt/${PN}"
+QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
 
 src_prepare() {
 	default
