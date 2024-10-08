@@ -18,6 +18,7 @@ EGIT_SUBMODULES=(
 	"externals/sdl3"
 	"externals/fmt"
 	"externals/sirit"
+	"externals/discord-rpc"
 )
 
 if [[ ${PV} != *9999* ]]; then
