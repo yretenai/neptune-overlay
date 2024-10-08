@@ -15,7 +15,7 @@ HOMEPAGE="
 	https://www.blender.org
 "
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
-SLOT="${PV%.*}"
+SLOT="$(ver_cut 1-2)"
 
 EGIT_REPO_URI="https://github.com/dillongoostudios/goo-engine.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"

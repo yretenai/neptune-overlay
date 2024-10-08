@@ -21,7 +21,7 @@ inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 too
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
-SLOT="${PV%.*}"
+SLOT="$(ver_cut 1-2)"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
