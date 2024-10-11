@@ -75,7 +75,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/install.patch"
-	"${FILESDIR}/datadir.patch"
 )
 
 src_prepare() {
