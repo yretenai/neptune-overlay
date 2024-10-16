@@ -54,6 +54,7 @@ DEPEND="
 	media-sound/sndio
 	virtual/jack
 	media-libs/openal
+	dev-libs/half
 	>=dev-libs/zydis-5.0.0[clang?]
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
@@ -75,6 +76,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/install.patch"
+	"${FILESDIR}/half.patch"
 )
 
 src_prepare() {
