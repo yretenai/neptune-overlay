@@ -1,1 +1,1 @@
-blender-9999.ebuild
+blender-4.2.3.ebuild

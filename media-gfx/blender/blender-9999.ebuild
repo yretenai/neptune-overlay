@@ -12,7 +12,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..12} )
+PYTHON_COMPAT=( python3_13 )
 LLVM_COMPAT=( 18 )
 EGIT_LFS="yes"
 ROCM_VERSION="5.7.1"
@@ -488,12 +488,12 @@ pkg_postinst() {
 		ewarn
 	fi
 
-	if ! use python_single_target_python3_11; then
+	if ! use python_single_target_python3_13; then
 		ewarn
 		ewarn "You are building Blender with a newer python version than"
 		ewarn "supported by this version upstream."
 		ewarn "If you experience breakages with e.g. plugins, please switch to"
-		ewarn "python_single_target_python3_11 instead."
+		ewarn "python_single_target_python3_13 instead."
 		ewarn "Bug: https://bugs.gentoo.org/737388"
 		ewarn
 	fi
