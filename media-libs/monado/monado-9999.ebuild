@@ -12,16 +12,16 @@ LICENSE="Boost-1.0"
 SLOT="0"
 
 IUSE="doc test bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X
-monado_driver_arduino monado_driver_daydream monado_driver_euroc monado_driver_twrap monado_driver_hdk
-monado_driver_hydra monado_driver_ns monado_driver_opengloves monado_driver_psmv monado_driver_pssense
-monado_driver_psvr monado_driver_qwerty monado_driver_remote monado_driver_rift monado_driver_rokid
-monado_driver_steamvr monado_driver_vf monado_driver_vive monado_driver_wmr monado_driver_xreal
-monado_driver_simulavr
+monado_drivers_arduino monado_drivers_daydream monado_drivers_euroc monado_drivers_twrap monado_drivers_hdk
+monado_drivers_hydra monado_drivers_ns monado_drivers_opengloves monado_drivers_psmv monado_drivers_pssense
+monado_drivers_psvr monado_drivers_qwerty monado_drivers_remote monado_drivers_rift monado_drivers_rokid
+monado_drivers_steamvr monado_drivers_vf monado_drivers_vive monado_drivers_wmr monado_drivers_xreal
+monado_drivers_simulavr
 "
 
-# monado_driver_depthai monado_driver_handtracking monado_driver_illixr
-# monado_driver_openhmd monado_driver_realsense monado_driver_survive
-# monado_driver_ulv2 monado_driver_ulv5
+# monado_drivers_depthai monado_drivers_handtracking monado_drivers_illixr
+# monado_drivers_openhmd monado_drivers_realsense monado_drivers_survive
+# monado_drivers_ulv2 monado_drivers_ulv5
 
 DEPEND="
 	media-libs/openxr-loader
@@ -68,15 +68,15 @@ BDEPEND="
 "
 
 REQUIRED_USE="
-	monado_driver_arduino? ( dbus )
-	monado_driver_daydream? ( dbus )
-	monado_driver_euroc? ( opencv )
-	monado_driver_opengloves? ( bluetooth )
-	monado_driver_psvr? ( hid )
-	monado_driver_qwerty? ( sdl )
-	monado_driver_steamvr? ( steam monado_driver_vive )
-	monado_driver_vf? ( gstreamer )
-	monado_driver_vive? ( zlib )
+	monado_drivers_arduino? ( dbus )
+	monado_drivers_daydream? ( dbus )
+	monado_drivers_euroc? ( opencv )
+	monado_drivers_opengloves? ( bluetooth )
+	monado_drivers_psvr? ( hid )
+	monado_drivers_qwerty? ( sdl )
+	monado_drivers_steamvr? ( steam monado_drivers_vive )
+	monado_drivers_vf? ( gstreamer )
+	monado_drivers_vive? ( zlib )
 "
 RESTRICT="
 	!test? ( test )
@@ -119,35 +119,35 @@ src_configure() {
 		-DXRT_HAVE_TRACY=OFF # todo
 
 		-DXRT_BUILD_DRIVER_ANDROID=OFF
-		-DXRT_BUILD_DRIVER_ARDUINO=$(usex monado_driver_arduino)
-		-DXRT_BUILD_DRIVER_DAYDREAM=$(usex monado_driver_daydream)
+		-DXRT_BUILD_DRIVER_ARDUINO=$(usex monado_drivers_arduino)
+		-DXRT_BUILD_DRIVER_DAYDREAM=$(usex monado_drivers_daydream)
 		-DXRT_BUILD_DRIVER_DEPTHAI=OFF # todo: DepthAI
-		-DXRT_BUILD_DRIVER_EUROC=$(usex monado_driver_euroc)
+		-DXRT_BUILD_DRIVER_EUROC=$(usex monado_drivers_euroc)
 		-DXRT_BUILD_DRIVER_HANDTRACKING=OFF # todo: ONNXRuntime
-		-DXRT_BUILD_DRIVER_HDK=$(usex monado_driver_hdk)
-		-DXRT_BUILD_DRIVER_HYDRA=$(usex monado_driver_hydra)
+		-DXRT_BUILD_DRIVER_HDK=$(usex monado_drivers_hdk)
+		-DXRT_BUILD_DRIVER_HYDRA=$(usex monado_drivers_hydra)
 		-DXRT_BUILD_DRIVER_ILLIXR=OFF # todo: ILLIXR
-		-DXRT_BUILD_DRIVER_NS=$(usex monado_driver_ns)
+		-DXRT_BUILD_DRIVER_NS=$(usex monado_drivers_ns)
 		-DXRT_BUILD_DRIVER_OHMD=OFF # todo: OpenHMD
-		-DXRT_BUILD_DRIVER_OPENGLOVES=$(usex monado_driver_opengloves)
-		-DXRT_BUILD_DRIVER_PSMV=$(usex monado_driver_psmv)
-		-DXRT_BUILD_DRIVER_PSSENSE=$(usex monado_driver_pssense)
-		-DXRT_BUILD_DRIVER_PSVR=$(usex monado_driver_psvr)
-		-DXRT_BUILD_DRIVER_QWERTY=$(usex monado_driver_qwerty)
+		-DXRT_BUILD_DRIVER_OPENGLOVES=$(usex monado_drivers_opengloves)
+		-DXRT_BUILD_DRIVER_PSMV=$(usex monado_drivers_psmv)
+		-DXRT_BUILD_DRIVER_PSSENSE=$(usex monado_drivers_pssense)
+		-DXRT_BUILD_DRIVER_PSVR=$(usex monado_drivers_psvr)
+		-DXRT_BUILD_DRIVER_QWERTY=$(usex monado_drivers_qwerty)
 		-DXRT_BUILD_DRIVER_REALSENSE=OFF # todo: RealSense SDK
-		-DXRT_BUILD_DRIVER_REMOTE=$(usex monado_driver_remote)
-		-DXRT_BUILD_DRIVER_RIFT_S=$(usex monado_driver_rift)
-		-DXRT_BUILD_DRIVER_ROKID=$(usex monado_driver_rokid)
-		-DXRT_BUILD_DRIVER_SIMULAVR=$(usex monado_driver_simulavr)
-		-DXRT_BUILD_DRIVER_STEAMVR_LIGHTHOUSE=$(usex monado_driver_steamvr)
+		-DXRT_BUILD_DRIVER_REMOTE=$(usex monado_drivers_remote)
+		-DXRT_BUILD_DRIVER_RIFT_S=$(usex monado_drivers_rift)
+		-DXRT_BUILD_DRIVER_ROKID=$(usex monado_drivers_rokid)
+		-DXRT_BUILD_DRIVER_SIMULAVR=$(usex monado_drivers_simulavr)
+		-DXRT_BUILD_DRIVER_STEAMVR_LIGHTHOUSE=$(usex monado_drivers_steamvr)
 		-DXRT_BUILD_DRIVER_SURVIVE=OFF # todo: survive
-		-DXRT_BUILD_DRIVER_TWRAP=$(usex monado_driver_twrap)
+		-DXRT_BUILD_DRIVER_TWRAP=$(usex monado_drivers_twrap)
 		-DXRT_BUILD_DRIVER_ULV2=OFF # todo: LeapV2 SDK
 		-DXRT_BUILD_DRIVER_ULV5=OFF # todo: LeapV5 SDK
-		-DXRT_BUILD_DRIVER_VF=$(usex monado_driver_vf)
-		-DXRT_BUILD_DRIVER_VIVE=$(usex monado_driver_vive)
-		-DXRT_BUILD_DRIVER_WMR=$(usex monado_driver_wmr)
-		-DXRT_BUILD_DRIVER_XREAL_AIR=$(usex monado_driver_xreal)
+		-DXRT_BUILD_DRIVER_VF=$(usex monado_drivers_vf)
+		-DXRT_BUILD_DRIVER_VIVE=$(usex monado_drivers_vive)
+		-DXRT_BUILD_DRIVER_WMR=$(usex monado_drivers_wmr)
+		-DXRT_BUILD_DRIVER_XREAL_AIR=$(usex monado_drivers_xreal)
 
 		-DXRT_INSTALL_SYSTEMD_UNIT_FILES=$(usex systemd)
 
