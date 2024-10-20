@@ -26,8 +26,8 @@ SRC_URI="
 	https://github.com/dcleblanc/SafeInt/archive/${SAFEINT_COMMIT}.tar.gz -> SafeInt-${SAFEINT_COMMIT:0:10}.tar.gz
 	https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_PV}.tar.gz -> flatbuffers-${FLATBUFFERS_PV}.tar.gz
 	https://github.com/HowardHinnant/date/archive/v${DATE_PV}.tar.gz -> hhdate-${DATE_PV}.tar.gz
-	https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.gz -> eigen-${EIGEN_PV}.tar.gz
+	composable_kernel? ( https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz )
 "
 
 LICENSE="MIT"
@@ -41,8 +41,6 @@ ${AMDGPU_TARGETS_COMPAT[@]/#/amdgpu_targets_}"
 RESTRICT="mirror test"
 REQUIRED_USE="
 	cuda? ( cudnn !lto )
-	hip? ( composable_kernel )
-	|| ( cudnn composable_kernel onednn tensorrt )
 "
 RDEPEND="
 	dev-libs/protobuf:=
@@ -299,6 +297,8 @@ src_configure() {
 		mycmakeargs+=(
 			-DCMAKE_HIP_COMPILER="$(get_llvm_prefix)/bin/clang++"
 			-DCMAKE_HIP_ARCHITECTURES="$(get_amdgpu_flags)"
+			-DHCC_AMDGPU_TARGET="$(get_amdgpu_flags)"
+			-Donnxruntime_HCC_AMDGPU_TARGET="$(get_amdgpu_flags)"
 		)
 	fi
 
