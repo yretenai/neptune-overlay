@@ -34,6 +34,7 @@ DEPEND="
 	media-libs/libv4l
 	dev-libs/libbsd
 	dev-libs/cJSON
+	media-libs/basalt-xr
 	wayland? (
 		dev-libs/wayland
 		dev-libs/wayland-protocols

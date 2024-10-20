@@ -1,0 +1,72 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0d85de0..f698c82 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -20,26 +20,6 @@ if(NOT EIGEN_ROOT)
+ endif()
+ 
+ string(TOLOWER "${PROJECT_NAME}" PROJECT_NAME_LOWERCASE)
+-find_program(DPKG_PROGRAM dpkg DOC "dpkg program of Debian-based systems")
+-if(DPKG_PROGRAM)
+-  execute_process(
+-    COMMAND ${DPKG_PROGRAM} --print-architecture
+-    OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
+-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+-endif(DPKG_PROGRAM)
+-
+-
+-find_program(LSB_RELEASE_PROGRAM lsb_release DOC "lsb_release program of Debian-based systems")
+-if(LSB_RELEASE_PROGRAM)
+-  execute_process(COMMAND ${LSB_RELEASE_PROGRAM} -rs
+-    OUTPUT_VARIABLE LSB_RELEASE_ID_SHORT
+-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-  if(${LSB_RELEASE_ID_SHORT} EQUAL "22.04")
+-    set(DEBIAN_DEPENDS "libtbb12, liblz4-1, libbz2-1.0, libboost-filesystem1.74.0, libboost-date-time1.74.0, libboost-program-options1.74.0, libboost-regex1.74.0, libopencv-dev, libglew2.2, libjpeg8, libpng16-16, libuvc0, libfmt8, libc++-14-dev, libc++1-14, libc++abi1-14, libunwind-14, libunwind-14-dev, libwayland-bin, libepoxy-dev")
+-  endif()
+-
+-endif(LSB_RELEASE_PROGRAM)
+ 
+ string(TIMESTAMP PROJECT_VERSION_REVISION "%Y%m%d%H%M")
+ 
+@@ -64,22 +44,6 @@ set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME_LOWERCASE}_${CPACK_PACKAGE_VERSION_M
+ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+ include(CPack)
+ 
+-# Configure CCache if available
+-if (NOT CMAKE_C_COMPILER_LAUNCHER AND NOT CMAKE_CXX_COMPILER_LAUNCHER)
+-  find_program(CCACHE_PROGRAM ccache)
+-  if(CCACHE_PROGRAM)
+-    message(STATUS "Found ccache: ${CCACHE_PROGRAM}")
+-    set(CMAKE_C_COMPILER_LAUNCHER   ${CCACHE_PROGRAM})
+-    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+-  else()
+-    message(STATUS "Dind't find ccache")
+-  endif()
+-else()
+-  message(STATUS "Compiler launcher already set. Not configuring ccache.")
+-  message(STATUS "CMAKE_C_COMPILER_LAUNCHER: ${CMAKE_C_COMPILER_LAUNCHER}")
+-  message(STATUS "CMAKE_CXX_COMPILER_LAUNCHER: ${CMAKE_CXX_COMPILER_LAUNCHER}")
+-endif()
+-
+ if( NOT CMAKE_BUILD_TYPE )
+   set( CMAKE_BUILD_TYPE Release)
+ endif()
+@@ -116,17 +80,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+ set(CMAKE_CXX_FLAGS_CIDEBUG  "-O0 -DEIGEN_INITIALIZE_MATRICES_BY_NAN")          # CI version with no debug symbols
+ set(CMAKE_CXX_FLAGS_CIRELWITHDEBINFO "-O3 -DEIGEN_INITIALIZE_MATRICES_BY_NAN")  # CI version with no debug symbols
+ 
+-# Limit number of jobs.
+-# As of now, Basalt compilation requires >16gb if you want to use >6 jobs.
+-execute_process(
+-  COMMAND bash -c "grep -m1 -oP 'MemAvailable:\\s+\\K[0-9]+' /proc/meminfo"
+-  OUTPUT_VARIABLE TOTAL_MEMORY
+-  OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
+-if (TOTAL_MEMORY LESS 16000000)
+-  set(CMAKE_BUILD_PARALLEL_LEVEL 6 CACHE STRING "Number of parallel build processes")
+-endif()
+-
+ # base set of compile flags
+ set(BASALT_CXX_FLAGS "-Wall -Wextra -Wno-error=unused-parameter -ftemplate-backtrace-limit=0")
+ 

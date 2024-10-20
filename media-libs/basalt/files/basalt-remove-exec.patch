@@ -1,0 +1,64 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7919d7a..9b4b745 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,35 +9,6 @@ if(NOT EIGEN_ROOT)
+ endif()
+ 
+ string(TOLOWER "${PROJECT_NAME}" PROJECT_NAME_LOWERCASE)
+-find_program(DPKG_PROGRAM dpkg DOC "dpkg program of Debian-based systems")
+-if(DPKG_PROGRAM)
+-  execute_process(
+-    COMMAND ${DPKG_PROGRAM} --print-architecture
+-    OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
+-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+-endif(DPKG_PROGRAM)
+-
+-
+-find_program(LSB_RELEASE_PROGRAM lsb_release DOC "lsb_release program of Debian-based systems")
+-if(LSB_RELEASE_PROGRAM)
+-  execute_process(COMMAND ${LSB_RELEASE_PROGRAM} -rs
+-    OUTPUT_VARIABLE LSB_RELEASE_ID_SHORT
+-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-  if(${LSB_RELEASE_ID_SHORT} EQUAL "22.04")
+-    set(DEBIAN_DEPENDS "libtbb12, liblz4-1, libbz2-1.0, libfmt8, libboost-filesystem1.74.0, libboost-date-time1.74.0, libboost-program-options1.74.0, libboost-regex1.74.0, libopencv-dev, libglew2.2, libjpeg8, libpng16-16, librealsense2, librealsense2-dkms, librealsense2-gl, librealsense2-utils")
+-
+-  elseif(${LSB_RELEASE_ID_SHORT} EQUAL "20.04")
+-    set(DEBIAN_DEPENDS "libtbb2, liblz4-1, libbz2-1.0, libboost-filesystem1.71.0, libboost-date-time1.71.0, libboost-program-options1.71.0, libboost-regex1.71.0, libopencv-dev, libglew2.1, libjpeg8, libpng16-16, librealsense2, librealsense2-dkms, librealsense2-gl, librealsense2-utils")
+-
+-  elseif(${LSB_RELEASE_ID_SHORT} EQUAL "18.04")
+-    set(DEBIAN_DEPENDS "libtbb2, liblz4-1, libbz2-1.0, libboost-filesystem1.65.1, libboost-date-time1.65.1, libboost-program-options1.65.1, libboost-regex1.65.1, libopencv-dev, libglew2.0, libjpeg8, libpng16-16, librealsense2, librealsense2-dkms, librealsense2-gl, librealsense2-utils")
+-
+-  elseif(${LSB_RELEASE_ID_SHORT} EQUAL "16.04")
+-    set(DEBIAN_DEPENDS "libtbb2, liblz4-1, libbz2-1.0, libboost-filesystem1.58.0, libboost-date-time1.58.0, libboost-program-options1.58.0, libboost-regex1.58.0, libopencv-dev, libglew1.13, libjpeg8, libpng12-0, libstdc++6, librealsense2, librealsense2-dkms, librealsense2-gl, librealsense2-utils")
+-  endif()
+-
+-endif(LSB_RELEASE_PROGRAM)
+ 
+ string(TIMESTAMP PROJECT_VERSION_REVISION "%Y%m%d%H%M")
+ 
+@@ -51,23 +22,6 @@ set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME_LOWERCASE}_${CPACK_PACKAGE_VERSION_M
+ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+ include(CPack)
+ 
+-
+-# Configure CCache if available
+-if (NOT CMAKE_C_COMPILER_LAUNCHER AND NOT CMAKE_CXX_COMPILER_LAUNCHER)
+-  find_program(CCACHE_PROGRAM ccache)
+-  if(CCACHE_PROGRAM)
+-    message(STATUS "Found ccache: ${CCACHE_PROGRAM}")
+-    set(CMAKE_C_COMPILER_LAUNCHER   ${CCACHE_PROGRAM})
+-    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+-  else()
+-    message(STATUS "Dind't find ccache")
+-  endif()
+-else()
+-  message(STATUS "Compiler launcher already set. Not configuring ccache.")
+-  message(STATUS "CMAKE_C_COMPILER_LAUNCHER: ${CMAKE_C_COMPILER_LAUNCHER}")
+-  message(STATUS "CMAKE_CXX_COMPILER_LAUNCHER: ${CMAKE_CXX_COMPILER_LAUNCHER}")
+-endif()
+-
+ if( NOT CMAKE_BUILD_TYPE )
+   set( CMAKE_BUILD_TYPE Release)
+ endif()
