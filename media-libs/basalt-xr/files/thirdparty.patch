@@ -1,0 +1,217 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0d85de0..a5ebb3c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,6 +19,14 @@ if(NOT EIGEN_ROOT)
+   set(EIGEN_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/basalt-headers/thirdparty/eigen")
+ endif()
+ 
++find_package(PkgConfig)
++find_package(Eigen3 CONFIG REQUIRED)
++find_package(nlohmann_json CONFIG REQUIRED)
++pkg_check_modules(CLI11 REQUIRED CLI11)
++find_package(magic_enum REQUIRED)
++find_package(Pangolin REQUIRED)
++find_package(opengv REQUIRED)
++
+ string(TOLOWER "${PROJECT_NAME}" PROJECT_NAME_LOWERCASE)
+ find_program(DPKG_PROGRAM dpkg DOC "dpkg program of Debian-based systems")
+ if(DPKG_PROGRAM)
+@@ -315,19 +323,14 @@ message(STATUS "Found {fmt} ${fmt_VERSION} in: ${fmt_DIR}")
+ 
+ add_subdirectory(thirdparty)
+ 
++add_library(basalt::cli11 INTERFACE IMPORTED)
++set_property(TARGET basalt::cli11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CLI11_INCLUDE_DIRS})
++
+ # custom scoped vit target: https://gitlab.freedesktop.org/monado/utilities/vit/
+ add_library(basalt::vit INTERFACE IMPORTED)
+ set_property(TARGET basalt::vit PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/vit)
+ target_sources(basalt::vit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/vit/vit_implementation_helper.cpp)
+ 
+-# custom scoped cli11 target
+-add_library(basalt::cli11 INTERFACE IMPORTED)
+-set_property(TARGET basalt::cli11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/CLI11/include)
+-
+-# custom scoped magic_enum target
+-add_library(basalt::magic_enum INTERFACE IMPORTED)
+-set_property(TARGET basalt::magic_enum PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/magic_enum/include)
+-
+ # main library
+ add_library(basalt_internal STATIC)
+ 
+@@ -412,8 +415,8 @@ target_sources(basalt_internal
+ )
+ 
+ target_link_libraries(basalt_internal
+-  PUBLIC ${STD_CXX_FS} basalt::opencv basalt::basalt-headers TBB::tbb pangolin basalt::cli11 basalt::vit basalt::magic_enum
+-  PRIVATE nlohmann::json fmt::fmt)
++  PUBLIC ${STD_CXX_FS} basalt::opencv basalt::basalt-headers TBB::tbb ${Pangolin_LIBRARIES} basalt::cli11 basalt::vit magic_enum::magic_enum
++  PRIVATE nlohmann_json::nlohmann_json fmt::fmt)
+ target_include_directories(basalt_internal PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+ target_compile_definitions(basalt_internal PUBLIC ${BASALT_COMPILE_DEFINITIONS})
+ #target_compile_definitions(basalt_internal PUBLIC BASALT_DISABLE_ASSERTS)
+@@ -460,36 +463,36 @@ target_link_libraries(basalt basalt_internal)
+ if(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
+ 
+ add_executable(basalt_calibrate src/calibrate.cpp src/calibration/cam_calib.cpp)
+-target_link_libraries(basalt_calibrate basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_calibrate basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ add_executable(basalt_calibrate_imu src/calibrate_imu.cpp src/calibration/cam_imu_calib.cpp)
+-target_link_libraries(basalt_calibrate_imu basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_calibrate_imu basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ 
+ add_executable(basalt_vio_sim src/vio_sim.cpp)
+-target_link_libraries(basalt_vio_sim basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_vio_sim basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ add_executable(basalt_mapper_sim src/mapper_sim.cpp)
+-target_link_libraries(basalt_mapper_sim basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_mapper_sim basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ # mapper sim native doesn't use template free interface
+ if(BASALT_INSTANTIATIONS_DOUBLE)
+   add_executable(basalt_mapper_sim_naive src/mapper_sim_naive.cpp)
+-  target_link_libraries(basalt_mapper_sim_naive basalt_internal pangolin basalt::cli11)
++  target_link_libraries(basalt_mapper_sim_naive basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ endif()
+ 
+ add_executable(basalt_mapper src/mapper.cpp)
+-target_link_libraries(basalt_mapper basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_mapper basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ 
+ add_executable(basalt_opt_flow src/opt_flow.cpp)
+-target_link_libraries(basalt_opt_flow basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_opt_flow basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ add_executable(basalt_vio src/vio.cpp)
+-target_link_libraries(basalt_vio basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_vio basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ add_executable(basalt_time_alignment src/time_alignment.cpp)
+-target_link_libraries(basalt_time_alignment basalt_internal pangolin basalt::cli11)
++target_link_libraries(basalt_time_alignment basalt_internal ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+ add_executable(basalt_kitti_eval src/kitti_eval.cpp)
+ target_link_libraries(basalt_kitti_eval basalt::basalt-headers basalt::cli11)
+@@ -497,10 +500,10 @@ target_link_libraries(basalt_kitti_eval basalt::basalt-headers basalt::cli11)
+ find_package(realsense2 QUIET)
+ if(realsense2_FOUND)
+   add_executable(basalt_rs_t265_record src/rs_t265_record.cpp src/device/rs_t265.cpp)
+-  target_link_libraries(basalt_rs_t265_record basalt_internal realsense2::realsense2 pangolin basalt::cli11)
++  target_link_libraries(basalt_rs_t265_record basalt_internal realsense2::realsense2 ${Pangolin_LIBRARIES} basalt::cli11)
+ 
+   add_executable(basalt_rs_t265_vio src/rs_t265_vio.cpp src/device/rs_t265.cpp)
+-  target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 pangolin basalt::cli11)
++  target_link_libraries(basalt_rs_t265_vio basalt_internal realsense2::realsense2 ${Pangolin_LIBRARIES} basalt::cli11)
+ endif()
+ 
+ endif(NOT BASALT_BUILD_SHARED_LIBRARY_ONLY)
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index 1b05782..5029073 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -1,100 +1,7 @@
+ cmake_minimum_required(VERSION 3.10...3.18)
+ 
+-add_library(nlohmann::json INTERFACE IMPORTED GLOBAL)
+-set_property(TARGET nlohmann::json PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/json/)
+-
+ add_subdirectory(basalt-headers EXCLUDE_FROM_ALL)
+ add_subdirectory(ros EXCLUDE_FROM_ALL)
+ 
+ add_subdirectory(apriltag EXCLUDE_FROM_ALL)
+ target_compile_options(apriltag PRIVATE "-Wno-unused-private-field") # Fix external warning
+-
+-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Enable BUILD_SHARED_LIBS")
+-set(BUILD_TESTS OFF CACHE BOOL "Enable BUILD_TESTS")
+-set(BUILD_TOOLS OFF CACHE BOOL "Enable BUILD_TOOLS")
+-set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY ON)
+-
+-set(BUILD_PANGOLIN_LIBOPENEXR OFF CACHE BOOL "Enable BUILD_PANGOLIN_LIBOPENEXR")
+-set(BUILD_PANGOLIN_PYTHON OFF CACHE BOOL "Enable BUILD_PANGOLIN_PYTHON")
+-set(BUILD_EXAMPLES OFF CACHE BOOL "Enable BUILD_EXAMPLES")
+-set(BUILD_PANGOLIN_REALSENSE OFF CACHE BOOL "Enable librealsense")
+-set(BUILD_PANGOLIN_REALSENSE2 OFF CACHE BOOL "Enable librealsense2")
+-
+-# disable ffmpeg b/c build is broken on macOS since 2022-02
+-# see: https://github.com/stevenlovegrove/Pangolin/issues/737
+-set(BUILD_PANGOLIN_FFMPEG OFF CACHE BOOL "Build support for ffmpeg video input")
+-
+-set(EIGEN_INCLUDE_DIR "${EIGEN3_INCLUDE_DIR}")
+-set(EIGEN_INCLUDE_DIRS "${EIGEN3_INCLUDE_DIR}")
+-
+-
+-# Hack to disable march=native in opengv
+-macro(add_definitions)
+-  if(NOT ${ARGV0} STREQUAL "-march=native")
+-    _add_definitions(${ARGN})
+-  endif()
+-endmacro()
+-add_subdirectory(opengv EXCLUDE_FROM_ALL)
+-
+-# fix opengv: c++17 and debug postfix
+-set_target_properties(opengv PROPERTIES CXX_STANDARD 17 DEBUG_POSTFIX "")
+-
+-# fix opengv: compile options (CMAKE_CXX_FLAGS is overwritten by Opengv)
+-target_compile_options(opengv PRIVATE -Wno-unused-private-field ${BASALT_MARCH_FLAGS}
+-  "SHELL:${BASALT_PASSED_CXX_FLAGS}" "-Wno-stringop-overflow" "-w")
+-ignore_external_warnings(opengv)
+-
+-# Hack to disable CPack in Pangolin.
+-macro(include)
+-  if(NOT ${ARGV0} STREQUAL "CPack")
+-    _include(${ARGN})
+-  endif()
+-endmacro()
+-
+-# Add pangolin and create an INTERFACE SYSTEM library out of it
+-# TODO: For cmake 3.25, use the SYSTEM parameter of add_subidrectory to avoid adding SYSTEM and silencing warnings explicitly
+-add_subdirectory(Pangolin EXCLUDE_FROM_ALL)
+-
+-get_property(pangolin_targets DIRECTORY Pangolin PROPERTY BUILDSYSTEM_TARGETS)
+-foreach(_target ${pangolin_targets})
+-  ignore_external_warnings(${_target})
+-endforeach()
+-
+-add_library(pangolin INTERFACE)
+-target_link_libraries(pangolin INTERFACE ${pangolin_targets})
+-target_include_directories(pangolin SYSTEM INTERFACE ${pangolin_targets})
+-
+-# TODO: enable once mpark issue is fixed upstream pangolin
+-#set_target_properties(pangolin PROPERTIES
+-#  CXX_STANDARD 17)
+-
+-# check here the directories for the pangolin and opengv targets, and
+-# confirm that the eigen-related include dirs match.
+-foreach(_target opengv pangolin)
+-  get_target_property(_include_dirs ${_target} INTERFACE_INCLUDE_DIRECTORIES)
+-  foreach(_dir IN LISTS _include_dirs)
+-    if("${_dir}" MATCHES ".*/eigen3?(/unsupported)?$")
+-      if(NOT _dir MATCHES "^${EIGEN3_INCLUDE_DIR}.*")
+-      endif()
+-    endif()
+-  endforeach()
+-endforeach()
+-
+-# opengv and pangolin assume that eigen is found outside the source
+-# directory and thus include it in INTERFACE_INCLUDE_DIRECTORIES,
+-# which makes cmake complain that that property contains paths in the
+-# source folder. Thus, we update the property to only include these
+-# eigen paths in the "BUILD_INTERFACE" (not "INSTALL").
+-if (EIGEN3_INCLUDE_DIR MATCHES "^${CMAKE_SOURCE_DIR}.*")
+-  foreach(_target opengv pangolin)
+-    get_target_property(_include_dirs ${_target} INTERFACE_INCLUDE_DIRECTORIES)
+-    set(_include_dirs_new "")
+-    foreach(_dir IN LISTS _include_dirs)
+-      if(_dir MATCHES ".*/eigen(/unsupported)?$")
+-        string(REGEX REPLACE "(^${CMAKE_SOURCE_DIR}.*$)" "$<BUILD_INTERFACE:\\1>" _dir "${_dir}")
+-      endif()
+-      list(APPEND _include_dirs_new "${_dir}")
+-    endforeach()
+-    set_target_properties(${_target} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${_include_dirs_new}")
+-  endforeach()
+-endif()

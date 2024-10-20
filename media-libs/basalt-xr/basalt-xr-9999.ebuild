@@ -5,48 +5,74 @@ EAPI=8
 
 inherit cmake git-r3
 
+EGIT_SUBMODULES=( '*'
+	'-thirdparty/opengv'
+	'-thirdparty/Pangolin'
+	'-thirdparty/CLI11'
+	'-thirdparty/magic_enum'
+	'-thirdparty/basalt-headers/test/*'
+	'-thirdparty/basalt-headers/thirdparty/eigen'
+)
+
 DESCRIPTION="Fork of Basalt, improves XR device tracking"
 HOMEPAGE="https://gitlab.freedesktop.org/mateosss/basalt"
-# this has A LOT of random dependencies, and I don't really know if I want to unpack all of them
 EGIT_REPO_URI="https://gitlab.freedesktop.org/mateosss/basalt.git"
+
+if [[ ${PV} != *9999* ]]; then
+	EGIT_COMMIT="v${PV}"
+	KEYWORDS="~amd64 ~ppc64 ~x86"
+fi
+
 LICENSE="BSD"
 SLOT="0"
 
 IUSE="wayland"
 
 DEPEND="
-	media-libs/mesa[egl(+)]
+	app-arch/bzip2
+	app-arch/lz4
 	dev-cpp/eigen:3
+	dev-libs/boost[bzip2]
+	dev-libs/libfmt
+	dev-libs/opengv
+	dev-libs/pangolin
 	media-libs/glew
+	media-libs/libepoxy
 	media-libs/libjpeg-turbo
 	media-libs/libpng
-	app-arch/lz4
-	app-arch/bzip2
-	dev-libs/boost[bzip2]
+	media-libs/libuvc
+	media-libs/mesa[egl(+)]
 	media-libs/opencv
 	sys-libs/libunwind
-	media-libs/libepoxy
-	dev-libs/libfmt
-	media-libs/libuvc
 	wayland? (
 		dev-libs/wayland
 		dev-libs/wayland-protocols
 		dev-util/wayland-scanner
 	)
-	!media-libs/basalt
 "
 RDEPEND="${DEPEND}"
+BDEPEND="
+	dev-cpp/cli11
+	dev-cpp/magic_enum
+	dev-cpp/nlohmann_json
+"
 
 PATCHES=(
 	"${FILESDIR}/basalt-remove-exec.patch"
 	"${FILESDIR}/install-paths.patch"
+	"${FILESDIR}/thirdparty.patch"
 )
 
 
 src_configure() {
 	local mycmakeargs=(
 		-DEIGEN_ROOT="${EROOT}/usr/include/eigen3"
+		-DEIGEN3_INCLUDE_DIR="${EROOT}/usr/include/eigen3"
+		-DBUILD_TESTING=OFF
+		-DBASALT_BUILTIN_EIGEN=OFF
 	)
+
+	sed -e "s|^ignore_external_warnings|#ignore_external_warnings|" -i thirdparty/basalt-headers/CMakeLists.txt || die
 
 	cmake_src_configure
 }
