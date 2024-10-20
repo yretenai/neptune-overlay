@@ -21,12 +21,14 @@ HOMEPAGE="https://onnxruntime.ai
 SAFEINT_COMMIT=3.0.28a
 FLATBUFFERS_PV=23.5.26
 DATE_PV=3.0.1
+EIGEN_PV=e7248b26a1ed53fa030c5c459f7ea095dfd276ac
 SRC_URI="
 	https://github.com/microsoft/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/dcleblanc/SafeInt/archive/${SAFEINT_COMMIT}.tar.gz -> SafeInt-${SAFEINT_COMMIT:0:10}.tar.gz
 	https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_PV}.tar.gz -> flatbuffers-${FLATBUFFERS_PV}.tar.gz
 	https://github.com/HowardHinnant/date/archive/v${DATE_PV}.tar.gz -> hhdate-${DATE_PV}.tar.gz
 	https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz
+	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.gz -> eigen-${EIGEN_PV}.tar.gz
 "
 
 LICENSE="MIT"
@@ -59,7 +61,6 @@ BDEPEND="
 	dev-libs/FP16
 	dev-libs/FXdiv
 	sys-cluster/openmpi:=[cuda?]
-	>=dev-cpp/eigen-3.4.0-r2:=[cuda?]
 	dev-cpp/ms-gsl:=
 	dev-cpp/nlohmann_json
 	sci-libs/pytorch
@@ -158,8 +159,6 @@ src_prepare() {
 
 	strip-unsupported-flags
 
-	append-cppflags "-I/usr/include/eigen3"
-
 	cmake_src_prepare
 }
 
@@ -189,7 +188,7 @@ src_configure() {
 		-Donnxruntime_RUN_ONNX_TESTS=$(usex test)
 		-Donnxruntime_ENABLE_LAZY_TENSOR=OFF
 		-Donnxruntime_USE_MPI=$(usex mpi)
-		-Donnxruntime_USE_PREINSTALLED_EIGEN=ON
+		-Donnxruntime_USE_PREINSTALLED_EIGEN=OFF
 		-Donnxruntime_USE_DNNL=$(usex onednn)
 		-Donnxruntime_USE_CUDA=$(usex cuda)
 		-Donnxruntime_USE_ROCM=$(usex hip)
@@ -200,7 +199,6 @@ src_configure() {
 		-Donnxruntime_USE_XNNPACK=$(usex xnnpack)
 		-Donnxruntime_ENABLE_LTO=$(usex lto)
 		-Donnxruntime_ROCM_HOME="${ROCM_PATH}"
-		-Deigen_SOURCE_PATH=/usr/include/eigen3
 		-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS
 		-DFETCHCONTENT_FULLY_DISCONNECTED=ON
 		-DFETCHCONTENT_QUIET=OFF
@@ -208,6 +206,7 @@ src_configure() {
 		-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS="${WORKDIR}/flatbuffers-${FLATBUFFERS_PV}"
 		-DFETCHCONTENT_SOURCE_DIR_COMPOSABLE_KERNEL="${WORKDIR}/composable_kernel-rocm-${ROCM_VERSION}"
 		-DFETCHCONTENT_SOURCE_DIR_DATE="${WORKDIR}/date-${DATE_PV}"
+		-DFETCHCONTENT_SOURCE_DIR_EIGEN="${WORKDIR}/eigen-${EIGEN_PV}"
 		-Donnxruntime_USE_TENSORRT=$(usex tensorrt)
 		-Donnxruntime_USE_JSEP=$(usex javascript)
 		-Donnxruntime_ENABLE_MEMORY_PROFILE=OFF
