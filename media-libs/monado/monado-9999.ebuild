@@ -61,8 +61,9 @@ DEPEND="
 	onnx? ( sci-libs/onnxruntime:= )
 "
 RDEPEND="
-	${DEPEND}	
+	${DEPEND}
 	media-libs/basalt-xr
+	monado_drivers_handtracking? ( media-libs/monado-data-handtracking )
 "
 BDEPEND="
 	doc? (
