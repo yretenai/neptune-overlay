@@ -8,9 +8,9 @@ DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
 CUDA_TARGETS_COMPAT=( sm_50 sm_52 sm_53 sm_60 sm_61 sm_62 sm_70 sm_72 sm_75 sm_80 sm_86 sm_87 sm_89 sm_90 )
-ROCM_VERSION="5.7.1"
+ROCM_VERSION="6.1.1"
 AMDGPU_TARGETS_COMPAT=( gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101	gfx1102	gfx1103 )
-LLVM_COMPAT=( 17 18 19 )
+LLVM_COMPAT=( 18 )
 LLVM_OPTIONAL=1
 
 inherit cmake cuda distutils-r1 flag-o-matic llvm-r1 rocm toolchain-funcs
@@ -26,21 +26,22 @@ SRC_URI="
 	https://github.com/dcleblanc/SafeInt/archive/${SAFEINT_COMMIT}.tar.gz -> SafeInt-${SAFEINT_COMMIT:0:10}.tar.gz
 	https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_PV}.tar.gz -> flatbuffers-${FLATBUFFERS_PV}.tar.gz
 	https://github.com/HowardHinnant/date/archive/v${DATE_PV}.tar.gz -> hhdate-${DATE_PV}.tar.gz
+	https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz
 "
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 CPU_FLAGS="cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512"
-IUSE="benchmark cuda onednn cudnn debug hip javascript +python migraphx +mpi mimalloc lto test tensorrt llvm xnnpack
+IUSE="benchmark cuda onednn cudnn debug hip javascript +python composable_kernel +mpi mimalloc lto test tensorrt llvm xnnpack
 ${CPU_FLAGS}
 ${CUDA_TARGETS_COMPAT[@]/#/cuda_targets_}
 ${AMDGPU_TARGETS_COMPAT[@]/#/amdgpu_targets_}"
 RESTRICT="mirror test"
 REQUIRED_USE="
 	cuda? ( cudnn !lto )
-	hip? ( migraphx )
-	|| ( cudnn migraphx onednn tensorrt )
+	hip? ( composable_kernel )
+	|| ( cudnn composable_kernel onednn tensorrt )
 "
 RDEPEND="
 	<dev-libs/protobuf-27.9:=
@@ -108,6 +109,7 @@ PATCHES=(
 	"${FILESDIR}/contrib-ops.patch"
 	"${FILESDIR}/disabled_rules_and_transformers.patch"
 	"${FILESDIR}/Werror.patch"
+	"${FILESDIR}/disable-ck-tile.patch"
 	#"${FILESDIR}/mpi.patch"
 )
 
@@ -124,9 +126,11 @@ src_prepare() {
 	use cuda && cuda_src_prepare
 
 	# Workaround for binary drivers.
-	addpredict /dev/ati
-	addpredict /dev/dri
+	addwrite /dev/ati
+	addwrite /dev/dri
+	addwrite /dev/kfd
 	addpredict /dev/nvidiactl
+	addpredict /proc/self/task/
 
 	# fix build with gcc12(?), take idea from https://github.com/microsoft/onnxruntime/pull/11667 and https://github.com/microsoft/onnxruntime/pull/10014
 	sed 's|dims)|TensorShape(dims))|g' \
@@ -160,7 +164,7 @@ src_prepare() {
 
 src_configure() {
 	export ROCM_PATH=/usr MIOPEN_PATH=/usr
-	export ROCM_VERSION="${ROCM_VERSION}"-
+	export ROCM_VERSION="${ROCM_VERSION}"
 
 	python && python_setup
 	CMAKE_BUILD_TYPE=$(usex debug RelWithDebInfo Release)
@@ -194,12 +198,14 @@ src_configure() {
 		-Donnxruntime_USE_MIMALLOC=$(usex mimalloc)
 		-Donnxruntime_USE_XNNPACK=$(usex xnnpack)
 		-Donnxruntime_ENABLE_LTO=$(usex lto)
+		-Donnxruntime_ROCM_HOME="${ROCM_PATH}"
 		-Deigen_SOURCE_PATH=/usr/include/eigen3
 		-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS
 		-DFETCHCONTENT_FULLY_DISCONNECTED=ON
 		-DFETCHCONTENT_QUIET=OFF
 		-DFETCHCONTENT_SOURCE_DIR_SAFEINT="${WORKDIR}/SafeInt-${SAFEINT_COMMIT}"
 		-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS="${WORKDIR}/flatbuffers-${FLATBUFFERS_PV}"
+		-DFETCHCONTENT_SOURCE_DIR_COMPOSABLE_KERNEL="${WORKDIR}/composable_kernel-rocm-${ROCM_VERSION}"
 		-DFETCHCONTENT_SOURCE_DIR_DATE="${WORKDIR}/date-${DATE_PV}"
 		-Donnxruntime_USE_TENSORRT=$(usex tensorrt)
 		-Donnxruntime_USE_JSEP=$(usex javascript)
@@ -220,7 +226,9 @@ src_configure() {
 		-Donnxruntime_USE_TENSORRT_BUILTIN_PARSER=OFF
 		-Donnxruntime_USE_TVM=OFF
 		-Donnxruntime_TVM_USE_HASH=OFF
-		-Donnxruntime_USE_MIGRAPHX=$(usex migraphx)
+		-Donnxruntime_USE_MIGRAPHX=OFF
+		-Donnxruntime_USE_COMPOSABLE_KERNEL=$(usex composable_kernel)
+		-Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=OFF # enable on 6.2.0
 		-Donnxruntime_CROSS_COMPILING=$(tc-is-cross-compiler && echo ON || echo OFF)
 		-Donnxruntime_DISABLE_CONTRIB_OPS=ON
 		-Donnxruntime_DISABLE_ML_OPS=ON
@@ -290,9 +298,9 @@ src_configure() {
 
 	if use hip; then
 		mycmakeargs+=(
-		-DCMAKE_HIP_COMPILER="$(get_llvm_prefix)/bin/clang++"
-		-DCMAKE_HIP_ARCHITECTURES="$(get_amdgpu_flags)"
-	)
+			-DCMAKE_HIP_COMPILER="$(get_llvm_prefix)/bin/clang++"
+			-DCMAKE_HIP_ARCHITECTURES="$(get_amdgpu_flags)"
+		)
 	fi
 
 	cmake_src_configure
