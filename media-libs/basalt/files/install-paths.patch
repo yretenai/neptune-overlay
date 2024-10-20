@@ -1,8 +1,17 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 7919d7a..a7086a1 100644
+index 7919d7a..98e25ab 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -446,32 +446,32 @@ endif()
+@@ -4,6 +4,8 @@ project(basalt)
+ 
+ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/" ${CMAKE_MODULE_PATH})
+ 
++include(GNUInstallDirs)
++
+ if(NOT EIGEN_ROOT)
+   set(EIGEN_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/basalt-headers/thirdparty/eigen")
+ endif()
+@@ -446,32 +448,32 @@ endif()
  
  install(TARGETS basalt_calibrate basalt_calibrate_imu basalt_vio_sim basalt_mapper_sim basalt_mapper basalt_opt_flow basalt_vio basalt_kitti_eval basalt_time_alignment basalt
    EXPORT BasaltTargets
