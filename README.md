@@ -8,6 +8,8 @@ Primarily to package applications that I haven't seen on many overlays, or was i
 
 ```shell
 emerge app-eselect/eselect-repository
+eselect repository enable guru
+eselect repository enable cg
 eselect repository add neptune-overlay git https://github.com/yretenai/neptune-overlay.git
 emerge --sync
 ```

@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://gitlab.freedesktop.org/monado/monado.git"
 LICENSE="Boost-1.0"
 SLOT="0"
 
-IUSE="doc test bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X
+IUSE="doc test onnx bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X
 monado_drivers_arduino monado_drivers_daydream monado_drivers_euroc monado_drivers_twrap monado_drivers_hdk
 monado_drivers_hydra monado_drivers_ns monado_drivers_opengloves monado_drivers_psmv monado_drivers_pssense
 monado_drivers_psvr monado_drivers_qwerty monado_drivers_remote monado_drivers_rift monado_drivers_rokid
@@ -58,6 +58,7 @@ DEPEND="
 	hid? ( dev-libs/hidapi )
 	zlib? ( sys-libs/zlib:= )
 	bluetooth? ( net-wireless/bluez:= )
+	onnx? ( sci-libs/onnxruntime )
 "
 RDEPEND="
 	${DEPEND}	
@@ -80,6 +81,7 @@ REQUIRED_USE="
 	monado_drivers_steamvr? ( steam monado_drivers_vive )
 	monado_drivers_vf? ( gstreamer )
 	monado_drivers_vive? ( zlib )
+	monado_drivers_handtracking? ( onnx )
 "
 RESTRICT="
 	!test? ( test )
@@ -113,7 +115,7 @@ src_configure() {
 		-DXRT_HAVE_LIBUSB=ON
 		-DXRT_HAVE_LIBUVC=$(usex uvc)
 		-DXRT_HAVE_LINUX=ON
-		-DXRT_HAVE_ONNXRUNTIME=OFF # todo
+		-DXRT_HAVE_ONNXRUNTIME=$(usex onnx)
 		-DXRT_HAVE_OPENCV=$(usex opencv)
 		-DXRT_HAVE_PERCETTO=OFF # todo
 		-DXRT_HAVE_SDL2=$(usex sdl)
@@ -126,7 +128,7 @@ src_configure() {
 		-DXRT_BUILD_DRIVER_DAYDREAM=$(usex monado_drivers_daydream)
 		-DXRT_BUILD_DRIVER_DEPTHAI=OFF # todo: DepthAI
 		-DXRT_BUILD_DRIVER_EUROC=$(usex monado_drivers_euroc)
-		-DXRT_BUILD_DRIVER_HANDTRACKING=OFF # todo: ONNXRuntime
+		-DXRT_BUILD_DRIVER_HANDTRACKING=$(usex monado_drivers_handtracking)
 		-DXRT_BUILD_DRIVER_HDK=$(usex monado_drivers_hdk)
 		-DXRT_BUILD_DRIVER_HYDRA=$(usex monado_drivers_hydra)
 		-DXRT_BUILD_DRIVER_ILLIXR=OFF # todo: ILLIXR
