@@ -34,7 +34,6 @@ DEPEND="
 	media-libs/libv4l
 	dev-libs/libbsd
 	dev-libs/cJSON
-	media-libs/basalt-xr
 	wayland? (
 		dev-libs/wayland
 		dev-libs/wayland-protocols
@@ -60,7 +59,10 @@ DEPEND="
 	zlib? ( sys-libs/zlib:= )
 	bluetooth? ( net-wireless/bluez:= )
 "
-RDEPEND="${DEPEND}"
+RDEPEND="
+	${DEPEND}	
+	media-libs/basalt-xr
+"
 BDEPEND="
 	doc? (
 		app-text/doxygen

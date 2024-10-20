@@ -28,7 +28,7 @@ SLOT="0"
 
 IUSE="wayland"
 
-DEPEND="
+RDEPEND="
 	app-arch/bzip2
 	app-arch/lz4
 	dev-cpp/eigen:3
@@ -50,11 +50,11 @@ DEPEND="
 		dev-util/wayland-scanner
 	)
 "
-RDEPEND="${DEPEND}"
-BDEPEND="
+DEPEND="
 	dev-cpp/cli11
 	dev-cpp/magic_enum
 	dev-cpp/nlohmann_json
+	${RDEPEND}
 "
 
 PATCHES=(
