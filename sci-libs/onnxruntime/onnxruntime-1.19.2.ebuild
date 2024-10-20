@@ -11,7 +11,6 @@ CUDA_TARGETS_COMPAT=( sm_50 sm_52 sm_53 sm_60 sm_61 sm_62 sm_70 sm_72 sm_75 sm_8
 ROCM_VERSION="6.1.1"
 AMDGPU_TARGETS_COMPAT=( gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101	gfx1102	gfx1103 )
 LLVM_COMPAT=( 18 )
-LLVM_OPTIONAL=1
 
 inherit cmake cuda distutils-r1 flag-o-matic llvm-r1 rocm toolchain-funcs
 
@@ -35,7 +34,7 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 CPU_FLAGS="cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512"
-IUSE="benchmark cuda onednn cudnn debug hip javascript +python composable_kernel +mpi mimalloc lto test tensorrt llvm xnnpack
+IUSE="benchmark cuda onednn cudnn debug hip javascript +python composable_kernel +mpi mimalloc lto test tensorrt xnnpack
 ${CPU_FLAGS}
 ${CUDA_TARGETS_COMPAT[@]/#/cuda_targets_}
 ${AMDGPU_TARGETS_COMPAT[@]/#/amdgpu_targets_}"
@@ -117,7 +116,7 @@ PATCHES=(
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
-	use llvm && llvm-r1_pkg_setup
+	llvm-r1_pkg_setup
 }
 
 src_prepare() {
@@ -220,7 +219,7 @@ src_configure() {
 		-Donnxruntime_BUILD_APPLE_FRAMEWORK=OFF
 		-Donnxruntime_USE_NNAPI_BUILTIN=OFF
 		-Donnxruntime_USE_RKNPU=OFF
-		-Donnxruntime_USE_LLVM=$(usex llvm)
+		-Donnxruntime_USE_LLVM=ON
 		-Donnxruntime_ENABLE_MICROSOFT_INTERNAL=OFF
 		-Donnxruntime_USE_VITISAI=OFF
 		-Donnxruntime_USE_TENSORRT_BUILTIN_PARSER=OFF
@@ -302,6 +301,8 @@ src_configure() {
 			-DCMAKE_HIP_ARCHITECTURES="$(get_amdgpu_flags)"
 		)
 	fi
+
+	CC=clang CXX=clang++
 
 	cmake_src_configure
 }
