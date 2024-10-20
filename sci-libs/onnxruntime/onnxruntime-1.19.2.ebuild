@@ -44,7 +44,7 @@ REQUIRED_USE="
 	|| ( cudnn composable_kernel onednn tensorrt )
 "
 RDEPEND="
-	<dev-libs/protobuf-27.9:=
+	dev-libs/protobuf:=
 "
 
 BDEPEND="
@@ -59,7 +59,7 @@ BDEPEND="
 	dev-libs/FP16
 	dev-libs/FXdiv
 	sys-cluster/openmpi:=[cuda?]
-	dev-cpp/eigen:=[cuda?]
+	>=dev-cpp/eigen-3.4.0-r2:=[cuda?]
 	dev-cpp/ms-gsl:=
 	dev-cpp/nlohmann_json
 	sci-libs/pytorch
@@ -110,6 +110,7 @@ PATCHES=(
 	"${FILESDIR}/disabled_rules_and_transformers.patch"
 	"${FILESDIR}/Werror.patch"
 	"${FILESDIR}/disable-ck-tile.patch"
+	"${FILESDIR}/protobuf.patch"
 	#"${FILESDIR}/mpi.patch"
 )
 
