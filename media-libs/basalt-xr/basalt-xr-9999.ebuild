@@ -66,8 +66,9 @@ PATCHES=(
 
 src_configure() {
 	local mycmakeargs=(
-		-DEIGEN_ROOT="${EROOT}/usr/include/eigen3"
-		-DEIGEN3_INCLUDE_DIR="${EROOT}/usr/include/eigen3"
+		-DEIGEN_ROOT="${ESYSROOT}/usr/include/eigen3"
+		-DEIGEN3_INCLUDE_DIR="${ESYSROOT}/usr/include/eigen3"
+		-DCMAKE_INSTALL_DATADIR="${EPREFIX}/usr/share"
 		-DBUILD_TESTING=OFF
 		-DBASALT_BUILTIN_EIGEN=OFF
 	)
