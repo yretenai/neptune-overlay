@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5dd3008..2c4ca0b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -416,6 +416,11 @@ file(GLOB HIPRT_HIPFB_FILES "${BASE_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/*.hipfb")
+ install(FILES ${HIPRT_HIPFB_FILES}
+ 		DESTINATION bin)
+ 
++# add bc files
++file(GLOB HIPRT_BC_FILES "${BASE_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/*.bc")
++install(FILES ${HIPRT_BC_FILES}
++		DESTINATION bin)
++
+ 
+ 
+ 

@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5dd3008..9d63706 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -328,13 +328,13 @@ endif()
+ # precompile kernels
+ if(PRECOMPILE)
+ 	execute_process(
+-		COMMAND python compile.py --nvidia --hipSdkPath ${HIP_PATH}
++		COMMAND python compile.py --hipSdkPath ${HIP_PATH}
+ 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/bitcodes
+ 		)
+ 
+ 	if(NOT NO_UNITTEST)
+ 		execute_process(
+-			COMMAND python precompile_bitcode.py --nvidia --hipSdkPath ${HIP_PATH}
++			COMMAND python precompile_bitcode.py --hipSdkPath ${HIP_PATH}
+ 			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/bitcodes
+ 			)
+ 	endif()
