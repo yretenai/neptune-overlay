@@ -86,9 +86,9 @@ RDEPEND="${PYTHON_DEPS}
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
 	hip? (
-		$(llvm_gen_dep '
-			>=dev-util/hip-6.1.1:=[llvm_slot_${LLVM_SLOT}]
-		')
+		$(llvm_gen_dep "
+			>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
+		")
 	)
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )
@@ -161,6 +161,11 @@ RDEPEND="${PYTHON_DEPS}
 			sys-devel/llvm:${LLVM_SLOT}
 		')
 	)
+	hiprt? (
+		$(llvm_gen_dep '
+			=dev-libs/hiprt-2.4:=[llvm_slot_${LLVM_SLOT}]
+		')
+	)
 "
 
 DEPEND="${RDEPEND}
@@ -197,7 +202,6 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
 	"${FILESDIR}/${PN}-9999-clang.patch"
-	# "${FILESDIR}/${PN}-9999-hiprt.patch"
 )
 
 blender_check_requirements() {
@@ -291,8 +295,10 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
+		-DHIP_PATH="${EPREFIX}/usr"
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		# -DHIPRT_ROOT_DIR=/opt/hiprt
+		-DHIPRT_ROOT_DIR="${EPREFIX}/usr/$(get_libdir)/hiprt"
+		-DHIP_LINKER_EXECUTABLE="clang++"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -306,7 +312,7 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
-		# -DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
+		-DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
@@ -375,6 +381,13 @@ src_configure() {
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_XR_OPENXR=no
 	)
+
+	if has_version ">=dev-python/numpy-2"; then
+		mycmakeargs+=(
+			-DPYTHON_NUMPY_INCLUDE_DIRS="$(python_get_sitedir)/numpy/_core/include"
+			-DPYTHON_NUMPY_PATH="$(python_get_sitedir)/numpy/_core/include"
+		)
+	fi
 
 	if use optix; then
 		mycmakeargs+=(
