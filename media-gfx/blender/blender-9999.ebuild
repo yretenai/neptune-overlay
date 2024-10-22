@@ -202,6 +202,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
 	"${FILESDIR}/${PN}-9999-clang.patch"
+	"${FILESDIR}/${PN}-9999-hiprt-parallel.patch"
 )
 
 blender_check_requirements() {
@@ -298,7 +299,7 @@ src_configure() {
 		-DHIP_PATH="${EPREFIX}/usr"
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 		-DHIPRT_ROOT_DIR="${EPREFIX}/usr/$(get_libdir)/hiprt"
-		-DHIP_LINKER_EXECUTABLE="clang++"
+		-DHIP_LINKER_EXECUTABLE="hipcc"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
