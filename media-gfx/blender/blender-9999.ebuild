@@ -299,7 +299,7 @@ src_configure() {
 		-DHIP_PATH="${EPREFIX}/usr"
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 		-DHIPRT_ROOT_DIR="${EPREFIX}/usr/$(get_libdir)/hiprt"
-		-DHIP_LINKER_EXECUTABLE="hipcc"
+		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
