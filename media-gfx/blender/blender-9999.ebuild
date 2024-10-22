@@ -163,7 +163,7 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	hiprt? (
 		$(llvm_gen_dep '
-			=dev-libs/hiprt-2.4:=[llvm_slot_${LLVM_SLOT}]
+			=dev-libs/hiprt-2.3:=[llvm_slot_${LLVM_SLOT}]
 		')
 	)
 "
@@ -203,6 +203,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
 	"${FILESDIR}/${PN}-9999-clang.patch"
 	"${FILESDIR}/${PN}-9999-hiprt-parallel.patch"
+	"${FILESDIR}/${PN}-9999-hipcc-path.patch"
+	"${FILESDIR}/${PN}-9999-cycles-runtime-path.patch"
 )
 
 blender_check_requirements() {
@@ -296,7 +298,6 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
-		-DHIP_PATH="${EPREFIX}/usr"
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 		-DHIPRT_ROOT_DIR="${EPREFIX}/usr/$(get_libdir)/hiprt"
 		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
@@ -524,7 +525,7 @@ pkg_postrm() {
 
 	ewarn
 	ewarn "You may want to remove the following directory."
-	ewarn "~/.config/${PN}/${BV}/cache/"
+	ewarn "~/.cache/cycles/"
 	ewarn "It may contain extra render kernels not tracked by portage"
 	ewarn
 }

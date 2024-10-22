@@ -18,7 +18,7 @@ HOMEPAGE="
 
 EGIT_LFS=no # fetches test data
 EGIT_REPO_URI="https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT.git"
-EGIT_COMMIT="3a8b83609bc347270643db12b422a6315cb89f81"
+EGIT_COMMIT="83e18cc9c3de8f2f9c48b663cf3189361e891054"
 
 LICENSE="MIT"
 SLOT="0"
@@ -87,8 +87,8 @@ src_compile() {
 
 src_install() {
 	cmake_src_install
-	dosym "hiprt/bin/libhiprt0200464.so" "${EPREFIX}/usr/$(get_libdir)/libhiprt64.so"
-	dosym "hiprt/bin/hiprt02004_6.1_amd.hipfb" "${EPREFIX}/usr/$(get_libdir)/hiprt02004_6.1_amd.hipfb"
-	dosym "hiprt/bin/hiprt02004_6.1_amd_lib_linux.bc" "${EPREFIX}/usr/$(get_libdir)/hiprt02004_6.1_amd_lib_linux.bc"
+	dosym "hiprt/bin/libhiprt0200364.so" "${EPREFIX}/usr/$(get_libdir)/libhiprt64.so"
+	dosym "hiprt/bin/hiprt02003_6.1_amd.hipfb" "${EPREFIX}/usr/$(get_libdir)/hiprt02003_6.1_amd.hipfb"
+	dosym "hiprt/bin/hiprt02003_6.1_amd_lib_linux.bc" "${EPREFIX}/usr/$(get_libdir)/hiprt02003_6.1_amd_lib_linux.bc"
 	dosym "hiprt/bin/oro_compiled_kernels.hipfb" "${EPREFIX}/usr/$(get_libdir)/oro_compiled_kernels.hipfb"
 }

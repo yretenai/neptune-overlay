@@ -1,0 +1,24 @@
+diff --git a/intern/cycles/kernel/CMakeLists.txt b/intern/cycles/kernel/CMakeLists.txt
+index c641e4c16fe..72a9a9dbec8 100644
+--- a/intern/cycles/kernel/CMakeLists.txt
++++ b/intern/cycles/kernel/CMakeLists.txt
+@@ -820,8 +820,8 @@ if(WITH_CYCLES_DEVICE_HIPRT)
+     COMMAND ${hiprt_compile_command} ${hiprt_compile_flags_bvh_oro}
+     DEPENDS ${HIPRT_INCLUDE_DIR}/contrib/Orochi/ParallelPrimitives/RadixSortKernels.h)
+ 
+-  delayed_install("" "${bvh_file}"     ${cycles_kernel_runtime_lib_target_path})
+-  delayed_install("" "${bvh_file_oro}" ${cycles_kernel_runtime_lib_target_path})
++  delayed_install("" "${bvh_file}"     ${CYCLES_INSTALL_PATH}/lib)
++  delayed_install("" "${bvh_file_oro}" ${CYCLES_INSTALL_PATH}/lib)
+ 
+   if(WITH_CYCLES_HIP_BINARIES)
+     set(hiprt_sources device/hiprt/kernel.cpp
+@@ -1300,7 +1300,7 @@ if(WITH_CYCLES_DEVICE_ONEAPI)
+   endif()
+ 
+   # install dynamic libraries required at runtime
+-  delayed_install("" "${cycles_kernel_oneapi_lib}" ${cycles_kernel_runtime_lib_target_path})
++  delayed_install("" "${cycles_kernel_oneapi_lib}" ${CYCLES_INSTALL_PATH}/lib)
+ 
+   add_custom_target(cycles_kernel_oneapi ALL DEPENDS ${cycles_kernel_oneapi_lib})
+ endif()
