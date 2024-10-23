@@ -76,6 +76,7 @@ src_configure() {
 		-DHIPRT_PREFER_HIP_5=OFF
 		-DHIP_PATH="${EPREFIX}/usr"
 		-DCMAKE_BUILD_TYPE="Release"
+		-DCMAKE_INSTALL_DATADIR="${EPREFIX}/usr/share"
 	)
 
 	cmake_src_configure

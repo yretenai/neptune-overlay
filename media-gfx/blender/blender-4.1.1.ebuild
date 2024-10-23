@@ -15,8 +15,9 @@ EAPI=8
 PYTHON_COMPAT=( python3_{11..12} )
 LLVM_COMPAT=( 18 )
 EGIT_LFS="yes"
+ROCM_VERSION="6.1.2"
 
-inherit git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
