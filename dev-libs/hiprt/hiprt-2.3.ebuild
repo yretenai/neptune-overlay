@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} )
 LLVM_COMPAT=( 18 )
-ROCM_VERSION="6.1.1"
+ROCM_VERSION="6.1.2"
 CMAKE_BUILD_TYPE="Release"
 
 inherit rocm cmake git-r3 python-single-r1 llvm-r1 python-utils-r1

@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} )
 LLVM_COMPAT=( 18 )
-ROCM_VERSION="6.1.1"
+ROCM_VERSION="6.1.2"
 
 inherit cuda rocm git-r3 python-single-r1 llvm-r1
 
@@ -47,10 +47,10 @@ RDEPEND="
 		>=sci-libs/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
 	')
 	hip? (
-		>=sci-libs/hipBLAS-6.1.1:=
-		$(llvm_gen_dep '
-			>=dev-util/hip-6.1.1:=[llvm_slot_${LLVM_SLOT}]
-		')
+		>=sci-libs/hipBLAS-${ROCM_VERSION}:=
+		$(llvm_gen_dep "
+			>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
+		")
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	clblast? ( sci-libs/clblast:=[cuda?] )

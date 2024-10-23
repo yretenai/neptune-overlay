@@ -80,9 +80,9 @@ RDEPEND="${PYTHON_DEPS}
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
 	hip? (
-		$(llvm_gen_dep '
-			>=dev-util/hip-6.1.1:=[llvm_slot_${LLVM_SLOT}]
-		')
+		$(llvm_gen_dep "
+			>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
+		")
 	)
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )

@@ -15,7 +15,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{11..12} )
 LLVM_COMPAT=( 18 )
 EGIT_LFS="yes"
-ROCM_VERSION="5.7.1"
+ROCM_VERSION="6.1.2"
 
 inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
@@ -85,9 +85,9 @@ RDEPEND="${PYTHON_DEPS}
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
 	hip? (
-		$(llvm_gen_dep '
-			>=dev-util/hip-6.1.1:=[llvm_slot_${LLVM_SLOT}]
-		')
+		$(llvm_gen_dep "
+			>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
+		")
 	)
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )
