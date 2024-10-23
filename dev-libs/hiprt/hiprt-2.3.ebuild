@@ -41,9 +41,9 @@ BDEPEND="
 "
 
 PATCHES=(
+	"${FILESDIR}/${PN}-output.patch"
 	"${FILESDIR}/${PN}-${PV}-precompile.patch"
 	"${FILESDIR}/${PN}-no-nvidia.patch"
-	"${FILESDIR}/${PN}-bcinstall.patch"
 )
 
 RESTRICT="test"
@@ -58,6 +58,8 @@ src_prepare() {
 	
 	_python_check_EPYTHON
 	sed -e "s| python | ${EPYTHON} |" -i CMakeLists.txt || die
+	sed -e "s|hiprt\${version_str_}|hiprt|" -i CMakeLists.txt || die
+	sed -e "s|\${HIPRT_NAME} SHARED)|\${HIPRT_NAME} SHARED)\nset_target_properties(\${HIPRT_NAME} PROPERTIES VERSION ${PV} SOVERSION 1)|" -i CMakeLists.txt || die
 
 	sed -e "s|__AMDGPU_FLAGS__|$(get_amdgpu_flags)|" -i contrib/Orochi/scripts/kernelCompile.py || die
 	sed -e "s|__AMDGPU_FLAGS__|$(get_amdgpu_flags)|" -i scripts/bitcodes/compile.py || die
@@ -74,7 +76,6 @@ src_configure() {
 		-DHIPRT_PREFER_HIP_5=OFF
 		-DHIP_PATH="${EPREFIX}/usr"
 		-DCMAKE_BUILD_TYPE="Release"
-		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr/$(get_libdir)/hiprt"
 	)
 
 	cmake_src_configure
@@ -83,12 +84,4 @@ src_configure() {
 src_compile() {
 	export PYTHON_BIN="${EPYTHON}"
 	cmake_src_compile
-}
-
-src_install() {
-	cmake_src_install
-	dosym "hiprt/bin/libhiprt0200364.so" "${EPREFIX}/usr/$(get_libdir)/libhiprt64.so"
-	dosym "hiprt/bin/hiprt02003_6.1_amd.hipfb" "${EPREFIX}/usr/$(get_libdir)/hiprt02003_6.1_amd.hipfb"
-	dosym "hiprt/bin/hiprt02003_6.1_amd_lib_linux.bc" "${EPREFIX}/usr/$(get_libdir)/hiprt02003_6.1_amd_lib_linux.bc"
-	dosym "hiprt/bin/oro_compiled_kernels.hipfb" "${EPREFIX}/usr/$(get_libdir)/oro_compiled_kernels.hipfb"
 }

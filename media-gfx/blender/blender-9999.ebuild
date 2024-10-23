@@ -15,7 +15,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_13 )
 LLVM_COMPAT=( 18 )
 EGIT_LFS="yes"
-ROCM_VERSION="5.7.1"
+ROCM_VERSION="6.1.1"
 
 inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
@@ -299,7 +299,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		-DHIPRT_ROOT_DIR="${EPREFIX}/usr/$(get_libdir)/hiprt"
 		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"

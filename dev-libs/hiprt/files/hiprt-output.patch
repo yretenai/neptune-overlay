@@ -1,0 +1,114 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5dd3008..30f816c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -29,6 +29,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ # Define GTEST_HAS_TR1_TUPLE=0 globally
+ add_definitions(-DGTEST_HAS_TR1_TUPLE=0)
+ 
++include(GNUInstallDirs)
++set(HIPRT_DATA_DIRECTORY "${CMAKE_INSTALL_DATADIR}/hiprt/")
+ 
+ 
+ 
+@@ -269,6 +271,8 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/contrib/Orochi/Orochi/enable_cuew.cmake)
+ set(BASE_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dist/bin)
+ file(MAKE_DIRECTORY "${BASE_OUTPUT_DIR}/Debug")
+ file(MAKE_DIRECTORY "${BASE_OUTPUT_DIR}/Release")
++file(MAKE_DIRECTORY "${BASE_OUTPUT_DIR}/RelWithDebInfo")
++file(MAKE_DIRECTORY "${BASE_OUTPUT_DIR}/MinSizeRel")
+ 
+ # Set output directories for each build configuration
+ foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} Debug Release RelWithDebInfo MinSizeRel)
+@@ -298,6 +302,7 @@ set(HIPRT_NAME "hiprt${version_str_}")
+ 
+ # Project: HIPRT
+ add_library(${HIPRT_NAME} SHARED)
++target_compile_definitions(${HIPRT_NAME} PRIVATE HIPRT_DATA_DIRECTORY=\"${HIPRT_DATA_DIRECTORY}\")
+ 
+ target_compile_definitions(${HIPRT_NAME} PRIVATE HIPRT_EXPORTS)
+ 
+@@ -393,28 +398,32 @@ target_sources(${HIPRT_NAME} PRIVATE ${hiprt_sources} ${orochi_sources})
+ #
+ # install script
+ #
+-
+-install(TARGETS ${HIPRT_NAME} DESTINATION bin)
++install(TARGETS ${HIPRT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+ # add header files
+ file(GLOB HIPRT_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/hiprt/*.h")
+ install(FILES ${HIPRT_HEADERS}
+-		DESTINATION include/hiprt)
++		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hiprt)
+ 
+ # add header files from implementation folder
+ file(GLOB HIPRT_IMPL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/hiprt/impl/*.h")
+ install(FILES ${HIPRT_IMPL_HEADERS}
+-		DESTINATION include/hiprt/impl)
++		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hiprt/impl)
+ 		
+ # add some header files from Orochi
+ file(GLOB HIPRT_ORO_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/contrib/Orochi/ParallelPrimitives/*.h")
+ install(FILES ${HIPRT_ORO_HEADERS}
+-		DESTINATION include/contrib/Orochi/ParallelPrimitives)
++		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/contrib/Orochi/ParallelPrimitives)
+ 
+ # add hipfb files
+ file(GLOB HIPRT_HIPFB_FILES "${BASE_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/*.hipfb")
+ install(FILES ${HIPRT_HIPFB_FILES}
+-		DESTINATION bin)
++		DESTINATION ${HIPRT_DATA_DIRECTORY})
++
++# add bc files
++file(GLOB HIPRT_BC_FILES "${BASE_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/*.bc")
++install(FILES ${HIPRT_BC_FILES}
++		DESTINATION ${HIPRT_DATA_DIRECTORY})
+ 
+ 
+ 
+diff --git a/contrib/Orochi/ParallelPrimitives/RadixSort.cpp b/contrib/Orochi/ParallelPrimitives/RadixSort.cpp
+index 951df61..3b623aa 100644
+--- a/contrib/Orochi/ParallelPrimitives/RadixSort.cpp
++++ b/contrib/Orochi/ParallelPrimitives/RadixSort.cpp
+@@ -125,17 +125,7 @@ void RadixSort::compileKernels( const std::string& kernelPath, const std::string
+ 
+ 	const auto getCurrentDir = []() noexcept
+ 	{
+-#if !defined( __GNUC__ )
+-		HMODULE hm = GetCurrentModule();
+-		char buff[MAX_PATH];
+-		GetModuleFileName( hm, buff, MAX_PATH );
+-#else
+-		Dl_info info;
+-		dladdr( (const void*)GetCurrentModule1, &info );
+-		const char* buff = info.dli_fname;
+-#endif
+-		std::string::size_type position = std::string( buff ).find_last_of( "\\/" );
+-		return std::string( buff ).substr( 0, position ) + "/";
++		return HIPRT_DATA_DIRECTORY;
+ 	};
+ 
+ 	std::string binaryPath{};
+diff --git a/hiprt/impl/Utility.cpp b/hiprt/impl/Utility.cpp
+index e961114..88d6e54 100644
+--- a/hiprt/impl/Utility.cpp
++++ b/hiprt/impl/Utility.cpp
+@@ -58,16 +58,7 @@ void getCurrentModule() {}
+ 
+ std::filesystem::path Utility::getCurrentDir()
+ {
+-#if !defined( __GNUC__ )
+-	char buff[MAX_PATH];
+-	GetModuleFileName( getCurrentModule(), buff, MAX_PATH );
+-#else
+-	Dl_info info;
+-	dladdr( (const void*)getCurrentModule, &info );
+-	const char* buff = info.dli_fname;
+-#endif
+-	std::string::size_type position = std::string( buff ).find_last_of( "\\/" );
+-	return std::string( buff ).substr( 0, position ) + "/";
++	return HIPRT_DATA_DIRECTORY;
+ }
+ 
+ uint32_t Utility::hashString( const std::string& str )
