@@ -1,7 +1,7 @@
 # Copyright 2023-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: electron-utils.eclass
+# @ECLASS: electron.eclass
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Eclass for patching electron build processes
 # @MAINTAINER:
@@ -22,6 +22,7 @@
 
 # @ECLASS_VARIABLE: ELECTRON_WVCUS
 # @DEFAULT_UNSET
+# @PRE_INHERIT
 # @DESCRIPTION:
 # If set, use Electron with support for Widevine
 
@@ -30,10 +31,10 @@
 # @DESCRIPTION:
 # Set by eclass, list of bdepends that are required.
 
-# @ECLASS_VARIABLE: ELECTRON_SRC_URI
+# @ECLASS_VARIABLE: ELECTRON_BIN_NAME
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# Set by eclass, list of src uris for the selecetd electron version.
+# Set by eclass, the binary name of the selected electron version.
 
 # @ECLASS_VARIABLE: ELECTRON_KEYWORDS
 # @DESCRIPTION:
