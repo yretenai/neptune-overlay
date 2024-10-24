@@ -5,10 +5,10 @@ EAPI=8
 
 inherit electron-version
 
-ELECTRON_VER="${LATEST_ELECTRON_VER}"
+ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 
-inherit desktop xdg electron-builder-utils git-r3
+inherit desktop xdg electron git-r3
 
 DESCRIPTION="Vesktop is a custom Discord App"
 HOMEPAGE="https://github.com/Vencord
@@ -23,30 +23,29 @@ fi
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="appindicator +seccomp +wayland"
+IUSE="+seccomp +wayland"
 
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror strip test"
 
 RDEPEND="
+	${ELECTRON_RDEPEND}
 	x11-libs/libnotify
 	x11-misc/xdg-utils
 	media-libs/libpulse
 	media-video/pipewire
-	appindicator? ( dev-libs/libayatana-appindicator )
 "
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
 	>=sys-apps/pnpm-bin-9.5.0
-	${ELECTRON_BDEPEND}
 "
 
-DESTDIR="/opt/${PN}"
-QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
+DESTDIR="/usr/share/electron/apps/${P}"
+QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
 src_prepare() {
-	electron-builder-utils_src_prepare
+	electron_src_prepare
 }
 
 src_configure() {
@@ -72,33 +71,19 @@ src_install() {
 	domenu "${PN}.desktop"
 	newicon static/icon.png vencord.png
 
-	cd dist/linux-unpacked
-
-	exeinto "${DESTDIR}"
-	doexe "${PN}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
-	[[ -x chrome_crashpad_handler ]] && doexe chrome_crashpad_handler
-
-	insinto "${DESTDIR}"
-	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json
-	insopts -m0755
+	cd dist/linux-unpacked/resources
 
 	# todo: build this manually.
 	if [[ "$ARCH" == "amd64" ]]; then
-		rm -rfv "resources/app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/"
+		rm -rfv "app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/"
 	elif [[ "$ARCH" == "arm64" ]]; then
-		rm -rfv "resources/app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/"
+		rm -rfv "app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/"
 	fi
 
-	doins -r locales resources
+	insinto "${DESTDIR}"
+	doins -r *
 
-	fowners root "${DESTDIR}/chrome-sandbox"
-	fperms 4711 "${DESTDIR}/chrome-sandbox"
-
-	dosym "${DESTDIR}/${PN}" "/usr/bin/${PN}"
-
-	if use appindicator; then
-		dosym ../../usr/lib64/libayatana-appindicator3.so "${DESTDIR}/libappindicator3.so"
-	fi
+	electron_dobin "${DESTDIR}/app.asar" "${PN}"
 }
 
 pkg_postinst() {

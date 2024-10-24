@@ -5,11 +5,11 @@ EAPI=8
 
 inherit electron-version
 
-ELECTRON_VER="${LATEST_ELECTRON_WVCUS_VER}"
-ELECTRON_VER_BASE="${ELECTRON_VER}"
+ELECTRON_SLOT="${LATEST_ELECTRON_WVCUS_VER}"
+ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 ELECTRON_WVCUS="1"
 
-inherit desktop xdg electron-builder-utils git-r3
+inherit desktop xdg electron git-r3
 
 DESCRIPTION="Web version of Tidal running in electron with Hi-Fi support thanks to Widevine."
 HOMEPAGE="https://github.com/Mastermindzh/tidal-hifi"
@@ -28,47 +28,19 @@ IUSE="+seccomp +wayland"
 RESTRICT="network-sandbox mirror strip test"
 
 RDEPEND="
-	>=app-accessibility/at-spi2-core-2.46.0:2
-	dev-libs/expat
-	dev-libs/glib:2
-	dev-libs/libgcrypt
-	dev-libs/nspr
-	dev-libs/nss
-	media-libs/alsa-lib
-	media-libs/fontconfig
-	media-libs/mesa[gbm(+)]
-	net-print/cups
-	sys-apps/dbus
-	sys-apps/util-linux
-	sys-libs/glibc
-	x11-libs/cairo
-	x11-libs/libdrm
-	x11-libs/gdk-pixbuf:2
-	x11-libs/gtk+:3
-	x11-libs/libX11
-	x11-libs/libXScrnSaver
-	x11-libs/libXcomposite
-	x11-libs/libXdamage
-	x11-libs/libXext
-	x11-libs/libXfixes
-	x11-libs/libXrandr
-	x11-libs/libxcb
-	x11-libs/libxkbcommon
-	x11-libs/libxshmfence
-	x11-libs/pango
+	${ELECTRON_RDEPEND}
 "
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
-	${ELECTRON_BDEPEND}
 "
 
-DESTDIR="/opt/${PN}"
-QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
+DESTDIR="/usr/share/electron/apps/${P}"
+QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
 src_prepare() {
 	default
-	sed -i -e "s|electronDownload:|electronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
+	sed -i -e "s|electronDownload:|electronDist: \"/usr/share/electron-wvcus/${ELECTRON_SLOT}\"\nelectronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
 	sed -i -e "s|electronVersion:.*$|electronVersion: ${ELECTRON_VER_BASE}|" build/electron-builder.base.yml || die
 	sed -i -e "s|version: .*+wvcus|version: ${ELECTRON_VER}|" build/electron-builder.base.yml || die
 }
@@ -83,9 +55,9 @@ src_compile() {
 }
 
 src_install() {
-	newicon "build/icon.png" tidal-hifi.png
+	newicon "build/icon.png" ${PN}.png
 
-	EXEC="/usr/bin/tidal-hifi"
+	EXEC="/usr/bin/${PN}"
 
 	if ! use seccomp ; then
 		EXEC="${EXEC} --disable-seccomp-filter-sandbox"
@@ -95,23 +67,14 @@ src_install() {
 		EXEC="${EXEC} --ozone-platform-hint=auto --enable-wayland-ime"
 	fi
 
-	make_desktop_entry "$EXEC" "TIDAL Hi-Fi" ${PN} "Network;AudioVideo;Audio;Video"
+	make_desktop_entry "$EXEC" "TIDAL Hi-Fi" "${PN}" "Network;AudioVideo;Audio;Video"
 
-	cd dist/linux-unpacked
-
-	exeinto "${DESTDIR}"
-	doexe "${PN}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
-	[[ -x chrome_crashpad_handler ]] && doexe chrome_crashpad_handler
+	cd dist/linux-unpacked/resources
 
 	insinto "${DESTDIR}"
-	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json
-	insopts -m0755
-	doins -r locales resources
+	doins -r *
 
-	fowners root "${DESTDIR}/chrome-sandbox"
-	fperms 4711 "${DESTDIR}/chrome-sandbox"
-
-	dosym "${DESTDIR}/${PN}" "/usr/bin/${PN}"
+	electron_dobin "${DESTDIR}/app.asar" "${PN}"
 }
 
 pkg_postinst() {

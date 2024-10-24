@@ -1,19 +1,19 @@
 # Copyright 2023-2024 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# @ECLASS: electron-builder-utils.eclass
+# @ECLASS: electron-utils.eclass
 # @SUPPORTED_EAPIS: 8
-# @BLURB: Eclass for patching electron-builder
+# @BLURB: Eclass for patching electron build processes
 # @MAINTAINER:
 # Ada <ada@chronovore.dev>
 # @AUTHOR:
 # Ada <ada@chronovore.dev>
 
-# @ECLASS_VARIABLE: ELECTRON_VER
+# @ECLASS_VARIABLE: ELECTRON_SLOT
 # @PRE_INHERIT
-# @REQUIRED
+# @DEFAULT_UNSET
 # @DESCRIPTION:
-# Version of electron to use
+# The electron slot to use
 
 # @ECLASS_VARIABLE: ELECTRON_BUILDER_VER
 # @DEFAULT_UNSET
@@ -21,7 +21,6 @@
 # If set, this electron-builder version will be used
 
 # @ECLASS_VARIABLE: ELECTRON_WVCUS
-# @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If set, use Electron with support for Widevine
@@ -47,26 +46,42 @@ ELECTRON_BDEPEND="
 "
 
 if [[ ${ELECTRON_WVCUS} ]]; then
-	ELECTRON_VER="${ELECTRON_VER}+wvcus"
-	ELECTRON_SRC_URI="
-		amd64? ( https://github.com/castlabs/electron-releases/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-x64.zip )
-	"
+	ELECTRON_RDEPEND="virtual/electron-wvcus:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="-* ~amd64"
+	ELECTRON_BIN_NAME="electron-wvcus-${ELECTRON_SLOT}"
 else
-	ELECTRON_SRC_URI="
-		amd64? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-x64.zip )
-		arm64? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-arm64.zip )
-		arm? ( https://github.com/electron/electron/releases/download/v${ELECTRON_VER}/electron-v${ELECTRON_VER}-linux-armv7l.zip )
-	"
+	ELECTRON_RDEPEND="virtual/electron:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="-* ~amd64 ~arm ~arm64"
+	ELECTRON_BIN_NAME="electron-${ELECTRON_SLOT}"
 fi
 
-SRC_URI="${ELECTRON_SRC_URI}"
+electron_dobin() {
+	[[ ${EBUILD_PHASE} != install ]] &&
+		die "${FUNCNAME} can only be used in src_install"
+	[[ ${#} -eq 2 ]] || die "Usage: ${FUNCNAME} <path> <name>"
 
-electron-builder-utils_src_prepare() {
+	local asarpath=${1}
+	local name=${2}
+	cat > "electron-${name}" <<-EOF
+	#!/bin/sh
+	
+	/usr/bin/${ELECTRON_BIN_NAME} "${asarpath}" "\$@"
+	EOF
+	newbin "electron-${name}" "${name}"
+}
+
+electron_src_prepare() {
     default
 
-	echo "$(jq --arg cache "${DISTDIR}" '.build.electronDownload.cache = $cache' package.json)" > package.json
+	if [[ ${ELECTRON_WVCUS} ]]; then
+		ELECTRON_VER=$(best_version virtual/electron-wvcus:${ELECTRON_SLOT})
+	else
+		ELECTRON_VER=$(best_version virtual/electron:${ELECTRON_SLOT})
+	fi
+	ELECTRON_VER=${ELECTRON_VER#*/*-} # reduce it to ${PV}-${PR}
+	ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
+
+	echo "$(jq ".build.electronDist = \"/usr/share/electron/${ELECTRON_SLOT}\"" package.json)" > package.json
 	echo "$(jq 'del(.dependencies.electron)' package.json)" > package.json
 	ELECTRON_NPM_VER="${ELECTRON_VER}"
 	if [[ ${ELECTRON_WVCUS} ]]; then

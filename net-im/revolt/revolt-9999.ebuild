@@ -3,10 +3,12 @@
 
 EAPI=8
 
-ELECTRON_VER="31.2.0"
+inherit electron-version
+
+ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="24.13.3"
 
-inherit desktop optfeature xdg electron-builder-utils git-r3
+inherit desktop optfeature xdg electron git-r3
 
 DESCRIPTION="Revolt is an open source user-first chat platform."
 HOMEPAGE="https://github.com/revoltchat
@@ -22,42 +24,19 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="${ELECTRON_KEYWORDS}"
 fi
 
-IUSE="appindicator +seccomp +wayland"
+IUSE="+seccomp +wayland"
 
 RDEPEND="
-	app-accessibility/at-spi2-core:2
-	dev-libs/expat
-	dev-libs/glib
-	dev-libs/nspr
-	dev-libs/nss
-	wayland? ( dev-libs/wayland )
-	media-libs/alsa-lib
-	media-libs/mesa
-	net-print/cups
-	sys-apps/dbus
-	x11-libs/cairo
-	x11-libs/gtk+:3
-	x11-libs/libdrm
-	x11-libs/libX11
-	x11-libs/libxcb
-	x11-libs/libXcomposite
-	x11-libs/libXdamage
-	x11-libs/libXext
-	x11-libs/libXfixes
-	x11-libs/libxkbcommon
-	x11-libs/libXrandr
-	x11-libs/pango
-	appindicator? ( dev-libs/libayatana-appindicator )
+	${ELECTRON_RDEPEND}
 "
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
 	sys-apps/yarn
-	${ELECTRON_BDEPEND}
 "
 
-DESTDIR="/opt/${PN}"
-QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
+DESTDIR="/usr/share/electron/apps/${P}"
+QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 RESTRICT="network-sandbox mirror strip test"
 
 src_configure() {
@@ -86,33 +65,12 @@ src_install() {
 	domenu "${PN}.desktop"
 	newicon -s 256 "assets/icon.png" revolt-desktop.png
 
-	cd dist/linux-unpacked || die
-
-	mv "revolt-desktop" "${PN}"
-
-	exeinto "${DESTDIR}"
-
-	doexe "${PN}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
+	cd dist/linux-unpacked/resources
 
 	insinto "${DESTDIR}"
-	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json
-	insopts -m0755
-	doins -r locales resources
+	doins -r *
 
-	# Chrome-sandbox requires the setuid bit to be specifically set.
-	# see https://github.com/electron/electron/issues/17972
-	fowners root "${DESTDIR}/chrome-sandbox"
-	fperms 4711 "${DESTDIR}/chrome-sandbox"
-
-	dosym "${DESTDIR}/${PN}" "/usr/bin/${PN}"
-
-	# Crashpad is included in the package once in a while and when it does, it must be installed.
-	# See #903616 and #890595
-	[[ -x chrome_crashpad_handler ]] && doins chrome_crashpad_handler
-
-	if use appindicator; then
-		dosym ../../usr/lib64/libayatana-appindicator3.so "${DESTDIR}/libappindicator3.so"
-	fi
+	electron_dobin "${DESTDIR}/app.asar" "${PN}"
 }
 
 pkg_postinst() {

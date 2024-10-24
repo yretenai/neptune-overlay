@@ -5,10 +5,10 @@ EAPI=8
 
 inherit electron-version
 
-ELECTRON_VER="${LATEST_ELECTRON_VER}"
+ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 
-inherit desktop xdg electron-builder-utils git-r3
+inherit desktop xdg electron git-r3
 
 DESCRIPTION="Blockbench - A low poly 3D model editor"
 HOMEPAGE="
@@ -30,6 +30,7 @@ IUSE="+seccomp +wayland"
 RESTRICT="network-sandbox mirror strip test"
 
 RDEPEND="
+	${ELECTRON_RDEPEND}
 	x11-libs/libnotify
 	x11-misc/xdg-utils
 	media-libs/imlib2
@@ -38,11 +39,10 @@ RDEPEND="
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
-	${ELECTRON_BDEPEND}
 "
 
-DESTDIR="/opt/${PN}"
-QA_PREBUILT="${DESTDIR}/resources/app.asar.unpacked/*"
+DESTDIR="/usr/share/electron/apps/${P}"
+QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
@@ -70,21 +70,14 @@ src_install() {
 	insinto "/usr/share/mime/packages"
 	doins bbmodel.xml
 
-	cd dist/linux-unpacked
+	cd dist/linux-unpacked/resources
 
-	exeinto "${DESTDIR}"
-	doexe "${PN}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
-	[[ -x chrome_crashpad_handler ]] && doexe chrome_crashpad_handler
+	[[ -x chrome_crashpad_handler ]] && rm app-update.yml
 
 	insinto "${DESTDIR}"
-	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json
-	insopts -m0755
-	doins -r locales resources
+	doins -r *
 
-	fowners root "${DESTDIR}/chrome-sandbox"
-	fperms 4711 "${DESTDIR}/chrome-sandbox"
-
-	dosym "${DESTDIR}/${PN}" "/usr/bin/${PN}"
+	electron_dobin "${DESTDIR}/app.asar" "${PN}"
 }
 
 pkg_postinst() {
