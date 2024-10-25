@@ -11,12 +11,10 @@ EGIT_REPO_URI="https://gitlab.freedesktop.org/monado/monado.git"
 LICENSE="Boost-1.0"
 SLOT="0"
 
-IUSE="doc test onnx bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X
-monado_drivers_arduino monado_drivers_daydream monado_drivers_euroc monado_drivers_twrap monado_drivers_hdk
-monado_drivers_hydra monado_drivers_ns monado_drivers_opengloves monado_drivers_psmv monado_drivers_pssense
-monado_drivers_psvr monado_drivers_qwerty monado_drivers_remote monado_drivers_rift monado_drivers_rokid
-monado_drivers_steamvr monado_drivers_vf monado_drivers_vive monado_drivers_wmr monado_drivers_xreal
-monado_drivers_simulavr monado_drivers_handtracking
+MONADO_DRIVERS_COMPAT=( arduino daydream euroc twrap hdk hydra ns opengloves psmv pssense psvr qwerty remote rift rokid steamvr vf vive wmr xreal simulavr handtracking )
+IUSE="
+	doc test onnx bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X
+	${MONADO_DRIVERS_COMPAT[@]/#/monado_drivers_}
 "
 
 # monado_drivers_depthai monado_drivers_handtracking monado_drivers_illixr

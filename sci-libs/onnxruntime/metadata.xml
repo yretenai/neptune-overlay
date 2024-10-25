@@ -8,9 +8,6 @@
 		<flag name="cudnn">
 			Enable CUDA Deep Neural Network
 		</flag>
-		<flag name="hip">
-			Enable ROCM HIP
-		</flag>
 		<flag name="mimalloc">
 			Enable GPUOpen MiMalloc
 		</flag>

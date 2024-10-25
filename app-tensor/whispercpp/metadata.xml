@@ -6,7 +6,6 @@
 		<remote-id type="github">ggerganov/whisper.cpp</remote-id>
 	</upstream>
 	<use>
-		<flag name="hip">Enable ROCM HIP support (computation on GPU)</flag>
 		<flag name="hipuma">Enable ROCM HIP Unified Memory Architecture support</flag>
 		<flag name="models">Emerge Whisper GGML models</flag>
 		<flag name="openblas">Enable openBLAS support (computation on CPU/GPU)</flag>

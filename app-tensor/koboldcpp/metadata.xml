@@ -5,9 +5,6 @@
 		<flag name="clblast">
 			Compile with OpenCL support via <pkg>sci-libs/clblast</pkg>
 		</flag>
-		<flag name="hip">
-			Enable AMD hipBLAS support (computation on GPU)
-		</flag>
 		<flag name="tools">
 			Install utility tools
 		</flag>

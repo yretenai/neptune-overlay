@@ -5,9 +5,6 @@
 		<flag name="flash-attenuation">
 			Use flash attention for x4 less memory usage
 		</flag>
-		<flag name="hip">
-			Use ROCm HIP backend
-		</flag>
 		<flag name="softmax">
 			x1.5 faster softmax, indeterministic, CUDA only
 		</flag>

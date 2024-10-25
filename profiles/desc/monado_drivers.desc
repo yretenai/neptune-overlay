@@ -3,33 +3,32 @@
 
 # This file contains descriptions of MONADO_DRIVERS USE_EXPAND flags.
 
-vive - HTC Vive, Vive Pro, Valve Index
-psvr - PSVR HMD
 arduino - Arduino input device with BLE
 daydream - Google Daydream View
-depthai - DepthAI
+# depthai - DepthAI
 euroc - EuRoC dataset for SLAM evaluation
 handtracking - Camera Hand Tracking
-twrap - Tracking Wrapper
 hdk - HDK
 hydra - Hydra
-illixr - ILLIXR
+# illixr - ILLIXR
 ns - North Star
-ohmd - OpenHMD
+# ohmd - OpenHMD
 opengloves - OpenGloves
 psmv - Playstation Move
 pssense - PlayStation Sense
 psvr - PSVR HMD
 qwerty - Qwerty
-realsense - RealSense device
+# realsense - RealSense device
 remote - Remote Debugging
 rift - Oculus Rift S
 rokid - Rokid
+simulavr - Simula
 steamvr - SteamVR Lighthouse
-survive - libsurvive
-ulv2 - Ultraleap v2
-ulv5 - Ultraleap v5
+# survive - libsurvive
+twrap - Tracking Wrapper
+# ulv2 - Ultraleap v2
+# ulv5 - Ultraleap v5
 vf - Video frame
+vive - HTC Vive, Vive Pro, Valve Index
 wmr - Windows Mixed Reality
 xreal - Xreal Air HMD
-simulavr - Simula
