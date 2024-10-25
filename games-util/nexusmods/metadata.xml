@@ -3,10 +3,7 @@
 <pkgmetadata>
 	<use>
 		<flag name="p7zip">
-			Use 
-			<pkg>app-arch/p7zip</pkg>
-			instead of
-			<pkg>app-arch/7zip</pkg>.
+			Use <pkg>app-arch/p7zip</pkg> instead of <pkg>app-arch/7zip</pkg>.
 		</flag>
 	</use>
 	<upstream>

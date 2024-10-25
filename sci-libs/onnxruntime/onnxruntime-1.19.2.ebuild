@@ -25,14 +25,14 @@ SRC_URI="
 	https://github.com/dcleblanc/SafeInt/archive/${SAFEINT_COMMIT}.tar.gz -> SafeInt-${SAFEINT_COMMIT:0:10}.tar.gz
 	https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_PV}.tar.gz -> flatbuffers-${FLATBUFFERS_PV}.tar.gz
 	https://github.com/HowardHinnant/date/archive/v${DATE_PV}.tar.gz -> hhdate-${DATE_PV}.tar.gz
-	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.gz
-	composable_kernel? ( https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz )
+	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.bz2
+	hip? ( https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz )
 "
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="benchmark cuda onednn cudnn debug hip javascript +python composable_kernel +mpi mimalloc lto test tensorrt xnnpack
+IUSE="benchmark cuda onednn cudnn debug hip javascript +python +mpi mimalloc lto test tensorrt xnnpack
 ${CPU_FLAGS}
 ${CUDA_TARGETS_COMPAT[@]/#/cuda_targets_}
 ${AMDGPU_TARGETS_COMPAT[@]/#/amdgpu_targets_}"
@@ -158,7 +158,6 @@ src_prepare() {
 
 src_configure() {
 	export ROCM_PATH=/usr MIOPEN_PATH=/usr
-	export ROCM_VERSION="${ROCM_VERSION}"
 
 	python && python_setup
 	CMAKE_BUILD_TYPE=$(usex debug RelWithDebInfo Release)
@@ -221,7 +220,7 @@ src_configure() {
 		-Donnxruntime_USE_TVM=OFF
 		-Donnxruntime_TVM_USE_HASH=OFF
 		-Donnxruntime_USE_MIGRAPHX=OFF
-		-Donnxruntime_USE_COMPOSABLE_KERNEL=$(usex composable_kernel)
+		-Donnxruntime_USE_COMPOSABLE_KERNEL=$(usex hip)
 		-Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=OFF # enable on 6.2.0
 		-Donnxruntime_CROSS_COMPILING=$(tc-is-cross-compiler && echo ON || echo OFF)
 		-Donnxruntime_DISABLE_CONTRIB_OPS=ON

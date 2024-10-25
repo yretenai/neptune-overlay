@@ -16,6 +16,7 @@
 # The electron slot to use
 
 # @ECLASS_VARIABLE: ELECTRON_BUILDER_VER
+# @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # If set, this electron-builder version will be used
@@ -31,6 +32,11 @@
 # @DESCRIPTION:
 # Set by eclass, list of rdepends that are required.
 
+# @ECLASS_VARIABLE: ELECTRON_BDEPEND
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Set by eclass, list of bdepends that are required.
+
 # @ECLASS_VARIABLE: ELECTRON_BIN_NAME
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -39,7 +45,6 @@
 # @ECLASS_VARIABLE: ELECTRON_KEYWORDS
 # @DESCRIPTION:
 # Package Keywords that are at least valid for Electron
-
 
 ELECTRON_BDEPEND="
 	app-misc/jq
@@ -68,10 +73,10 @@ electron_dobin() {
 	local asarpath=${1}
 	local name=${2}
 	cat > "electron-${name}" <<-EOF
-	#!/bin/sh
-	
-	/usr/bin/${ELECTRON_BIN_NAME} "${asarpath}" "\$@"
-	EOF
+#!/bin/sh
+
+/usr/bin/${ELECTRON_BIN_NAME} "${asarpath}" "\$@"
+EOF
 	newbin "electron-${name}" "${name}"
 }
 

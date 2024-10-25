@@ -73,7 +73,7 @@ Mask Guru's imhex if you use neptune's imhex (`app-editors/imhex`)
 app-editors/imhex::guru
 ```
 
-and discord if you use discord 
+and discord if you use discord
 
 ```
 net-im/discord::gentoo

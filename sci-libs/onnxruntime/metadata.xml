@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="benchmark">
+			Build benchmarking tools
+		</flag>
+		<flag name="cudnn">
+			Enable CUDA Deep Neural Network
+		</flag>
+		<flag name="hip">
+			Enable ROCM HIP
+		</flag>
+		<flag name="mimalloc">
+			Enable GPUOpen MiMalloc
+		</flag>
+		<flag name="onednn">
+			Enable OneAPI Deep Neural Network
+		</flag>
+		<flag name="tensorrt">
+			Enable Tensor Runtime
+		</flag>
+		<flag name="xnnpack">
+			Enable XNNPACK
+		</flag>
+		<flag name="cuda_targets_sm_50">
+			Enable CUDA Capability sm_50
+		</flag>
+		<flag name="cuda_targets_sm_52">
+			Enable CUDA Capability sm_52
+		</flag>
+		<flag name="cuda_targets_sm_53">
+			Enable CUDA Capability sm_53
+		</flag>
+		<flag name="cuda_targets_sm_60">
+			Enable CUDA Capability sm_60
+		</flag>
+		<flag name="cuda_targets_sm_61">
+			Enable CUDA Capability sm_61
+		</flag>
+		<flag name="cuda_targets_sm_62">
+			Enable CUDA Capability sm_62
+		</flag>
+		<flag name="cuda_targets_sm_70">
+			Enable CUDA Capability sm_70
+		</flag>
+		<flag name="cuda_targets_sm_72">
+			Enable CUDA Capability sm_72
+		</flag>
+		<flag name="cuda_targets_sm_75">
+			Enable CUDA Capability sm_75
+		</flag>
+		<flag name="cuda_targets_sm_80">
+			Enable CUDA Capability sm_80
+		</flag>
+		<flag name="cuda_targets_sm_86">
+			Enable CUDA Capability sm_86
+		</flag>
+		<flag name="cuda_targets_sm_87">
+			Enable CUDA Capability sm_87
+		</flag>
+		<flag name="cuda_targets_sm_89">
+			Enable CUDA Capability sm_89
+		</flag>
+		<flag name="cuda_targets_sm_90">
+			Enable CUDA Capability sm_90
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">microsoft/onnxruntime</remote-id>
+		<remote-id type="gitlab">libeigen/eigen</remote-id>
+	</upstream>
+</pkgmetadata>

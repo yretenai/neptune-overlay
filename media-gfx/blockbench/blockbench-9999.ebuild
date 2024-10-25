@@ -38,6 +38,7 @@ RDEPEND="
 "
 
 BDEPEND="
+	${ELECTRON_BDEPEND}
 	>=net-libs/nodejs-20.6.1[npm]
 "
 
