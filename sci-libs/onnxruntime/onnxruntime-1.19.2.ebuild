@@ -10,6 +10,7 @@ DISTUTILS_EXT=1
 ROCM_VERSION="6.1.2"
 CUDA_TARGETS_COMPAT=( sm_50 sm_52 sm_53 sm_60 sm_61 sm_62 sm_70 sm_72 sm_75 sm_80 sm_86 sm_87 sm_89 sm_90 )
 LLVM_COMPAT=( 18 )
+CPU_FLAGS="cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512_vbmi2"
 
 inherit cmake cuda distutils-r1 flag-o-matic llvm-r1 rocm toolchain-funcs
 
@@ -34,8 +35,7 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE="benchmark cuda onednn cudnn debug hip javascript +python +mpi mimalloc lto test tensorrt xnnpack
 ${CPU_FLAGS}
-${CUDA_TARGETS_COMPAT[@]/#/cuda_targets_}
-${AMDGPU_TARGETS_COMPAT[@]/#/amdgpu_targets_}"
+${CUDA_TARGETS_COMPAT[@]/#/cuda_targets_}"
 RESTRICT="mirror test"
 REQUIRED_USE="
 	cuda? ( cudnn !lto )
