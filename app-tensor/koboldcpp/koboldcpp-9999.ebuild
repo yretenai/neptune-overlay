@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{{11..13},13t} )
 LLVM_COMPAT=( 18 )
 ROCM_VERSION="6.1.2"
 
@@ -47,7 +47,7 @@ RDEPEND="
 		>=sci-libs/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
 	')
 	hip? (
-		>=sci-libs/hipBLAS-${ROCM_VERSION}:=
+		>=sci-libs/hipBLAS-6.1.1:=
 		$(llvm_gen_dep "
 			>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
 		")

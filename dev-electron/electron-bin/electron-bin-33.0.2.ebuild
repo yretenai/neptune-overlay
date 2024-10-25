@@ -3,7 +3,11 @@
 
 EAPI=8
 
-DESCRIPTION="Electron"
+DESCRIPTION="Build cross-platform desktop apps with JavaScript, HTML, and CSS"
+HOMEPAGE="
+	https://github.com/electron/electron/
+	https://www.electronjs.org/
+"
 
 MY_PN="${PN/-bin*/}"
 MY_PV="${PV/-r*/}"
@@ -18,16 +22,18 @@ SRC_URI="
 	arm64? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-arm64.zip )
 	arm? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-armv7l.zip )
 "
+
+S="${WORKDIR}"
+LICENSE="MIT"
+SLOT="$(ver_cut 1)"
 KEYWORDS="-* ~amd64 ~arm ~arm64"
 
-SLOT="$(ver_cut 1)"
-RESTRICT="mirror test"
 IUSE="debug wayland X appindicator"
+RESTRICT="mirror test"
 REQUIRED_USE="
 	|| ( wayland X )
 "
 DESTDIR="/usr/share/${MY_PN}/${SLOT}"
-S="${WORKDIR}"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -49,6 +55,10 @@ RDEPEND="
 	x11-libs/gtk+:3[X?,wayland?]
 	x11-libs/pango
 	appindicator? ( dev-libs/libayatana-appindicator )
+"
+
+BDEPEND="
+	app-arch/unzip
 "
 
 src_install() {

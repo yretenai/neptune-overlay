@@ -3,12 +3,13 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{{11..13},13t} )
 LLVM_COMPAT=( 18 )
 ROCM_VERSION="6.1.2"
 CMAKE_BUILD_TYPE="Release"
+EGIT_LFS="no" # fetches test data
 
-inherit rocm cmake git-r3 python-single-r1 llvm-r1 python-utils-r1
+inherit rocm cmake git-r3 python-single-r1 llvm-r1
 
 DESCRIPTION="HIP RT is a ray tracing library for HIP."
 HOMEPAGE="
@@ -16,7 +17,6 @@ HOMEPAGE="
 	https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT
 "
 
-EGIT_LFS=no # fetches test data
 EGIT_REPO_URI="https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT.git"
 EGIT_COMMIT="3a8b83609bc347270643db12b422a6315cb89f81"
 
@@ -55,8 +55,7 @@ pkg_setup() {
 
 src_prepare() {
 	cmake_src_prepare
-	
-	_python_check_EPYTHON
+
 	sed -e "s| python | ${EPYTHON} |" -i CMakeLists.txt || die
 	sed -e "s|hiprt\${version_str_}|hiprt|" -i CMakeLists.txt || die
 	sed -e "s|\${HIPRT_NAME} SHARED)|\${HIPRT_NAME} SHARED)\nset_target_properties(\${HIPRT_NAME} PROPERTIES VERSION ${PV} SOVERSION 1)|" -i CMakeLists.txt || die

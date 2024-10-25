@@ -26,10 +26,10 @@
 # @DESCRIPTION:
 # If set, use Electron with support for Widevine
 
-# @ECLASS_VARIABLE: ELECTRON_BDEPEND
+# @ECLASS_VARIABLE: ELECTRON_RDEPEND
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# Set by eclass, list of bdepends that are required.
+# Set by eclass, list of rdepends that are required.
 
 # @ECLASS_VARIABLE: ELECTRON_BIN_NAME
 # @DEFAULT_UNSET
@@ -56,6 +56,10 @@ else
 	ELECTRON_BIN_NAME="electron-${ELECTRON_SLOT}"
 fi
 
+# @FUNCTION: electron_dobin
+# @USAGE: asarpath name
+# @DESCRIPTION:
+# Builds a bin wrapper for an electron app
 electron_dobin() {
 	[[ ${EBUILD_PHASE} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"

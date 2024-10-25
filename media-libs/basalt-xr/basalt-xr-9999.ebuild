@@ -63,7 +63,6 @@ PATCHES=(
 	"${FILESDIR}/thirdparty.patch"
 )
 
-
 src_configure() {
 	local mycmakeargs=(
 		-DEIGEN_ROOT="${ESYSROOT}/usr/include/eigen3"

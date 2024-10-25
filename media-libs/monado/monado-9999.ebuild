@@ -83,6 +83,7 @@ REQUIRED_USE="
 	monado_drivers_vf? ( gstreamer )
 	monado_drivers_vive? ( zlib )
 	monado_drivers_handtracking? ( onnx )
+	monado_drivers_wmr? ( monado_drivers_euroc )
 "
 RESTRICT="
 	!test? ( test )

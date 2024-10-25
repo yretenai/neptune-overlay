@@ -8,9 +8,6 @@
 		<flag name="hip">
 			Enable AMD hipBLAS support (computation on GPU)
 		</flag>
-		<flag name="openblas">
-			Enable openBLAS support
-		</flag>
 		<flag name="tools">
 			Install utility tools
 		</flag>

@@ -3,7 +3,10 @@
 
 EAPI=8
 
-DESCRIPTION="Electron with Widevine"
+DESCRIPTION="Electron for Content Security from castLabs"
+HOMEPAGE="
+	https://github.com/castlabs/electron-releases
+"
 
 MY_PN="${PN/-bin*/}"
 MY_PV="${PV/-r*/}"
@@ -11,16 +14,18 @@ MY_PV="${PV/-r*/}"
 SRC_URI="
 	https://github.com/castlabs/electron-releases/releases/download/v${MY_PV}+wvcus/electron-v${MY_PV}+wvcus-linux-x64.zip
 "
+
+S="${WORKDIR}"
+LICENSE="MIT"
+SLOT="$(ver_cut 1)"
 KEYWORDS="-* ~amd64"
 
-SLOT="$(ver_cut 1)"
-RESTRICT="mirror test"
 IUSE="wayland X appindicator"
+RESTRICT="mirror test"
 REQUIRED_USE="
 	|| ( wayland X )
 "
 DESTDIR="/usr/share/${MY_PN}/${SLOT}"
-S="${WORKDIR}"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -42,6 +47,10 @@ RDEPEND="
 	x11-libs/gtk+:3[X?,wayland?]
 	x11-libs/pango
 	appindicator? ( dev-libs/libayatana-appindicator )
+"
+
+BDEPEND="
+	app-arch/unzip
 "
 
 src_install() {

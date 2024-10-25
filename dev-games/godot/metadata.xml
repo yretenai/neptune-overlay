@@ -2,6 +2,8 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<use>
+		<flag name="bullet">Enable physics via the bullet physics engine</flag>
+		<flag name="webm">Enable support for the webm image format</flag>
 		<flag name="deprecated">Enable support for deprecated features</flag>
 		<flag name="raycast">Enable the raycast Editor module using <pkg>media-libs/embree</pkg></flag>
 		<flag name="runner">Build an additional binary optimized for running games (only relevant with USE=tools)</flag>

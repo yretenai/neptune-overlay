@@ -6,7 +6,7 @@ EAPI=8
 DISTUTILS_EXT=1
 DISTUTILS_OPTIONAL=1
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{8..13} )
+PYTHON_COMPAT=( python3_{{11..13},13t} )
 inherit distutils-r1 git-r3 cmake
 
 DESCRIPTION="Unsupervised text tokenizer for Neural Network-based text generation."

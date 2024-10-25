@@ -24,10 +24,14 @@ IUSE="+man"
 RESTRICT="mirror strip"
 QA_PREBUILT="*"
 
+BDEPEND="
+	app-arch/unzip
+"
+
 src_install() {
 	domenu "share/applications/org.zrythm.Zrythm.desktop"
 	doicon -s scalable "share/icons/hicolor/scalable/apps/org.zrythm.Zrythm.svg"
-	
+
 	if use man; then
 		doman "share/man/man1/zrythm.1"
 	fi
@@ -60,4 +64,3 @@ pkg_postinst() {
 pkg_postrm() {
 	xdg_pkg_postrm
 }
-

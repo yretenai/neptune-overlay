@@ -163,7 +163,7 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	hiprt? (
 		$(llvm_gen_dep '
-			=dev-libs/hiprt-2.3:=[llvm_slot_${LLVM_SLOT}]
+			=dev-libs/hiprt-2.3*:=[llvm_slot_${LLVM_SLOT}]
 		')
 	)
 "

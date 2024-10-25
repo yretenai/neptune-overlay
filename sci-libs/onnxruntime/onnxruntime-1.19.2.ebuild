@@ -3,13 +3,12 @@
 
 EAPI=8
 CMAKE_IN_SOURCE_BUILD=1
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{{11..13},13t} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
-CUDA_TARGETS_COMPAT=( sm_50 sm_52 sm_53 sm_60 sm_61 sm_62 sm_70 sm_72 sm_75 sm_80 sm_86 sm_87 sm_89 sm_90 )
 ROCM_VERSION="6.1.2"
-AMDGPU_TARGETS_COMPAT=( gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 gfx1100 gfx1101	gfx1102	gfx1103 )
+CUDA_TARGETS_COMPAT=( sm_50 sm_52 sm_53 sm_60 sm_61 sm_62 sm_70 sm_72 sm_75 sm_80 sm_86 sm_87 sm_89 sm_90 )
 LLVM_COMPAT=( 18 )
 
 inherit cmake cuda distutils-r1 flag-o-matic llvm-r1 rocm toolchain-funcs
@@ -26,14 +25,13 @@ SRC_URI="
 	https://github.com/dcleblanc/SafeInt/archive/${SAFEINT_COMMIT}.tar.gz -> SafeInt-${SAFEINT_COMMIT:0:10}.tar.gz
 	https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_PV}.tar.gz -> flatbuffers-${FLATBUFFERS_PV}.tar.gz
 	https://github.com/HowardHinnant/date/archive/v${DATE_PV}.tar.gz -> hhdate-${DATE_PV}.tar.gz
-	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.gz -> eigen-${EIGEN_PV}.tar.gz
+	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.gz
 	composable_kernel? ( https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz )
 "
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-CPU_FLAGS="cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512"
 IUSE="benchmark cuda onednn cudnn debug hip javascript +python composable_kernel +mpi mimalloc lto test tensorrt xnnpack
 ${CPU_FLAGS}
 ${CUDA_TARGETS_COMPAT[@]/#/cuda_targets_}
@@ -67,7 +65,6 @@ BDEPEND="
 	benchmark? ( dev-cpp/benchmark )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	cudnn? ( dev-libs/cudnn:= )
-	javascript? ( dev-util/emscripten )
 	onednn? ( dev-libs/oneDNN:= )
 	hip? (
 		sci-libs/hipFFT:=
@@ -191,7 +188,7 @@ src_configure() {
 		-Donnxruntime_USE_ROCM=$(usex hip)
 		-Donnxruntime_USE_AVX=$(usex cpu_flags_x86_avx)
 		-Donnxruntime_USE_AVX2=$(usex cpu_flags_x86_avx2)
-		-Donnxruntime_USE_AVX512=$(usex cpu_flags_x86_avx512)
+		-Donnxruntime_USE_AVX512=$(usex cpu_flags_x86_avx512_vbmi2)
 		-Donnxruntime_USE_MIMALLOC=$(usex mimalloc)
 		-Donnxruntime_USE_XNNPACK=$(usex xnnpack)
 		-Donnxruntime_ENABLE_LTO=$(usex lto)
@@ -205,7 +202,7 @@ src_configure() {
 		-DFETCHCONTENT_SOURCE_DIR_DATE="${WORKDIR}/date-${DATE_PV}"
 		-DFETCHCONTENT_SOURCE_DIR_EIGEN="${WORKDIR}/eigen-${EIGEN_PV}"
 		-Donnxruntime_USE_TENSORRT=$(usex tensorrt)
-		-Donnxruntime_USE_JSEP=$(usex javascript)
+		-Donnxruntime_USE_JSEP=OFF
 		-Donnxruntime_ENABLE_MEMORY_PROFILE=OFF
 		-Donnxruntime_DISABLE_ABSEIL=ON
 		-Donnxruntime_BUILD_FOR_NATIVE_MACHINE=OFF

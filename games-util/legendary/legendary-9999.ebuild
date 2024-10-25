@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{{11..13},13t} )
 DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1 git-r3
 
@@ -32,4 +32,3 @@ RDEPEND="
 	')
 "
 DEPEND="${RDEPEND}"
-REQUIRED_USE="webview? ( || ( python_single_target_python3_10 python_single_target_python3_11 ) )"
