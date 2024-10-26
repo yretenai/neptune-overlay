@@ -1,4 +1,4 @@
-# Notes
+# Notes<br/>neptune-overlay
 
 ### npm.eclass planning
 
@@ -58,4 +58,6 @@ get all resolved packages:
 jq .packages\[\].resolved < package-lock.json
 ```
 
-Also get all of the licenses.
+also get all of the licenses (read every package.json from every package listed in package-lock.json)
+
+bundle all of this into a gdmt-esque program
