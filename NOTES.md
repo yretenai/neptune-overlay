@@ -2,17 +2,23 @@
 
 ### npm.eclass planning
 
-cargo.eclass/nuget.eclass style? (NODE_PACKAGES eclass var?)
+cargo.eclass GIT_CRATES style? (NODE_PACKAGES eclass var?)
 
 ```Gentoo-Ebuild
-NODE_PACKAGES="
-	https://registry.npmjs.org/@electron/asar/-/asar-3.2.13.tgz -> node_modules/@electron/asar
+EAPI=8
+
+declare -A NODE_PACKAGES=(
+	[node_modules/@electron/asar]="https://registry.npmjs.org/@electron/asar/-/asar-3.2.13.tgz"
 	...
 	...
-"
+)
 
 # should construct NPM_URIS and NODE_RDEPEND, detect build system?
 inherit npm
+
+# defaults:
+NPM_BUILD_COMMAND="build"
+NPM_TEST_COMMAND="test"
 
 SRC_URI="
 	${NPM_URIS}
@@ -35,15 +41,25 @@ src_configure() {
 }
 
 src_compile() {
-	npm_src_compile
+	npm_src_compile # ${NPM_BUILD_COMMAND} if unspecified
+	npm_src_compile dev:build
+}
+
+src_test() {
+	npm_src_test # ${NPM_TEST_COMMAND} if unspecified
+	npm_src_test dev:test
 }
 
 src_install() {
 	# global package store is ${EPREFIX}/lib/node
-	insinto "/usr/share/node/${P}"
+	insinto "/usr/share/node/${PN}"
+
+	# installs package.json. maybe check package.json? .files, and .bin has install paths.
+	npm_install_package
+
 	doins -r dist
 	dosym "/usr/share/node/${P}/bin/${PN}" "/usr/bin/${PN}"
-	# or something 
+	# or something
 }
 ```
 
