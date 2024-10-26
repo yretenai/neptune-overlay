@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{{11..13},13t} )
+PYTHON_COMPAT=( python3_{11..13} )
 inherit desktop python-any-r1 flag-o-matic scons-utils
 inherit shell-completion toolchain-funcs xdg git-r3
 
