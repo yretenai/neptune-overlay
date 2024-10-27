@@ -53,6 +53,8 @@ src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i || die
+
+	electron_src_configure
 }
 
 src_compile() {

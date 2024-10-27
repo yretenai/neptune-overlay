@@ -45,6 +45,8 @@ src_configure() {
 	yarn config set cacheFolder "${T}/yarn" || die
 	mkdir "${T}/yarn" || die
 	yarn install || die
+
+	electron_src_configure
 }
 
 src_compile() {

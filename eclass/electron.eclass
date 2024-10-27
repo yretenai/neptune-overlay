@@ -102,4 +102,11 @@ electron_src_prepare() {
     fi
 }
 
+electron_src_configure() {
+	default
+
+	sed -i -e 's|await unpack|return; await unpack|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from unpacking"
+	sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from renaming files"
+}
+
 EXPORT_FUNCTIONS src_prepare

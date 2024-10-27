@@ -78,9 +78,8 @@ src_install() {
 
 	dosym "${DESTDIR}/${MY_PN}" "/usr/bin/${MY_PN}-${SLOT}"
 
-	# this kills electron-builder, need to figure out how to do this cleanly...
-	# fowners root "${DESTDIR}/chrome-sandbox"
-	# fperms 4711 "${DESTDIR}/chrome-sandbox"
+	fowners root "${DESTDIR}/chrome-sandbox"
+	fperms 4711 "${DESTDIR}/chrome-sandbox"
 
 	if use appindicator; then
 		dosym "/usr/$(get_libdir)/libayatana-appindicator3.so" "${DESTDIR}/libappindicator3.so"

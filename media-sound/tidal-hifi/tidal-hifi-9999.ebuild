@@ -49,6 +49,8 @@ src_prepare() {
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	npm i || die
+
+	electron_src_configure
 }
 
 src_compile() {
