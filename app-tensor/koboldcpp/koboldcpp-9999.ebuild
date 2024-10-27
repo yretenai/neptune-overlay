@@ -17,11 +17,7 @@ SLOT="0"
 EGIT_REPO_URI="https://github.com/YellowRoseCx/koboldcpp-rocm.git"
 
 if [[ ${PV} != *9999* ]]; then
-	if [[ "$(ver_cut 3)" != "0" ]]; then
-		EGIT_COMMIT="v$(ver_cut 1-3).yr$(ver_cut 4)-ROCm"
-	else
-		EGIT_COMMIT="v$(ver_cut 1-2).yr$(ver_cut 4)-ROCm"
-	fi
+	EGIT_COMMIT="v$(ver_cut 1-2).yr$(ver_cut 3)-ROCm"
 	KEYWORDS="~amd64"
 fi
 
