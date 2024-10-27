@@ -49,7 +49,7 @@ src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	npm i || die
 
-	electron_src_configure
+	electron_patch_electron_builder
 }
 
 src_compile() {

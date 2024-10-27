@@ -62,7 +62,7 @@ else
 fi
 
 # @FUNCTION: electron_dobin
-# @USAGE: asarpath name
+# @USAGE: electron_dobin asarpath name
 # @DESCRIPTION:
 # Builds a bin wrapper for an electron app
 electron_dobin() {
@@ -78,6 +78,15 @@ electron_dobin() {
 /usr/bin/${ELECTRON_BIN_NAME} "${asarpath}" "\$@"
 EOF
 	newbin "electron-${name}" "${name}"
+}
+
+# @FUNCTION: electron_patch_electron_builder
+# @USAGE: electron_patch_electron_builder
+# @DESCRIPTION:
+# Patches electron-builder to not attempt to copy or rename electron files
+electron_patch_electron_builder() {
+	sed -i -e 's|await unpack|return; await unpack|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from unpacking"
+	sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from renaming files"
 }
 
 electron_src_prepare() {
@@ -100,13 +109,6 @@ electron_src_prepare() {
 	    echo "$(jq 'del(.dependencies["electron-builder"])' package.json)" > package.json
         echo "$(jq --arg version "${ELECTRON_BUILDER_VER}" '.devDependencies["electron-builder"] = $version' package.json)" > package.json
     fi
-}
-
-electron_src_configure() {
-	default
-
-	sed -i -e 's|await unpack|return; await unpack|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from unpacking"
-	sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from renaming files"
 }
 
 EXPORT_FUNCTIONS src_prepare

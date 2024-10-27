@@ -45,16 +45,12 @@ BDEPEND="
 DESTDIR="/usr/share/electron/apps/${P}"
 QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
-src_prepare() {
-	electron_src_prepare
-}
-
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i || die
 
-	electron_src_configure
+	electron_patch_electron_builder
 }
 
 src_compile() {

@@ -46,7 +46,7 @@ src_configure() {
 	mkdir "${T}/yarn" || die
 	yarn install || die
 
-	electron_src_configure
+	electron_patch_electron_builder
 }
 
 src_compile() {
