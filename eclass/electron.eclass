@@ -52,11 +52,11 @@ ELECTRON_BDEPEND="
 "
 
 if [[ ${ELECTRON_WVCUS} ]]; then
-	ELECTRON_RDEPEND="virtual/electron-wvcus:${ELECTRON_SLOT}="
+	ELECTRON_RDEPEND="dev-electron/electron-wvcus-bin:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="-* ~amd64"
 	ELECTRON_BIN_NAME="electron-wvcus-${ELECTRON_SLOT}"
 else
-	ELECTRON_RDEPEND="virtual/electron:${ELECTRON_SLOT}="
+	ELECTRON_RDEPEND="dev-electron/electron-bin:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="-* ~amd64 ~arm ~arm64"
 	ELECTRON_BIN_NAME="electron-${ELECTRON_SLOT}"
 fi
@@ -83,12 +83,9 @@ EOF
 electron_src_prepare() {
     default
 
-	if [[ ${ELECTRON_WVCUS} ]]; then
-		ELECTRON_VER=$(best_version virtual/electron-wvcus:${ELECTRON_SLOT})
-	else
-		ELECTRON_VER=$(best_version virtual/electron:${ELECTRON_SLOT})
-	fi
+	ELECTRON_VER=$(best_version ${ELECTRON_RDEPEND})
 	ELECTRON_VER=${ELECTRON_VER#*/*-} # reduce it to ${PV}-${PR}
+	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- prefix if it exists
 	ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
 
 	echo "$(jq ".build.electronDist = \"/usr/share/electron/${ELECTRON_SLOT}\"" package.json)" > package.json
