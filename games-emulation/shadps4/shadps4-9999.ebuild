@@ -72,6 +72,7 @@ BDEPEND="
 	dev-util/vulkan-headers
 	>=dev-cpp/magic_enum-0.9.6
 	sys-devel/clang
+	app-text/dos2unix
 "
 
 PATCHES=(
@@ -81,6 +82,9 @@ PATCHES=(
 
 src_prepare() {
 	eapply_user
+
+	dos2unix src/core/libraries/videodec/videodec2_impl.cpp
+	eapply --binary --ignore-whitespace "${FILESDIR}/averr.patch"
 
 	if use hacks; then
 		eapply "${FILESDIR}/hacks.patch"
