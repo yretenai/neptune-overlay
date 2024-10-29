@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit fcaps cmake git-r3
 
 DESCRIPTION="The open source OpenXR runtime"
 HOMEPAGE="https://monado.dev"
@@ -83,9 +83,14 @@ REQUIRED_USE="
 	monado_drivers_handtracking? ( onnx )
 	monado_drivers_wmr? ( monado_drivers_euroc )
 "
+
 RESTRICT="
 	!test? ( test )
 "
+
+FILECAPS=(
+	CAP_SYS_NICE=eip bin/monado-service
+)
 
 src_configure() {
 	local mycmakeargs=(
