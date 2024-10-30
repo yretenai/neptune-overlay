@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit shell-completion
+
 DESCRIPTION="Your CLI home video recorder"
 HOMEPAGE="https://github.com/charmbracelet/vhs"
 
@@ -15,7 +17,6 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm ~arm64 ~x86"
-IUSE="fish-completion zsh-completion bash-completion"
 
 if [[ "$ARCH" == "amd64" ]]; then
 	S="${WORKDIR}/vhs_${PV}_Linux_x86_64"
@@ -49,19 +50,7 @@ src_install() {
 	dobin vhs
 	gunzip manpages/vhs.1.gz
 	doman manpages/vhs.1
-
-	if use fish-completion; then
-		insinto /etc/fish/completions/
-		doins completions/vhs.fish
-	fi
-
-	if use zsh-completion; then
-		insinto /usr/share/zsh/site-functions/
-		newins completions/vhs.zsh _vhs
-	fi
-
-	if use bash-completion; then
-		insinto /usr/share/bash-completion/completions/
-		newins completions/vhs.zsh vhs
-	fi
+	dofishcomp completions/vhs.fish
+	newzshcomp completions/vhs.zsh _vhs
+	newbashcomp completions/vhs.bash vhs
 }

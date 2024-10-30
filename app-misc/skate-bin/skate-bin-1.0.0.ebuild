@@ -15,7 +15,6 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm ~arm64 ~x86"
-IUSE="fish-completion zsh-completion bash-completion"
 
 if [[ "$ARCH" == "amd64" ]]; then
 	S="${WORKDIR}/skate_${PV}_Linux_x86_64"

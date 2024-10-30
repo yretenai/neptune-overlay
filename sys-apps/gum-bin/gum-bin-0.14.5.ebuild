@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit shell-completion
+
 DESCRIPTION="A tool for glamorous shell scripts"
 HOMEPAGE="https://github.com/charmbracelet/gum"
 SRC_URI="
@@ -14,7 +16,6 @@ SRC_URI="
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm ~arm64 ~x86"
-IUSE="fish-completion zsh-completion bash-completion"
 
 if [[ "$ARCH" == "amd64" ]]; then
 	S="${WORKDIR}/gum_${PV}_Linux_x86_64"
@@ -40,19 +41,7 @@ src_install() {
 	dobin gum
 	gunzip manpages/gum.1.gz
 	doman manpages/gum.1
-
-	if use fish-completion; then
-		insinto /etc/fish/completions/
-		doins completions/gum.fish
-	fi
-
-	if use zsh-completion; then
-		insinto /usr/share/zsh/site-functions/
-		newins completions/gum.zsh _gum
-	fi
-
-	if use bash-completion; then
-		insinto /usr/share/bash-completion/completions/
-		newins completions/gum.zsh gum
-	fi
+	dofishcomp completions/gum.fish
+	newzshcomp completions/gum.zsh _gum
+	newbashcomp completions/gum.bash gum
 }
