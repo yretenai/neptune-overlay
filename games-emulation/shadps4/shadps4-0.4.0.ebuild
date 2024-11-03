@@ -26,7 +26,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64 ~ppc64 ~x86"
 fi
 
-IUSE="+qt6 clang"
+IUSE="+qt6 +hacks clang"
 
 # missing dependencies:
 # fmt 10.2.0 or newer is required
@@ -72,12 +72,26 @@ BDEPEND="
 	dev-util/vulkan-headers
 	>=dev-cpp/magic_enum-0.9.6
 	sys-devel/clang
+	app-text/dos2unix
 "
 
 PATCHES=(
 	"${FILESDIR}/install.patch"
 	"${FILESDIR}/half.patch"
 )
+
+src_prepare() {
+	eapply_user
+
+	dos2unix src/core/libraries/videodec/videodec2_impl.cpp
+	eapply --binary --ignore-whitespace "${FILESDIR}/averr.patch"
+
+	if use hacks; then
+		eapply "${FILESDIR}/hacks.patch"
+	fi
+
+	cmake_src_prepare
+}
 
 src_configure() {
 	if use clang; then
