@@ -5,7 +5,7 @@ EAPI=8
 
 inherit cmake git-r3 flag-o-matic
 
-DESCRIPTION="PS4 Emulator"
+DESCRIPTION="shadPS4 is an early PlayStation 4 emulator"
 HOMEPAGE="https://github.com/shadps4-emu/shadPS4"
 LICENSE="GPL-2"
 SLOT="0"
@@ -87,7 +87,7 @@ src_prepare() {
 	eapply --binary --ignore-whitespace "${FILESDIR}/averr.patch"
 
 	if use hacks; then
-		eapply "${FILESDIR}/hacks.patch"
+		eapply "${FILESDIR}/hacks.patch" || die "Cannot apply hacks patch"
 	fi
 
 	cmake_src_prepare
@@ -107,4 +107,25 @@ src_configure() {
 	)
 
 	cmake_src_configure
+}
+
+pkg_postinst() {
+	elog
+	elog "shadPS4 currently relies on vulkan extensions which may not be"
+	elog "supported by AMD's open source Radeon drivers."
+	elog "If you encounter graphical glitches, please install:"
+	elog "\tamdgpu-pro-drivers"
+	elog "and run with vk_pro shadps4"
+	elog
+
+	ewarn
+	ewarn "shadPS4 is observed to have buggy behavior when "
+	ewarn "launching a game binary directly."
+	if ! use qt; then
+		ewarn "if you observe issues, compile with the qt6 USE flag"
+		ewarn "and launching the game via the Qt GUI"
+	else
+		ewarn "if you observe issues, try launching via the QT GUI"
+	fi
+	ewarn
 }
