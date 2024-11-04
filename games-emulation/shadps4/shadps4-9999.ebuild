@@ -117,7 +117,7 @@ pkg_postinst() {
 	ewarn
 	ewarn "shadPS4 is observed to have buggy behavior when "
 	ewarn "launching a game binary directly."
-	if ! use qt; then
+	if ! use qt6; then
 		ewarn "if you observe issues, compile with the qt6 USE flag"
 		ewarn "and launching the game via the Qt GUI"
 	else
