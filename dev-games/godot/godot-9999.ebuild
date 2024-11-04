@@ -90,6 +90,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-${PV}-scons.patch
+	"${FILESDIR}"/${PN}-fix-jpeg-compressor.patch
 )
 
 src_prepare() {
