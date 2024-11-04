@@ -110,6 +110,13 @@ src_install() {
 	dolib.so "usr/lib/libIndexStore.so.15git" \
 		"usr/lib/libsourcekitdInProc.so" \
 		"usr/lib/libswiftDemangle.so"
+	dosym "libIndexStore.so.15git" "$(get_libdir)/libIndexStore.so"
+
+	if [[ "$(get_libdir)" != *"lib64"* ]]; then
+		dosym "$(get_libdir)/libIndexStore.so" "/usr/lib/libIndexStore.so"
+		dosym "$(get_libdir)/libsourcekitdInProc.so" "/usr/lib/libsourcekitdInProc.so"
+		dosym "$(get_libdir)/libswiftDemangle.so" "/usr/lib/libswiftDemangle.so"
+	fi
 
 	local clang_version=${LLVM_SLOT}
 	if [[ ! -e "/usr/lib/clang/${LLVM_SLOT}" ]]; then
