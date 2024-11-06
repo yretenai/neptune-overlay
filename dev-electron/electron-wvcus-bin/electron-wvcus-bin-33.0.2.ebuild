@@ -17,7 +17,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SLOT="$(ver_cut 1)"
+SLOT="$(ver_cut 1)/${MY_PV}"
 KEYWORDS="-* ~amd64"
 
 IUSE="wayland X appindicator"
