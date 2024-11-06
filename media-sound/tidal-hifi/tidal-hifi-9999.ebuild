@@ -48,7 +48,8 @@ src_prepare() {
 
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
-	npm i || die
+	npm set progress false
+	npm i --loglevel verbose || die
 
 	electron_patch_electron_builder
 }

@@ -47,7 +47,8 @@ QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
-	npm i || die
+	npm set progress false
+	npm i --force --loglevel verbose || die
 
 	electron_patch_electron_builder
 }

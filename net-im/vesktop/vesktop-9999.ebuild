@@ -48,7 +48,7 @@ QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
-	pnpm i || die
+	pnpm i --loglevel verbose --reporter append-only || die
 
 	electron_patch_electron_builder
 }

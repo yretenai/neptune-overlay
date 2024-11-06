@@ -120,6 +120,10 @@ electron_src_prepare() {
 	    echo "$(jq 'del(.dependencies["electron-builder"])' package.json)" > package.json
         echo "$(jq --arg version "${ELECTRON_BUILDER_VER}" '.devDependencies["electron-builder"] = $version' package.json)" > package.json
     fi
+
+	if [[ -f package-lock.json ]]; then
+		rm package-lock.json
+	fi
 }
 
 EXPORT_FUNCTIONS src_prepare
