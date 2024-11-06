@@ -37,7 +37,7 @@
 # @DESCRIPTION:
 # Set by eclass, list of bdepends that are required.
 
-# @ECLASS_VARIABLE: ELECTRON_BIN_NAME
+# @ECLASS_VARIABLE: ELECTRON_NAME
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # Set by eclass, the binary name of the selected electron version.
@@ -54,12 +54,24 @@ ELECTRON_BDEPEND="
 if [[ ${ELECTRON_WVCUS} ]]; then
 	ELECTRON_RDEPEND="dev-electron/electron-wvcus-bin:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="-* ~amd64"
-	ELECTRON_BIN_NAME="electron-wvcus-${ELECTRON_SLOT}"
+	ELECTRON_NAME="electron-wvcus"
 else
 	ELECTRON_RDEPEND="dev-electron/electron-bin:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="-* ~amd64 ~arm ~arm64"
-	ELECTRON_BIN_NAME="electron-${ELECTRON_SLOT}"
+	ELECTRON_NAME="electron"
 fi
+
+# @FUNCTION: electron_binname
+# @USAGE: electron_binname
+# @DESCRIPTION:
+# Gets the electron binary name and electron version
+electron_binname() {
+	ELECTRON_VER=$(best_version ${ELECTRON_RDEPEND})
+	ELECTRON_VER=${ELECTRON_VER#*/*-} # reduce it to ${PV}-${PR}
+	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- prefix if it exists
+	export ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
+	export ELECTRON_BIN_NAME="${ELECTRON_NAME}-${ELECTRON_VER}"
+}
 
 # @FUNCTION: electron_dobin
 # @USAGE: electron_dobin asarpath name
@@ -69,6 +81,8 @@ electron_dobin() {
 	[[ ${EBUILD_PHASE} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
 	[[ ${#} -eq 2 ]] || die "Usage: ${FUNCNAME} <path> <name>"
+
+	electron_binname
 
 	local asarpath=${1}
 	local name=${2}
@@ -92,12 +106,9 @@ electron_patch_electron_builder() {
 electron_src_prepare() {
     default
 
-	ELECTRON_VER=$(best_version ${ELECTRON_RDEPEND})
-	ELECTRON_VER=${ELECTRON_VER#*/*-} # reduce it to ${PV}-${PR}
-	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- prefix if it exists
-	ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
+	electron_binname
 
-	echo "$(jq ".build.electronDist = \"/usr/share/electron/${ELECTRON_SLOT}\"" package.json)" > package.json
+	echo "$(jq ".build.electronDist = \"/usr/share/electron/${ELECTRON_VER}\"" package.json)" > package.json
 	echo "$(jq 'del(.dependencies.electron)' package.json)" > package.json
 	ELECTRON_NPM_VER="${ELECTRON_VER}"
 	if [[ ${ELECTRON_WVCUS} ]]; then

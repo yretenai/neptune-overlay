@@ -25,7 +25,7 @@ RESTRICT="mirror test"
 REQUIRED_USE="
 	|| ( wayland X )
 "
-DESTDIR="/usr/share/${MY_PN}/${SLOT}"
+DESTDIR="/usr/share/${MY_PN}/${MY_PV}"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -63,7 +63,7 @@ src_install() {
 	insopts -m0755
 	doins -r locales resources
 
-	dosym "${DESTDIR}/electron" "/usr/bin/${MY_PN}-${SLOT}"
+	dosym "${DESTDIR}/electron" "/usr/bin/${MY_PN}-${MY_PV}"
 
 	fowners root "${DESTDIR}/chrome-sandbox"
 	fperms 4711 "${DESTDIR}/chrome-sandbox"
