@@ -14,28 +14,28 @@ avalonia.angle.windows.natives@2.1.22045.20230930
 avalonia.avaloniaedit@11.1.0
 avalonia.buildservices@0.0.28
 avalonia.buildservices@0.0.29
-avalonia.controls.colorpicker@11.1.3
-avalonia.controls.datagrid@11.1.3
+avalonia.controls.colorpicker@11.1.4
+avalonia.controls.datagrid@11.1.4
 avalonia.controls.treedatagrid@11.0.10
-avalonia.desktop@11.1.3
-avalonia.diagnostics@11.1.3
-avalonia.freedesktop@11.1.3
-avalonia.headless@11.1.3
-avalonia.labs.panels@11.1.0
-avalonia.native@11.1.3
-avalonia.reactiveui@11.1.3
+avalonia.desktop@11.1.4
+avalonia.diagnostics@11.1.4
+avalonia.freedesktop@11.1.4
+avalonia.headless@11.1.4
+avalonia.labs.panels@11.2.0
+avalonia.native@11.1.4
+avalonia.reactiveui@11.1.4
 avalonia.remote.protocol@11.0.0
-avalonia.remote.protocol@11.1.3
+avalonia.remote.protocol@11.1.4
 avalonia.skia@11.0.0
 avalonia.skia@11.1.0
-avalonia.skia@11.1.3
+avalonia.skia@11.1.4
 avalonia.svg.skia@11.1.0.1
-avalonia.themes.fluent@11.1.3
-avalonia.themes.simple@11.1.3
-avalonia.win32@11.1.3
-avalonia.x11@11.1.3
+avalonia.themes.fluent@11.1.4
+avalonia.themes.simple@11.1.4
+avalonia.win32@11.1.4
+avalonia.x11@11.1.4
 avalonia@11.0.0
-avalonia@11.1.3
+avalonia@11.1.4
 avaloniaedit.textmate@11.1.0
 benchmarkdotnet.annotations@0.13.12
 benchmarkdotnet@0.13.12
@@ -68,17 +68,17 @@ fomodinstaller.interface@1.2.0
 fomodinstaller.scripting.xmlscript@1.0.0
 fomodinstaller.scripting@1.0.0
 fomodinstaller.utils@1.0.0
-gamefinder.common@4.3.2
-gamefinder.launcher.heroic@4.3.2
-gamefinder.registryutils@4.3.2
-gamefinder.storehandlers.eadesktop@4.3.2
-gamefinder.storehandlers.egs@4.3.2
-gamefinder.storehandlers.gog@4.3.2
-gamefinder.storehandlers.origin@4.3.2
-gamefinder.storehandlers.steam@4.3.2
-gamefinder.storehandlers.xbox@4.3.2
-gamefinder.wine@4.3.2
-gamefinder@4.3.2
+gamefinder.common@4.3.3
+gamefinder.launcher.heroic@4.3.3
+gamefinder.registryutils@4.3.3
+gamefinder.storehandlers.eadesktop@4.3.3
+gamefinder.storehandlers.egs@4.3.3
+gamefinder.storehandlers.gog@4.3.3
+gamefinder.storehandlers.origin@4.3.3
+gamefinder.storehandlers.steam@4.3.3
+gamefinder.storehandlers.xbox@4.3.3
+gamefinder.wine@4.3.3
+gamefinder@4.3.3
 gee.external.capstone@2.3.0
 githubactionstestlogger@2.3.3
 google.protobuf@3.22.5
@@ -300,12 +300,12 @@ netstandard.library@2.0.3
 newtonsoft.json.bson@1.0.1
 newtonsoft.json@13.0.1
 newtonsoft.json@13.0.3
-nexusmods.archives.nx@0.5.0
-nexusmods.hashing.xxhash64@2.0.2
-nexusmods.mnemonicdb.abstractions@0.9.86
-nexusmods.mnemonicdb.abstractions@0.9.89
-nexusmods.mnemonicdb.sourcegenerator@0.9.89
-nexusmods.mnemonicdb@0.9.89
+nexusmods.archives.nx@0.6.1
+nexusmods.hashing.xxhash3.paths@3.0.2
+nexusmods.hashing.xxhash3@3.0.2
+nexusmods.mnemonicdb.abstractions@0.9.95
+nexusmods.mnemonicdb.sourcegenerator@0.9.95
+nexusmods.mnemonicdb@0.9.95
 nexusmods.paths.extensions.nx@0.10.0
 nexusmods.paths.testinghelpers@0.10.0
 nexusmods.paths@0.10.0
@@ -328,6 +328,7 @@ observablecollections@3.1.0
 oneof.extended@2.1.125
 oneof@2.1.125
 oneof@3.0.271
+onigwrap@1.0.6
 opentelemetry.api.providerbuilderextensions@1.8.1
 opentelemetry.api@1.8.1
 opentelemetry.exporter.opentelemetryprotocol@1.8.1
@@ -641,8 +642,9 @@ system.xml.xdocument@4.0.11
 system.xml.xdocument@4.3.0
 testableio.system.io.abstractions.wrappers@20.0.28
 testableio.system.io.abstractions@20.0.28
-textmatesharp.grammars@1.0.59
+textmatesharp.grammars@1.0.63
 textmatesharp@1.0.59
+textmatesharp@1.0.63
 tmds.dbus.protocol@0.16.0
 transparentvalueobjects@1.0.1
 validation@2.3.7
@@ -782,11 +784,23 @@ src_install() {
 }
 
 pkg_postrm() {
-	ewarn ""
-	ewarn "NexusMods.App stores full copies of game archives for repairing."
-	ewarn "You may want to remove the following directories:"
-	ewarn "\t~/.local/state/NexusMods.App"
-	ewarn "\t~/.local/share/NexusMods.App"
-	ewarn "It may contain (significant) debris."
-	ewarn ""
+	einfo ""
+	einfo "NexusMods.App stores full copies of game archives for repairing."
+	einfo "You may want to remove the following directories:"
+	einfo "\t\$\{XDG_STATE_HOME:-\$HOME/.local/state\}/NexusMods.App"
+	einfo "\t\$\{XDG_DATA_HOME:-\$HOME/.local/share\}/NexusMods.App"
+	einfo "It may contain (significant) debris."
+	einfo ""
+}
+
+pkg_postinst() {
+	if has_version "<${CATEGORY}/${P}"; then
+		ewarn ""
+		ewarn "NexusMods.App at the moment may require a clean install when updating"
+		ewarn "You may want to remove the following directories:"
+		ewarn "\t\$\{XDG_STATE_HOME:-\$HOME/.local/state\}/NexusMods.App"
+		ewarn "\t\$\{XDG_DATA_HOME:-\$HOME/.local/share\}/NexusMods.App"
+		ewarn "If you experience issues"
+		ewarn ""
+	fi
 }
