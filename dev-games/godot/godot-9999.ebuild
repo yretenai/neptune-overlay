@@ -24,12 +24,16 @@ fi
 # Enable roughly same as upstream by default so it works as expected,
 # except raycast (tools-only heavy dependency), and deprecated.
 IUSE="
-	alsa +dbus debug deprecated +fontconfig +gui pulseaudio raycast
-	+runner speech test +theora +tools +udev +upnp +vulkan wayland +webp
+	alsa +dbus debug +deprecated +double-precision dotnet +fontconfig +gui pulseaudio 
+	raycast speech test +theora +tools +udev +upnp +vulkan wayland +webp
 "
 REQUIRED_USE="wayland? ( gui )"
 # TODO: tests still need more figuring out
-RESTRICT="test"
+# TODO: figure out how dotnet.eclass builds things so i can just pass it through to godot.
+RESTRICT="
+	!test? ( test )
+	dotnet ( network-sandbox )
+"
 
 # mbedtls: "can" use >=mbedtls-3 but the module needs updates handle
 # the new tls1.3 default among other things, and the bundled 3.x copy
@@ -77,6 +81,9 @@ RDEPEND="
 		gui-libs/libdecor
 	)
 	webp? ( media-libs/libwebp:= )
+	dotnet? (
+		virtual/neptune-dotnet:8.0[sdk]
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -86,28 +93,49 @@ DEPEND="
 BDEPEND="
 	virtual/pkgconfig
 	wayland? ( dev-util/wayland-scanner )
+	app-alternatives/awk
 "
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-${PV}-scons.patch
+	"${FILESDIR}"/${PN}-${PV}-mono-path.patch
 	"${FILESDIR}"/${PN}-fix-jpeg-compressor.patch
 )
 
+godot_get_version() {
+	export GODOT_VERSION=$(awk -F ' = ' '{
+		gsub(/"/, "", $2)
+		if ($1 == "major") major = $2
+		else if ($1 == "minor") minor = $2
+		else if ($1 == "patch") patch = $2
+		else if ($1 == "status") status = $2
+	} END {
+		version = major "." minor
+		if (patch != "0") version = version "." patch
+		if (status != "stable") version = version "-" status
+		print version
+	}' version.py)
+}
+
 src_prepare() {
 	default
+	
+	godot_get_version
+	local s="-${GODOT_VERSION}"
 
 	# handle slotting
-	sed -i "1,5s/ godot/&${SLOT}/i" misc/dist/linux/godot.6 || die
-	sed -i "/id/s/Godot/&${SLOT}/" misc/dist/linux/org.godotengine.Godot.appdata.xml || die
-	sed -e "s/=godot/&${SLOT}/" -e "/^Name=/s/$/ ${SLOT}/" \
+	sed -i "1,5s/ godot/&${s}/i" misc/dist/linux/godot.6 || die
+	sed -i "/id/s/Godot/&${s}/" misc/dist/linux/org.godotengine.Godot.appdata.xml || die
+	sed -e "s/=godot/&${s}/" -e "/^Name=/s/$/ ${GODOT_VERSION}/" \
 		-i misc/dist/linux/org.godotengine.Godot.desktop || die
-	sed -e "s/godot/&${SLOT}/g" \
+	sed -e "s/godot/&${s}/g" \
 		-i misc/dist/shell/{godot.bash-completion,godot.fish,_godot.zsh-completion} || die
 
 	sed -i "s|pkg-config |$(tc-getPKG_CONFIG) |" platform/linuxbsd/detect.py || die
-	sed -e "s/app_id = \"org.godotengine.Editor\"/app_id = \"org.godotengine.Editor${SLOT}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
-	sed -e "s/app_id = \"org.godotengine.ProjectManager\"/app_id = \"org.godotengine.ProjectManager${SLOT}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
-	sed -e "s/app_id = \"org.godotengine.Godot\"/app_id = \"org.godotengine.Godot${SLOT}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
+	sed -e "s/app_id = \"org.godotengine.Editor\"/app_id = \"org.godotengine.Editor${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
+	sed -e "s/app_id = \"org.godotengine.ProjectManager\"/app_id = \"org.godotengine.ProjectManager${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
+	sed -e "s/app_id = \"org.godotengine.Godot\"/app_id = \"org.godotengine.Godot${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
+	sed -e "s|__GODOT_VERSION__|godot${s}|" -i modules/mono/godotsharp_dirs.cpp
 
 	# use of builtin_ switches can be messy (see below), delete to be sure
 	local unbundle=(
@@ -123,7 +151,7 @@ src_prepare() {
 }
 
 src_compile() {
-	local -x BUILD_NAME=gentoo # replaces "custom_build" in version string
+	local -x BUILD_NAME=gentoo-neptune # replaces "custom_build" in version string
 
 	filter-lto #921017
 
@@ -132,6 +160,8 @@ src_compile() {
 
 		progress=no
 		verbose=yes
+		engine_update_check=no
+		precision=$(usex double-precision double single)
 
 		use_sowrap=no
 
@@ -187,7 +217,7 @@ src_compile() {
 
 		# modules with optional dependencies, "possible" to disable more but
 		# gets messy and breaks all sorts of features (expected enabled)
-		module_mono_enabled=no # unhandled
+		module_mono_enabled=$(usex dotnet)
 		# note raycast is only enabled on amd64+arm64, see raycast/config.py
 		module_raycast_enabled=$(usex gui $(usex tools $(usex raycast)))
 		module_theora_enabled=$(usex theora)
@@ -199,39 +229,63 @@ src_compile() {
 		lto=none
 		optimize=custom
 		use_static_cpp=no
-	)
-
-	if use runner && use tools; then
-		# build alternate faster + ~60% smaller binary for running
-		# games or servers without game development debug paths
-		escons extra_suffix=runner target=template_release "${esconsargs[@]}"
-	fi
-
-	esconsargs+=(
-		target=$(usex tools editor template_$(usex debug{,} release))
+		disable_exceptions=$(usex debug no yes)
 		dev_build=$(usex debug)
 
 		# harmless but note this bakes in --test in the final binary
 		tests=$(usex tools $(usex test))
+		target=$(usex tools editor template_$(usex debug{,} release))
 	)
+	
+	escons extra_suffix=main "${esconsargs[@]}" || die
 
-	escons extra_suffix=main "${esconsargs[@]}"
+	if use dotnet; then
+		addpredict /dev/input
+		export DOTNET_CLI_TELEMETRY_OPTOUT=1
+		export DOTNET_HOME="${EPREFIX}/opt/neptune-dotnet"
+		bin/godot*.main.mono --headless --generate-mono-glue ./modules/mono/glue || die
+
+		local dotnetargs=(
+			--godot-output-dir=./bin
+			--godot-platform=linuxbsd
+		)
+
+		if ! use deprecated; then
+			dotnetargs+=(
+				--no-deprecated
+			)
+		fi
+
+		if use debug; then
+			dotnetargs+=(
+				--dev-debug
+			)
+		fi
+
+		"${EPYTHON}" ./modules/mono/build_scripts/build_assemblies.py ${dotnetargs[@]} || die
+	fi
 }
 
 src_test() {
 	xdg_environment_reset
-	bin/godot*.main --headless --test || die
+
+	if use dotnet; then
+		bin/godot*.main.mono --headless --test || die
+	else
+		bin/godot*.main --headless --test || die
+	fi
 }
 
 src_install() {
-	local s=godot${SLOT}
+	godot_get_version
+	local s="godot-${GODOT_VERSION}"
 
-	newbin bin/godot*.main ${s}
-	if use runner && use tools; then
-		newbin bin/godot*.runner ${s}-runner
+	if ! use dotnet; then
+		newbin bin/godot*.main ${s}
 	else
-		# always available, revdeps shouldn't depend on [runner]
-		dosym ${s} /usr/bin/${s}-runner
+		newbin bin/godot*.main.mono ${s}
+		insinto "/usr/share/godot/${s}/"
+		doins -r bin/GodotSharp
 	fi
 
 	newman misc/dist/linux/godot.6 ${s}.6

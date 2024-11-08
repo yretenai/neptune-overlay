@@ -24,8 +24,8 @@ fi
 # Enable roughly same as upstream by default so it works as expected,
 # except raycast (tools-only heavy dependency), and deprecated.
 IUSE="
-	+bullet debug deprecated +gui pulseaudio raycast +runner +theora
-	+tools +udev +upnp +webm +webp
+	+bullet debug +deprecated +double-precision +gui pulseaudio 
+	raycast +theora +tools +udev +upnp +webm +webp
 "
 
 # dlopen: alsa-lib,pulseaudio,udev
@@ -77,15 +77,33 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-${PV}-scons.patch
 )
 
+godot_get_version() {
+	export GODOT_VERSION=$(awk -F ' = ' '{
+		gsub(/"/, "", $2)
+		if ($1 == "major") major = $2
+		else if ($1 == "minor") minor = $2
+		else if ($1 == "patch") patch = $2
+		else if ($1 == "status") status = $2
+	} END {
+		version = major "." minor
+		if (patch != "0") version = version "." patch
+		if (status != "stable") version = version "-" status
+		print version
+	}' version.py)
+}
+
 src_prepare() {
 	default
+	
+	godot_get_version
+	local s="-${GODOT_VERSION}"
 
 	# handle slotting
-	sed -i "1,5s/ godot/&${SLOT}/i" misc/dist/linux/godot.6 || die
-	sed -i "/id/s/Godot/&${SLOT}/" misc/dist/linux/org.godotengine.Godot.appdata.xml || die
-	sed -e "s/=godot/&${SLOT}/" -e "/^Name=/s/$/ ${SLOT}/" \
+	sed -i "1,5s/ godot/&${s}/i" misc/dist/linux/godot.6 || die
+	sed -i "/id/s/Godot/&${s}/" misc/dist/linux/org.godotengine.Godot.appdata.xml || die
+	sed -e "s/=godot/&${s}/" -e "/^Name=/s/$/ ${GODOT_VERSION}/" \
 		-i misc/dist/linux/org.godotengine.Godot.desktop || die
-	sed -e "s/godot/&${SLOT}/g" \
+	sed -e "s/godot/&${s}/g" \
 		-i misc/dist/shell/{godot.bash-completion,godot.fish,_godot.zsh-completion} || die
 
 	sed -i "s|pkg-config |$(tc-getPKG_CONFIG) |" platform/{x11,server}/detect.py || die
@@ -101,7 +119,7 @@ src_prepare() {
 }
 
 src_compile() {
-	local -x BUILD_NAME=gentoo # replaces "custom_build" in version string
+	local -x BUILD_NAME=gentoo-neptune # replaces "custom_build" in version string
 
 	local esconsargs=(
 		AR="$(tc-getAR)" CC="$(tc-getCC)" CXX="$(tc-getCXX)"
@@ -109,6 +127,8 @@ src_compile() {
 		platform=$(usex gui x11 server)
 		progress=no
 		verbose=yes
+		engine_update_check=no
+		precision=$(usex double-precision double single)
 
 		deprecated=$(usex deprecated)
 		#execinfo=$(usex !elibc_glibc) # libexecinfo is not packaged
@@ -148,7 +168,7 @@ src_compile() {
 		# modules with optional dependencies, "possible" to disable more but
 		# gets messy and breaks all sorts of features (expected enabled)
 		module_bullet_enabled=$(usex bullet)
-		module_mono_enabled=no # unhandled
+		module_mono_enabled=no # unstable
 		module_ogg_enabled=no # unused
 		module_opus_enabled=no # unused, support is gone and webm uses system's
 		# note raycast is disabled on many arches, see raycast/config.py
@@ -164,35 +184,24 @@ src_compile() {
 		lto=none
 		optimize=none
 		use_static_cpp=no
-	)
+		disable_exceptions=$(usex debug no yes)
 
-	if use runner && use tools; then
-		# build alternate faster + ~60% smaller binary for running
-		# games or servers without game development debug paths
-		escons extra_suffix=runner target=release tools=no "${esconsargs[@]}"
-	fi
-
-	esconsargs+=(
 		# debug: debug for godot itself
 		# release_debug: debug for game development
 		# release: no debugging paths, only available with tools=no
 		target=$(usex debug{,} $(usex tools release_debug release))
 		tools=$(usex tools)
+		disable_exceptions=$(usex debug no yes)
 	)
 
-	escons extra_suffix=main "${esconsargs[@]}"
+	escons extra_suffix=main "${esconsargs[@]}" || die
 }
 
 src_install() {
-	local s=godot${SLOT}
+	godot_get_version
+	local s="godot-${GODOT_VERSION}"
 
 	newbin bin/godot*.main ${s}
-	if use runner && use tools; then
-		newbin bin/godot*.runner ${s}-runner
-	else
-		# always available, revdeps shouldn't depend on [runner]
-		dosym ${s} /usr/bin/${s}-runner
-	fi
 
 	newman misc/dist/linux/godot.6 ${s}.6
 	dodoc AUTHORS.md CHANGELOG.md DONORS.md README.md
