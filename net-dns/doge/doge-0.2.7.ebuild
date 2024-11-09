@@ -137,6 +137,8 @@ CRATES="
 	zeroize@1.7.0
 "
 
+RUST_MIN_VER="1.80.1"
+
 inherit cargo
 
 DESCRIPTION="A command-line DNS client"
