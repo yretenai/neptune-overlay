@@ -144,7 +144,7 @@ inherit cargo
 DESCRIPTION="A command-line DNS client"
 HOMEPAGE="https://dns.lookup.dog/"
 SRC_URI="
-	https://github.com/Dj-Codeman/doge/archive/refs/tags/v${PV}.tar.gz
+	https://github.com/Dj-Codeman/doge/archive/refs/tags/v${PV}.tar.gz -> ${CATEGORY}-${PN}-${PV}.tar.gz
 	${CARGO_CRATE_URIS}
 "
 
@@ -152,4 +152,4 @@ LICENSE="MIT"
 # Dependent crate licenses
 LICENSE+=" Apache-2.0 BSD ISC MIT MPL-2.0 openssl Unicode-DFS-2016"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm ~arm64 ~x86"
