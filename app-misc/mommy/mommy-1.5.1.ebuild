@@ -5,8 +5,10 @@ EAPI=8
 
 inherit git-r3 shell-completion flag-o-matic
 
-DESCRIPTION=" mommy's here to support you ❤️"
+DESCRIPTION="mommy's here to support you ❤️"
 HOMEPAGE="https://github.com/FWDekker/mommy"
+LICENSE="Unlicense"
+SLOT="0"
 
 EGIT_REPO_URI="https://github.com/FWDekker/mommy.git"
 if [[ ${PV} != *9999* ]]; then
@@ -15,8 +17,6 @@ if [[ ${PV} != *9999* ]]; then
 fi
 
 IUSE="test man"
-LICENSE="Unlicense"
-SLOT="0"
 RESTRICT="!test? ( test )"
 
 BDEPEND="
