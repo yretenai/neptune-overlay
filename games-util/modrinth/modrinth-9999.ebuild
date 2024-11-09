@@ -6,6 +6,8 @@ EAPI=8
 CRATES="
 "
 
+RUST_MIN_VER="1.80.1"
+
 inherit cargo git-r3 desktop xdg
 
 DESCRIPTION="The Modrinth App is a desktop application for managing your Minecraft mods"
