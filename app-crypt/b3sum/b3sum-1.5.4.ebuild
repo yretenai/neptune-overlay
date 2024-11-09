@@ -71,6 +71,8 @@ CRATES="
 	windows_x86_64_msvc@0.52.6
 "
 
+RUST_MIN_VER="1.80.1"
+
 inherit cargo git-r3
 
 DESCRIPTION="A simple one-file way to run various GGML models with KoboldAI's UI"
