@@ -12,8 +12,8 @@ HOMEPAGE="https://godotengine.org/"
 
 LICENSE="
 	MIT
-	Apache-2.0 BSD Boost-1.0 CC0-1.0 Unlicense ZLIB
-	gui? ( CC-BY-4.0 ) tools? ( OFL-1.1 )
+	Apache-2.0 BSD Boost-1.0 CC0-1.0 Unlicense ZLIB OFL-1.1
+	gui? ( CC-BY-4.0 )
 "
 SLOT="${PV}"
 EGIT_REPO_URI="https://github.com/godotengine/godot.git"
@@ -22,17 +22,16 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 # Enable roughly same as upstream by default so it works as expected,
-# except raycast (tools-only heavy dependency), and deprecated.
 IUSE="
-	alsa +dbus debug +deprecated +double-precision dotnet +fontconfig +gui pulseaudio 
-	raycast speech test +theora +tools +udev +upnp +vulkan wayland +webp
+	alsa +dbus debug +deprecated +double-precision dotnet +fontconfig +gui pulseaudio
+	+raycast speech test +theora +udev +upnp +vulkan wayland +webp
 "
 REQUIRED_USE="wayland? ( gui )"
 # TODO: tests still need more figuring out
 # TODO: figure out how dotnet.eclass builds things so i can just pass it through to godot.
 RESTRICT="
 	!test? ( test )
-	dotnet ( network-sandbox )
+	dotnet? ( network-sandbox )
 "
 
 # mbedtls: "can" use >=mbedtls-3 but the module needs updates handle
@@ -55,6 +54,7 @@ RDEPEND="
 	<net-libs/mbedtls-3:=
 	net-libs/wslay
 	sys-libs/zlib:=
+	app-misc/ca-certificates
 	alsa? ( media-libs/alsa-lib )
 	dbus? ( sys-apps/dbus )
 	fontconfig? ( media-libs/fontconfig )
@@ -68,13 +68,12 @@ RDEPEND="
 		x11-libs/libXrandr
 		x11-libs/libXrender
 		x11-libs/libxkbcommon
-		tools? ( raycast? ( media-libs/embree:4 ) )
+		raycast? ( media-libs/embree:4 )
 		vulkan? ( media-libs/vulkan-loader[X,wayland?] )
 	)
 	pulseaudio? ( media-libs/libpulse )
 	speech? ( app-accessibility/speech-dispatcher )
 	theora? ( media-libs/libtheora )
-	tools? ( app-misc/ca-certificates )
 	udev? ( virtual/udev )
 	wayland? (
 		dev-libs/wayland
@@ -88,7 +87,7 @@ RDEPEND="
 DEPEND="
 	${RDEPEND}
 	gui? ( x11-base/xorg-proto )
-	tools? ( test? ( dev-cpp/doctest ) )
+	test? ( dev-cpp/doctest )
 "
 BDEPEND="
 	virtual/pkgconfig
@@ -119,7 +118,7 @@ godot_get_version() {
 
 src_prepare() {
 	default
-	
+
 	godot_get_version
 	local s="-${GODOT_VERSION}"
 
@@ -189,7 +188,7 @@ src_compile() {
 		builtin_brotli=no
 		builtin_certs=no
 		builtin_clipper2=yes # not packaged
-		builtin_embree=$(usex !gui yes $(usex !tools yes $(usex !raycast)))
+		builtin_embree=$(usex !gui yes $(usex !raycast))
 		builtin_enet=yes # bundled copy is patched for IPv6+DTLS support
 		builtin_freetype=no
 		builtin_glslang=yes #879111 (for now, may revisit if more stable)
@@ -219,7 +218,7 @@ src_compile() {
 		# gets messy and breaks all sorts of features (expected enabled)
 		module_mono_enabled=$(usex dotnet)
 		# note raycast is only enabled on amd64+arm64, see raycast/config.py
-		module_raycast_enabled=$(usex gui $(usex tools $(usex raycast)))
+		module_raycast_enabled=$(usex gui $(usex raycast))
 		module_theora_enabled=$(usex theora)
 		module_upnp_enabled=$(usex upnp)
 		module_webp_enabled=$(usex webp)
@@ -233,10 +232,10 @@ src_compile() {
 		dev_build=$(usex debug)
 
 		# harmless but note this bakes in --test in the final binary
-		tests=$(usex tools $(usex test))
-		target=$(usex tools editor template_$(usex debug{,} release))
+		tests=$(usex test)
+		target=editor
 	)
-	
+
 	escons extra_suffix=main "${esconsargs[@]}" || die
 
 	if use dotnet; then

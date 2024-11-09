@@ -6,8 +6,8 @@
 		<flag name="webm">Enable support for the webm image format</flag>
 		<flag name="deprecated">Enable support for deprecated features</flag>
 		<flag name="raycast">Enable the raycast Editor module using <pkg>media-libs/embree</pkg></flag>
-		<flag name="runner">Build an additional binary optimized for running games (only relevant with USE=tools)</flag>
-		<flag name="tools">Enable the Godot Editor for game development</flag>
+		<flag name="double-precision">Build with double precision floating point numbers instead of single precision</flag>
+		<flag name="dotnet">Build with C# scripting support</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">godotengine/godot</remote-id>

@@ -12,8 +12,8 @@ HOMEPAGE="https://godotengine.org/"
 
 LICENSE="
 	MIT
-	Apache-2.0 BSD Boost-1.0 CC0-1.0 Unlicense ZLIB
-	gui? ( CC-BY-4.0 ) tools? ( BitstreamVera OFL-1.1 )
+	Apache-2.0 BSD Boost-1.0 CC0-1.0 Unlicense ZLIB BitstreamVera OFL-1.1
+	gui? ( CC-BY-4.0 )
 "
 SLOT="${PV}"
 EGIT_REPO_URI="https://github.com/godotengine/godot.git"
@@ -22,10 +22,9 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 # Enable roughly same as upstream by default so it works as expected,
-# except raycast (tools-only heavy dependency), and deprecated.
 IUSE="
-	+bullet debug +deprecated +double-precision +gui pulseaudio 
-	raycast +theora +tools +udev +upnp +webm +webp
+	+bullet debug +deprecated +double-precision +gui pulseaudio
+	+raycast +theora +udev +upnp +webm +webp
 "
 
 # dlopen: alsa-lib,pulseaudio,udev
@@ -39,6 +38,7 @@ RDEPEND="
 	<net-libs/mbedtls-3:=
 	net-libs/wslay
 	sys-libs/zlib:=
+	app-misc/ca-certificates
 	bullet? ( sci-physics/bullet:= )
 	gui? (
 		media-libs/libglvnd
@@ -49,7 +49,7 @@ RDEPEND="
 		x11-libs/libXinerama
 		x11-libs/libXrandr
 		x11-libs/libXrender
-		tools? ( raycast? ( media-libs/embree:3 ) )
+		raycast? ( media-libs/embree:3 )
 	)
 	pulseaudio? ( media-libs/libpulse )
 	theora? (
@@ -57,7 +57,6 @@ RDEPEND="
 		media-libs/libtheora
 		media-libs/libvorbis
 	)
-	tools? ( app-misc/ca-certificates )
 	udev? ( virtual/udev )
 	webm? (
 		media-libs/libvorbis
@@ -94,7 +93,7 @@ godot_get_version() {
 
 src_prepare() {
 	default
-	
+
 	godot_get_version
 	local s="-${GODOT_VERSION}"
 
@@ -143,7 +142,7 @@ src_compile() {
 		# actually used, so "enable" deleted builtins on disabled deps
 		builtin_bullet=$(usex !bullet)
 		builtin_certs=no
-		builtin_embree=$(usex !gui yes $(usex !tools yes $(usex !raycast)))
+		builtin_embree=$(usex !gui yes $(usex !raycast))
 		builtin_enet=yes # bundled copy is patched for IPv6+DTLS support
 		builtin_freetype=no
 		builtin_libogg=yes # unused
@@ -172,7 +171,7 @@ src_compile() {
 		module_ogg_enabled=no # unused
 		module_opus_enabled=no # unused, support is gone and webm uses system's
 		# note raycast is disabled on many arches, see raycast/config.py
-		module_raycast_enabled=$(usex gui $(usex tools $(usex raycast)))
+		module_raycast_enabled=$(usex gui $(usex raycast))
 		module_theora_enabled=$(usex theora)
 		module_upnp_enabled=$(usex upnp)
 		module_vorbis_enabled=no # unused, non-theora/webm uses stb_vorbis
@@ -186,11 +185,8 @@ src_compile() {
 		use_static_cpp=no
 		disable_exceptions=$(usex debug no yes)
 
-		# debug: debug for godot itself
-		# release_debug: debug for game development
-		# release: no debugging paths, only available with tools=no
-		target=$(usex debug{,} $(usex tools release_debug release))
-		tools=$(usex tools)
+		target=release_debug
+		tools=yes
 		disable_exceptions=$(usex debug no yes)
 	)
 
