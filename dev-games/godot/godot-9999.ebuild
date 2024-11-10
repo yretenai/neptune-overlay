@@ -150,7 +150,7 @@ src_prepare() {
 }
 
 src_compile() {
-	local -x BUILD_NAME=gentoo-neptune # replaces "custom_build" in version string
+	local -x BUILD_NAME=gentoo.neptune # replaces "custom_build" in version string
 
 	filter-lto #921017
 
@@ -247,6 +247,7 @@ src_compile() {
 			--godot-output-dir=./bin
 			--godot-platform=linuxbsd
 			--precision=$(usex double-precision double single)
+			--push-nupkgs-local=./bin/nugets
 		)
 
 		if use dev; then
@@ -279,6 +280,8 @@ src_install() {
 	if use dotnet; then
 		insinto "/usr/share/godot/${s}/"
 		doins -r bin/GodotSharp
+		insinto "/usr/share/godot/"
+		doins -r bin/nugets
 	fi
 
 	newman misc/dist/linux/godot.6 ${s}.6
@@ -301,4 +304,16 @@ src_install() {
 	newbashcomp misc/dist/shell/godot.bash-completion ${s}
 	newfishcomp misc/dist/shell/godot.fish ${s}.fish
 	newzshcomp misc/dist/shell/_godot.zsh-completion _${s}
+}
+
+pkg_postinst() {
+	if use dotnet; then
+		ewarn
+		ewarn "Godot C# SDK has been installed to ${EPREFIX}/usr/share/godot/godot-${GODOT_VERSION}"
+		ewarn "Godot Nugets have been installed to ${EPREFIX}/usr/share/godot/nugets"
+		ewarn "Please run"
+		ewarn "\tdotnet nuget add source \"${EPREFIX}/usr/share/godot/nugets\" --name Godot"
+		ewarn "To avoid nuget resolution problems"
+		ewarn
+	fi
 }

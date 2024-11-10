@@ -118,7 +118,7 @@ src_prepare() {
 }
 
 src_compile() {
-	local -x BUILD_NAME=gentoo-neptune # replaces "custom_build" in version string
+	local -x BUILD_NAME=gentoo.neptune # replaces "custom_build" in version string
 
 	local esconsargs=(
 		AR="$(tc-getAR)" CC="$(tc-getCC)" CXX="$(tc-getCXX)"
