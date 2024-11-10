@@ -1,1 +1,1 @@
-electron-bin-33.2.0.ebuild
+electron-bin.base
