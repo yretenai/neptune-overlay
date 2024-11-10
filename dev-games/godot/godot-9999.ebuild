@@ -24,7 +24,7 @@ fi
 # Enable roughly same as upstream by default so it works as expected,
 IUSE="
 	alsa +dbus debug +deprecated +double-precision dotnet +fontconfig +gui pulseaudio
-	+raycast speech test +theora +udev +upnp +vulkan wayland +webp
+	+raycast speech test +theora +udev +upnp +vulkan wayland +webp dev
 "
 REQUIRED_USE="wayland? ( gui )"
 # TODO: tests still need more figuring out
@@ -228,8 +228,7 @@ src_compile() {
 		lto=none
 		optimize=custom
 		use_static_cpp=no
-		disable_exceptions=$(usex debug no yes)
-		dev_build=$(usex debug)
+		disable_exceptions=$(usex dev no yes)
 
 		# harmless but note this bakes in --test in the final binary
 		tests=$(usex test)
@@ -241,13 +240,20 @@ src_compile() {
 	if use dotnet; then
 		addpredict /dev/input
 		export DOTNET_CLI_TELEMETRY_OPTOUT=1
-		export DOTNET_HOME="${EPREFIX}/opt/neptune-dotnet"
-		bin/godot*.main.mono --headless --generate-mono-glue ./modules/mono/glue || die
+		export DOTNET_ROOT="${EPREFIX}/opt/neptune-dotnet"
+		bin/godot* --headless --generate-mono-glue ./modules/mono/glue || die
 
 		local dotnetargs=(
 			--godot-output-dir=./bin
 			--godot-platform=linuxbsd
+			--precision=$(usex double-precision double single)
 		)
+
+		if use dev; then
+			dotnetargs+=(
+				--dev-debug
+			)
+		fi
 
 		if ! use deprecated; then
 			dotnetargs+=(
@@ -255,34 +261,22 @@ src_compile() {
 			)
 		fi
 
-		if use debug; then
-			dotnetargs+=(
-				--dev-debug
-			)
-		fi
-
-		"${EPYTHON}" ./modules/mono/build_scripts/build_assemblies.py ${dotnetargs[@]} || die
+		PATH="${DOTNET_ROOT};${PATH}" "${EPYTHON}" ./modules/mono/build_scripts/build_assemblies.py ${dotnetargs[@]} || die
 	fi
 }
 
 src_test() {
 	xdg_environment_reset
 
-	if use dotnet; then
-		bin/godot*.main.mono --headless --test || die
-	else
-		bin/godot*.main --headless --test || die
-	fi
+	bin/godot* --headless --test || die
 }
 
 src_install() {
 	godot_get_version
 	local s="godot-${GODOT_VERSION}"
 
-	if ! use dotnet; then
-		newbin bin/godot*.main ${s}
-	else
-		newbin bin/godot*.main.mono ${s}
+	newbin bin/godot* ${s}
+	if use dotnet; then
 		insinto "/usr/share/godot/${s}/"
 		doins -r bin/GodotSharp
 	fi
