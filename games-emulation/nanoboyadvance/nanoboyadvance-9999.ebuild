@@ -46,7 +46,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 BDEPEND="
 	$(python_gen_cond_dep '
-		>=dev-python/jinja-2.7[${PYTHON_USEDEP}]
+		>=dev-python/jinja2-2.7[${PYTHON_USEDEP}]
 	')
 	dev-cpp/toml11
 "
