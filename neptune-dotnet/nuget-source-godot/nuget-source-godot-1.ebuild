@@ -12,7 +12,7 @@ RESTRICT="test"
 S="${WORKDIR}"
 
 src_unpack() {
-	cat > Godot.conf <<-EOF
+	cat > Godot.config <<-EOF
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <packageSources>
@@ -24,5 +24,5 @@ EOF
 
 src_install() {
 	insinto "/etc/opt/NuGet/Config"
-	doins Godot.conf
+	doins Godot.config
 }
