@@ -97,10 +97,12 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-${PV}-scons.patch
-	"${FILESDIR}"/${PN}-${PV}-mono-path.patch
-	"${FILESDIR}"/${PN}-fix-jpeg-compressor.patch
+	"${FILESDIR}/${PN}-${PV}-scons.patch"
+	"${FILESDIR}/${PN}-${PV}-mono-path.patch"
+	"${FILESDIR}/${PN}-fix-jpeg-compressor.patch"
 )
+
+SPINLOCK_PATCH="${FILESDIR}/${PN}-${PV}.patch"
 
 godot_get_version() {
 	export GODOT_VERSION=$(awk -F ' = ' '{
@@ -119,6 +121,10 @@ godot_get_version() {
 
 src_prepare() {
 	default
+
+	if [[ -f "${SPINLOCK_PATCH}" ]]; then
+		eapply "${SPINLOCK_PATCH}"
+	fi
 
 	godot_get_version
 	local s="-${GODOT_VERSION}"

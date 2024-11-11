@@ -1,0 +1,13 @@
+diff --git a/core/os/spin_lock.h b/core/os/spin_lock.h
+index 8c2d5667ff..95a16e3335 100644
+--- a/core/os/spin_lock.h
++++ b/core/os/spin_lock.h
+@@ -84,7 +84,7 @@ _ALWAYS_INLINE_ static void _cpu_pause() {
+ 
+ static_assert(std::atomic_bool::is_always_lock_free);
+ 
+-class alignas(Thread::CACHE_LINE_BYTES) SpinLock {
++class __attribute__((aligned(Thread::CACHE_LINE_BYTES))) SpinLock {
+ 	mutable std::atomic<bool> locked = ATOMIC_VAR_INIT(false);
+ 
+ public:
