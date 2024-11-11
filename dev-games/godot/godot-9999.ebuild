@@ -82,6 +82,7 @@ RDEPEND="
 	webp? ( media-libs/libwebp:= )
 	dotnet? (
 		virtual/neptune-dotnet:8.0[sdk]
+		neptune-dotnet/nuget-source-godot
 	)
 "
 DEPEND="
@@ -311,9 +312,8 @@ pkg_postinst() {
 		ewarn
 		ewarn "Godot C# SDK has been installed to ${EPREFIX}/usr/share/godot/godot-${GODOT_VERSION}"
 		ewarn "Godot Nugets have been installed to ${EPREFIX}/usr/share/godot/nugets"
-		ewarn "Please run"
-		ewarn "\tdotnet nuget add source \"${EPREFIX}/usr/share/godot/nugets\" --name Godot"
-		ewarn "To avoid nuget resolution problems"
+		ewarn "An appropriate NuGet config file has been placed in ${EPREFIX}/opt/NuGet/Config"
+		ewarn "No further action is needed"
 		ewarn
 	fi
 }
