@@ -4,20 +4,20 @@
 EAPI=8
 
 DESCRIPTION="Nuget Source Config for Godot"
+HOMEPAGE="https://docs.godotengine.org/en/4.3/contributing/development/compiling/compiling_with_dotnet.html"
+S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 RESTRICT="test"
 
-S="${WORKDIR}"
-
 src_unpack() {
 	cat > Godot.config <<-EOF
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
-  <packageSources>
-    <add key="Godot" value="/usr/share/godot/nugets" />
-  </packageSources>
+	<packageSources>
+		<add key="Godot" value="/usr/share/godot/nugets" />
+	</packageSources>
 </configuration>
 EOF
 }
