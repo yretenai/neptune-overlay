@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/laurentkneip/opengv.git"
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64 ~ppc64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
 LICENSE="BSD"

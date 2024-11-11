@@ -19,7 +19,7 @@ EGIT_REPO_URI="https://github.com/RenderKit/oidn.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="apps cuda hip hip-safe openimageio test"

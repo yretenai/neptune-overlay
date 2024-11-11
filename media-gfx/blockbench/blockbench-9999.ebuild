@@ -21,7 +21,7 @@ SLOT="0"
 EGIT_REPO_URI="https://github.com/JannisX11/blockbench.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="${ELECTRON_KEYWORDS}"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+seccomp +wayland"

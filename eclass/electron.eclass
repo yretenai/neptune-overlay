@@ -53,11 +53,11 @@ ELECTRON_BDEPEND="
 
 if [[ ${ELECTRON_WVCUS} ]]; then
 	ELECTRON_RDEPEND="dev-electron/electron-wvcus-bin:${ELECTRON_SLOT}="
-	ELECTRON_KEYWORDS="-* ~amd64"
+	ELECTRON_KEYWORDS="~amd64"
 	ELECTRON_NAME="electron-wvcus"
 else
 	ELECTRON_RDEPEND="dev-electron/electron-bin:${ELECTRON_SLOT}="
-	ELECTRON_KEYWORDS="-* ~amd64 ~arm ~arm64"
+	ELECTRON_KEYWORDS="~amd64 ~arm ~arm64"
 	ELECTRON_NAME="electron"
 fi
 

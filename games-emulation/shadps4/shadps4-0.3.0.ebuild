@@ -23,7 +23,7 @@ EGIT_SUBMODULES=(
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v.${PV}"
-	KEYWORDS="~amd64 ~ppc64 ~x86"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+qt6 +hacks clang"
@@ -54,7 +54,7 @@ DEPEND="
 	media-sound/sndio
 	virtual/jack
 	media-libs/openal
-	>=dev-libs/zydis-5.0.0[clang?]
+	>=dev-libs/zydis-5.0.0_alpha[clang?]
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
 		dev-qt/qtmultimedia:6[ffmpeg,vulkan]

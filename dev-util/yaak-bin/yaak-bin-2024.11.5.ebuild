@@ -15,7 +15,7 @@ SRC_URI="https://github.com/OctoputApp/Yaak/releases/download/v${MY_PV}/yaak_${M
 S="${WORKDIR}/usr"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="-* amd64"
+KEYWORDS="~amd64"
 RESTRICT="bindist mirror strip test"
 
 RDEPEND="

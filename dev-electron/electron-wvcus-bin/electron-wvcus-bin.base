@@ -18,7 +18,7 @@ SRC_URI="
 S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="$(ver_cut 1)/${MY_PV}"
-KEYWORDS="-* ~amd64"
+KEYWORDS="~amd64"
 
 IUSE="wayland X appindicator"
 RESTRICT="mirror test"
@@ -69,6 +69,6 @@ src_install() {
 	fperms 4711 "${DESTDIR}/chrome-sandbox"
 
 	if use appindicator; then
-		dosym "/usr/$(get_libdir)/libayatana-appindicator3.so" "${DESTDIR}/libappindicator3.so"
+		dosym "../../../$(get_libdir)/libayatana-appindicator3.so" "${DESTDIR}/libappindicator3.so"
 	fi
 }

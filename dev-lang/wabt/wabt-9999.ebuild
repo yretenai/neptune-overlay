@@ -15,7 +15,7 @@ SLOT="0"
 EGIT_REPO_URI="https://github.com/WebAssembly/wabt.git"
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="${PV}"
-	KEYWORDS="-* ~amd64 ~arm64"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="test"

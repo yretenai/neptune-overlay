@@ -23,7 +23,7 @@ EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64 ~arm64"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+system-llvm lto"
@@ -31,7 +31,6 @@ RESTRICT="mirror"
 
 DEPEND="
 	app-forensics/yara
-	dev-libs/pattern-language
 	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/capstone
 	dev-libs/nativefiledialog-extended

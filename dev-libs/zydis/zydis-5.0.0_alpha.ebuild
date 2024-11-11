@@ -14,7 +14,7 @@ EGIT_REPO_URI="https://github.com/zyantific/zydis.git"
 EGIT_SUBMODULES=( )
 
 if [[ ${PV} != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+	EGIT_COMMIT="9d298eb8067ff62a237203d1e1470785033e185c"
 	KEYWORDS="~amd64"
 fi
 

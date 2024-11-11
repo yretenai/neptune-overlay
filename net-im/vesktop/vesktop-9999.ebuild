@@ -18,7 +18,7 @@ HOMEPAGE="https://github.com/Vencord
 EGIT_REPO_URI="https://github.com/Vencord/Vesktop.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="-* ~amd64 ~arm64"
+	KEYWORDS="~amd64"
 fi
 
 LICENSE="GPL-3"

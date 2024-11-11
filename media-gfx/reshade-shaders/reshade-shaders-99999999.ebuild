@@ -11,6 +11,10 @@ LICENSE="CC0-1.0 BSD MIT"
 SLOT="0"
 
 EGIT_REPO_URI="https://github.com/crosire/${PN}.git"
+if [[ "${PV}" != *99999999* ]]; then
+	EGIT_COMMIT="757209bb7d00224ce36fed59dd197e04ede43973"
+	KEYWORDS="~amd64"
+fi
 
 src_install() {
 	insinto /usr/share/${PN}

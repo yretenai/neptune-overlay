@@ -19,7 +19,7 @@ SLOT="0"
 EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="${PV}"
-	KEYWORDS="${ELECTRON_KEYWORDS}"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+seccomp +wayland"

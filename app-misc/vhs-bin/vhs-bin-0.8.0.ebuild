@@ -16,7 +16,7 @@ SRC_URI="
 "
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="~amd64"
 
 if [[ "$ARCH" == "amd64" ]]; then
 	S="${WORKDIR}/vhs_${PV}_Linux_x86_64"

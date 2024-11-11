@@ -11,7 +11,7 @@ LICENSE="GPL-3+"
 SLOT="0"
 
 EGIT_REPO_URI="https://git.causal.agency/catgirl"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 
 DEPEND="
 	dev-libs/libretls:=

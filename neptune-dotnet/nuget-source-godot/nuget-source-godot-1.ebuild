@@ -8,7 +8,7 @@ HOMEPAGE="https://docs.godotengine.org/en/4.3/contributing/development/compiling
 S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="~amd64"
 RESTRICT="test"
 
 src_unpack() {
