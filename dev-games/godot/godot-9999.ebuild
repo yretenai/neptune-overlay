@@ -102,7 +102,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-fix-jpeg-compressor.patch"
 )
 
-SPINLOCK_PATCH="${FILESDIR}/${PN}-${PV}-mutex-spinlock.patch"
+SPINLOCK_PATCH="${FILESDIR}/${PN}-${PV}-disalign-spinlock.patch"
 
 godot_get_version() {
 	export GODOT_VERSION=$(awk -F ' = ' '{
