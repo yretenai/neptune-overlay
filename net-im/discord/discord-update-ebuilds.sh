@@ -1,9 +1,8 @@
-#!/bin/zsh
+#!/usr/bin/env sh
 
 NETIM_ROOT="/var/db/repos/neptune/net-im"
 
-function update-discord
-{
+update-discord() {
 	NAME=$1
 	TARGET=$2
 	EBUILD_TEMPLATE=$3

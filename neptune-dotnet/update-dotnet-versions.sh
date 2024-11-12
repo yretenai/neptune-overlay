@@ -1,4 +1,5 @@
-#!/bin/zsh
+#!/usr/bin/env sh
+
 ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
 DOTNET_NEXT_VER_BASE="9.0"
