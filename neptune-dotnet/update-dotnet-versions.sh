@@ -83,3 +83,20 @@ ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${LATEST_SDK_VERSION}.ebuild" ma
 ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${LATEST_VERSION}.ebuild" manifest
 ebuild "${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${LATEST_SDK_VERSION}.ebuild" manifest
 ebuild "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild" manifest
+
+pkgdev_do() {
+    git add $1
+    if [ -n "$(git status --porcelain)" ]; then
+        pkgdev commit
+    fi
+}
+
+if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
+    pushd "${ADADOTNET_ROOT}"
+    pkgdev_do dotnet-aspnetcore-runtime
+    pkgdev_do dotnet-runtime
+    pkgdev_do dotnet-sdk
+    pkgdev_do dotnet-cli-bin
+    pkgdev_do dotnet-man
+    pkgdev_do netstandard
+fi

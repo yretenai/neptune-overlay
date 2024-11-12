@@ -16,6 +16,12 @@ function update-discord
 	cp $EBUILD_TEMPLATE $EBUILD_NAME 
 	pushd "${NETIM_ROOT}/${NAME}"
 	ebuild "$EBUILD_NAME" manifest
+	if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
+		git add .
+		if [ -n "$(git status --porcelain)" ]; then
+			pkgdev commit
+		fi
+	fi
 	popd
 }
 
