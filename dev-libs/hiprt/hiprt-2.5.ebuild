@@ -18,11 +18,12 @@ HOMEPAGE="
 "
 
 EGIT_REPO_URI="https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT.git"
-EGIT_COMMIT="83e18cc9c3de8f2f9c48b663cf3189361e891054"
+EGIT_COMMIT="80715876d213ca20a398837e3c8e9b7d3a31a92a"
 
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
+IUSE="cuda"
 
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
@@ -41,9 +42,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-output.patch"
 	"${FILESDIR}/${PN}-${PV}-precompile.patch"
-	"${FILESDIR}/${PN}-no-nvidia.patch"
+	"${FILESDIR}/${PN}-output.patch"
 )
 
 RESTRICT="test"
@@ -56,8 +56,11 @@ pkg_setup() {
 src_prepare() {
 	cmake_src_prepare
 
-	sed -e "s| python | ${EPYTHON} |" -i CMakeLists.txt || die
-	sed -e "s|hiprt\${version_str_}|hiprt|" -i CMakeLists.txt || die
+	if ! use cuda; then
+		eapply "${FILESDIR}/${PN}-${PV}-no-nvidia.patch"
+	fi
+
+	sed -e "s|set(HIPRT_NAME \"hiprt\${version_str_}\")|set(HIPRT_NAME \"hiprt\")|" -i CMakeLists.txt || die
 	sed -e "s|\${HIPRT_NAME} SHARED)|\${HIPRT_NAME} SHARED)\nset_target_properties(\${HIPRT_NAME} PROPERTIES VERSION ${PV} SOVERSION 1)|" -i CMakeLists.txt || die
 
 	sed -e "s|__AMDGPU_FLAGS__|$(get_amdgpu_flags)|" -i contrib/Orochi/scripts/kernelCompile.py || die
@@ -70,11 +73,14 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DBITCODE=ON
+		-DBAKE_COMPILED_KERNEL=ON
+		-DBAKE_KERNEL=ON
 		-DPRECOMPILE=ON
 		-DNO_UNITTEST=ON
 		-DHIPRT_PREFER_HIP_5=OFF
 		-DHIP_PATH="${EPREFIX}/usr"
 		-DCMAKE_BUILD_TYPE="Release"
+		-DPYTHON_EXECUTABLE="${PYTHON}"
 		-DCMAKE_INSTALL_DATADIR="${EPREFIX}/usr/share"
 	)
 
