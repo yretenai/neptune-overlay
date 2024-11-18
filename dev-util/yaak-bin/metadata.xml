@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<remote-id type="github">getyaak/app</remote-id>
+		<remote-id type="github">mountain-loop/yaak</remote-id>
 	</upstream>
 </pkgmetadata>
