@@ -2,7 +2,7 @@
 
 NETIM_ROOT="/var/db/repos/neptune/net-im"
 
-update-discord() {
+update_discord() {
 	NAME=$1
 	TARGET=$2
 	EBUILD_TEMPLATE=$3
@@ -24,7 +24,7 @@ update-discord() {
 	popd
 }
 
-update-discord "discord" "" "discord.ebuild"
-update-discord "discord-canary" "canary" "discord-canary.ebuild"
-update-discord "discord-ptb" "ptb" "discord-ptb.ebuild"
-update-discord "discord-development" "development" "discord-canary.ebuild"
+update_discord "discord" "" "discord.ebuild"
+update_discord "discord-canary" "canary" "discord-canary.ebuild"
+update_discord "discord-ptb" "ptb" "discord-ptb.ebuild"
+update_discord "discord-development" "development" "discord-canary.ebuild"
