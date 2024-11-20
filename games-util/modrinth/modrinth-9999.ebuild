@@ -44,24 +44,13 @@ BDEPEND="
 	>=sys-apps/pnpm-bin-9.5.0
 "
 
-src_configure() {
-	cd "${S_FRONTEND}"
-	export COREPACK_ENABLE_STRICT=0
-	pnpm config set store-dir "${T}/pnpm" || die
-	pnpm i || die
-	cd "${S}"
-	cargo_src_configure
-}
-
-src_compile() {
-	cd "${S_FRONTEND}"
-	pnpm build || die
-	cd "${S}"
-	cargo_src_compile
-}
+PATCHES=(
+	"${FILESDIR}/modrinth-${PV}-disable-update-check.patch"
+)
 
 src_unpack() {
 	git-r3_src_unpack
+
 	cd "${S}"
 	cargo generate-lockfile
 	if [[ ${PV} != *9999* ]]; then
@@ -69,6 +58,36 @@ src_unpack() {
 	else
 		cargo_live_src_unpack
 	fi
+}
+
+src_prepare() {
+	cd "${S_ROOT}"
+	default
+	sed -e "s|staging-api.modrinth.com|api.modrinth.com|" -i "packages/app-lib/src/config.rs" || die "can't patch api endpoint to be prod"
+}
+
+src_configure() {
+	export COREPACK_ENABLE_STRICT=0
+	export BASE_URL="https://api.modrinth.com/v2/"
+	export BROWSER_BASE_URL="https://api.modrinth.com/v2/"
+
+	cd "${S_FRONTEND}"
+	pnpm config set store-dir "${T}/pnpm" || die
+	pnpm i || die
+	
+	cd "${S}"
+	cargo_src_configure
+}
+
+src_compile() {
+	export BASE_URL="https://api.modrinth.com/v2/"
+	export BROWSER_BASE_URL="https://api.modrinth.com/v2/"
+
+	cd "${S_FRONTEND}"
+	pnpm build || die
+	
+	cd "${S}"
+	cargo_src_compile
 }
 
 src_install() {

@@ -1,0 +1,42 @@
+diff --git a/apps/app-frontend/src/App.vue b/apps/app-frontend/src/App.vue
+index f5cd667b..87b37bec 100644
+--- a/apps/app-frontend/src/App.vue
++++ b/apps/app-frontend/src/App.vue
+@@ -121,18 +121,7 @@ async function setupApp() {
+     }),
+   )
+ 
+-  useFetch(
+-    `https://api.modrinth.com/appCriticalAnnouncement.json?version=${version}`,
+-    'criticalAnnouncements',
+-    true,
+-  ).then((res) => {
+-    if (res && res.header && res.body) {
+-      criticalErrorMessage.value = res
+-    }
+-  })
+-
+   get_opening_command().then(handleCommand)
+-  checkUpdates()
+ }
+ 
+ const stateFailed = ref(false)
+@@ -244,18 +233,6 @@ async function handleCommand(e) {
+ }
+ 
+ const updateAvailable = ref(false)
+-async function checkUpdates() {
+-  const update = await check()
+-  console.log(update)
+-  updateAvailable.value = !!update
+-
+-  setTimeout(
+-    () => {
+-      checkUpdates()
+-    },
+-    5 * 1000 * 60,
+-  )
+-}
+ </script>
+ 
+ <template>
