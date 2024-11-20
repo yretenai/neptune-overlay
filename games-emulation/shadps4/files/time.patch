@@ -1,0 +1,13 @@
+diff --git a/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp b/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp
+index 52abe910..3d20e267 100644
+--- a/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp
++++ b/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp
+@@ -130,7 +130,7 @@ SaveDialogState::SaveDialogState(const OrbisSaveDataDialogParam& param) {
+ #else
+             auto t = std::chrono::zoned_time{std::chrono::current_zone(), last_write};
+ #endif
+-            std::string date_str = fmt::format("{:%d %b, %Y %R}", t.get_local_time());
++            std::string date_str = fmt::format("{:%d %b, %Y %R}", t.get_sys_time());
+ 
+             size_t size = Common::FS::GetDirectorySize(dir_path);
+             std::string size_str = SpaceSizeToString(size);

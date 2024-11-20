@@ -78,6 +78,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/install.patch"
 	"${FILESDIR}/half.patch"
+	"${FILESDIR}/time.patch"
 )
 
 src_prepare() {
