@@ -68,7 +68,8 @@ fi
 electron_binname() {
 	ELECTRON_VER=$(best_version ${ELECTRON_RDEPEND})
 	ELECTRON_VER=${ELECTRON_VER#*/*-} # reduce it to ${PV}-${PR}
-	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- prefix if it exists
+	ELECTRON_VER=${ELECTRON_VER#wvcus-} # Remove the wvcus- suffix if it exists
+	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- suffix if it exists
 	export ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
 	export ELECTRON_BIN_NAME="${ELECTRON_NAME}-${ELECTRON_VER}"
 }
