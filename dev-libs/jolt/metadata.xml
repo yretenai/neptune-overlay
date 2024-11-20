@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="clang">
+			Enforce usage of Clang for build
+		</flag>
+		<flag name="custom-allocator">
+			Enables the ability to override the memory allocator
+		</flag>
+		<flag name="deterministic">
+			Turns on behavior to attempt cross platform determinism. If this is set, fmadd optimizations are ignored
+		</flag>
+		<flag name="double-precision">
+			Compiles the library so that all positions are stored in double precision floating point values
+		</flag>
+		<flag name="profiler">
+			Turns on the internal profiler
+		</flag>
+		<flag name="renderer">
+			Adds support to draw lines and triangles, used to be able to debug draw the state of the world
+		</flag>
+		<flag name="rtti">
+			Enable C++ RTTI for the library
+		</flag>
+		<flag name="std">
+			Use std::vector instead of Jolt's own Array class
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">jrouwe/JoltPhysics</remote-id>
+	</upstream>
+</pkgmetadata>
