@@ -15,9 +15,9 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-PATCHES="
-	${FILESDIR}/fixup-makefile.patch
-"
+PATCHES=(
+	"${FILESDIR}/fixup-makefile.patch"
+)
 
 src_install() {
 	doheader src/density_api.h

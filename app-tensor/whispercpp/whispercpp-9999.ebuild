@@ -46,10 +46,10 @@ REQUIRED_USE="
 	hipuma? ( hip )
 "
 
-PATCHES="
-	${FILESDIR}/prefix-whisper-name.patch
-	${FILESDIR}/install-examples.patch
-"
+PATCHES=(
+	"${FILESDIR}/prefix-whisper-name.patch"
+	"${FILESDIR}/install-examples.patch"
+)
 
 src_prepare() {
 	# :(

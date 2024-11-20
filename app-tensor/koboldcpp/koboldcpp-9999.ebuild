@@ -69,11 +69,11 @@ BDEPEND="
 	)
 "
 
-PATCHES="
-	${FILESDIR}/makefile.patch
-	${FILESDIR}/examples.patch
-	${FILESDIR}/gguf.patch
-"
+PATCHES=(
+	"${FILESDIR}/makefile.patch"
+	"${FILESDIR}/examples.patch"
+	"${FILESDIR}/gguf.patch"
+)
 
 src_prepare() {
 	default
