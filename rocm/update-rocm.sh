@@ -1,5 +1,8 @@
 #!/bin/sh
 
+NEPTUNE_REPO_ROOT="/var/db/repos/neptune-rocm"
+GENTOO_REPO_ROOT="/var/db/repos/gentoo"
+
 ROCM_TARGET_VERSION="$1"
 
 COMPAT_MATRIX_URI="https://raw.githubusercontent.com/ROCm/ROCm/refs/tags/rocm-${ROCM_TARGET_VERSION}/docs/compatibility/compatibility-matrix-historical-6.0.csv"
@@ -41,7 +44,7 @@ PKGMAP="
 	AMD SMI ->
 	ROCm Data Center Tool ->
 	rocminfo -> dev-util/rocminfo
-	ROCm SMI ->
+	ROCm SMI -> dev-util/rocm-smi
 	ROCm Validation Suite ->
 	Omniperf ->
 	Omnitrace ->
@@ -49,7 +52,7 @@ PKGMAP="
 	ROCProfiler ->
 	ROCProfiler-SDK ->
 	ROCTracer -> dev-util/roctracer
-	HIPIFY ->
+	HIPIFY -> dev-util/hipify-clang
 	ROCm CMake -> dev-build/rocm-cmake
 	ROCdbgapi -> dev-libs/rocdbgapi
 	ROCm Debugger ->
@@ -59,29 +62,66 @@ PKGMAP="
 	AMD CLR ->
 	HIP -> dev-util/hip
 	ROCR-Runtime -> dev-libs/rocr-runtime
+	llvm-project -> dev-libs/rocm-comgr dev-libs/rocm-device-libs
 "
-DISTINCT_VERSION="half"
+DISTINCT_VERSION="dev-libs/half"
 
 find_package_from_compat() {
 	COMPAT_KEY="$1"
 	echo "${PKGMAP}" | grep -E "^\s*${COMPAT_KEY}\s*->" | cut -d'>' -f2 | xargs
 }
 
-process_pkg() {
-	PKG=$(find_package_from_compat "$1")
+process_pkg_actual() {
+	TARGET_PKG="$1"
 	VERSION="$2"
-
-	if [ -z "${PKG}" ]; then
-		return
-	fi
+	PKG="$3"
 
 	NAME="$(echo "${PKG}" | cut -d'/' -f2)"
 	if [ ! -f "ebuilds/${NAME}.ebuild" ]; then
-	 	echo "${1} lacks an ebuild (ebuilds/${NAME}.ebuild)"
+		echo "${1} lacks an ebuild (ebuilds/${NAME}.ebuild)"
 	 	return
 	fi
-	echo "$NAME -> $VERSION"
+
+	TARGET_VER="${ROCM_TARGET_VERSION}"
+	if [[ $DISTINCT_VERSION == *"${PKG}"* ]]; then
+		TARGET_VER="${VERSION}"
+	fi
+
+	if [ -n "$(find "${GENTOO_REPO_ROOT}/${PKG}" -maxdepth 1 -name "${NAME}-${TARGET_VER}*.ebuild" -print -quit)" ]; then
+		echo "skipping ${NAME}, exists in ::gentoo"
+		return
+	fi
+
+	if [ -n "$(find "${NEPTUNE_REPO_ROOT}/${PKG}" -maxdepth 1 -name "${NAME}-${TARGET_VER}*.ebuild" -print -quit)" ]; then
+		echo "skipping ${NAME}, exists in ::neptune-rocm"
+		return
+	fi
+
+	echo "${NAME} -> ${TARGET_VER} ($VERSION)"
+
+	cp "ebuilds/${NAME}.ebuild" "${NEPTUNE_REPO_ROOT}/${PKG}/${NAME}-${TARGET_VER}.ebuild"
+	ebuild "${NEPTUNE_REPO_ROOT}/${PKG}/${NAME}-${TARGET_VER}.ebuild" manifest
+	pushd "${NEPTUNE_REPO_ROOT}/${PKG}/"
+		git add .
+		pkgdev commit
+	popd
 }
+
+process_pkg() {
+	TARGET_PKG="$1"
+	VERSION="$2"
+
+	PKGS=$(find_package_from_compat "${TARGET_PKG}")
+
+	if [ -z "${PKGS}" ]; then
+		return
+	fi
+
+	for PKG in ${PKGS}; do
+		process_pkg_actual "${TARGET_PKG}" "${VERSION}" "${PKG}"
+	done
+}
+
 
 echo "$(curl --silent --fail ${COMPAT_MATRIX_URI})" | while IFS="\n" read -r LINE; do
 	# skip headers
@@ -106,5 +146,3 @@ echo "$(curl --silent --fail ${COMPAT_MATRIX_URI})" | while IFS="\n" read -r LIN
 	
 	process_pkg "${MODULE}" "${VERSION}"
 done
-
-process_pkg "$1"
