@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -o pipefail
+
+rm rocm.log prepare.log
+
 NEPTUNE_REPO_ROOT="/var/db/repos/neptune-rocm"
 GENTOO_REPO_ROOT="/var/db/repos/gentoo"
 
@@ -99,8 +103,19 @@ process_pkg_actual() {
 
 	echo "${NAME} -> ${TARGET_VER} ($VERSION)"
 
-	cp "ebuilds/${NAME}.ebuild" "${NEPTUNE_REPO_ROOT}/${PKG}/${NAME}-${TARGET_VER}.ebuild"
-	ebuild "${NEPTUNE_REPO_ROOT}/${PKG}/${NAME}-${TARGET_VER}.ebuild" manifest
+	TARGET_EBUILD="${NEPTUNE_REPO_ROOT}/${PKG}/${NAME}-${TARGET_VER}.ebuild"
+
+	cp "ebuilds/${NAME}.ebuild" "${TARGET_EBUILD}"
+	if ebuild "${TARGET_EBUILD}" clean manifest; then
+		if (ebuild "${TARGET_EBUILD}" prepare | tee -a prepare.log); then
+			ebuild "${TARGET_EBUILD}" clean
+		else
+			echo "!!! ${PKG} failed to unpack !!!" | tee -a rocm.log
+		fi
+	else
+		echo "!!! ${PKG} failed to generate manifest !!!" | tee -a rocm.log
+	fi
+
 	pushd "${NEPTUNE_REPO_ROOT}/${PKG}/"
 		git add .
 		pkgdev commit
