@@ -27,7 +27,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+qt6 hacks clang"
+IUSE="+qt6 clang"
 
 # missing dependencies:
 # fmt 10.2.0 or newer is required
@@ -80,16 +80,6 @@ PATCHES=(
 	"${FILESDIR}/half.patch"
 	"${FILESDIR}/time.patch"
 )
-
-src_prepare() {
-	eapply_user
-
-	if use hacks; then
-		eapply "${FILESDIR}/hacks.patch" || die "Cannot apply hacks patch"
-	fi
-
-	cmake_src_prepare
-}
 
 src_configure() {
 	if use clang; then
