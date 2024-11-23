@@ -44,7 +44,7 @@ DEPEND="
 	>=media-video/ffmpeg-5.1.2
 	sys-libs/zlib-ng
 	media-gfx/renderdoc
-	dev-util/glslang
+	=dev-util/glslang-14.2.0
 	>=dev-cpp/robin-map-1.3.0
 	>=dev-libs/xbyak-7.07.1[clang?]
 	dev-cpp/toml11
@@ -74,15 +74,15 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/install.patch"
-	"${FILESDIR}/datadir.patch"
+	"${FILESDIR}/${PN}-install.patch"
+	"${FILESDIR}/${PN}-${PV}-datadir.patch"
 )
 
 src_prepare() {
 	eapply_user
 
 	if use hacks; then
-		eapply "${FILESDIR}/hacks.patch" || die "Cannot apply hacks patch"
+		eapply "${FILESDIR}/${PN}-hacks.patch" || die "Cannot apply hacks patch"
 	fi
 
 	cmake_src_prepare

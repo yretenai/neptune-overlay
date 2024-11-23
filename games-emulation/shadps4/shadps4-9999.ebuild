@@ -44,6 +44,7 @@ DEPEND="
 	dev-libs/crypto++
 	>=media-video/ffmpeg-5.1.2
 	sys-libs/zlib-ng
+	sys-libs/zlib
 	media-gfx/renderdoc
 	dev-util/glslang
 	>=dev-cpp/robin-map-1.3.0
@@ -76,8 +77,9 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/install.patch"
-	"${FILESDIR}/half.patch"
+	"${FILESDIR}/${PN}-install.patch"
+	"${FILESDIR}/${PN}-half.patch"
+	"${FILESDIR}/${PN}-${PV}-deps.patch"
 )
 
 src_configure() {

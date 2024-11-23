@@ -1,0 +1,53 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a967c540..49d66857 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -110,7 +110,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/common/scm_rev.cpp.in" "${CMAKE_
+ find_package(Boost 1.84.0 CONFIG)
+ find_package(FFmpeg 5.1.2 MODULE)
+ find_package(fmt 10.2.0 CONFIG)
+-find_package(glslang 14.2.0 CONFIG)
++find_package(glslang CONFIG)
+ find_package(half 1.12.0 MODULE)
+ find_package(magic_enum 0.9.6 CONFIG)
+ find_package(RenderDoc 1.6.0 MODULE)
+@@ -124,6 +124,8 @@ find_package(xxHash 0.8.2 MODULE)
+ find_package(zlib-ng 2.1.7 MODULE)
+ find_package(Zydis 5.0.0 CONFIG)
+ find_package(pugixml 1.14 CONFIG)
++find_package(PNG REQUIRED)
++find_package(ZLIB REQUIRED)
+ 
+ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR NOT MSVC)
+     find_package(cryptopp 8.9.0 MODULE)
+@@ -830,7 +832,7 @@ endif()
+ 
+ create_target_directory_groups(shadps4)
+ 
+-target_link_libraries(shadps4 PRIVATE magic_enum::magic_enum fmt::fmt toml11::toml11 tsl::robin_map xbyak::xbyak Tracy::TracyClient RenderDoc::API FFmpeg::ffmpeg Dear_ImGui gcn half::half zlib-ng::zlib png_static)
++target_link_libraries(shadps4 PRIVATE magic_enum::magic_enum fmt::fmt toml11::toml11 tsl::robin_map xbyak::xbyak Tracy::TracyClient RenderDoc::API FFmpeg::ffmpeg Dear_ImGui gcn half::half zlib-ng::zlib ${PNG_LIBRARY} ${ZLIB_LIBRARY})
+ target_link_libraries(shadps4 PRIVATE Boost::headers GPUOpen::VulkanMemoryAllocator LibAtrac9 sirit Vulkan::Headers xxHash::xxhash Zydis::Zydis glslang::SPIRV glslang::glslang SDL3::SDL3 pugixml::pugixml)
+ 
+ target_compile_definitions(shadps4 PRIVATE IMGUI_USER_CONFIG="imgui/imgui_config.h")
+diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
+index 8d080acc..5beab3cf 100644
+--- a/externals/CMakeLists.txt
++++ b/externals/CMakeLists.txt
+@@ -155,17 +155,6 @@ if (NOT TARGET half::half)
+     add_library(half::half ALIAS half)
+ endif()
+ 
+-# libpng
+-set(PNG_SHARED OFF CACHE BOOL "" FORCE)
+-set(PNG_STATIC ON CACHE BOOL "" FORCE)
+-set(PNG_TESTS OFF CACHE BOOL "" FORCE) 
+-set(PNG_TOOLS OFF CACHE BOOL "" FORCE) 
+-set(SKIP_INSTALL_ALL OFF CACHE BOOL "" FORCE)
+-set(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/zlib-ng" CACHE STRING "" FORCE)
+-set(ZLIB_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/zlib-ng/zlibstatic-ngd" CACHE STRING "" FORCE)
+-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/libpng/zlib.h" "#include \"../zlib-ng/zlib.h\"")
+-add_subdirectory(libpng)
+-
+ if (APPLE)
+     # date
+     if (NOT TARGET date::date-tz)
