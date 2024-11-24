@@ -74,7 +74,7 @@ src_configure() {
 	cd "${S_FRONTEND}"
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i || die
-	
+
 	cd "${S}"
 	cargo_src_configure
 }
@@ -85,7 +85,7 @@ src_compile() {
 
 	cd "${S_FRONTEND}"
 	pnpm build || die
-	
+
 	cd "${S}"
 	cargo_src_compile
 }

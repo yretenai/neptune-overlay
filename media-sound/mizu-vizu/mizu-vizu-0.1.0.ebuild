@@ -68,13 +68,13 @@ inherit cargo
 DESCRIPTION="A multiplatform terminal-based audio visualizer written in Rust"
 HOMEPAGE="https://github.com/natty-misc/mizu-vizu"
 SRC_URI="
-	https://github.com/natty-misc/mizu-vizu/archive/ee6572c74f9aabb2827210f0d297d79389ea8eaf.tar.gz
+	https://github.com/natty-misc/mizu-vizu/archive/ee6572c74f9aabb2827210f0d297d79389ea8eaf.tar.gz -> ${PN}-${PV}.tar.gz
 	${CARGO_CRATE_URIS}
 "
+S="${WORKDIR}/mizu-vizu-ee6572c74f9aabb2827210f0d297d79389ea8eaf"
 
 LICENSE="|| ( GPL-3 MIT )"
 # Dependent crate licenses
 LICENSE+=" MIT"
 SLOT="0"
 KEYWORDS="~amd64"
-S="${WORKDIR}/mizu-vizu-ee6572c74f9aabb2827210f0d297d79389ea8eaf"

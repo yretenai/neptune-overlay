@@ -5,19 +5,19 @@ EAPI=8
 
 inherit cmake flag-o-matic
 
-DESCRIPTION=" A multi core friendly rigid body physics and collision detection library. Written in C++"
+DESCRIPTION="A multi core friendly rigid body physics and collision detection library"
 HOMEPAGE="https://github.com/jrouwe/JoltPhysics"
 LICENSE="MIT"
 SLOT="0"
 
 if [[ ${PV} != *9999* ]]; then
 	SRC_URI="
-		https://github.com/jrouwe/JoltPhysics/archive/refs/tags/v5.2.0.tar.gz -> jolt-${PV}.tar.gz
+		https://github.com/jrouwe/JoltPhysics/archive/refs/tags/v${PV}.tar.gz -> jolt-${PV}.tar.gz
 	"
 	S="${WORKDIR}/JoltPhysics-${PV}"
 	KEYWORDS="~amd64"
 else
-	inherit git-r3 
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/jrouwe/JoltPhysics.git"
 fi
 
