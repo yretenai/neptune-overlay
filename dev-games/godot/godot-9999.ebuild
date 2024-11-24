@@ -451,7 +451,6 @@ src_prepare() {
 	fi
 
 	godot_get_version
-	echo ${GODOT_VERSION}
 	local s="-${GODOT_VERSION}"
 
 	# handle slotting

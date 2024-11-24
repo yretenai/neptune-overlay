@@ -82,7 +82,6 @@ godot_get_version() {
 	)
 }
 
-
 src_prepare() {
 	default
 
