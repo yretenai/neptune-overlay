@@ -77,19 +77,11 @@ PATCHES=(
 )
 
 godot_get_version() {
-	export GODOT_VERSION=$(awk -F ' = ' '{
-		gsub(/"/, "", $2)
-		if ($1 == "major") major = $2
-		else if ($1 == "minor") minor = $2
-		else if ($1 == "patch") patch = $2
-		else if ($1 == "status") status = $2
-	} END {
-		version = major "." minor
-		if (patch != "0") version = version "." patch
-		if (status != "stable") version = version "-" status
-		print version
-	}' version.py)
+	export GODOT_VERSION=$(
+		${PYTHON} -c 'from version import major, minor, patch, status; print(f"{major}.{minor}{f".{patch}" if patch > 0 else ""}{f"-{status}" if status != "stable" else ""}")'
+	)
 }
+
 
 src_prepare() {
 	default
