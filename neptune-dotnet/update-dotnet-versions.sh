@@ -1,61 +1,66 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
+# usage: dotnet_strip "name"
 dotnet_strip() {
-	value=${"$1"/-rc/}
-	value=${"${value}"/-preview/}
+	value="$1"
+    value=${value/-rc/}
+    value=${value/-preview/}
 	echo $value
-} 
+}
 
-find "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime" -iname "*.ebuild" -delete
-find "${ADADOTNET_ROOT}/dotnet-runtime" -iname "*.ebuild" -delete
-find "${ADADOTNET_ROOT}/dotnet-sdk" -iname "*.ebuild" -delete
-find "${ADADOTNET_ROOT}/dotnet-cli-bin" -iname "*.ebuild" -delete
-find "${ADADOTNET_ROOT}/dotnet-man" -iname "*.ebuild" -delete
-find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
+# usage: dotnet_apply "name" "version"
+dotnet_apply() {
+	EBUILD_NAME="$1"
+	VERSION="$2"
+	VERSION_SAFE="$(dotnet_strip "${VERSION}")"
+
+	cp "${EBUILD_NAME}.ebuild" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild"
+	if ! [ "${VERSION_SAFE}" = "${VERSION}" ]; then
+		sed -i "/\${PV}/s//${VERSION}/g" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild"
+	fi
+}
+
+TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-sdk dotnet-cli-bin dotnet-man netstandard"
+for TARGET in $TARGETS; do
+	find "${ADADOTNET_ROOT}/${TARGET}" -iname "*.ebuild" -delete
+done
 
 DOTNET_RELEASE_INDEX="$(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json)"
 RELEASE_COUNT="$(jq ".[\"releases-index\"] | length - 1" <<< "${DOTNET_RELEASE_INDEX}")"
-LATEST_VERSION="0.0.0"
-LATEST_SDK_VERSION="0.0.0"
 LATEST_NETSTANDARD_VERSION="2.1.0"
 IS_FIRST=Y
 
-for i in $(seq 0 ${RELEASE_COUNT}); do
-	RELEASE_OBJ="$(jq --raw-output ".[\"releases-index\"][${i}]" <<< "${DOTNET_RELEASE_INDEX}")"
-	RELEASE_CHANNEL="$(jq --raw-output '.["channel-version"]' <<< "${RELEASE_OBJ}")"
-	RELEASE_SDK="$(jq --raw-output '.["latest-sdk"]' <<< "${RELEASE_OBJ}")"
-	RELEASE_RUNTIME="$(jq --raw-output '.["latest-runtime"]' <<< "${RELEASE_OBJ}")"
-	RELEASE_TYPE="$(jq --raw-output '.["support-phase"]' <<< "${RELEASE_OBJ}")"
+dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}"
 
-	echo $RELEASE_CHANNEL ${RELEASE_TYPE} $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP
+for RELEASE in $(jq -r '.["releases-index"][] | [.["channel-version", "latest-sdk", "latest-runtime", "support-phase", "releases.json"]] | join("^")' <<< "${DOTNET_RELEASE_INDEX}"); do
+	IFS="^"
+	set -- $RELEASE
+	RELEASE_CHANNEL=$1
+	RELEASE_SDK=$2
+	RELEASE_RUNTIME=$3
+	RELEASE_TYPE=$4
+	RELEASE_INDEX=$5
+	unset IFS
+
+	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
 
 	if ! ([ "${RELEASE_TYPE}" = "active" ] || [ "${RELEASE_TYPE}" = "eol" ] || [ "${RELEASE_TYPE}" = "maintenance" ]); then
-		RELEASE_ROOT="$(curl -s $(jq --raw-output ".[\"releases-index\"][${i}][\"releases.json\"]" <<< "${DOTNET_RELEASE_INDEX}"))"
-		RELEASE_ASP="$(jq --raw-output '.releases[0]["aspnetcore-runtime"].version' <<< "${RELEASE_ROOT}")"
-		RELEASE_SDK_SAFE=$(dotnet_strip "$RELEASE_SDK")
-		RELEASE_RUNTIME_SAFE=$(dotnet_strip "$RELEASE_RUNTIME")
-		RELEASE_ASP_SAFE=$(dotnet_strip "$RELEASE_ASP")
+		RELEASE_ASP="$(jq --raw-output '.releases[0]["aspnetcore-runtime"].version' <<< "$(curl -s ${RELEASE_INDEX})")"
 
-		cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${RELEASE_ASP_SAFE}.ebuild"
-		cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${RELEASE_RUNTIME_SAFE}.ebuild"
-		cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild"
-		cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${RELEASE_RUNTIME_SAFE}.ebuild"
-
-		sed -i "/\${PV}/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${RELEASE_ASP_SAFE}.ebuild"
-		sed -i "/\${PV}/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${RELEASE_RUNTIME_SAFE}.ebuild"
-		sed -i "/\${PV}/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild"
-		sed -i "/\${PV}/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${RELEASE_RUNTIME_SAFE}.ebuild"
+		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}"
+		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
+		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
+		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
 	else
-		cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${RELEASE_RUNTIME}.ebuild"
-		cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${RELEASE_RUNTIME}.ebuild"
-		cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
+		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_RUNTIME}"
+		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
+		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
 
-		if [ "$IS_FIRST" = "Y" ]; then
-			cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${RELEASE_RUNTIME}.ebuild"
-			cp dotnet-man.ebuild ${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${RELEASE_SDK}.ebuild
-			cp netstandard.ebuild ${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild
+		if [ "${IS_FIRST}" = "Y" ]; then
+			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
+			dotnet_apply dotnet-man "${RELEASE_SDK}"
 
 			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild"
 
@@ -70,27 +75,22 @@ for i in $(seq 0 ${RELEASE_COUNT}); do
 	fi 
 done
 
-ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${LATEST_VERSION}.ebuild" manifest
-ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${LATEST_VERSION}.ebuild" manifest
-ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${LATEST_SDK_VERSION}.ebuild" manifest
-ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${LATEST_VERSION}.ebuild" manifest
-ebuild "${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${LATEST_SDK_VERSION}.ebuild" manifest
-ebuild "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild" manifest
+for TARGET in $TARGETS; do
+	TARGET_EBUILD="$(find "${ADADOTNET_ROOT}/${TARGET}" -type f -iname "*.ebuild" | head -1)" 
+	ebuild "$TARGET_EBUILD" manifest
+done
 
 pkgdev_do() {
-    git add $1
-    if [ -n "$(git status --porcelain .)" ]; then
-        pkgdev commit
-    fi
+	git add $1
+	if [ -n "$(git status --porcelain .)" ]; then
+		pkgdev commit
+	fi
 }
 
 if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
-    pushd "${ADADOTNET_ROOT}"
-    pkgdev_do dotnet-aspnetcore-runtime
-    pkgdev_do dotnet-runtime
-    pkgdev_do dotnet-sdk
-    pkgdev_do dotnet-cli-bin
-    pkgdev_do dotnet-man
-    pkgdev_do netstandard
+	pushd "${ADADOTNET_ROOT}"
+		for TARGET in $TARGETS; do
+			pkgdev_do $TARGET
+		done
 	popd
 fi
