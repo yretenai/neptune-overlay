@@ -45,5 +45,10 @@ src_install() {
 	insinto "${dest}"
 
 	# install dotnet packs
-	doins -r host shared
+	TARGETS="host shared"
+	for DIRECTORY in $TARGETS; do
+		if [ -d "${DIRECTORY}" ]; then
+			doins -r "${DIRECTORY}"
+		fi
+	done
 }

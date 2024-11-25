@@ -53,7 +53,11 @@ src_install() {
 
 	# remove netstandard
 	rm -rf packs/NETStandard.Library.Ref
-
 	# install dotnet packs
-	doins -r host packs sdk sdk-manifests shared templates
+	TARGETS="host packs sdk sdk-manifests shared templates"
+	for DIRECTORY in $TARGETS; do
+		if [ -d "${DIRECTORY}" ]; then
+			doins -r "${DIRECTORY}"
+		fi
+	done
 }
