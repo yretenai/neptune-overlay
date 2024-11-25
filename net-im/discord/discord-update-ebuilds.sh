@@ -17,7 +17,7 @@ update_discord() {
 	ebuild "$EBUILD_NAME" manifest
 	if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
 		git add .
-		if [ -n "$(git status --porcelain)" ]; then
+		if [ -n "$(git status --porcelain .)" ]; then
 			pkgdev commit
 		fi
 	fi

@@ -53,14 +53,14 @@ PKGMAP="
 	Omniperf ->
 	Omnitrace ->
 	ROCm Bandwidth Test ->
-	ROCProfiler ->
-	ROCProfiler-SDK ->
+	ROCProfiler -> dev-util/rocprofiler
+	ROCProfiler-SDK -> dev-util/rocprofiler-sdk
 	ROCTracer -> dev-util/roctracer
 	HIPIFY -> dev-util/hipify-clang
 	ROCm CMake -> dev-build/rocm-cmake
 	ROCdbgapi -> dev-libs/rocdbgapi
 	ROCm Debugger ->
-	rocprofiler-register ->
+	rocprofiler-register -> dev-util/rocprofiler-register
 	ROCr Debug Agent ->
 	hipCC -> dev-util/hipcc
 	AMD CLR ->
