@@ -15,10 +15,6 @@ SRC_URI="
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-x64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-x64.tar.gz )
 	)
-	arm? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-arm.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-arm.tar.gz )
-	)
 	arm64? (
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-arm64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-arm64.tar.gz )
@@ -48,5 +44,10 @@ src_install() {
 	insinto "${dest}"
 
 	# install dotnet packs
-	doins -r host shared
+	TARGETS="host shared"
+	for DIRECTORY in $TARGETS; do
+		if [ -d "${DIRECTORY}" ]; then
+			doins -r "${DIRECTORY}"
+		fi
+	done
 }

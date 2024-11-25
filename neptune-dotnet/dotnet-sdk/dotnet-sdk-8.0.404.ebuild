@@ -15,10 +15,6 @@ SRC_URI="
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DN_PV}/dotnet-sdk-${DN_PV}-linux-x64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DN_PV}/dotnet-sdk-${DN_PV}-linux-musl-x64.tar.gz )
 	)
-	arm? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DN_PV}/dotnet-sdk-${DN_PV}-linux-arm.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DN_PV}/dotnet-sdk-${DN_PV}-linux-musl-arm.tar.gz )
-	)
 	arm64? (
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DN_PV}/dotnet-sdk-${DN_PV}-linux-arm64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DN_PV}/dotnet-sdk-${DN_PV}-linux-musl-arm64.tar.gz )
@@ -57,7 +53,11 @@ src_install() {
 
 	# remove netstandard
 	rm -rf packs/NETStandard.Library.Ref
-
 	# install dotnet packs
-	doins -r host packs sdk sdk-manifests shared templates
+	TARGETS="host packs sdk sdk-manifests shared templates"
+	for DIRECTORY in $TARGETS; do
+		if [ -d "${DIRECTORY}" ]; then
+			doins -r "${DIRECTORY}"
+		fi
+	done
 }

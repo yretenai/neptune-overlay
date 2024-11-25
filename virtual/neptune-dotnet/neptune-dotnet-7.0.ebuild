@@ -1,1 +1,1 @@
-neptune-dotnet-9.0.ebuild
+neptune-dotnet.base
