@@ -15,10 +15,6 @@ SRC_URI="
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-x64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-musl-x64.tar.gz )
 	)
-	arm? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-arm.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-musl-arm.tar.gz )
-	)
 	arm64? (
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-arm64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Sdk/${DOTNET_PV}/dotnet-sdk-${DOTNET_PV}-linux-musl-arm64.tar.gz )

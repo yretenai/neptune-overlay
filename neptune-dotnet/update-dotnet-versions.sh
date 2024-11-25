@@ -2,87 +2,73 @@
 
 ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
-# DOTNET_NEXT_VER_BASE="10.0"
+dotnet_strip() {
+	value=${"$1"/-rc/}
+	value=${"${value}"/-preview/}
+	echo $value
+} 
 
-DOTNET_6_0_VERSION=$(./dotnet-version.sh runtime "6.0")
-DOTNET_7_0_VERSION=$(./dotnet-version.sh runtime "7.0")
-DOTNET_8_0_VERSION=$(./dotnet-version.sh runtime "8.0")
-DOTNET_9_0_VERSION=$(./dotnet-version.sh runtime "9.0")
+find "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime" -iname "*.ebuild" -delete
+find "${ADADOTNET_ROOT}/dotnet-runtime" -iname "*.ebuild" -delete
+find "${ADADOTNET_ROOT}/dotnet-sdk" -iname "*.ebuild" -delete
+find "${ADADOTNET_ROOT}/dotnet-cli-bin" -iname "*.ebuild" -delete
+find "${ADADOTNET_ROOT}/dotnet-man" -iname "*.ebuild" -delete
+find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
 
-echo runtime versions: $DOTNET_6_0_VERSION $DOTNET_7_0_VERSION $DOTNET_8_0_VERSION $DOTNET_9_0_VERSION
-
-DOTNET_6_0_ASP_VERSION=$DOTNET_6_0_VERSION
-DOTNET_7_0_ASP_VERSION=$DOTNET_7_0_VERSION
-DOTNET_8_0_ASP_VERSION=$DOTNET_8_0_VERSION
-DOTNET_9_0_ASP_VERSION=$DOTNET_9_0_VERSION
-
-echo aspnet versions: $DOTNET_6_0_ASP_VERSION $DOTNET_7_0_ASP_VERSION $DOTNET_8_0_ASP_VERSION $DOTNET_9_0_VERSION
-
-DOTNET_6_0_SDK_VERSION=$(./dotnet-version.sh sdk "6.0")
-DOTNET_7_0_SDK_VERSION=$(./dotnet-version.sh sdk "7.0")
-DOTNET_8_0_SDK_VERSION=$(./dotnet-version.sh sdk "8.0")
-DOTNET_9_0_SDK_VERSION=$(./dotnet-version.sh sdk "9.0")
-
-echo sdk versions: $DOTNET_6_0_SDK_VERSION $DOTNET_7_0_SDK_VERSION $DOTNET_8_0_SDK_VERSION $DOTNET_9_0_VERSION
-
-LATEST_VERSION=$DOTNET_9_0_VERSION
-LATEST_SDK_VERSION=$DOTNET_9_0_SDK_VERSION
+DOTNET_RELEASE_INDEX="$(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json)"
+RELEASE_COUNT="$(jq ".[\"releases-index\"] | length - 1" <<< "${DOTNET_RELEASE_INDEX}")"
+LATEST_VERSION="0.0.0"
+LATEST_SDK_VERSION="0.0.0"
 LATEST_NETSTANDARD_VERSION="2.1.0"
+IS_FIRST=Y
 
-find "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime" -iname "*.ebuild" -print -delete
-find "${ADADOTNET_ROOT}/dotnet-runtime" -iname "*.ebuild" -print -delete
-find "${ADADOTNET_ROOT}/dotnet-sdk" -iname "*.ebuild" -print -delete
-find "${ADADOTNET_ROOT}/dotnet-cli-bin" -iname "*.ebuild" -print -delete
-find "${ADADOTNET_ROOT}/dotnet-man" -iname "*.ebuild" -print -delete
-find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -print -delete
+for i in $(seq 0 ${RELEASE_COUNT}); do
+	RELEASE_OBJ="$(jq --raw-output ".[\"releases-index\"][${i}]" <<< "${DOTNET_RELEASE_INDEX}")"
+	RELEASE_CHANNEL="$(jq --raw-output '.["channel-version"]' <<< "${RELEASE_OBJ}")"
+	RELEASE_SDK="$(jq --raw-output '.["latest-sdk"]' <<< "${RELEASE_OBJ}")"
+	RELEASE_RUNTIME="$(jq --raw-output '.["latest-runtime"]' <<< "${RELEASE_OBJ}")"
+	RELEASE_TYPE="$(jq --raw-output '.["release-type"]' <<< "${RELEASE_OBJ}")"
 
-cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_6_0_ASP_VERSION}.ebuild"
-cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_7_0_ASP_VERSION}.ebuild"
-cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_8_0_ASP_VERSION}.ebuild"
-cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_9_0_ASP_VERSION}.ebuild"
+	echo $RELEASE_CHANNEL-${RELEASE_TYPE} $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP
 
-cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${DOTNET_6_0_VERSION}.ebuild"
-cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${DOTNET_7_0_VERSION}.ebuild"
-cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${DOTNET_8_0_VERSION}.ebuild"
-cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${DOTNET_9_0_VERSION}.ebuild"
+	if ! ([ "${RELEASE_TYPE}" = "sts" ] || [ "${RELEASE_TYPE}" = "lts" ]); then
+		RELEASE_ROOT="$(curl -s $(jq --raw-output ".[\"releases-index\"][${i}][\"releases.json\"]" <<< "${DOTNET_RELEASE_INDEX}"))"
+		RELEASE_ASP="$(jq --raw-output '.releases[0]["aspnetcore-runtime"].version' <<< "${RELEASE_ROOT}")"
+		RELEASE_SDK_SAFE=$(dotnet_strip "$RELEASE_SDK")
+		RELEASE_RUNTIME_SAFE=$(dotnet_strip "$RELEASE_RUNTIME")
+		RELEASE_ASP_SAFE=$(dotnet_strip "$RELEASE_ASP")
 
-cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${DOTNET_6_0_SDK_VERSION}.ebuild"
-cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${DOTNET_7_0_SDK_VERSION}.ebuild"
-cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${DOTNET_8_0_SDK_VERSION}.ebuild"
-cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${DOTNET_9_0_SDK_VERSION}.ebuild"
+		cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${RELEASE_ASP_SAFE}.ebuild"
+		cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${RELEASE_RUNTIME_SAFE}.ebuild"
+		cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild"
+		cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${RELEASE_RUNTIME_SAFE}.ebuild"
 
-cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${LATEST_VERSION}.ebuild"
+		sed -i "/\${PV}/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${RELEASE_ASP_SAFE}.ebuild"
+		sed -i "/\${PV}/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${RELEASE_RUNTIME_SAFE}.ebuild"
+		sed -i "/\${PV}/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild"
+		sed -i "/\${PV}/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${RELEASE_RUNTIME_SAFE}.ebuild"
+	else
+		cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${RELEASE_RUNTIME}.ebuild"
+		cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${RELEASE_RUNTIME}.ebuild"
+		cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
 
-cp dotnet-man.ebuild ${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${LATEST_SDK_VERSION}.ebuild
+		if [ "$IS_FIRST" = "Y" ]; then
+			cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${RELEASE_RUNTIME}.ebuild"
+			cp dotnet-man.ebuild ${ADADOTNET_ROOT}/dotnet-man/dotnet-man-${RELEASE_SDK}.ebuild
+			cp netstandard.ebuild ${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild
 
-cp netstandard.ebuild ${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild
-sed -i "/__DOTNET_VERSION__/s//${LATEST_SDK_VERSION}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild"
+			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild"
 
-if [ ! -z $DOTNET_NEXT_VER_BASE ]; then
-    DOTNET_NEXT_VERSION=$(./dotnet-version-preview.sh Runtime "${DOTNET_NEXT_VER_BASE}")
-    DOTNET_NEXT_VERSION_SAFE=${DOTNET_NEXT_VERSION/-rc/}
-    DOTNET_NEXT_VERSION_SAFE=${DOTNET_NEXT_VERSION_SAFE/-preview/}
-    DOTNET_NEXT_ASP_VERSION=$(./dotnet-version-preview.sh aspnetcore/Runtime "${DOTNET_NEXT_VER_BASE}")
-    DOTNET_NEXT_ASP_VERSION_SAFE=${DOTNET_NEXT_ASP_VERSION/-rc/}
-    DOTNET_NEXT_ASP_VERSION_SAFE=${DOTNET_NEXT_ASP_VERSION_SAFE/-preview/}
-    DOTNET_NEXT_SDK_VERSION=$(./dotnet-version-preview.sh Sdk "${DOTNET_NEXT_VER_BASE}")
-    DOTNET_NEXT_SDK_VERSION_SAFE=${DOTNET_NEXT_SDK_VERSION/-rc/}
-    DOTNET_NEXT_SDK_VERSION_SAFE=${DOTNET_NEXT_SDK_VERSION_SAFE/-preview/}
+			LATEST_VERSION="${RELEASE_RUNTIME}"
+			LATEST_SDK_VERSION="${RELEASE_SDK}"
+			IS_FIRST=N
+		fi
+	fi
 
-    echo preview versions: runtime $DOTNET_NEXT_VERSION asp $DOTNET_NEXT_ASP_VERSION sdk $DOTNET_NEXT_SDK_VERSION
-
-    cp dotnet-aspnetcore-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_NEXT_ASP_VERSION_SAFE}.ebuild"
-    sed -i "/\${PV}/s//${DOTNET_NEXT_ASP_VERSION}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${DOTNET_NEXT_ASP_VERSION_SAFE}.ebuild"
-
-    cp dotnet-runtime.ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${DOTNET_NEXT_VERSION_SAFE}.ebuild"
-    sed -i "/\${PV}/s//${DOTNET_NEXT_VERSION}/g" "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${DOTNET_NEXT_VERSION_SAFE}.ebuild"
-
-    cp dotnet-sdk.ebuild "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${DOTNET_NEXT_SDK_VERSION_SAFE}.ebuild"
-    sed -i "/\${PV}/s//${DOTNET_NEXT_SDK_VERSION}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${DOTNET_NEXT_SDK_VERSION_SAFE}.ebuild"
-
-    cp dotnet-cli-bin.ebuild "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${DOTNET_NEXT_VERSION_SAFE}.ebuild"
-    sed -i "/\${PV}/s//${DOTNET_NEXT_VERSION}/g" "${ADADOTNET_ROOT}/dotnet-cli-bin/dotnet-cli-bin-${DOTNET_NEXT_VERSION_SAFE}.ebuild"
-fi
+	if [ "${RELEASE_CHANNEL}" = "5.0" ]; then
+		break
+	fi 
+done
 
 ebuild "${ADADOTNET_ROOT}/dotnet-aspnetcore-runtime/dotnet-aspnetcore-runtime-${LATEST_VERSION}.ebuild" manifest
 ebuild "${ADADOTNET_ROOT}/dotnet-runtime/dotnet-runtime-${LATEST_VERSION}.ebuild" manifest
@@ -93,7 +79,7 @@ ebuild "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.
 
 pkgdev_do() {
     git add $1
-    if [ -n "$(git status --porcelain)" ]; then
+    if [ -n "$(git status --porcelain .)" ]; then
         pkgdev commit
     fi
 }
@@ -106,4 +92,5 @@ if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
     pkgdev_do dotnet-cli-bin
     pkgdev_do dotnet-man
     pkgdev_do netstandard
+	popd
 fi
