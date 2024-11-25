@@ -4,10 +4,7 @@ ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
 # usage: dotnet_strip "name"
 dotnet_strip() {
-	value="$1"
-    value=${value/-rc/}
-    value=${value/-preview/}
-	echo $value
+	printf "%s" "$1" | sed 's/-rc//g; s/-preview//g'
 }
 
 # usage: dotnet_apply "name" "version"
@@ -27,14 +24,12 @@ for TARGET in $TARGETS; do
 	find "${ADADOTNET_ROOT}/${TARGET}" -iname "*.ebuild" -delete
 done
 
-DOTNET_RELEASE_INDEX="$(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json)"
-RELEASE_COUNT="$(jq ".[\"releases-index\"] | length - 1" <<< "${DOTNET_RELEASE_INDEX}")"
 LATEST_NETSTANDARD_VERSION="2.1.0"
 IS_FIRST=Y
 
 dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}"
 
-for RELEASE in $(jq -r '.["releases-index"][] | [.["channel-version", "latest-sdk", "latest-runtime", "support-phase", "releases.json"]] | join("^")' <<< "${DOTNET_RELEASE_INDEX}"); do
+for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json | jq -r '.["releases-index"][] | [.["channel-version", "latest-sdk", "latest-runtime", "support-phase", "releases.json"]] | join("^")'); do
 	IFS="^"
 	set -- $RELEASE
 	RELEASE_CHANNEL=$1
@@ -47,7 +42,7 @@ for RELEASE in $(jq -r '.["releases-index"][] | [.["channel-version", "latest-sd
 	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
 
 	if ! ([ "${RELEASE_TYPE}" = "active" ] || [ "${RELEASE_TYPE}" = "eol" ] || [ "${RELEASE_TYPE}" = "maintenance" ]); then
-		RELEASE_ASP="$(jq --raw-output '.releases[0]["aspnetcore-runtime"].version' <<< "$(curl -s ${RELEASE_INDEX})")"
+		RELEASE_ASP="$(curl -s "${RELEASE_INDEX}" | jq --raw-output '.releases[0]["aspnetcore-runtime"].version')"
 
 		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}"
 		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
@@ -72,11 +67,11 @@ for RELEASE in $(jq -r '.["releases-index"][] | [.["channel-version", "latest-sd
 
 	if [ "${RELEASE_CHANNEL}" = "5.0" ]; then
 		break
-	fi 
+	fi
 done
 
 for TARGET in $TARGETS; do
-	TARGET_EBUILD="$(find "${ADADOTNET_ROOT}/${TARGET}" -type f -iname "*.ebuild" | head -1)" 
+	TARGET_EBUILD="$(find "${ADADOTNET_ROOT}/${TARGET}" -type f -iname "*.ebuild" -print -quit)"
 	ebuild "$TARGET_EBUILD" manifest
 done
 
@@ -88,9 +83,10 @@ pkgdev_do() {
 }
 
 if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
-	pushd "${ADADOTNET_ROOT}"
-		for TARGET in $TARGETS; do
-			pkgdev_do $TARGET
-		done
-	popd
+	OLD_PWD="${PWD}"
+	cd "${ADADOTNET_ROOT}"
+	for TARGET in $TARGETS; do
+		pkgdev_do $TARGET
+	done
+	cd "${OLD_PWD}"
 fi
