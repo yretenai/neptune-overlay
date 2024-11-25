@@ -27,11 +27,11 @@ for i in $(seq 0 ${RELEASE_COUNT}); do
 	RELEASE_CHANNEL="$(jq --raw-output '.["channel-version"]' <<< "${RELEASE_OBJ}")"
 	RELEASE_SDK="$(jq --raw-output '.["latest-sdk"]' <<< "${RELEASE_OBJ}")"
 	RELEASE_RUNTIME="$(jq --raw-output '.["latest-runtime"]' <<< "${RELEASE_OBJ}")"
-	RELEASE_TYPE="$(jq --raw-output '.["release-type"]' <<< "${RELEASE_OBJ}")"
+	RELEASE_TYPE="$(jq --raw-output '.["support-phase"]' <<< "${RELEASE_OBJ}")"
 
-	echo $RELEASE_CHANNEL-${RELEASE_TYPE} $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP
+	echo $RELEASE_CHANNEL ${RELEASE_TYPE} $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP
 
-	if ! ([ "${RELEASE_TYPE}" = "sts" ] || [ "${RELEASE_TYPE}" = "lts" ]); then
+	if ! ([ "${RELEASE_TYPE}" = "active" ] || [ "${RELEASE_TYPE}" = "eol" ] || [ "${RELEASE_TYPE}" = "maintenance" ]); then
 		RELEASE_ROOT="$(curl -s $(jq --raw-output ".[\"releases-index\"][${i}][\"releases.json\"]" <<< "${DOTNET_RELEASE_INDEX}"))"
 		RELEASE_ASP="$(jq --raw-output '.releases[0]["aspnetcore-runtime"].version' <<< "${RELEASE_ROOT}")"
 		RELEASE_SDK_SAFE=$(dotnet_strip "$RELEASE_SDK")
