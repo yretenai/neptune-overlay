@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 NETIM_ROOT="/var/db/repos/neptune/net-im"
 
@@ -13,7 +13,8 @@ update_discord() {
 	EBUILD_NAME="${EBUILD_PRE}0.0.${VERSION}.ebuild"
 	find "${NETIM_ROOT}/${NAME}" -iname "*.ebuild" -print -delete
 	cp $EBUILD_TEMPLATE $EBUILD_NAME 
-	pushd "${NETIM_ROOT}/${NAME}"
+	OLD_PWD="$PWD"
+	cd "${NETIM_ROOT}/${NAME}"
 	ebuild "$EBUILD_NAME" manifest
 	if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
 		git add .
@@ -21,7 +22,7 @@ update_discord() {
 			pkgdev commit
 		fi
 	fi
-	popd
+	cd "$OLD_PWD"
 }
 
 update_discord "discord" "" "discord.ebuild"
