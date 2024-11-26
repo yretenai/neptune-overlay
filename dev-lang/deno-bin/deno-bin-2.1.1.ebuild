@@ -24,9 +24,12 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
+RDEPEND="
+	!dev-lang/deno
+"
+
 BDEPEND="
 	app-arch/unzip
-	!dev-lang/deno
 "
 
 QA_PREBUILT="*"

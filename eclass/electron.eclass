@@ -105,7 +105,7 @@ electron_patch_electron_builder() {
 }
 
 electron_src_prepare() {
-    default
+	default
 
 	electron_binname
 
@@ -117,10 +117,10 @@ electron_src_prepare() {
 	fi
 	echo "$(jq --arg version "${ELECTRON_NPM_VER}" '.devDependencies.electron = $version' package.json)" > package.json
 
-    if [[ ${ELECTRON_BUILDER_VER} ]]; then
+	if [[ ${ELECTRON_BUILDER_VER} ]]; then
 	    echo "$(jq 'del(.dependencies["electron-builder"])' package.json)" > package.json
-        echo "$(jq --arg version "${ELECTRON_BUILDER_VER}" '.devDependencies["electron-builder"] = $version' package.json)" > package.json
-    fi
+		echo "$(jq --arg version "${ELECTRON_BUILDER_VER}" '.devDependencies["electron-builder"] = $version' package.json)" > package.json
+	fi
 
 	if [[ -f package-lock.json ]]; then
 		rm package-lock.json
