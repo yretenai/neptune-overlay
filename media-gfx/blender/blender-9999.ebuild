@@ -214,6 +214,14 @@ PATCHES=(
 	"${FILESDIR}/${PN}-9999-functional-header.patch"
 )
 
+if [[ ${PV} == *9999* ]]; then
+	if [[ ${PV} != *9999 ]]; then
+		PATCHES+=(
+			"${FILESDIR}/${PN}-9999-branch.patch"
+		)
+	fi
+fi
+
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 
@@ -237,8 +245,10 @@ blender_get_version() {
 		BV=${BV:0:1}.${BV:2}
 	fi
 
-	if [[ ${PV} == *99991* ]]; then
-		BV="${BV}-npr"
+	if [[ ${PV} == *9999* ]]; then
+		if [[ ${PV} != *9999 ]]; then
+			BV="${BV}-${SLOT}"
+		fi
 	fi
 }
 
@@ -257,6 +267,14 @@ pkg_setup() {
 
 src_prepare() {
 	cmake_src_prepare
+
+	if [[ ${PV} == *9999* ]]; then
+		if [[ ${PV} != *9999 ]]; then
+			sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
+				-i build_files/cmake/macros.cmake \
+				-i source/blender/blenkernel/intern/appdir.cc || die
+		fi
+	fi
 
 	blender_get_version
 
