@@ -12,8 +12,8 @@ ROCM_VERSION=${PV}
 inherit cmake docs edo multiprocessing rocm llvm-r1
 
 DESCRIPTION="AMD's library for BLAS on ROCm"
-HOMEPAGE="https://github.com/ROCmSoftwarePlatform/rocBLAS"
-SRC_URI="https://github.com/ROCmSoftwarePlatform/rocBLAS/archive/rocm-${PV}.tar.gz -> rocm-${P}.tar.gz"
+HOMEPAGE="https://github.com/ROCm/rocBLAS"
+SRC_URI="https://github.com/ROCm/rocBLAS/archive/rocm-${PV}.tar.gz -> rocm-${P}.tar.gz"
 S="${WORKDIR}/${PN}-rocm-${PV}"
 
 LICENSE="BSD"

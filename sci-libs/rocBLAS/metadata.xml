@@ -2,7 +2,7 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<remote-id type="github">ROCmSoftwarePlatform/rocBLAS</remote-id>
+		<remote-id type="github">ROCm/rocBLAS</remote-id>
 	</upstream>
 	<use>
 		<flag name="benchmark">Build and install rocblas-bench.</flag>
