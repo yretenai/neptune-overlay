@@ -70,7 +70,9 @@ BDEPEND="
 	dev-util/spirv-headers
 	dev-util/vulkan-headers
 	>=dev-cpp/magic_enum-0.9.6
-	sys-devel/clang
+	clang? (
+		sys-devel/clang
+	)
 "
 
 PATCHES=(

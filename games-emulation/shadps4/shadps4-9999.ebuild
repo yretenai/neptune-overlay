@@ -73,7 +73,10 @@ BDEPEND="
 	dev-util/spirv-headers
 	dev-util/vulkan-headers
 	>=dev-cpp/magic_enum-0.9.6
-	sys-devel/clang
+	clang? (
+		sys-devel/clang:19
+	)
+	>=sys-devel/gcc-14:*
 "
 
 PATCHES=(
@@ -97,6 +100,20 @@ src_configure() {
 
 	cmake_src_configure
 }
+
+
+pkg_setup() {
+	[[ ${MERGE_TYPE} == binary ]] && return
+
+	if tc-is-gcc && ver_test $(gcc-version) -lt 13 ; then
+		eerror "shadps4 requires >=sys-devel/gcc-14 to build"
+		eerror "Please upgrade GCC."
+		eerror "\temerge -v1 sys-devel/gcc"
+		eerror "and select GCC-14 or newer with gcc-config"
+		die "GCC version is too old to compile shadps4!"
+	fi
+}
+
 
 pkg_postinst() {
 	elog
