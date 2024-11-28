@@ -66,6 +66,7 @@ DOTNET_PKG_EXECUTABLE="${EPREFIX}/opt/neptune-dotnet/dotnet"
 DOTNET_ROOT="${EPREFIX}/opt/neptune-dotnet"
 inherit dotnet-pkg-base
 
+# nasty, nasty override for deps.
 if [[ ! -z "${DOTNET_NEPTUNE_TARGETS}" ]]; then
 	DOTNET_PKG_RDEPS="
 		dev-dotnet/csharp-gentoodotnetinfo
@@ -79,6 +80,14 @@ if [[ ! -z "${DOTNET_NEPTUNE_TARGETS}" ]]; then
 			virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[sdk]
 		"
 	done
+else
+	DOTNET_PKG_RDEPS="
+		virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}
+	"
+	DOTNET_PKG_BDEPS="
+		virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[sdk]
+		dev-dotnet/csharp-gentoodotnetinfo
+	"
 fi
 
 inherit dotnet-pkg
