@@ -4,6 +4,7 @@
 EAPI=8
 
 DOTNET_PKG_COMPAT=9.0
+DOTNET_NEPTUNE_TARGETS="8.0 9.0"
 
 NUGETS="
 argon@0.24.2
@@ -642,7 +643,7 @@ xunit@2.9.2
 zstdsharp.port@0.8.2
 "
 
-inherit desktop dotnet-pkg xdg git-r3
+inherit desktop neptune-dotnet xdg git-r3
 
 DESCRIPTION="Nexus Mods App is a mod manager for games"
 HOMEPAGE="
@@ -733,7 +734,7 @@ src_install() {
 		"${DOTNET_PKG_OUTPUT}/librocksdb-musl.so" \
 		"${DOTNET_PKG_OUTPUT}/librocksdb-jemalloc.so"
 	dotnet-pkg-base_install
-	dotnet-pkg-base_dolauncher "/usr/share/${P}/NexusMods.App" "nexusmods"
+	neptune-dotnet_dolauncher "/usr/share/${P}/NexusMods.App" "nexusmods"
 
 	doicon -s scalable src/NexusMods.App.UI/Assets/nexus-logo.svg
 	domenu "${FILESDIR}/${PN}-nxm.desktop"
