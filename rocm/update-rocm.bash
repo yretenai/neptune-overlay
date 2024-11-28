@@ -138,7 +138,7 @@ process_pkg() {
 }
 
 
-echo "$(curl --silent --fail ${COMPAT_MATRIX_URI})" | while IFS="\n" read -r LINE; do
+curl --silent --fail ${COMPAT_MATRIX_URI} | while IFS="\n" read -r LINE; do
 	# skip headers
 	if [[ ${LINE} != *"<"* ]]; then
 		continue
