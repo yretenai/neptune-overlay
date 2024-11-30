@@ -12,10 +12,10 @@ HOMEPAGE="
 "
 SRC_URI="
 	amd64? (
-		https://github.com/denoland/deno/releases/download/v${PV}/deno-x86_64-unknown-linux-gnu.zip -> ${PN}-${PV}-amd64.tar.xz
+		https://github.com/denoland/deno/releases/download/v${PV}/deno-x86_64-unknown-linux-gnu.zip -> ${PN}-${PV}-amd64.zip
 	)
 	arm64? (
-		https://github.com/denoland/deno/releases/download/v${PV}/deno-aarch64-unknown-linux-gnu.zip -> ${PN}-${PV}-arm64.tar.xz
+		https://github.com/denoland/deno/releases/download/v${PV}/deno-aarch64-unknown-linux-gnu.zip -> ${PN}-${PV}-arm64.zip
 	)
 "
 S="${WORKDIR}"
