@@ -38,6 +38,11 @@ BDEPEND="
 	>=sys-apps/pnpm-bin-9.5.0
 "
 
+src_prepare() {
+	default
+	echo "$(jq '.pnpm.overrides.nan = "2.22.0"' package.json)" > package.json
+}
+
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
@@ -66,7 +71,7 @@ src_install() {
 
 	make_desktop_entry "$EXEC" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
 
-	cd dist/linux-unpacked/resources
+	cd pack/linux-unpacked/resources
 
 	insinto "${DESTDIR}"
 	doins -r *
