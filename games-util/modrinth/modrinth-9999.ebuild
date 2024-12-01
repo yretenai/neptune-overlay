@@ -73,7 +73,7 @@ src_configure() {
 
 	cd "${S_FRONTEND}"
 	pnpm config set store-dir "${T}/pnpm" || die
-	pnpm i || die
+	pnpm i --loglevel verbose --reporter append-only || die
 
 	cd "${S}"
 	cargo_src_configure
