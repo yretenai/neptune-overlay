@@ -51,6 +51,9 @@ ELECTRON_BDEPEND="
 	app-arch/unzip
 "
 
+ELECTRON_DESTDIR="/usr/share/electron/apps/${P}"
+ELECTRON_PREBUILT="usr/share/electron/apps/${P}/app.asar.unpacked/*"
+
 if [[ ${ELECTRON_WVCUS} ]]; then
 	ELECTRON_RDEPEND="dev-electron/electron-wvcus-bin:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="~amd64"
@@ -60,6 +63,11 @@ else
 	ELECTRON_KEYWORDS="~amd64 ~arm ~arm64"
 	ELECTRON_NAME="electron"
 fi
+
+BDEPEND+="${ELECTRON_BDEPEND}"
+RDEPEND+="${ELECTRON_RDEPEND}"
+DESTDIR="${ELECTRON_DESTDIR}"
+QA_PREBUILT+="${ELECTRON_PREBUILT}"
 
 # @FUNCTION: electron_binname
 # @USAGE: electron_binname
@@ -100,8 +108,8 @@ EOF
 # @DESCRIPTION:
 # Patches electron-builder to not attempt to copy or rename electron files
 electron_patch_electron_builder() {
-	sed -i -e 's|await unpack|return; await unpack|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from unpacking"
-	sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' node_modules/app-builder-lib/out/electron/ElectronFramework.js || die "can't prevent electron from renaming files"
+	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|await unpack|return; await unpack|' {} \; || die "can't prevent electron from unpacking"
+	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' {} \; || die "can't prevent electron from renaming files"
 }
 
 electron_src_prepare() {
@@ -125,6 +133,10 @@ electron_src_prepare() {
 	if [[ -f package-lock.json ]]; then
 		rm package-lock.json
 	fi
+}
+
+electron_src_compile() {
+	./node_modules/.bin/electron-builder --dir -p never || die "can't build electron"
 }
 
 EXPORT_FUNCTIONS src_prepare

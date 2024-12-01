@@ -27,17 +27,9 @@ IUSE="+seccomp +wayland"
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror strip test"
 
-RDEPEND="
-	${ELECTRON_RDEPEND}
-"
-
 BDEPEND="
-	${ELECTRON_BDEPEND}
 	>=net-libs/nodejs-20.6.1[npm]
 "
-
-DESTDIR="/usr/share/electron/apps/${P}"
-QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
 src_prepare() {
 	default

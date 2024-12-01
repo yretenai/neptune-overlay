@@ -26,18 +26,11 @@ fi
 
 IUSE="+seccomp +wayland"
 
-RDEPEND="
-	${ELECTRON_RDEPEND}
-"
-
 BDEPEND="
-	${ELECTRON_BDEPEND}
 	>=net-libs/nodejs-20.6.1[npm]
 	sys-apps/yarn
 "
 
-DESTDIR="/usr/share/electron/apps/${P}"
-QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 RESTRICT="network-sandbox mirror strip test"
 
 src_configure() {

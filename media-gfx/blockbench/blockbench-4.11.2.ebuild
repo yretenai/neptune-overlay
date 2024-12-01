@@ -30,7 +30,6 @@ IUSE="+seccomp +wayland"
 RESTRICT="network-sandbox mirror strip test"
 
 RDEPEND="
-	${ELECTRON_RDEPEND}
 	x11-libs/libnotify
 	x11-misc/xdg-utils
 	media-libs/imlib2
@@ -38,12 +37,8 @@ RDEPEND="
 "
 
 BDEPEND="
-	${ELECTRON_BDEPEND}
 	>=net-libs/nodejs-20.6.1[npm]
 "
-
-DESTDIR="/usr/share/electron/apps/${P}"
-QA_PREBUILT="${DESTDIR}/app.asar.unpacked/*"
 
 src_configure() {
 	export COREPACK_ENABLE_STRICT=0
