@@ -3,6 +3,8 @@
 
 EAPI=8
 
+PLUTOVG_PV="0.0.4"
+
 DOTNET_PKG_COMPAT="8.0"
 CMAKE_BUILD_TYPE="Release"
 CMAKE_MAKEFILE_GENERATOR="emake"
@@ -20,7 +22,7 @@ SLOT="0"
 
 inherit git-r3
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
-
+SRC_URI="https://github.com/sammycage/plutovg/archive/refs/tags/v${PLUTOVG_PV}.tar.gz -> ${PN}-plutovg-${PLUTOVG_PV}.tar.gz"
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
@@ -82,6 +84,7 @@ pkg_setup() {
 }
 
 src_unpack() {
+	default
 	git-r3_src_unpack
 	dotnet-pkg_src_unpack
 	egit_clean "${S}/lib"
@@ -123,7 +126,11 @@ src_configure() {
 		-D USE_SYSTEM_LLVM=$(use system-llvm) \
 		-D USE_SYSTEM_NFD=ON \
 		-D USE_SYSTEM_NLOHMANN_JSON=ON \
-		-D USE_SYSTEM_YARA=ON
+		-D USE_SYSTEM_YARA=ON \
+		-D FETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS \
+		-D FETCHCONTENT_FULLY_DISCONNECTED=ON \
+		-D FETCHCONTENT_QUIET=OFF \
+		-D FETCHCONTENT_SOURCE_DIR_PLUTOVG="${WORKDIR}/plutovg-${PLUTOVG_PV}"
 	)
 
 	cmake_src_configure
