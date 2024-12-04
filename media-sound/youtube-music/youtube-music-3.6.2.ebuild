@@ -38,6 +38,11 @@ BDEPEND="
 	>=sys-apps/pnpm-bin-9.5.0
 "
 
+PATCHES="
+	${FILESDIR}/${PN}-${PV}-disable-updates.patch
+	${FILESDIR}/${PN}-${PV}-disable-devtools.patch
+"
+
 src_prepare() {
 	default
 	echo "$(jq '.pnpm.overrides.nan = "2.22.0"' package.json)" > package.json
