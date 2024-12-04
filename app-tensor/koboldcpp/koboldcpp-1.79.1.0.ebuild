@@ -7,17 +7,25 @@ PYTHON_COMPAT=( python3_{11..12} )
 LLVM_COMPAT=( 18 )
 ROCM_VERSION="6.1.2"
 
-inherit cuda rocm git-r3 python-single-r1 llvm-r1
+inherit cuda rocm python-single-r1 llvm-r1
 
 DESCRIPTION="A simple one-file way to run various GGML models with KoboldAI's UI"
 HOMEPAGE="https://github.com/YellowRoseCx/koboldcpp-rocm"
 LICENSE="AGPL-3"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/YellowRoseCx/koboldcpp-rocm.git"
+if [[ $(ver_cut 3) == *0* ]]; then
+	KOBOLDCPP_PV="$(ver_cut 1-2).yr$(ver_cut 3)-ROCm"
+else
+	KOBOLDCPP_PV="$(ver_cut 1-3).yr$(ver_cut 4)-ROCm"
+fi
 
-if [[ ${PV} != *9999* ]]; then
-	EGIT_COMMIT="v$(ver_cut 1-2).yr$(ver_cut 3)-ROCm"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/YellowRoseCx/koboldcpp-rocm.git"
+else
+	SRC_URI="https://github.com/YellowRoseCx/koboldcpp-rocm/archive/refs/tags/v${KOBOLDCPP_PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	S="${WORKDIR}/koboldcpp-rocm-${KOBOLDCPP_PV}"
 	KEYWORDS="~amd64"
 fi
 
