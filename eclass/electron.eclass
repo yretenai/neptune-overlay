@@ -98,6 +98,7 @@ electron_dobin() {
 	cat > "electron-${name}" <<-EOF
 #!/bin/sh
 
+export ELECTRON_FORCE_IS_PACKAGED=1
 /usr/bin/${ELECTRON_BIN_NAME} "${asarpath}" "\$@"
 EOF
 	newbin "electron-${name}" "${name}"
