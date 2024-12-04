@@ -55,7 +55,7 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 
 		if [ "${IS_FIRST}" = "Y" ]; then
 			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
-			dotnet_apply dotnet-man "${RELEASE_SDK}"
+			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_SDK}" | sed 's/..$/00/')"
 
 			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild"
 
