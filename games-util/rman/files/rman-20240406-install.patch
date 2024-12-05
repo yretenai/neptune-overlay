@@ -1,0 +1,74 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ebe9d65..3f383ab 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -51,6 +51,7 @@ add_library(rlib STATIC
+     lib/rlib/rmanifest.cpp
+     lib/rlib/rmanifest.hpp
+ )
++install(TARGETS rlib)
+ target_include_directories(rlib PUBLIC lib/)
+ target_link_libraries(rlib PUBLIC argparse libcurl zstd fmt)
+ target_link_libraries(rlib PUBLIC argparse zstd fmt)
+@@ -63,46 +64,61 @@ if (WIN32)
+ endif()
+ 
+ add_executable(rman-dl src/rman_dl.cpp)
++install(TARGETS rman-dl)
+ target_link_libraries(rman-dl PRIVATE rlib)
+ 
+ add_executable(rman-ls src/rman_ls.cpp)
++install(TARGETS rman-ls)
+ target_link_libraries(rman-ls PRIVATE rlib)
+ 
+ add_executable(rman-bl src/rman_bl.cpp)
++install(TARGETS rman-bl)
+ target_link_libraries(rman-bl PRIVATE rlib)
+ 
+ add_executable(rman-diff src/rman_diff.cpp)
++install(TARGETS rman-diff)
+ target_link_libraries(rman-diff PRIVATE rlib)
+ 
+ add_executable(rman-make src/rman_make.cpp)
++install(TARGETS rman-make)
+ target_link_libraries(rman-make PRIVATE rlib)
+ 
+ add_executable(rman-merge src/rman_merge.cpp)
++install(TARGETS rman-merge)
+ target_link_libraries(rman-merge PRIVATE rlib)
+ 
+ add_executable(rman-mount src/rman_mount.cpp)
++install(TARGETS rman-mount)
+ target_link_libraries(rman-mount PRIVATE rlib fuse3)
+ 
+ add_executable(rman-rads src/rman_rads.cpp)
++install(TARGETS rman-rads)
+ target_link_libraries(rman-rads PRIVATE rlib)
+ 
+ add_executable(rman-chk src/rman_chk.cpp)
++install(TARGETS rman-chk)
+ target_link_libraries(rman-chk PRIVATE rlib)
+ 
+ add_executable(rman-remake src/rman_remake.cpp)
++install(TARGETS rman-remake)
+ target_link_libraries(rman-remake PRIVATE rlib)
+ 
+ add_executable(rbun-chk src/rbun_chk.cpp)
++install(TARGETS rbun-chk)
+ target_link_libraries(rbun-chk PRIVATE rlib)
+ 
+ add_executable(rbun-ex src/rbun_ex.cpp)
++install(TARGETS rbun-ex)
+ target_link_libraries(rbun-ex PRIVATE rlib)
+ 
+ add_executable(rbun-ls src/rbun_ls.cpp)
++install(TARGETS rbun-ls)
+ target_link_libraries(rbun-ls PRIVATE rlib)
+ 
+ add_executable(rbun-merge src/rbun_merge.cpp)
++install(TARGETS rbun-merge)
+ target_link_libraries(rbun-merge PRIVATE rlib)
+ 
+ add_executable(rbun-usage src/rbun_usage.cpp)
++install(TARGETS rbun-usage)
+ target_link_libraries(rbun-usage PRIVATE rlib)

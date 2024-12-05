@@ -1,0 +1,10 @@
+diff --git a/lib/rlib/ar_zip.cpp b/lib/rlib/ar_zip.cpp
+index f4e88e8..e149487 100644
+--- a/lib/rlib/ar_zip.cpp
++++ b/lib/rlib/ar_zip.cpp
+@@ -1,4 +1,4 @@
+-#include <miniz.h>
++#include <miniz/miniz.h>
+ 
+ #include "ar.hpp"
+ 
