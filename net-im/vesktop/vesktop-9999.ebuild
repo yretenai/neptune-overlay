@@ -8,16 +8,19 @@ inherit electron-version
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 
-inherit desktop xdg electron git-r3
+inherit desktop xdg electron
 
 DESCRIPTION="Vesktop is a custom Discord App"
 HOMEPAGE="https://github.com/Vencord
 	https://github.com/Vencord/Vesktop
 	https://vencord.dev/"
 
-EGIT_REPO_URI="https://github.com/Vencord/Vesktop.git"
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ "${PV}" == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/Vencord/Vesktop.git"
+else
+	SRC_URI="https://github.com/Vencord/Vesktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	S="${WORKDIR}/Vesktop-${PV}"
 	KEYWORDS="~amd64"
 fi
 
