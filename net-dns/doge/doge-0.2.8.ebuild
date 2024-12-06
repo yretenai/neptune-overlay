@@ -25,7 +25,7 @@ CRATES="
 	datetime@0.5.2
 	diff@0.1.13
 	doge_dns@1.0.2
-	doge_transport@0.2.5
+	doge_transport@0.2.6
 	dunce@1.0.4
 	either@1.11.0
 	errno@0.3.8
@@ -48,7 +48,7 @@ CRATES="
 	libc@0.2.154
 	libloading@0.8.3
 	linux-raw-sys@0.4.13
-	log@0.4.21
+	log@0.4.22
 	matches@0.1.10
 	memchr@2.7.2
 	minimal-lexical@0.2.1
@@ -59,12 +59,12 @@ CRATES="
 	openssl-macros@0.1.1
 	openssl-probe@0.1.5
 	openssl-src@300.2.3+3.2.1
-	openssl-sys@0.9.102
-	openssl@0.10.64
+	openssl-sys@0.9.103
+	openssl@0.10.66
 	paste@1.0.14
 	pkg-config@0.3.30
 	ppv-lite86@0.2.17
-	pretty_assertions@1.4.0
+	pretty_assertions@1.4.1
 	prettyplease@0.2.19
 	proc-macro2@1.0.81
 	quote@1.0.36
@@ -133,7 +133,7 @@ CRATES="
 	windows_x86_64_msvc@0.48.5
 	windows_x86_64_msvc@0.52.5
 	winreg@0.50.0
-	yansi@0.5.1
+	yansi@1.0.1
 	zeroize@1.7.0
 "
 
