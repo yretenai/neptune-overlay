@@ -77,23 +77,18 @@ BDEPEND="
 	clang? (
 		sys-devel/clang:19
 	)
-	app-text/dos2unix
 "
 
 PATCHES=(
 	"${FILESDIR}/${PN}-install.patch"
 	"${FILESDIR}/${PN}-half.patch"
-	"${FILESDIR}/${PN}-${PV}-magic_enum.patch"
 )
 
 src_prepare() {
 	eapply_user
 
-	mkdir -p "${S}/src/common/support"
-	cp "${FILESDIR}/avdec.h" "${S}/src/common/support/avdec.h"
-
-	dos2unix src/core/libraries/videodec/videodec2_impl.cpp
-	eapply --binary --ignore-whitespace "${FILESDIR}/${PN}-${PV}-aaaaaaa.patch"
+	find src \( -iname "*.cpp" -or -iname "*.h" \) -exec sed -e "s|#include <magic_enum/|#include <|" -i "{}" \; || die
+	sed -e "s|magic_enum .* CONFIG|magic_enum CONFIG|" -i CMakeLists.txt || die
 
 	cmake_src_prepare
 }
