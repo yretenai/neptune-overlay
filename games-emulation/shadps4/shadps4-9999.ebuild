@@ -46,7 +46,7 @@ DEPEND="
 	sys-libs/zlib-ng
 	sys-libs/zlib
 	media-gfx/renderdoc
-	dev-util/glslang
+	dev-util/glslang:0/15
 	>=dev-cpp/robin-map-1.3.0
 	>=dev-libs/xbyak-7.07.1[clang?]
 	dev-cpp/toml11
@@ -82,7 +82,6 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-install.patch"
 	"${FILESDIR}/${PN}-half.patch"
-	"${FILESDIR}/${PN}-${PV}-deps.patch"
 )
 
 src_configure() {
