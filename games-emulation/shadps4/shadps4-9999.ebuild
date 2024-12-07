@@ -94,6 +94,7 @@ src_configure() {
 
 	local mycmakeargs=(
 		-D ENABLE_QT_GUI=$(usex qt6)
+		-D ENABLE_UPDATER=OFF
 		-D SIRIT_USE_SYSTEM_SPIRV_HEADERS=ON
 	)
 
