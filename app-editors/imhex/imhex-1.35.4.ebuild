@@ -34,7 +34,7 @@ DEPEND="
 	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/capstone
 	dev-libs/nativefiledialog-extended
-	>=dev-libs/libfmt-8.0.0:=
+	dev-libs/libfmt:=
 	media-libs/freetype
 	media-libs/glfw
 	media-libs/glm
