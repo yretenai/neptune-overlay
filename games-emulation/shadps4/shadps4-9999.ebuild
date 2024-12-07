@@ -20,6 +20,7 @@ EGIT_SUBMODULES=(
 	"externals/sirit"
 	"externals/discord-rpc"
 	"externals/LibAtrac9"
+	"externals/vulkan-headers" # unbundle when >= 1.4.303
 )
 
 if [[ ${PV} != *9999* ]]; then
@@ -76,16 +77,29 @@ BDEPEND="
 	clang? (
 		sys-devel/clang:19
 	)
-	>=sys-devel/gcc-14:*
+	app-text/dos2unix
 "
 
 PATCHES=(
 	"${FILESDIR}/${PN}-install.patch"
 	"${FILESDIR}/${PN}-half.patch"
+	"${FILESDIR}/${PN}-${PV}-magic_enum.patch"
 )
 
+src_prepare() {
+	eapply_user
+
+	mkdir -p "${S}/src/common/support"
+	cp "${FILESDIR}/avdec.h" "${S}/src/common/support/avdec.h"
+
+	dos2unix src/core/libraries/videodec/videodec2_impl.cpp
+	eapply --binary --ignore-whitespace "${FILESDIR}/${PN}-${PV}-aaaaaaa.patch"
+
+	cmake_src_prepare
+}
+
 src_configure() {
-	if use clang; then
+	if use clang; then 
 		CC="${CHOST}-clang"
 		CXX="${CHOST}-clang++"
 		AR=llvm-ar

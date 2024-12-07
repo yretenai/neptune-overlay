@@ -1,0 +1,364 @@
+diff --git a/src/core/devtools/widget/common.h b/src/core/devtools/widget/common.h
+index 5f669eb6..4b4f63c7 100644
+--- a/src/core/devtools/widget/common.h
++++ b/src/core/devtools/widget/common.h
+@@ -8,7 +8,7 @@
+ #include <type_traits>
+ #include <variant>
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/bit_field.h"
+ #include "common/io_file.h"
+diff --git a/src/core/devtools/widget/frame_dump.cpp b/src/core/devtools/widget/frame_dump.cpp
+index 055ce133..59ce91d3 100644
+--- a/src/core/devtools/widget/frame_dump.cpp
++++ b/src/core/devtools/widget/frame_dump.cpp
+@@ -4,7 +4,7 @@
+ #include <cstdio>
+ #include <fmt/chrono.h>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/io_file.h"
+ #include "core/devtools/options.h"
+diff --git a/src/core/devtools/widget/memory_map.cpp b/src/core/devtools/widget/memory_map.cpp
+index 7edd676e..d8b87209 100644
+--- a/src/core/devtools/widget/memory_map.cpp
++++ b/src/core/devtools/widget/memory_map.cpp
+@@ -3,7 +3,7 @@
+ 
+ #include <cinttypes>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "core/debug_state.h"
+ #include "core/memory.h"
+diff --git a/src/core/devtools/widget/reg_popup.cpp b/src/core/devtools/widget/reg_popup.cpp
+index 2727e174..0633e76e 100644
+--- a/src/core/devtools/widget/reg_popup.cpp
++++ b/src/core/devtools/widget/reg_popup.cpp
+@@ -5,7 +5,7 @@
+ 
+ #include <cstdio>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "cmd_list.h"
+ #include "common.h"
+diff --git a/src/core/devtools/widget/reg_view.cpp b/src/core/devtools/widget/reg_view.cpp
+index 79b02a84..e3e18952 100644
+--- a/src/core/devtools/widget/reg_view.cpp
++++ b/src/core/devtools/widget/reg_view.cpp
+@@ -5,7 +5,7 @@
+ #include <optional>
+ #include <string>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ #include <stdio.h>
+ 
+ #include "common.h"
+diff --git a/src/core/libraries/ajm/ajm.cpp b/src/core/libraries/ajm/ajm.cpp
+index a3728039..2396669b 100644
+--- a/src/core/libraries/ajm/ajm.cpp
++++ b/src/core/libraries/ajm/ajm.cpp
+@@ -9,7 +9,7 @@
+ #include "core/libraries/error_codes.h"
+ #include "core/libraries/libs.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ namespace Libraries::Ajm {
+ 
+diff --git a/src/core/libraries/ajm/ajm_instance.cpp b/src/core/libraries/ajm/ajm_instance.cpp
+index ea7fd561..4e04eea7 100644
+--- a/src/core/libraries/ajm/ajm_instance.cpp
++++ b/src/core/libraries/ajm/ajm_instance.cpp
+@@ -5,7 +5,7 @@
+ #include "core/libraries/ajm/ajm_instance.h"
+ #include "core/libraries/ajm/ajm_mp3.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ namespace Libraries::Ajm {
+ 
+diff --git a/src/core/libraries/audio/audioout.cpp b/src/core/libraries/audio/audioout.cpp
+index 78b04cc9..b92c75a8 100644
+--- a/src/core/libraries/audio/audioout.cpp
++++ b/src/core/libraries/audio/audioout.cpp
+@@ -2,7 +2,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include <memory>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/assert.h"
+ #include "common/logging/log.h"
+diff --git a/src/core/libraries/avplayer/avplayer_file_streamer.cpp b/src/core/libraries/avplayer/avplayer_file_streamer.cpp
+index 19faeb27..3323ee9b 100644
+--- a/src/core/libraries/avplayer/avplayer_file_streamer.cpp
++++ b/src/core/libraries/avplayer/avplayer_file_streamer.cpp
+@@ -2,7 +2,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include <algorithm> // std::max, std::min
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ #include "core/libraries/avplayer/avplayer_file_streamer.h"
+ 
+ extern "C" {
+diff --git a/src/core/libraries/avplayer/avplayer_source.cpp b/src/core/libraries/avplayer/avplayer_source.cpp
+index 7b80d00d..49528603 100644
+--- a/src/core/libraries/avplayer/avplayer_source.cpp
++++ b/src/core/libraries/avplayer/avplayer_source.cpp
+@@ -8,7 +8,7 @@
+ #include "core/libraries/avplayer/avplayer_file_streamer.h"
+ #include "core/libraries/avplayer/avplayer_source.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ extern "C" {
+ #include <libavcodec/avcodec.h>
+diff --git a/src/core/libraries/avplayer/avplayer_state.cpp b/src/core/libraries/avplayer/avplayer_state.cpp
+index 143df749..c3694eec 100644
+--- a/src/core/libraries/avplayer/avplayer_state.cpp
++++ b/src/core/libraries/avplayer/avplayer_state.cpp
+@@ -8,7 +8,7 @@
+ #include "core/libraries/avplayer/avplayer_state.h"
+ #include "core/tls.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ namespace Libraries::AvPlayer {
+ 
+diff --git a/src/core/libraries/ime/error_dialog.cpp b/src/core/libraries/ime/error_dialog.cpp
+index 07580fe1..cc76d937 100644
+--- a/src/core/libraries/ime/error_dialog.cpp
++++ b/src/core/libraries/ime/error_dialog.cpp
+@@ -3,7 +3,7 @@
+ 
+ #include <utility>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/assert.h"
+ #include "common/logging/log.h"
+diff --git a/src/core/libraries/ime/ime_dialog.cpp b/src/core/libraries/ime/ime_dialog.cpp
+index 9151aa64..cd2cb3e6 100644
+--- a/src/core/libraries/ime/ime_dialog.cpp
++++ b/src/core/libraries/ime/ime_dialog.cpp
+@@ -2,7 +2,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include <array>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/logging/log.h"
+ #include "core/libraries/error_codes.h"
+diff --git a/src/core/libraries/ime/ime_dialog_ui.cpp b/src/core/libraries/ime/ime_dialog_ui.cpp
+index 51183c79..5957606e 100644
+--- a/src/core/libraries/ime/ime_dialog_ui.cpp
++++ b/src/core/libraries/ime/ime_dialog_ui.cpp
+@@ -4,7 +4,7 @@
+ #include <cwchar>
+ #include <string>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/assert.h"
+ #include "common/logging/log.h"
+diff --git a/src/core/libraries/jpeg/jpegenc.cpp b/src/core/libraries/jpeg/jpegenc.cpp
+index b9c88d09..bb4b11a5 100644
+--- a/src/core/libraries/jpeg/jpegenc.cpp
++++ b/src/core/libraries/jpeg/jpegenc.cpp
+@@ -1,7 +1,7 @@
+ // SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/alignment.h"
+ #include "common/assert.h"
+diff --git a/src/core/libraries/save_data/dialog/savedatadialog.cpp b/src/core/libraries/save_data/dialog/savedatadialog.cpp
+index 2f061916..6088d5bb 100644
+--- a/src/core/libraries/save_data/dialog/savedatadialog.cpp
++++ b/src/core/libraries/save_data/dialog/savedatadialog.cpp
+@@ -1,7 +1,7 @@
+ // SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/elf_info.h"
+ #include "common/logging/log.h"
+diff --git a/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp b/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp
+index a6ca8744..50b3b295 100644
+--- a/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp
++++ b/src/core/libraries/save_data/dialog/savedatadialog_ui.cpp
+@@ -3,7 +3,7 @@
+ 
+ #include <fmt/chrono.h>
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/elf_info.h"
+ #include "common/singleton.h"
+diff --git a/src/core/libraries/save_data/save_backup.cpp b/src/core/libraries/save_data/save_backup.cpp
+index 3f7969d6..9c834737 100644
+--- a/src/core/libraries/save_data/save_backup.cpp
++++ b/src/core/libraries/save_data/save_backup.cpp
+@@ -5,7 +5,7 @@
+ #include <mutex>
+ #include <semaphore>
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "save_backup.h"
+ #include "save_instance.h"
+diff --git a/src/core/libraries/save_data/save_instance.cpp b/src/core/libraries/save_data/save_instance.cpp
+index 99daf83c..ea5aaf75 100644
+--- a/src/core/libraries/save_data/save_instance.cpp
++++ b/src/core/libraries/save_data/save_instance.cpp
+@@ -3,7 +3,7 @@
+ 
+ #include <iostream>
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/assert.h"
+ #include "common/config.h"
+diff --git a/src/core/libraries/save_data/savedata.cpp b/src/core/libraries/save_data/savedata.cpp
+index 66899fb3..c515ebcb 100644
+--- a/src/core/libraries/save_data/savedata.cpp
++++ b/src/core/libraries/save_data/savedata.cpp
+@@ -5,7 +5,7 @@
+ #include <vector>
+ 
+ #include <core/libraries/system/msgdialog_ui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/assert.h"
+ #include "common/cstring.h"
+diff --git a/src/core/libraries/system/msgdialog.cpp b/src/core/libraries/system/msgdialog.cpp
+index 8a01f429..7d924e4a 100644
+--- a/src/core/libraries/system/msgdialog.cpp
++++ b/src/core/libraries/system/msgdialog.cpp
+@@ -2,7 +2,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ #include <imgui.h>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/assert.h"
+ #include "common/logging/log.h"
+diff --git a/src/core/libraries/system/sysmodule.cpp b/src/core/libraries/system/sysmodule.cpp
+index 350f1317..9bed4ef3 100644
+--- a/src/core/libraries/system/sysmodule.cpp
++++ b/src/core/libraries/system/sysmodule.cpp
+@@ -3,7 +3,7 @@
+ 
+ #define MAGIC_ENUM_RANGE_MIN 0
+ #define MAGIC_ENUM_RANGE_MAX 300
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include "common/logging/log.h"
+ #include "core/libraries/error_codes.h"
+diff --git a/src/core/platform.h b/src/core/platform.h
+index bdb50701..894fb6e5 100644
+--- a/src/core/platform.h
++++ b/src/core/platform.h
+@@ -8,7 +8,7 @@
+ #include "common/singleton.h"
+ #include "common/types.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #include <functional>
+ #include <mutex>
+diff --git a/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp b/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
+index d005169c..b578f0c5 100644
+--- a/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
++++ b/src/shader_recompiler/backend/spirv/emit_spirv_context_get_set.cpp
+@@ -5,7 +5,7 @@
+ #include "shader_recompiler/backend/spirv/emit_spirv_instructions.h"
+ #include "shader_recompiler/backend/spirv/spirv_emit_context.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ namespace Shader::Backend::SPIRV {
+ namespace {
+diff --git a/src/shader_recompiler/frontend/decode.cpp b/src/shader_recompiler/frontend/decode.cpp
+index a5187aeb..ba4e3d74 100644
+--- a/src/shader_recompiler/frontend/decode.cpp
++++ b/src/shader_recompiler/frontend/decode.cpp
+@@ -5,7 +5,7 @@
+ #include "common/assert.h"
+ #include "shader_recompiler/frontend/decode.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ namespace Shader::Gcn {
+ 
+diff --git a/src/shader_recompiler/frontend/translate/translate.cpp b/src/shader_recompiler/frontend/translate/translate.cpp
+index 97978ff6..c2c67c2f 100644
+--- a/src/shader_recompiler/frontend/translate/translate.cpp
++++ b/src/shader_recompiler/frontend/translate/translate.cpp
+@@ -14,7 +14,7 @@
+ 
+ #define MAGIC_ENUM_RANGE_MIN 0
+ #define MAGIC_ENUM_RANGE_MAX 1515
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ namespace Shader::Gcn {
+ 
+diff --git a/src/video_core/renderer_vulkan/liverpool_to_vk.cpp b/src/video_core/renderer_vulkan/liverpool_to_vk.cpp
+index f0f7d352..2262a429 100644
+--- a/src/video_core/renderer_vulkan/liverpool_to_vk.cpp
++++ b/src/video_core/renderer_vulkan/liverpool_to_vk.cpp
+@@ -6,7 +6,7 @@
+ #include "video_core/amdgpu/pixel_format.h"
+ #include "video_core/renderer_vulkan/liverpool_to_vk.h"
+ 
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ 
+ #define INVALID_NUMBER_FORMAT_COMBO                                                                \
+     LOG_ERROR(Render_Vulkan, "Unsupported number type {} for format {}", number_type, format);
+diff --git a/src/video_core/texture_cache/tile_manager.cpp b/src/video_core/texture_cache/tile_manager.cpp
+index 2bc3bf28..9823cb4d 100644
+--- a/src/video_core/texture_cache/tile_manager.cpp
++++ b/src/video_core/texture_cache/tile_manager.cpp
+@@ -14,7 +14,7 @@
+ #include "video_core/host_shaders/detile_m8x2_comp.h"
+ 
+ #include <boost/container/static_vector.hpp>
+-#include <magic_enum/magic_enum.hpp>
++#include <magic_enum.hpp>
+ #include <vk_mem_alloc.h>
+ 
+ namespace VideoCore {
