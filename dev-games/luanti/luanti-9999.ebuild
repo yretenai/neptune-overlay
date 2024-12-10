@@ -32,7 +32,8 @@ RESTRICT="!test? ( test )"
 
 # Use bundled PUC Lua if lua5-1 has been requested requested due to C++
 # interoperability issues, at least until Bug #825766 has been resolved anyway.
-RDEPEND="lua_single_target_luajit? ( ${LUA_DEPS} )
+RDEPEND="
+	lua_single_target_luajit? ( ${LUA_DEPS} )
 	app-arch/zstd
 	dev-db/sqlite:3
 	dev-libs/gmp:0=
@@ -61,14 +62,22 @@ RDEPEND="lua_single_target_luajit? ( ${LUA_DEPS} )
 		acct-group/luanti
 		acct-user/luanti
 	)
-	spatial? ( sci-libs/libspatialindex:= )"
+	spatial? ( sci-libs/libspatialindex:= )
+"
+
 DEPEND="${RDEPEND}"
+
 BDEPEND="
 	doc? (
 		app-text/doxygen
 		media-gfx/graphviz
 	)
-	nls? ( sys-devel/gettext )"
+	nls? ( sys-devel/gettext )
+"
+
+PATCHES="
+	${FILESDIR}/${PN}-${PV}-remove-legacy.patch
+"
 
 src_prepare() {
 	sed -e "s|\${RELEASE_WARNING_FLAGS} \${OTHER_FLAGS}.*\"|\${RELEASE_WARNING_FLAGS} \${OTHER_FLAGS}\"|" -i src/CMakeLists.txt
@@ -146,13 +155,8 @@ src_install() {
 
 pkg_postinst() {
 	xdg_pkg_postinst
+}
 
-	elog "Since 5.7.0-r2 new ${PN} configurations no longer check if newer versions are available upstream,"
-	elog "a feature unnecessary when ${PN} is installed using distro packages."
-	elog "To disable this check for existing configurations open the file ~/.luanti/luanti.conf"
-	elog "in a text editor while ${PN} is not running, locate the keyword 'update_last_checked',"
-	elog "and change that line to say:"
-	elog
-	elog "	update_last_checked = disabled"
-	elog
+pkg_postrm() {
+	xdg_pkg_postrm
 }
