@@ -18,12 +18,11 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/minetest/minetest/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/minetest-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~riscv"
 fi
 
 LICENSE="LGPL-2.1+ CC-BY-SA-3.0 OFL-1.1 Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~riscv"
 IUSE="+client +curl doc leveldb ncurses nls postgres prometheus redis +server +sound spatial +test"
 
 REQUIRED_USE="${LUA_REQUIRED_USE}
