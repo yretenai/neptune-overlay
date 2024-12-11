@@ -70,7 +70,7 @@ BDEPEND="
 	dev-util/vulkan-headers
 	>=dev-cpp/magic_enum-0.9.6
 	clang? (
-		sys-devel/clang
+		llvm-core/clang
 	)
 "
 

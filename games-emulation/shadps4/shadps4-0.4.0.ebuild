@@ -72,7 +72,7 @@ BDEPEND="
 	>=dev-cpp/magic_enum-0.9.6
 	app-text/dos2unix
 	clang? (
-		sys-devel/clang
+		llvm-core/clang
 	)
 "
 

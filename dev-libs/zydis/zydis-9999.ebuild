@@ -31,7 +31,7 @@ RDEPEND="
 BDEPEND="
 	man? ( app-text/ronn-ng )
 	doc? ( app-text/doxygen )
-	clang? ( sys-devel/clang )
+	clang? ( llvm-core/clang )
 "
 
 PATCHES=(

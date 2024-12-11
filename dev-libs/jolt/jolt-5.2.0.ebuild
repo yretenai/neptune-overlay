@@ -31,7 +31,7 @@ IUSE="
 "
 
 BDEPEND="
-	clang? ( sys-devel/clang )
+	clang? ( llvm-core/clang )
 "
 
 RESTRICT="!test? ( test )"
