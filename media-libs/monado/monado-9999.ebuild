@@ -13,7 +13,7 @@ SLOT="0"
 
 MONADO_DRIVERS_COMPAT=( arduino daydream euroc twrap hdk hydra ns opengloves psmv pssense psvr qwerty remote rift rokid steamvr vf vive wmr xreal simulavr handtracking )
 IUSE="
-	doc test onnx bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X
+	doc test onnx bluetooth dbus ffmpeg gstreamer opencv sdl systemd uvc vulkan wayland steam zlib hid X tracing
 	${MONADO_DRIVERS_COMPAT[@]/#/monado_drivers_}
 "
 
@@ -57,6 +57,7 @@ DEPEND="
 	zlib? ( sys-libs/zlib:= )
 	bluetooth? ( net-wireless/bluez:= )
 	onnx? ( sci-libs/onnxruntime:= )
+	tracing? ( dev-cpp/tracy:= )
 "
 RDEPEND="
 	${DEPEND}
@@ -86,6 +87,10 @@ REQUIRED_USE="
 
 RESTRICT="
 	!test? ( test )
+"
+
+PATCHES="
+	${FILESDIR}/${PN}-${PV}-tracy.patch
 "
 
 FILECAPS=(
@@ -124,11 +129,12 @@ src_configure() {
 		-DXRT_HAVE_LINUX=ON
 		-DXRT_HAVE_ONNXRUNTIME=$(usex onnx)
 		-DXRT_HAVE_OPENCV=$(usex opencv)
-		-DXRT_HAVE_PERCETTO=OFF # todo
+		-DXRT_HAVE_PERCETTO=OFF
 		-DXRT_HAVE_SDL2=$(usex sdl)
 		-DXRT_HAVE_STEAM=$(usex steam)
 		-DXRT_HAVE_SYSTEM_CJSON=ON
-		-DXRT_HAVE_TRACY=OFF # todo
+		-DXRT_HAVE_TRACY=$(usex tracing)
+		-DXRT_FEATURE_TRACING=$(usex tracing)
 
 		-DXRT_BUILD_DRIVER_ANDROID=OFF
 		-DXRT_BUILD_DRIVER_ARDUINO=$(usex monado_drivers_arduino)

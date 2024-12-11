@@ -7,5 +7,6 @@
 		<flag name="opencv">Enable OpenCV backend</flag>
 		<flag name="onnx">Enable ONNX Tensor runtime</flag>
 		<flag name="hid">Enable HID support</flag>
+		<flag name="tracing">Enable Tracing support via Tracy</flag>
 	</use>
 </pkgmetadata>
