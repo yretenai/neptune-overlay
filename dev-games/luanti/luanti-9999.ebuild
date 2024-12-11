@@ -23,7 +23,7 @@ fi
 
 LICENSE="LGPL-2.1+ CC-BY-SA-3.0 OFL-1.1 Apache-2.0"
 SLOT="0"
-IUSE="+client +curl doc leveldb ncurses nls postgres prometheus redis +server +sound spatial +test"
+IUSE="+client +curl doc leveldb ncurses nls postgres prometheus redis +server +sound spatial +test tracy"
 
 REQUIRED_USE="${LUA_REQUIRED_USE}
 	|| ( client server )"
@@ -63,6 +63,7 @@ RDEPEND="
 		acct-user/luanti
 	)
 	spatial? ( sci-libs/libspatialindex:= )
+	tracy? ( dev-cpp/tracy:= )
 "
 
 DEPEND="${RDEPEND}"
@@ -77,6 +78,7 @@ BDEPEND="
 
 PATCHES="
 	${FILESDIR}/${PN}-${PV}-remove-legacy.patch
+	${FILESDIR}/${PN}-${PV}-tracy.patch
 "
 
 src_prepare() {
@@ -109,6 +111,7 @@ src_configure() {
 		-DENABLE_REDIS=$(usex redis)
 		-DENABLE_SPATIAL=$(usex spatial)
 		-DENABLE_SOUND=$(usex sound)
+		-DBUILD_WITH_TRACY=$(usex tracy)
 		-DENABLE_SYSTEM_GMP=1
 		-DENABLE_SYSTEM_JSONCPP=1
 		-DENABLE_UPDATE_CHECKER=no

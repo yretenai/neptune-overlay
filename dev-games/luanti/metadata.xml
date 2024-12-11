@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="client">Build Minetest client</flag>
+		<flag name="leveldb">Enable LevelDB backend</flag>
+		<flag name="prometheus">Enable prometheus client support</flag>
+		<flag name="redis">Enable redis backend via <pkg>dev-libs/hiredis</pkg></flag>
+		<flag name="server">Build Minetest server</flag>
+		<flag name="spatial">Enable SpatialIndex AreaStore backend</flag>
+		<flag name="tracy">Enable Tracy profiling</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">minetest/minetest</remote-id>
+	</upstream>
+</pkgmetadata>
