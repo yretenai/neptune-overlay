@@ -1,0 +1,31 @@
+diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
+index 082be211..b9acd49a 100644
+--- a/externals/CMakeLists.txt
++++ b/externals/CMakeLists.txt
+@@ -195,18 +195,14 @@ add_library(Dear_ImGui
+ target_include_directories(Dear_ImGui INTERFACE dear_imgui/)
+ 
+ # Tracy
+-option(TRACY_ENABLE "" ON)
+-option(TRACY_NO_CRASH_HANDLER "" ON) # Otherwise texture cache exceptions will be treaten as a crash
+-option(TRACY_ON_DEMAND "" ON)
+-option(TRACY_NO_FRAME_IMAGE "" ON)
+-option(TRACY_FIBERS "" ON) # For AmdGpu frontend profiling
+-option(TRACY_NO_SYSTEM_TRACING "" ON)
+-option(TRACY_NO_CALLSTACK "" ON)
+-option(TRACY_NO_CODE_TRANSFER "" ON)
+-option(TRACY_NO_SAMPLING "" ON)
+-option(TRACY_ONLY_LOCALHOST "" ON)
+-option(TRACY_NO_CONTEXT_SWITCH "" ON)
+-add_subdirectory(tracy)
++find_package(PkgConfig QUIET)
++pkg_search_module(TRACY REQUIRED tracy)
++add_library(TracyClient INTERFACE)
++target_include_directories(TracyClient INTERFACE ${TRACY_INCLUDEDIR})
++target_compile_options(TracyClient INTERFACE ${TRACY_CFLAGS})
++target_link_options(TracyClient INTERFACE ${TRACY_LDFLAGS})
++target_link_libraries(TracyClient INTERFACE ${TRACY_LIBRARIES} ${TRACY_LINK_LIBRARIES})
++add_library(Tracy::TracyClient ALIAS TracyClient)
+ 
+ # pugixml
+ if (NOT TARGET pugixml::pugixml)

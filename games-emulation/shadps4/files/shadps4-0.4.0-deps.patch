@@ -1,1 +1,13 @@
-shadps4-0.3.0-deps.patch
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 04bd6a33..2b3be007 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -109,7 +109,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/common/scm_rev.cpp.in" "${CMAKE_
+ find_package(Boost 1.84.0 CONFIG)
+ find_package(FFmpeg 5.1.2 MODULE)
+ find_package(fmt 10.2.0 CONFIG)
+-find_package(glslang 14.2.0 CONFIG)
++find_package(glslang CONFIG)
+ find_package(half 1.12.0 MODULE)
+ find_package(magic_enum 0.9.6 CONFIG)
+ find_package(RenderDoc 1.6.0 MODULE)

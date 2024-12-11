@@ -13,7 +13,6 @@ SLOT="0"
 EGIT_REPO_URI="https://github.com/shadps4-emu/shadPS4.git"
 EGIT_SUBMODULES=(
 	"externals/dear_imgui"
-	"externals/tracy"
 	"externals/vma"
 	"externals/sdl3"
 	"externals/fmt"
@@ -35,7 +34,6 @@ IUSE="+qt6 +hacks clang"
 
 # mandatory bundled:
 # sirit
-# tracy
 # imgui
 
 DEPEND="
@@ -56,6 +54,7 @@ DEPEND="
 	media-libs/openal
 	dev-libs/half
 	>=dev-libs/zydis-5.0.0_alpha[clang?]
+	dev-cpp/tracy:=
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
 		dev-qt/qtmultimedia:6[ffmpeg,vulkan]
@@ -80,6 +79,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-install.patch"
 	"${FILESDIR}/${PN}-half.patch"
+	"${FILESDIR}/${PN}-tracy.patch"
 	"${FILESDIR}/${PN}-${PV}-deps.patch"
 )
 
