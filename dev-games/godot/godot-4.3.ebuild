@@ -426,8 +426,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-fix-jpeg-compressor.patch"
 )
 
-SPINLOCK_PATCH="${FILESDIR}/${PN}-${PV}-PR99168.patch"
-
 godot_get_version() {
 	export GODOT_VERSION=$(
 		${PYTHON} -c 'from version import major, minor, patch, status; print(f"{major}.{minor}{f".{patch}" if patch > 0 else ""}{f"-{status}" if status != "stable" else ""}")'
@@ -445,10 +443,6 @@ src_unpack() {
 
 src_prepare() {
 	default
-
-	if [[ -f "${SPINLOCK_PATCH}" ]]; then
-		eapply "${SPINLOCK_PATCH}"
-	fi
 
 	godot_get_version
 	local s="-${GODOT_VERSION}"
