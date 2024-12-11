@@ -36,6 +36,7 @@ PATCHES="
 src_configure() {
 	local emesonargs=(
 		-Dlibunwind_backtrace=true
+		-Don_demand=true
 		-Dfibers=true
 		-Dno_crash_handler=true
 	)
