@@ -36,6 +36,8 @@ PATCHES="
 src_configure() {
 	local emesonargs=(
 		-Dlibunwind_backtrace=true
+		-Dfibers=true
+		-Dno_crash_handler=true
 	)
 
 	meson_src_configure
