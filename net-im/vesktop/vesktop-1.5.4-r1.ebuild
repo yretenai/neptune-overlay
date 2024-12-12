@@ -8,7 +8,7 @@ inherit electron-version
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 
-inherit desktop xdg electron
+inherit desktop xdg electron-r1
 
 DESCRIPTION="Vesktop is a custom Discord App"
 HOMEPAGE="https://github.com/Vencord
@@ -48,7 +48,7 @@ src_configure() {
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i --loglevel verbose --reporter append-only || die
 
-	electron_patch_electron_builder
+	electron-r1_patch_electron_builder
 }
 
 src_compile() {
@@ -77,10 +77,7 @@ src_install() {
 		rm -rfv "app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/"
 	fi
 
-	insinto "${DESTDIR}"
-	doins -r *
-
-	electron_dobin "${DESTDIR}/app.asar" "${PN}"
+	electron-r1_src_install
 }
 
 pkg_postinst() {
