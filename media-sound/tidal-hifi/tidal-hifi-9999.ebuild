@@ -9,16 +9,18 @@ ELECTRON_SLOT="${LATEST_ELECTRON_WVCUS_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 ELECTRON_WVCUS="1"
 
-inherit desktop xdg electron git-r3
+inherit desktop xdg electron-r1
 
 DESCRIPTION="Web version of Tidal running in electron with Hi-Fi support thanks to Widevine."
 HOMEPAGE="https://github.com/Mastermindzh/tidal-hifi"
 LICENSE="MIT"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="${PV}"
+if [[ "${PV}" == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
+else
+	SRC_URI="https://github.com/Mastermindzh/tidal-hifi/archive/refs/tags/${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	KEYWORDS="~amd64"
 fi
 
@@ -43,7 +45,7 @@ src_configure() {
 	npm set progress false
 	npm i --loglevel verbose || die
 
-	electron_patch_electron_builder
+	electron-r1_patch_electron_builder
 }
 
 src_compile() {
@@ -66,11 +68,7 @@ src_install() {
 	make_desktop_entry "$EXEC" "TIDAL Hi-Fi" "${PN}" "Network;AudioVideo;Audio;Video"
 
 	cd dist/linux-unpacked/resources
-
-	insinto "${DESTDIR}"
-	doins -r *
-
-	electron_dobin "${DESTDIR}/app.asar" "${PN}"
+	electron-r1_src_install
 }
 
 pkg_postinst() {
