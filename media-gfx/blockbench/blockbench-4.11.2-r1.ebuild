@@ -8,7 +8,7 @@ inherit electron-version
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
 
-inherit desktop xdg electron git-r3
+inherit desktop xdg electron-r1
 
 DESCRIPTION="Blockbench - A low poly 3D model editor"
 HOMEPAGE="
@@ -18,9 +18,11 @@ HOMEPAGE="
 LICENSE="GPL-3"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/JannisX11/blockbench.git"
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ "${PV}" == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/JannisX11/blockbench.git"
+else
+	SRC_URI="https://github.com/JannisX11/blockbench/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	KEYWORDS="~amd64"
 fi
 
@@ -45,7 +47,7 @@ src_configure() {
 	npm set progress false
 	npm i --force --loglevel verbose || die
 
-	electron_patch_electron_builder
+	electron-r1_patch_electron_builder
 }
 
 src_compile() {
@@ -70,13 +72,7 @@ src_install() {
 	doins bbmodel.xml
 
 	cd dist/linux-unpacked/resources
-
-	[[ -x chrome_crashpad_handler ]] && rm app-update.yml
-
-	insinto "${DESTDIR}"
-	doins -r *
-
-	electron_dobin "${DESTDIR}/app.asar" "${PN}"
+	electron-r1_src_install
 }
 
 pkg_postinst() {
