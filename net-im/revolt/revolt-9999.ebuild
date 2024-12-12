@@ -8,7 +8,7 @@ inherit electron-version
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="24.13.3"
 
-inherit desktop optfeature xdg electron git-r3
+inherit desktop optfeature xdg electron-r1
 
 DESCRIPTION="Revolt is an open source user-first chat platform."
 HOMEPAGE="https://github.com/revoltchat
@@ -17,10 +17,13 @@ HOMEPAGE="https://github.com/revoltchat
 LICENSE="Apache-2.0 MIT CC0-1.0 0BSD ISC BSD BSD-2 PSF-2 WTFPL"
 SLOT="0"
 
-EGIT_SUBMODULES=()
-EGIT_REPO_URI="https://github.com/revoltchat/desktop.git"
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ "${PV}" == *9999* ]]; then
+	inherit git-r3
+	EGIT_SUBMODULES=()
+	EGIT_REPO_URI="https://github.com/revoltchat/desktop.git"
+else
+	SRC_URI="https://github.com/revoltchat/desktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	S="${WORKDIR}/desktop-${PV}"
 	KEYWORDS="~amd64"
 fi
 
@@ -39,7 +42,7 @@ src_configure() {
 	mkdir "${T}/yarn" || die
 	yarn install || die
 
-	electron_patch_electron_builder
+	electron-r1_patch_electron_builder
 }
 
 src_compile() {
@@ -62,11 +65,7 @@ src_install() {
 	newicon -s 256 "assets/icon.png" revolt-desktop.png
 
 	cd dist/linux-unpacked/resources
-
-	insinto "${DESTDIR}"
-	doins -r *
-
-	electron_dobin "${DESTDIR}/app.asar" "${PN}"
+	electron-r1_src_install
 }
 
 pkg_postinst() {
