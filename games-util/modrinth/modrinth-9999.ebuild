@@ -3,19 +3,12 @@
 
 EAPI=8
 
-CRATES="
-"
-
 RUST_MIN_VER="1.80.1"
 
 inherit cargo git-r3 desktop xdg
 
 DESCRIPTION="The Modrinth App is a desktop application for managing your Minecraft mods"
 HOMEPAGE="https://github.com/modrinth/code"
-
-SRC_URI="
-	${CARGO_CRATE_URIS}
-"
 
 S_ROOT="${WORKDIR}/${P}"
 S="${S_ROOT}/apps/app"
