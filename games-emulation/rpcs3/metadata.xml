@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<remote-id type="github">RPCS3/rpcs3</remote-id>
+	</upstream>
+	<use>
+		<flag name="discord">Enables Discord Rich Presence</flag>
+		<flag name="faudio">Add faudio sound backend support</flag>
+		<flag name="llvm">Use llvm backend for PPU cache generation</flag>
+		<flag name="vulkan">Build vulkan renderer</flag>
+	</use>
+</pkgmetadata>
