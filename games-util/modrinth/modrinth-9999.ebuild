@@ -24,8 +24,8 @@ S_FRONTEND="${S_ROOT}/apps/app-frontend"
 LICENSE="GPL-3"
 # Dependent crate licenses
 LICENSE+="
-	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD CC0-1.0 ISC MIT
-	MPL-2.0 Unicode-DFS-2016
+	0BSD Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD CC0-1.0
+	ISC MIT MPL-2.0 MPL-2.0 Unicode-3.0
 "
 SLOT="0"
 
