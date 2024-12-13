@@ -3,6 +3,13 @@
 
 EAPI=8
 
+# cd into
+# ./modules/mono/editor/Godot.NET.Sdk
+# ./modules/mono/editor/GodotTools
+# ./modules/mono/glue/GodotSharp
+# run: DOTNET_ROOT=/opt/neptune-dotnet gdmt restore -x /opt/neptune-dotnet/dotnet > somename.lst
+# combine nuget lists: cat *.lst | grep \@ | sort | uniq
+# todo: make a better way to collect nugets, this is painful.
 NUGETS="
 coverlet.collector@3.2.0
 diffplex@1.5.0
@@ -11,7 +18,6 @@ humanizer.core@2.14.1
 humanizer.core@2.2.0
 jetbrains.annotations@2019.1.3
 jetbrains.rider.pathlocator@1.0.9
-microsoft.bcl.asyncinterfaces@1.1.1
 microsoft.bcl.asyncinterfaces@5.0.0
 microsoft.bcl.asyncinterfaces@7.0.0
 microsoft.build.framework@15.1.548
@@ -21,25 +27,24 @@ microsoft.build@15.1.548
 microsoft.codeanalysis.analyzer.testing@1.1.1
 microsoft.codeanalysis.analyzers@2.6.1
 microsoft.codeanalysis.analyzers@3.3.2
-microsoft.codeanalysis.analyzers@3.3.3
 microsoft.codeanalysis.analyzers@3.3.4
 microsoft.codeanalysis.codefix.testing@1.1.1
-microsoft.codeanalysis.common@1.0.1
-microsoft.codeanalysis.common@3.10.0
 microsoft.codeanalysis.common@3.11.0
-microsoft.codeanalysis.common@3.8.0
 microsoft.codeanalysis.common@4.8.0
+microsoft.codeanalysis.common@4.9.2
 microsoft.codeanalysis.csharp.analyzer.testing.xunit@1.1.1
 microsoft.codeanalysis.csharp.analyzer.testing@1.1.1
 microsoft.codeanalysis.csharp.codefix.testing.xunit@1.1.1
 microsoft.codeanalysis.csharp.codefix.testing@1.1.1
 microsoft.codeanalysis.csharp.sourcegenerators.testing.xunit@1.1.1
 microsoft.codeanalysis.csharp.sourcegenerators.testing@1.1.1
+microsoft.codeanalysis.csharp.workspaces@1.0.1
 microsoft.codeanalysis.csharp.workspaces@3.11.0
+microsoft.codeanalysis.csharp.workspaces@3.8.0
 microsoft.codeanalysis.csharp.workspaces@4.8.0
-microsoft.codeanalysis.csharp@3.10.0
 microsoft.codeanalysis.csharp@3.11.0
 microsoft.codeanalysis.csharp@4.8.0
+microsoft.codeanalysis.csharp@4.9.2
 microsoft.codeanalysis.sourcegenerators.testing@1.1.1
 microsoft.codeanalysis.testing.verifiers.xunit@1.1.1
 microsoft.codeanalysis.workspaces.common@1.0.1
@@ -47,13 +52,10 @@ microsoft.codeanalysis.workspaces.common@3.11.0
 microsoft.codeanalysis.workspaces.common@3.8.0
 microsoft.codeanalysis.workspaces.common@4.8.0
 microsoft.codecoverage@17.7.1
-microsoft.composition@1.0.27
-microsoft.csharp@4.0.1
 microsoft.net.test.sdk@17.7.1
 microsoft.netcore.platforms@1.0.1
 microsoft.netcore.platforms@1.1.0
 microsoft.netcore.platforms@2.0.0
-microsoft.netcore.platforms@2.1.2
 microsoft.netcore.platforms@5.0.0
 microsoft.netcore.targets@1.0.1
 microsoft.netcore.targets@1.1.0
@@ -156,10 +158,10 @@ system.buffers@4.3.0
 system.buffers@4.5.1
 system.collections.concurrent@4.0.12
 system.collections.concurrent@4.3.0
-system.collections.immutable@1.1.36
 system.collections.immutable@1.2.0
 system.collections.immutable@5.0.0
 system.collections.immutable@7.0.0
+system.collections.immutable@8.0.0
 system.collections.nongeneric@4.0.1
 system.collections@4.0.11
 system.collections@4.3.0
@@ -185,7 +187,6 @@ system.diagnostics.diagnosticsource@4.3.0
 system.diagnostics.fileversioninfo@4.0.0
 system.diagnostics.process@4.1.0
 system.diagnostics.process@4.3.0
-system.diagnostics.tools@4.0.1
 system.diagnostics.tools@4.3.0
 system.diagnostics.tracesource@4.0.0
 system.diagnostics.tracing@4.1.0
@@ -214,6 +215,7 @@ system.linq.parallel@4.0.1
 system.linq@4.1.0
 system.linq@4.3.0
 system.memory@4.5.4
+system.memory@4.5.5
 system.net.http@4.3.0
 system.net.nameresolution@4.0.0
 system.net.nameresolution@4.3.0
@@ -222,7 +224,6 @@ system.net.primitives@4.3.0
 system.net.sockets@4.1.0
 system.net.sockets@4.3.0
 system.numerics.vectors@4.4.0
-system.numerics.vectors@4.5.0
 system.objectmodel@4.0.12
 system.objectmodel@4.3.0
 system.private.uri@4.0.1
@@ -235,11 +236,11 @@ system.reflection.emit@4.0.1
 system.reflection.emit@4.3.0
 system.reflection.extensions@4.0.1
 system.reflection.extensions@4.3.0
-system.reflection.metadata@1.0.21
 system.reflection.metadata@1.3.0
 system.reflection.metadata@1.6.0
 system.reflection.metadata@5.0.0
 system.reflection.metadata@7.0.0
+system.reflection.metadata@8.0.0
 system.reflection.primitives@4.0.1
 system.reflection.primitives@4.3.0
 system.reflection.typeextensions@4.1.0
@@ -248,8 +249,8 @@ system.reflection@4.1.0
 system.reflection@4.3.0
 system.resources.resourcemanager@4.0.1
 system.resources.resourcemanager@4.3.0
+system.runtime.compilerservices.unsafe@4.5.2
 system.runtime.compilerservices.unsafe@4.5.3
-system.runtime.compilerservices.unsafe@4.7.1
 system.runtime.compilerservices.unsafe@5.0.0
 system.runtime.compilerservices.unsafe@6.0.0
 system.runtime.extensions@4.1.0
@@ -262,7 +263,6 @@ system.runtime.interopservices@4.1.0
 system.runtime.interopservices@4.3.0
 system.runtime.loader@4.0.0
 system.runtime.numerics@4.3.0
-system.runtime.serialization.primitives@4.1.1
 system.runtime@4.1.0
 system.runtime@4.3.0
 system.security.accesscontrol@4.5.0
@@ -285,6 +285,7 @@ system.security.principal.windows@5.0.0
 system.security.principal@4.0.1
 system.security.principal@4.3.0
 system.text.encoding.codepages@4.5.1
+system.text.encoding.codepages@8.0.0
 system.text.encoding.extensions@4.0.11
 system.text.encoding.extensions@4.3.0
 system.text.encoding@4.0.11
@@ -309,7 +310,6 @@ system.threading@4.3.0
 system.valuetuple@4.5.0
 system.xml.readerwriter@4.0.11
 system.xml.readerwriter@4.3.0
-system.xml.xdocument@4.0.11
 system.xml.xdocument@4.3.0
 system.xml.xmldocument@4.0.1
 system.xml.xpath.xmldocument@4.0.1
