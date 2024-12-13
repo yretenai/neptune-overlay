@@ -42,7 +42,7 @@ RDEPEND="
 	media-libs/libpng
 	media-libs/libuvc
 	media-libs/mesa[egl(+)]
-	media-libs/opencv
+	media-libs/opencv:=
 	sys-libs/libunwind
 	wayland? (
 		dev-libs/wayland
