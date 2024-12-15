@@ -1,5 +1,5 @@
 diff --git a/apps/app-frontend/src/App.vue b/apps/app-frontend/src/App.vue
-index e36feef1..d9a2701d 100644
+index 69483075..0b8f4827 100644
 --- a/apps/app-frontend/src/App.vue
 +++ b/apps/app-frontend/src/App.vue
 @@ -179,18 +179,7 @@ async function setupApp() {
@@ -18,10 +18,10 @@ index e36feef1..d9a2701d 100644
 -
    get_opening_command().then(handleCommand)
 -  checkUpdates()
+   fetchCredentials()
  }
  
- const stateFailed = ref(false)
-@@ -309,15 +298,6 @@ async function handleCommand(e) {
+@@ -308,15 +297,6 @@ async function handleCommand(e) {
  
  const updateAvailable = ref(false)
  async function checkUpdates() {
