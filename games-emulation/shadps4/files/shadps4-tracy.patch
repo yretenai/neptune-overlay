@@ -1,8 +1,8 @@
 diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
-index 082be211..b9acd49a 100644
+index dbe6794d..aab26c84 100644
 --- a/externals/CMakeLists.txt
 +++ b/externals/CMakeLists.txt
-@@ -195,18 +195,14 @@ add_library(Dear_ImGui
+@@ -189,18 +189,14 @@ add_library(Dear_ImGui
  target_include_directories(Dear_ImGui INTERFACE dear_imgui/)
  
  # Tracy
@@ -10,7 +10,7 @@ index 082be211..b9acd49a 100644
 -option(TRACY_NO_CRASH_HANDLER "" ON) # Otherwise texture cache exceptions will be treaten as a crash
 -option(TRACY_ON_DEMAND "" ON)
 -option(TRACY_NO_FRAME_IMAGE "" ON)
--option(TRACY_FIBERS "" ON) # For AmdGpu frontend profiling
+-option(TRACY_FIBERS "" OFF) # For AmdGpu frontend profiling, disabled due to instability
 -option(TRACY_NO_SYSTEM_TRACING "" ON)
 -option(TRACY_NO_CALLSTACK "" ON)
 -option(TRACY_NO_CODE_TRANSFER "" ON)
