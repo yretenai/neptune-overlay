@@ -4,7 +4,7 @@
 EAPI=8
 
 DOTNET_PKG_COMPAT=9.0
-DOTNET_NEPTUNE_TARGETS="8.0 9.0"
+DOTNET_NEPTUNE_TARGETS="9.0"
 
 NUGETS="
 argon@0.24.2
@@ -14,30 +14,30 @@ avalonia.angle.windows.natives@2.1.22045.20230930
 avalonia.avaloniaedit@11.1.0
 avalonia.buildservices@0.0.28
 avalonia.buildservices@0.0.29
-avalonia.controls.colorpicker@11.2.1
-avalonia.controls.datagrid@11.2.1
-avalonia.controls.treedatagrid@11.0.10
-avalonia.desktop@11.2.1
-avalonia.diagnostics@11.2.1
-avalonia.freedesktop@11.2.1
-avalonia.headless@11.2.1
+avalonia.controls.colorpicker@11.2.2
+avalonia.controls.datagrid@11.2.2
+avalonia.controls.treedatagrid@11.1.0
+avalonia.desktop@11.2.2
+avalonia.diagnostics@11.2.2
+avalonia.freedesktop@11.2.2
+avalonia.headless@11.2.2
 avalonia.labs.panels@11.2.0
-avalonia.native@11.2.1
-avalonia.reactiveui@11.2.1
+avalonia.native@11.2.2
+avalonia.reactiveui@11.2.2
 avalonia.remote.protocol@11.0.0
-avalonia.remote.protocol@11.2.1
+avalonia.remote.protocol@11.2.2
 avalonia.skia@11.0.0
 avalonia.skia@11.2.0
-avalonia.skia@11.2.1
-avalonia.svg.skia@11.2.0
-avalonia.themes.fluent@11.2.1
-avalonia.themes.simple@11.2.1
-avalonia.win32@11.2.1
-avalonia.x11@11.2.1
+avalonia.skia@11.2.2
+avalonia.svg.skia@11.2.0.2
+avalonia.themes.fluent@11.2.2
+avalonia.themes.simple@11.2.2
+avalonia.win32@11.2.2
+avalonia.x11@11.2.2
 avalonia@11.0.0
 avalonia@11.1.3
 avalonia@11.2.0
-avalonia@11.2.1
+avalonia@11.2.2
 avaloniaedit.textmate@11.1.0
 bannerlord.launchermanager.localization@1.0.138
 bannerlord.launchermanager.models@1.0.138
@@ -96,10 +96,15 @@ grpc.core.api@2.52.0
 grpc.net.client@2.52.0
 grpc.net.common@2.52.0
 harfbuzzsharp.nativeassets.linux@7.3.0.2
+harfbuzzsharp.nativeassets.linux@7.3.0.3
 harfbuzzsharp.nativeassets.macos@7.3.0.2
+harfbuzzsharp.nativeassets.macos@7.3.0.3
+harfbuzzsharp.nativeassets.webassembly@7.3.0.3
 harfbuzzsharp.nativeassets.webassembly@7.3.0.3-preview.2.2
 harfbuzzsharp.nativeassets.win32@7.3.0.2
+harfbuzzsharp.nativeassets.win32@7.3.0.3
 harfbuzzsharp@7.3.0.2
+harfbuzzsharp@7.3.0.3
 hotchocolate.language.syntaxtree@14.1.0
 hotchocolate.transport.abstractions@14.1.0
 hotchocolate.transport.http@14.1.0
@@ -286,6 +291,7 @@ microsoft.extensions.primitives@9.0.0
 microsoft.extensions.resilience@9.0.0
 microsoft.extensions.telemetry.abstractions@9.0.0
 microsoft.extensions.telemetry@9.0.0
+microsoft.extensions.timeprovider.testing@9.0.0
 microsoft.io.recyclablememorystream@3.0.0
 microsoft.net.http.headers@9.0.0
 microsoft.net.test.sdk@17.11.1
@@ -319,6 +325,7 @@ newtonsoft.json@12.0.1
 newtonsoft.json@13.0.1
 newtonsoft.json@13.0.3
 nexusmods.archives.nx@0.6.1
+nexusmods.archives.nx@0.6.3
 nexusmods.hashing.xxhash3.paths@3.0.3
 nexusmods.hashing.xxhash3@3.0.3
 nexusmods.mnemonicdb.abstractions@0.9.97
@@ -415,16 +422,21 @@ runtime.unix.system.runtime.extensions@4.3.0
 sha3.net@2.0.0
 sharpziplib@1.4.2
 sharpzstd.interop@1.5.6
-shimskiasharp@2.0.0.2
+shimskiasharp@2.0.0.4
 simpleinfoname@3.0.1
 skiasharp.harfbuzz@2.88.6
 skiasharp.harfbuzz@2.88.8
 skiasharp.nativeassets.linux@2.88.8
+skiasharp.nativeassets.linux@2.88.9
 skiasharp.nativeassets.macos@2.88.8
+skiasharp.nativeassets.macos@2.88.9
 skiasharp.nativeassets.webassembly@2.88.8
+skiasharp.nativeassets.webassembly@2.88.9
 skiasharp.nativeassets.win32@2.88.8
+skiasharp.nativeassets.win32@2.88.9
 skiasharp@2.88.6
 skiasharp@2.88.8
+skiasharp@2.88.9
 spectre.console.cli@0.49.1
 spectre.console.testing@0.49.1
 spectre.console@0.49.1
@@ -437,9 +449,9 @@ strawberryshake.resources@14.1.0
 strawberryshake.server@14.1.0
 strawberryshake.transport.http@14.1.0
 strawberryshake.transport.websockets@14.1.0
-svg.custom@2.0.0.2
-svg.model@2.0.0.2
-svg.skia@2.0.0.2
+svg.custom@2.0.0.4
+svg.model@2.0.0.4
+svg.skia@2.0.0.4
 system.appcontext@4.3.0
 system.buffers@4.3.0
 system.buffers@4.5.1
@@ -641,9 +653,10 @@ xunit.runner.visualstudio@2.8.2
 xunit.skippablefact@1.4.13
 xunit@2.9.2
 zstdsharp.port@0.8.2
+zstring@2.6.0
 "
 
-inherit desktop neptune-dotnet xdg git-r3
+inherit desktop neptune-dotnet xdg
 
 DESCRIPTION="Nexus Mods App is a mod manager for games"
 HOMEPAGE="
@@ -651,16 +664,29 @@ HOMEPAGE="
 	https://github.com/Nexus-Mods/NexusMods.App
 "
 
-SRC_URI="${NUGET_URIS}"
-LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
-SLOT="0"
+if [[ "${PV}" == *9999* ]]; then
+	GIT_LFS=1
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/Nexus-Mods/NexusMods.App.git"
+else
+	NEXUSDOCS_PV="fe4e8b1b26d2c2917b404b0b091bfa31f135e337"
+	SMAPI_PV="4.1.9"
 
-EGIT_REPO_URI="https://github.com/Nexus-Mods/NexusMods.App.git"
-
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+	SRC_URI="
+		https://github.com/Nexus-Mods/NexusMods.App/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz
+		https://github.com/Pathoschild/SMAPI/archive/refs/tags/${SMAPI_PV}.tar.gz -> SMAPI-${SMAPI_PV}.tar.gz
+		https://github.com/Nexus-Mods/NexusMods.MkDocsMaterial.Themes.Next/archive/${NEXUSDOCS_PV}.tar.gz -> NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}.tar.gz
+	"
+	S="${WORKDIR}/NexusMods.App-${PV}"
 	KEYWORDS="~amd64"
 fi
+
+SRC_URI="
+	${SRC_URI}
+	${NUGET_URIS}
+"
+LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
+SLOT="0"
 
 IUSE="p7zip"
 RESTRICT="mirror"
@@ -696,31 +722,33 @@ RDEPEND="
 	x11-libs/libxshmfence
 "
 
-PATCHES=(
-	"${FILESDIR}/use-system-7z.patch"
-)
-
 DOTNET_PKG_PROJECTS=(
 	"src/NexusMods.App/NexusMods.App.csproj"
 )
 
 DOTNET_PKG_BUILD_EXTRA_ARGS+=(
-	"/p:TieredCompilation=true"
-	"/p:DefineConstants=INSTALLATION_METHOD_PACKAGE_MANAGER"
+	"-p:TieredCompilation=true"
+	"-p:DefineConstants=\"INSTALLATION_METHOD_PACKAGE_MANAGER\""
+	"-p:UseSystemExtractor=true"
 )
 
 DOTNET_PKG_TEST_EXTRA_ARGS+=(
 	"--filter \"RequiresNetworking==True\""
 )
 
-src_prepare() {
-	rm src/src.sln
-	dotnet-pkg_src_prepare
-}
-
 src_unpack() {
 	dotnet-pkg_src_unpack
-	git-r3_src_unpack
+	if [[ "${PV}" == *9999* ]]; then
+		git-r3_src_unpack
+	fi
+}
+
+src_prepare() {
+	mv "${WORKDIR}/SMAPI-${SMAPI_PV}" "${S}/extern/SMAPI"
+	mv "${WORKDIR}/NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}" "${S}/docs/Nexus"
+
+	rm src/src.sln
+	dotnet-pkg_src_prepare
 }
 
 # error MSB1001 due to --filter switch not being recognized??
