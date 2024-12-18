@@ -744,6 +744,8 @@ src_unpack() {
 }
 
 src_prepare() {
+	rm -d "${S}/extern/SMAPI"
+	rm -d "${S}/docs/Nexus"
 	mv "${WORKDIR}/SMAPI-${SMAPI_PV}" "${S}/extern/SMAPI"
 	mv "${WORKDIR}/NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}" "${S}/docs/Nexus"
 
