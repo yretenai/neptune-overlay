@@ -751,12 +751,6 @@ src_prepare() {
 	dotnet-pkg_src_prepare
 }
 
-# error MSB1001 due to --filter switch not being recognized??
-# -> dotnet-pkg-base fucks something up with it's flags?
-src_test() {
-	edotnet test -c Release --filter "RequiresNetworking==True" --no-restore
-}
-
 src_install() {
 	rm -fv "${DOTNET_PKG_OUTPUT}/librocksdb.so" \
 		"${DOTNET_PKG_OUTPUT}/librocksdb-musl.so" \
