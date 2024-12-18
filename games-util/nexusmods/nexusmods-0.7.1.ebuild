@@ -172,6 +172,7 @@ livechartscore.skiasharpview@2.0.0-rc2
 livechartscore@2.0.0-rc2
 magick.net-q16-anycpu@14.0.0
 magick.net.core@14.0.0
+markdig@0.38.0
 markdown.avalonia.tight@11.0.3-a1
 martincostello.logging.xunit@0.3.0
 memorypack.core@1.21.3
@@ -722,6 +723,10 @@ RDEPEND="
 	x11-libs/libxshmfence
 "
 
+BDEPEND="
+	app-text/dos2unix
+"
+
 DOTNET_PKG_PROJECTS=(
 	"src/NexusMods.App/NexusMods.App.csproj"
 )
@@ -734,6 +739,10 @@ DOTNET_PKG_BUILD_EXTRA_ARGS+=(
 
 DOTNET_PKG_TEST_EXTRA_ARGS+=(
 	"--filter \"RequiresNetworking==True\""
+)
+
+PATCHES=(
+	"${FILESDIR}/${PN}-${PV}-SMAPI.patch"
 )
 
 src_unpack() {
@@ -750,6 +759,8 @@ src_prepare() {
 	mv "${WORKDIR}/NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}" "${S}/docs/Nexus"
 
 	rm src/src.sln
+
+	dos2unix src/Games/NexusMods.Games.StardewValley.SMAPI/NexusMods.Games.StardewValley.SMAPI.csproj
 	dotnet-pkg_src_prepare
 }
 
