@@ -640,7 +640,7 @@ pkg_postinst() {
 		ewarn
 		ewarn "Godot C# SDK has been installed to ${EPREFIX}/usr/share/godot/godot-${GODOT_VERSION}"
 		ewarn "Godot Nugets have been installed to ${EPREFIX}/usr/share/godot/nugets"
-		ewarn "An appropriate NuGet config file has been placed in ${EPREFIX}/opt/NuGet/Config"
+		ewarn "An appropriate NuGet config file has been placed in ${EPREFIX}/etc/opt/NuGet/Config"
 		ewarn "No further action is needed"
 		ewarn
 	fi
