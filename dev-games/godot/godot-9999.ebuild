@@ -3,13 +3,8 @@
 
 EAPI=8
 
-# cd into
-# ./modules/mono/editor/Godot.NET.Sdk
-# ./modules/mono/editor/GodotTools
-# ./modules/mono/glue/GodotSharp
-# run: DOTNET_ROOT=/opt/neptune-dotnet gdmt restore -x /opt/neptune-dotnet/dotnet > somename.lst
-# combine nuget lists: cat *.lst | grep \@ | sort | uniq
-# todo: make a better way to collect nugets, this is painful.
+# run godot-nugets.bash
+# todo: implement nuget_live_src_unpack (just rewrite nuget.eclass tbh)
 NUGETS="
 coverlet.collector@3.2.0
 diffplex@1.5.0
@@ -31,7 +26,6 @@ microsoft.codeanalysis.analyzers@3.3.4
 microsoft.codeanalysis.codefix.testing@1.1.1
 microsoft.codeanalysis.common@3.11.0
 microsoft.codeanalysis.common@4.8.0
-microsoft.codeanalysis.common@4.9.2
 microsoft.codeanalysis.csharp.analyzer.testing.xunit@1.1.1
 microsoft.codeanalysis.csharp.analyzer.testing@1.1.1
 microsoft.codeanalysis.csharp.codefix.testing.xunit@1.1.1
@@ -44,7 +38,6 @@ microsoft.codeanalysis.csharp.workspaces@3.8.0
 microsoft.codeanalysis.csharp.workspaces@4.8.0
 microsoft.codeanalysis.csharp@3.11.0
 microsoft.codeanalysis.csharp@4.8.0
-microsoft.codeanalysis.csharp@4.9.2
 microsoft.codeanalysis.sourcegenerators.testing@1.1.1
 microsoft.codeanalysis.testing.verifiers.xunit@1.1.1
 microsoft.codeanalysis.workspaces.common@1.0.1
@@ -80,6 +73,7 @@ newtonsoft.json@9.0.1
 nuget.common@5.6.0
 nuget.configuration@5.6.0
 nuget.frameworks@5.6.0
+nuget.frameworks@6.12.1
 nuget.frameworks@6.5.0
 nuget.packaging@5.6.0
 nuget.protocol@5.6.0
@@ -161,7 +155,6 @@ system.collections.concurrent@4.3.0
 system.collections.immutable@1.2.0
 system.collections.immutable@5.0.0
 system.collections.immutable@7.0.0
-system.collections.immutable@8.0.0
 system.collections.nongeneric@4.0.1
 system.collections@4.0.11
 system.collections@4.3.0
@@ -240,7 +233,6 @@ system.reflection.metadata@1.3.0
 system.reflection.metadata@1.6.0
 system.reflection.metadata@5.0.0
 system.reflection.metadata@7.0.0
-system.reflection.metadata@8.0.0
 system.reflection.primitives@4.0.1
 system.reflection.primitives@4.3.0
 system.reflection.typeextensions@4.1.0
@@ -285,7 +277,7 @@ system.security.principal.windows@5.0.0
 system.security.principal@4.0.1
 system.security.principal@4.3.0
 system.text.encoding.codepages@4.5.1
-system.text.encoding.codepages@8.0.0
+system.text.encoding.codepages@7.0.0
 system.text.encoding.extensions@4.0.11
 system.text.encoding.extensions@4.3.0
 system.text.encoding@4.0.11
