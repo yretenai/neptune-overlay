@@ -19,9 +19,11 @@ if [[ ${PV} != *9999* ]]; then
 fi
 
 DEPEND+="
-	dev-python/darkdetect[${PYTHON_USEDEP}]
-	dev-python/typing-extensions[${PYTHON_USEDEP}]
-	dev-python/packaging[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/darkdetect[${PYTHON_USEDEP}]
+		dev-python/typing-extensions[${PYTHON_USEDEP}]
+		dev-python/packaging[${PYTHON_USEDEP}]
+	')
 "
 
 RDEPEND="
