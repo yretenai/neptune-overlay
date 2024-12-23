@@ -38,6 +38,7 @@ RDEPEND="
 		dev-python/music-tag[${PYTHON_USEDEP}]
 		dev-python/clint[${PYTHON_USEDEP}]
 	')
+	media-video/ffmpeg
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
@@ -52,6 +53,10 @@ BDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}/${PN}-${PV}-cfg-location.patch"
+)
+
 src_prepare() {
 	default
 	sed -i '1s|^|#!/usr/bin/python\n|' scdl/scdl.py || die
@@ -61,4 +66,6 @@ src_install() {
 	python_domodule scdl
 	python_fix_shebang scdl/scdl.py
 	python_newscript scdl/scdl.py scdl
+	insinto /etc
+	doins scdl/scdl.cfg
 }
