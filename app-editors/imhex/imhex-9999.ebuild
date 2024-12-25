@@ -7,8 +7,12 @@ PLUTOVG_PV="0.0.4"
 
 DOTNET_PKG_COMPAT="8.0"
 CMAKE_BUILD_TYPE="Release"
-CMAKE_MAKEFILE_GENERATOR="emake"
-NUGETS=""
+NUGETS="
+imgui.net@1.90.1.1
+system.buffers@4.4.0
+system.numerics.vectors@4.4.0
+system.runtime.compilerservices.unsafe@4.4.0
+"
 LLVM_COMPAT=( {16..18} )
 
 inherit dotnet-pkg cmake llvm-r1 toolchain-funcs desktop vcs-clean
@@ -22,7 +26,10 @@ SLOT="0"
 
 inherit git-r3
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
-SRC_URI="https://github.com/sammycage/plutovg/archive/refs/tags/v${PLUTOVG_PV}.tar.gz -> ${PN}-plutovg-${PLUTOVG_PV}.tar.gz"
+SRC_URI="
+	https://github.com/sammycage/plutovg/archive/refs/tags/v${PLUTOVG_PV}.tar.gz -> ${PN}-plutovg-${PLUTOVG_PV}.tar.gz
+	${NUGET_URIS}	
+"
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
@@ -85,6 +92,7 @@ pkg_setup() {
 
 src_unpack() {
 	default
+	nuget_src_unpack
 	git-r3_src_unpack
 	dotnet-pkg_src_unpack
 	egit_clean "${S}/lib"
