@@ -1,8 +1,8 @@
 diff --git a/apps/app-frontend/src/App.vue b/apps/app-frontend/src/App.vue
-index 69483075..0b8f4827 100644
+index 786e1f31..d8e2ed07 100644
 --- a/apps/app-frontend/src/App.vue
 +++ b/apps/app-frontend/src/App.vue
-@@ -179,18 +179,7 @@ async function setupApp() {
+@@ -162,15 +162,7 @@ async function setupApp() {
      }),
    )
  
@@ -15,13 +15,19 @@ index 69483075..0b8f4827 100644
 -      criticalErrorMessage.value = res
 -    }
 -  })
--
++
+ 
+   useFetch(`https://modrinth.com/blog/news.json`, 'news', true).then((res) => {
+     if (res && res.articles) {
+@@ -179,7 +171,6 @@ async function setupApp() {
+   })
+ 
    get_opening_command().then(handleCommand)
 -  checkUpdates()
    fetchCredentials()
  }
  
-@@ -308,15 +297,6 @@ async function handleCommand(e) {
+@@ -309,15 +300,7 @@ async function handleCommand(e) {
  
  const updateAvailable = ref(false)
  async function checkUpdates() {
@@ -34,6 +40,7 @@ index 69483075..0b8f4827 100644
 -    },
 -    5 * 1000 * 60,
 -  )
++
  }
  
  function handleClick(e) {
