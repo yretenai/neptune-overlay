@@ -1,12 +1,11 @@
 diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
-index dbe6794d..aab26c84 100644
+index 4350948b..54773181 100644
 --- a/externals/CMakeLists.txt
 +++ b/externals/CMakeLists.txt
-@@ -189,18 +189,14 @@ add_library(Dear_ImGui
- target_include_directories(Dear_ImGui INTERFACE dear_imgui/)
- 
- # Tracy
--option(TRACY_ENABLE "" ON)
+@@ -194,17 +194,14 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
+ else()
+     option(TRACY_ENABLE "" ON)
+ endif()
 -option(TRACY_NO_CRASH_HANDLER "" ON) # Otherwise texture cache exceptions will be treaten as a crash
 -option(TRACY_ON_DEMAND "" ON)
 -option(TRACY_NO_FRAME_IMAGE "" ON)

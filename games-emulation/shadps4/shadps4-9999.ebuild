@@ -27,7 +27,7 @@ if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+qt6 clang"
+IUSE="+qt6 clang tracing"
 
 # missing dependencies:
 # fmt 10.2.0 or newer is required
@@ -57,7 +57,7 @@ DEPEND="
 	media-libs/openal
 	dev-libs/half
 	>=dev-libs/zydis-5.0.0_alpha[clang?]
-	dev-cpp/tracy:=
+	tracing? ( dev-cpp/tracy:= )
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
 		dev-qt/qtmultimedia:6[ffmpeg,vulkan]
@@ -105,6 +105,7 @@ src_configure() {
 		-D ENABLE_QT_GUI=$(usex qt6)
 		-D ENABLE_UPDATER=OFF
 		-D SIRIT_USE_SYSTEM_SPIRV_HEADERS=ON
+		-D TRACY_ENABLE=$(usex tracing)
 	)
 
 	cmake_src_configure
