@@ -57,7 +57,7 @@ DEPEND="
 	media-libs/openal
 	dev-libs/half
 	>=dev-libs/zydis-5.0.0_alpha[clang?]
-	tracing? ( dev-cpp/tracy:= )
+	dev-cpp/tracy:=
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
 		dev-qt/qtmultimedia:6[ffmpeg,vulkan]
