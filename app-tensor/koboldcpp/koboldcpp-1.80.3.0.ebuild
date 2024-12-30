@@ -79,7 +79,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/makefile.patch"
-	"${FILESDIR}/examples.patch"
 	"${FILESDIR}/gguf.patch"
 )
 
@@ -179,7 +178,6 @@ src_install() {
 			convert_hf_to_gguf_update.py \
 			convert_llama_ggml_to_gguf.py \
 			convert_lora_to_gguf.py \
-			export_lora \
 			gguf-split \
 			quantize_clip \
 			quantize_gguf \
