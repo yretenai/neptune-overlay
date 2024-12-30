@@ -60,7 +60,7 @@ BDEPEND="
 	dev-cpp/nlohmann_json
 	sci-libs/pytorch
 	dev-libs/re2
-	<dev-libs/protobuf-27.9:=
+	dev-libs/protobuf:=
 	sci-libs/onnx:=[disableStaticReg]
 	benchmark? ( dev-cpp/benchmark )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
