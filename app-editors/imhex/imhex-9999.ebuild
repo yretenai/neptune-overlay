@@ -111,8 +111,6 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-D CMAKE_BUILD_TYPE="Release" \
-		-D CMAKE_C_FLAGS="-fuse-ld=lld ${CFLAGS}" \
-		-D CMAKE_CXX_FLAGS="-fuse-ld=lld ${CXXFLAGS}" \
 		-D CMAKE_SKIP_RPATH=ON \
 		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
