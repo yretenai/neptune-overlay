@@ -1,0 +1,12 @@
+diff --git a/intern/cycles/util/profiling.cpp b/intern/cycles/util/profiling.cpp
+index c80c1326e0a..a88743331cc 100644
+--- a/intern/cycles/util/profiling.cpp
++++ b/intern/cycles/util/profiling.cpp
+@@ -4,6 +4,7 @@
+ 
+ #include <cassert>
+ #include <thread>
++#include <algorithm>
+ 
+ #include "util/profiling.h"
+ 

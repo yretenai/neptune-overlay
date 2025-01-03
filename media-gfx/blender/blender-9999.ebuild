@@ -211,6 +211,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-9999-hipcc-path.patch"
 	"${FILESDIR}/${PN}-9999-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-9999-functional-header.patch"
+	"${FILESDIR}/${PN}-9999-profiling-algrotihm.patch"
 )
 
 if [[ ${PV} == *9999* ]]; then
