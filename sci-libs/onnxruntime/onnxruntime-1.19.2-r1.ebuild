@@ -106,6 +106,7 @@ PATCHES=(
 	"${FILESDIR}/Werror.patch"
 	"${FILESDIR}/disable-ck-tile.patch"
 	"${FILESDIR}/protobuf.patch"
+	"${FILESDIR}/cstring.patch"
 	#"${FILESDIR}/mpi.patch"
 )
 
@@ -167,7 +168,7 @@ src_configure() {
 	PYTHON_INCLUDE_DIR="$(python_get_includedir)"
 	PYTHON_LIBRARY="$(python_get_library_path)"
 
-	append-cxxflags -Wno-dangling-reference -Wno-c++20-compat
+	append-cxxflags -Wno-c++20-compat
 
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_INCLUDEDIR="include/${PN}"
