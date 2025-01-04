@@ -28,7 +28,7 @@ DEPEND="
 	dev-cpp/argparse
 	dev-cpp/digestpp
 	dev-cpp/json_struct
-	dev-libs/libfmt
+	dev-libs/libfmt:=
 	dev-libs/miniz
 "
 
@@ -43,4 +43,5 @@ PATCHES="
 	${FILESDIR}/${PN}-${PV}-argparse.patch
 	${FILESDIR}/${PN}-${PV}-miniz.patch
 	${FILESDIR}/${PN}-${PV}-xxhash.patch
+	${FILESDIR}/${PN}-${PV}-fmtconst.patch
 "

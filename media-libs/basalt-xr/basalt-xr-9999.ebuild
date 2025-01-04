@@ -33,7 +33,7 @@ RDEPEND="
 	app-arch/lz4
 	dev-cpp/eigen:3
 	dev-libs/boost[bzip2]
-	dev-libs/libfmt
+	dev-libs/libfmt:=
 	dev-libs/opengv
 	dev-libs/pangolin
 	media-libs/glew

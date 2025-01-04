@@ -30,7 +30,7 @@ DEPEND="
 	virtual/opengl
 	media-libs/glew
 	app-arch/unarr
-	dev-libs/libfmt
+	dev-libs/libfmt:=
 	qt5? (
 		dev-qt/qtcore:5
 		dev-qt/qtgui:5
