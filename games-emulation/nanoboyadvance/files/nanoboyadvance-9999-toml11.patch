@@ -1,0 +1,190 @@
+diff --git a/src/platform/core/CMakeLists.txt b/src/platform/core/CMakeLists.txt
+index c11f34d..00ee811 100644
+--- a/src/platform/core/CMakeLists.txt
++++ b/src/platform/core/CMakeLists.txt
+@@ -28,7 +28,7 @@ glad_add_library(glad_gl_core_33 STATIC
+ )
+ 
+ if(USE_SYSTEM_TOML11)
+-  find_package(toml11 3.7 REQUIRED)
++  find_package(toml11 REQUIRED)
+ else()
+   FetchContent_Declare(toml11
+     GIT_REPOSITORY https://github.com/ToruNiina/toml11.git
+diff --git a/src/platform/core/include/platform/config.hpp b/src/platform/core/include/platform/config.hpp
+index 89c6278..e1e28f3 100644
+--- a/src/platform/core/include/platform/config.hpp
++++ b/src/platform/core/include/platform/config.hpp
+@@ -48,7 +48,7 @@ struct PlatformConfig : Config {
+ protected:
+   virtual void LoadCustomData(toml::value const& data) {}
+   virtual void SaveCustomData(
+-    toml::basic_value<toml::preserve_comments>& data
++    toml::value& data
+   ) {};
+ };
+ 
+diff --git a/src/platform/core/src/config.cpp b/src/platform/core/src/config.cpp
+index be382c9..00b312a 100644
+--- a/src/platform/core/src/config.cpp
++++ b/src/platform/core/src/config.cpp
+@@ -29,21 +29,19 @@ void PlatformConfig::Load(std::string const& path) {
+   }
+ 
+   if(data.contains("general")) {
+-    auto general_result = toml::expect<toml::value>(data.at("general"));
++    auto general = data.at("general");
+ 
+-    if(general_result.is_ok()) {
+-      auto general = general_result.unwrap();
++    {
+       this->bios_path = toml::find_or<std::string>(general, "bios_path", "bios.bin");
+-      this->skip_bios = toml::find_or<toml::boolean>(general, "bios_skip", false);
++      this->skip_bios = toml::find_or<bool>(general, "bios_skip", false);
+       this->save_folder = toml::find_or<std::string>(general, "save_folder", "");
+     }
+   }
+ 
+   if(data.contains("cartridge")) {
+-    auto cartridge_result = toml::expect<toml::value>(data.at("cartridge"));
++    auto cartridge = data.at("cartridge");
+ 
+-    if(cartridge_result.is_ok()) {
+-      auto cartridge = cartridge_result.unwrap();
++    {
+       auto save_type = toml::find_or<std::string>(cartridge, "save_type", "detect");
+ 
+       const std::map<std::string, Config::BackupType> save_types{
+@@ -65,18 +63,16 @@ void PlatformConfig::Load(std::string const& path) {
+         this->cartridge.backup_type = match->second;
+       }
+ 
+-      this->cartridge.force_rtc = toml::find_or<toml::boolean>(cartridge, "force_rtc", false);
+-      this->cartridge.force_solar_sensor = toml::find_or<toml::boolean>(cartridge, "force_solar_sensor", false);
++      this->cartridge.force_rtc = toml::find_or<bool>(cartridge, "force_rtc", false);
++      this->cartridge.force_solar_sensor = toml::find_or<bool>(cartridge, "force_solar_sensor", false);
+       this->cartridge.solar_sensor_level = toml::find_or<int>(cartridge, "solar_sensor_level", 156);
+     }
+   }
+ 
+   if(data.contains("video")) {
+-    auto video_result = toml::expect<toml::value>(data.at("video"));
++    auto video = data.at("video");
+ 
+-    if(video_result.is_ok()) {
+-      auto video = video_result.unwrap();
+-  
++    {
+       const std::map<std::string, Video::Filter> filters{
+         { "nearest", Video::Filter::Nearest },
+         { "linear",  Video::Filter::Linear  },
+@@ -108,10 +104,9 @@ void PlatformConfig::Load(std::string const& path) {
+   }
+ 
+   if(data.contains("audio")) {
+-    auto audio_result = toml::expect<toml::value>(data.at("audio"));
++    auto audio = data.at("audio");
+ 
+-    if(audio_result.is_ok()) {
+-      auto audio = audio_result.unwrap();
++    {
+       auto resampler = toml::find_or<std::string>(audio, "resampler", "cosine");
+ 
+       const std::map<std::string, Config::Audio::Interpolation> resamplers{
+@@ -132,9 +127,9 @@ void PlatformConfig::Load(std::string const& path) {
+       }
+ 
+       this->audio.volume = toml::find_or<int>(audio, "volume", 100);
+-      this->audio.mp2k_hle_enable = toml::find_or<toml::boolean>(audio, "mp2k_hle_enable", false);
+-      this->audio.mp2k_hle_cubic = toml::find_or<toml::boolean>(audio, "mp2k_hle_cubic", true);
+-      this->audio.mp2k_hle_force_reverb = toml::find_or<toml::boolean>(audio, "mp2k_hle_force_reverb", true);
++      this->audio.mp2k_hle_enable = toml::find_or<bool>(audio, "mp2k_hle_enable", false);
++      this->audio.mp2k_hle_cubic = toml::find_or<bool>(audio, "mp2k_hle_cubic", true);
++      this->audio.mp2k_hle_force_reverb = toml::find_or<bool>(audio, "mp2k_hle_force_reverb", true);
+     }
+   }
+ 
+@@ -142,11 +137,11 @@ void PlatformConfig::Load(std::string const& path) {
+ }
+ 
+ void PlatformConfig::Save(std::string const& path) {
+-  toml::basic_value<toml::preserve_comments> data;
++  toml::value data;
+ 
+   if(std::filesystem::exists(path)) {
+     try {
+-      data = toml::parse<toml::preserve_comments>(path);
++      data = toml::parse(path);
+     } catch (std::exception& ex) {
+       Log<Error>("Config: error while parsing TOML configuration: {0}", ex.what());
+       return;
+diff --git a/src/platform/qt/src/config.cpp b/src/platform/qt/src/config.cpp
+index 7fbc712..5204a6d 100644
+--- a/src/platform/qt/src/config.cpp
++++ b/src/platform/qt/src/config.cpp
+@@ -9,13 +9,11 @@
+ 
+ void QtConfig::LoadCustomData(toml::value const& data) {
+   if(data.contains("input")) {
+-    auto input_result = toml::expect<toml::value>(data.at("input"));
++    auto input_ = data.at("input");
+ 
+-    if(input_result.is_ok()) {
++    {
+       using Map = Input::Map;
+ 
+-      auto input_ = input_result.unwrap();
+-
+       input.controller_guid = toml::find_or<std::string>(input_, "controller_guid", "");
+       input.hold_fast_forward = toml::find_or<bool>(input_, "hold_fast_forward", true);
+ 
+@@ -26,11 +24,9 @@ void QtConfig::LoadCustomData(toml::value const& data) {
+       input.fast_forward = get_map(input_, "fast_forward");
+     
+       if(input_.contains("gba")) {
+-        auto gba_result = toml::expect<toml::value>(input_.at("gba"));
+-
+-        if(gba_result.is_ok()) {
+-          auto gba = gba_result.unwrap();
++        auto gba = input_.at("gba");
+ 
++        {
+           input.gba[0] = get_map(gba, "a");
+           input.gba[1] = get_map(gba, "b");
+           input.gba[2] = get_map(gba, "select");
+@@ -47,11 +43,9 @@ void QtConfig::LoadCustomData(toml::value const& data) {
+   }
+ 
+   if(data.contains("window")) {
+-    auto window_result = toml::expect<toml::value>(data.at("window"));
+-
+-    if(window_result.is_ok()) {
+-      auto window_ = window_result.unwrap();
++    auto window_ = data.at("window");
+ 
++    {
+       window.scale = toml::find_or<int>(window_, "scale", 2);
+       window.maximum_scale = toml::find_or<int>(window_, "maximum_scale", 0);
+       window.fullscreen = toml::find_or<bool>(window_, "fullscreen", false);
+@@ -67,7 +61,7 @@ void QtConfig::LoadCustomData(toml::value const& data) {
+ }
+ 
+ void QtConfig::SaveCustomData(
+-  toml::basic_value<toml::preserve_comments>& data
++  toml::value& data
+ ) {
+   data["input"]["controller_guid"] = input.controller_guid;
+   data["input"]["fast_forward"] = input.fast_forward.Array();
+diff --git a/src/platform/qt/src/config.hpp b/src/platform/qt/src/config.hpp
+index 91af829..84e49c4 100644
+--- a/src/platform/qt/src/config.hpp
++++ b/src/platform/qt/src/config.hpp
+@@ -118,7 +118,7 @@ protected:
+   void LoadCustomData(toml::value const& data) override;
+ 
+   void SaveCustomData(
+-    toml::basic_value<toml::preserve_comments>& data
++    toml::value& data
+   ) override;
+ 
+ private:
