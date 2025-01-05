@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="gdb">Enable GDB Stub support</flag>
+	</use>
+	<upstream>
+		<bugs-to>https://github.com/melonDS-emu/melonDS/issues</bugs-to>
+		<remote-id type="github">melonDS-emu/melonDS</remote-id>
+	</upstream>
+</pkgmetadata>

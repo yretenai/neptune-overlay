@@ -1,0 +1,13 @@
+diff --git a/src/frontend/qt_sdl/EmuInstance.cpp b/src/frontend/qt_sdl/EmuInstance.cpp
+index 309abe6..6779137 100644
+--- a/src/frontend/qt_sdl/EmuInstance.cpp
++++ b/src/frontend/qt_sdl/EmuInstance.cpp
+@@ -1292,7 +1292,7 @@ bool EmuInstance::updateConsole() noexcept
+     };
+     auto gdbargs = gdbopt.GetBool("Enabled") ? std::make_optional(_gdbargs) : std::nullopt;
+ #else
+-    optional<GDBArgs> gdbargs = std::nullopt;
++    std::optional<GDBArgs> gdbargs = std::nullopt;
+ #endif
+ 
+     NDSArgs ndsargs {
