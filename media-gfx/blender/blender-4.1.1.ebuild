@@ -27,10 +27,27 @@ SLOT="$(ver_cut 1-2)"
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
+ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
+ASSETS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-assets"
 
-EGIT_COMMIT="v${PV}"
+if [[ ${PV} != *9999* ]]; then
+	if [[ ${PV} != *_beta* ]]; then
+		EGIT_COMMIT="v${PV}"
+	else
+		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
+	fi
+	ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
+	KEYWORDS="~amd64"
+else
+	ASSETS_EGIT_BRANCH="main"
+	# special branches
+	if [[ ${PV} == *99991* ]]; then
+		EGIT_BRANCH="npr-prototype"
+		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
+		SLOT="${EGIT_BRANCH}"
+	fi
+fi
 
-KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
@@ -194,6 +211,14 @@ PATCHES=(
 	"${FILESDIR}/${PN}-9999-clang.patch"
 )
 
+if [[ ${PV} == *9999* ]]; then
+	if [[ ${PV} != *9999 ]]; then
+		PATCHES+=(
+			"${FILESDIR}/${PN}-9999-branch.patch"
+		)
+	fi
+fi
+
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 
@@ -216,6 +241,12 @@ blender_get_version() {
 		# Add period and skip the middle number (301 -> 3.1)
 		BV=${BV:0:1}.${BV:2}
 	fi
+
+	if [[ ${PV} == *9999* ]]; then
+		if [[ ${PV} != *9999 ]]; then
+			BV="${BV}-${SLOT}"
+		fi
+	fi
 }
 
 pkg_pretend() {
@@ -234,11 +265,21 @@ pkg_setup() {
 src_unpack() {
 	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_COMMIT}" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
+	git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${ASSETS_EGIT_BRANCH}" "${ASSETS_EGIT_LOCAL_ID}"
+	git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${ASSETS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
 }
 
 src_prepare() {
 	cmake_src_prepare
+
+	if [[ ${PV} == *9999* ]]; then
+		if [[ ${PV} != *9999 ]]; then
+			sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
+				-i build_files/cmake/macros.cmake \
+				-i source/blender/blenkernel/intern/appdir.cc || die
+		fi
+	fi
 
 	blender_get_version
 
@@ -274,6 +315,8 @@ src_prepare() {
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
 	fi
+
+	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 }
 
 src_configure() {
@@ -301,7 +344,6 @@ src_configure() {
 		-DWITH_CLANG=$(usex llvm)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
-		-DWITH_CPU_CHECK=no
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
@@ -309,6 +351,7 @@ src_configure() {
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
 		-DWITH_CYCLES_HIP_BINARIES=$(usex hip $(usex cycles-bin-kernels))
+		-DCYCLES_HIP_BINARIES_ARCH="$(get_amdgpu_flags)"
 		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
 		-DWITH_CYCLES_ONEAPI_BINARIES=no
 		-DWITH_CYCLES_OSL=$(usex osl)
@@ -373,6 +416,13 @@ src_configure() {
 		-DWITH_XR_OPENXR=no
 	)
 
+	if has_version ">=dev-python/numpy-2"; then
+		mycmakeargs+=(
+			-DPYTHON_NUMPY_INCLUDE_DIRS="$(python_get_sitedir)/numpy/_core/include"
+			-DPYTHON_NUMPY_PATH="$(python_get_sitedir)/numpy/_core/include"
+		)
+	fi
+
 	if use optix; then
 		mycmakeargs+=(
 			-DCYCLES_RUNTIME_OPTIX_ROOT_DIR="${EPREFIX}"/opt/optix
@@ -423,8 +473,8 @@ src_install() {
 	if use doc; then
 		# Define custom blender data/script file paths. Otherwise Blender will not be able to find them during doc building.
 		# (Because the data is in the image directory and it will default to look in /usr/share)
-		export BLENDER_SYSTEM_SCRIPTS=${ED}/usr/share/blender/${BV}/scripts
-		export BLENDER_SYSTEM_DATAFILES=${ED}/usr/share/blender/${BV}/datafiles
+		export BLENDER_SYSTEM_SCRIPTS="${ED}/usr/share/blender/${BV}/scripts"
+		export BLENDER_SYSTEM_DATAFILES="${ED}/usr/share/blender/${BV}/datafiles"
 
 		# Workaround for binary drivers.
 		addwrite /dev/ati
@@ -459,6 +509,9 @@ src_install() {
 
 	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/blender-${BV}-thumbnailer" || die
 	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/blender-${BV}" || die
+
+	insinto "/usr/share/blender/${BV}/datafiles/assets"
+	doins -r "${WORKDIR}/blender-assets/publish/"*
 }
 
 pkg_postinst() {
@@ -507,7 +560,7 @@ pkg_postrm() {
 
 	ewarn
 	ewarn "You may want to remove the following directory."
-	ewarn "~/.config/${PN}/${BV}/cache/"
+	ewarn "~/.cache/cycles/"
 	ewarn "It may contain extra render kernels not tracked by portage"
 	ewarn
 }

@@ -25,6 +25,8 @@ LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
+ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
+ASSETS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-assets"
 
 if [[ ${PV} != *9999* ]]; then
 	if [[ ${PV} != *_beta* ]]; then
@@ -32,7 +34,16 @@ if [[ ${PV} != *9999* ]]; then
 	else
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	fi
+	ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
 	KEYWORDS="~amd64"
+else
+	ASSETS_EGIT_BRANCH="main"
+	# special branches
+	if [[ ${PV} == *99991* ]]; then
+		EGIT_BRANCH="npr-prototype"
+		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
+		SLOT="${EGIT_BRANCH}"
+	fi
 fi
 
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
@@ -207,6 +218,14 @@ PATCHES=(
 	"${FILESDIR}/${PN}-9999-cycles-runtime-path.patch"
 )
 
+if [[ ${PV} == *9999* ]]; then
+	if [[ ${PV} != *9999 ]]; then
+		PATCHES+=(
+			"${FILESDIR}/${PN}-9999-branch.patch"
+		)
+	fi
+fi
+
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 
@@ -229,6 +248,12 @@ blender_get_version() {
 		# Add period and skip the middle number (301 -> 3.1)
 		BV=${BV:0:1}.${BV:2}
 	fi
+
+	if [[ ${PV} == *9999* ]]; then
+		if [[ ${PV} != *9999 ]]; then
+			BV="${BV}-${SLOT}"
+		fi
+	fi
 }
 
 pkg_pretend() {
@@ -244,8 +269,22 @@ pkg_setup() {
 	fi
 }
 
+src_unpack() {
+	git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${ASSETS_EGIT_BRANCH}" "${ASSETS_EGIT_LOCAL_ID}"
+	git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${ASSETS_EGIT_LOCAL_ID}"
+	git-r3_src_unpack
+}
+
 src_prepare() {
 	cmake_src_prepare
+
+	if [[ ${PV} == *9999* ]]; then
+		if [[ ${PV} != *9999 ]]; then
+			sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
+				-i build_files/cmake/macros.cmake \
+				-i source/blender/blenkernel/intern/appdir.cc || die
+		fi
+	fi
 
 	blender_get_version
 
@@ -281,6 +320,8 @@ src_prepare() {
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
 	fi
+
+	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 }
 
 src_configure() {
@@ -440,8 +481,8 @@ src_install() {
 	if use doc; then
 		# Define custom blender data/script file paths. Otherwise Blender will not be able to find them during doc building.
 		# (Because the data is in the image directory and it will default to look in /usr/share)
-		export BLENDER_SYSTEM_SCRIPTS=${ED}/usr/share/blender/${BV}/scripts
-		export BLENDER_SYSTEM_DATAFILES=${ED}/usr/share/blender/${BV}/datafiles
+		export BLENDER_SYSTEM_SCRIPTS="${ED}/usr/share/blender/${BV}/scripts"
+		export BLENDER_SYSTEM_DATAFILES="${ED}/usr/share/blender/${BV}/datafiles"
 
 		# Workaround for binary drivers.
 		addwrite /dev/ati
@@ -476,6 +517,9 @@ src_install() {
 
 	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/blender-${BV}-thumbnailer" || die
 	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/blender-${BV}" || die
+
+	insinto "/usr/share/blender/${BV}/datafiles/assets"
+	doins -r "${WORKDIR}/blender-assets/publish/"*
 }
 
 pkg_postinst() {
