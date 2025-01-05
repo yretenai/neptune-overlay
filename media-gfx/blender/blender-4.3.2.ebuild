@@ -213,7 +213,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
 	"${FILESDIR}/${PN}-9999-clang.patch"
-	"${FILESDIR}/${PN}-9999-hiprt-parallel.patch"
+	"${FILESDIR}/${PN}-4.3.2-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-9999-hipcc-path.patch"
 	"${FILESDIR}/${PN}-9999-cycles-runtime-path.patch"
 )
