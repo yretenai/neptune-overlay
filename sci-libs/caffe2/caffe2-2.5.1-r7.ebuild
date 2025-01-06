@@ -69,7 +69,7 @@ RDEPEND="
 	)
 	rocm? (
 		llvm_slot_18? (
-			=dev-util/hip-6.1*[llvm_slot_18(-)]
+			>=dev-util/hip-6.1[llvm_slot_18(-)]
 			=dev-libs/rccl-6.1*
 			=sci-libs/rocThrust-6.1*
 			=sci-libs/rocPRIM-6.1*
@@ -84,7 +84,7 @@ RDEPEND="
 			=sci-libs/hipBLASLt-6.1*
 		)
 		llvm_slot_19? (
-			=dev-util/hip-6.3*[llvm_slot_19(-)]
+			>=dev-util/hip-6.3[llvm_slot_19(-)]
 			=dev-libs/rccl-6.3*
 			=sci-libs/rocThrust-6.3*
 			=sci-libs/rocPRIM-6.3*

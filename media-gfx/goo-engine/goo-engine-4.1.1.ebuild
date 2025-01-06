@@ -79,10 +79,10 @@ RDEPEND="${PYTHON_DEPS}
 	gmp? ( dev-libs/gmp )
 	hip? (
 		llvm_slot_18? (
-			>=dev-util/hip-6.1*:=[llvm_slot_18(-)]
+			>>=dev-util/hip-6.1:=[llvm_slot_18(-)]
 		)
 		llvm_slot_19? (
-			>=dev-util/hip-6.3*:=[llvm_slot_19(-)]
+			>>=dev-util/hip-6.3:=[llvm_slot_19(-)]
 		)
 	)
 	jack? ( virtual/jack )
