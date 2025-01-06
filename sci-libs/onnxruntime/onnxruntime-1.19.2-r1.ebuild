@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
+
 CMAKE_IN_SOURCE_BUILD=1
 PYTHON_COMPAT=( python3_{11..13} )
 DISTUTILS_USE_PEP517=setuptools
@@ -115,6 +116,7 @@ PATCHES=(
 	"${FILESDIR}/disable-ck-tile.patch"
 	"${FILESDIR}/protobuf.patch"
 	"${FILESDIR}/cstring.patch"
+	"${FILESDIR}/${PN}-abseil.patch"
 	#"${FILESDIR}/mpi.patch"
 )
 
@@ -312,8 +314,6 @@ src_configure() {
 			-Donnxruntime_HCC_AMDGPU_TARGET="$(get_amdgpu_flags)"
 		)
 	fi
-
-	CC=clang CXX=clang++
 
 	cmake_src_configure
 }
