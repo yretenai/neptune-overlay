@@ -13,9 +13,10 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..12} )
-LLVM_COMPAT=( 18 )
+LLVM_COMPAT=( 18 19 )
+LLVM_OPTIONAL=1
 EGIT_LFS="yes"
-ROCM_VERSION="6.1.2"
+ROCM_VERSION="6.3"
 
 inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
@@ -98,9 +99,12 @@ RDEPEND="${PYTHON_DEPS}
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp )
 	hip? (
-		$(llvm_gen_dep "
-			>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
-		")
+		llvm_slot_18? (
+			>=dev-util/hip-6.1*:=[llvm_slot_18(-)]
+		)
+		llvm_slot_19? (
+			>=dev-util/hip-6.3*:=[llvm_slot_19(-)]
+		)
 	)
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )
@@ -111,11 +115,7 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? (
-		$(llvm_gen_dep '
-			>=media-libs/oidn-2.3.0:=[llvm_slot_${LLVM_SLOT}]
-		')
-	)
+	oidn? ( >=media-libs/oidn-2.1.0[${LLVM_USEDEP}] )
 	openexr? (
 		>=dev-libs/imath-3.1.4-r2:=
 		>=media-libs/openexr-3:0=
@@ -128,10 +128,8 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	optix? ( <dev-libs/optix-7.5.0 )
 	osl? (
-		$(llvm_gen_dep '
-			>=media-libs/osl-1.13.10.0:=[llvm_slot_${LLVM_SLOT}]
-			>=media-libs/mesa-24.1.2[llvm_slot_${LLVM_SLOT}]
-		')
+		>=media-libs/osl-1.13:=[${LLVM_USEDEP}]
+		media-libs/mesa[${LLVM_USEDEP}]
 	)
 	pdf? ( media-libs/libharu )
 	potrace? ( media-gfx/potrace )
@@ -167,12 +165,6 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	llvm? (
-		$(llvm_gen_dep '
-			llvm-core/clang:${LLVM_SLOT}
-			llvm-core/llvm:${LLVM_SLOT}
-		')
-	)
 "
 
 DEPEND="${RDEPEND}
@@ -199,10 +191,8 @@ BDEPEND="
 		dev-util/wayland-scanner
 	)
 	llvm? (
-		$(llvm_gen_dep '
-			llvm-core/clang:${LLVM_SLOT}
-			llvm-core/llvm:${LLVM_SLOT}
-		')
+		llvm-core/clang:${LLVM_USEDEP}
+		llvm-core/llvm:${LLVM_USEDEP}
 	)
 "
 

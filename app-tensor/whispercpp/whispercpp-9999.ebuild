@@ -3,7 +3,8 @@
 
 EAPI=8
 
-inherit cmake
+LLVM_COMPAT=( 18 19 )
+inherit cmake llvm-r1
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++ "
 HOMEPAGE="https://github.com/ggerganov/whisper.cpp"
@@ -24,8 +25,14 @@ RESTRICT="!test? ( test )"
 
 DEPEND="
 	hip? (
-		sci-libs/hipBLAS:=
-		dev-util/hip:=
+		llvm_slot_18? (
+			=sci-libs/hipBLAS-6.1*:=
+			=dev-util/hip-6.1*:=[llvm_slot_18(-)]
+		)
+		llvm_slot_19? (
+			=sci-libs/hipBLAS-6.3*:=
+			=dev-util/hip-6.3*:=[llvm_slot_18(-)]
+		)
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	vulkan? ( media-libs/vulkan-loader )

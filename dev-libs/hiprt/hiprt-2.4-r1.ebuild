@@ -4,10 +4,10 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} python3_13t )
-LLVM_COMPAT=( 18 )
-ROCM_VERSION="6.1.2"
+LLVM_COMPAT=( 18 19 )
 CMAKE_BUILD_TYPE="Release"
 EGIT_LFS="no" # fetches test data
+ROCM_VERSION="6.3"
 
 inherit rocm cmake git-r3 python-single-r1 llvm-r1
 
@@ -31,9 +31,12 @@ REQUIRED_USE="
 
 RDEPEND="
 	${PYTHON_DEPS}
-	$(llvm_gen_dep "
-		>=dev-util/hip-${ROCM_VERSION}:=[llvm_slot_\${LLVM_SLOT}]
-	")
+	llvm_slot_18? (
+		=dev-util/hip-6.1*:=[llvm_slot_18(-)]
+	)
+	llvm_slot_19? (
+		=dev-util/hip-6.3*:=[llvm_slot_18(-)]
+	)
 "
 DEPEND="${RDEPEND}"
 

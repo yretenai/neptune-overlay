@@ -4,9 +4,9 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} python3_13t )
-LLVM_COMPAT=( {15..18} )
-ROCM_VERSION="6.1.2"
+LLVM_COMPAT=( {15..19} )
 EGIT_LFS="1"
+ROCM_VERSION="6.3"
 
 inherit cmake cuda llvm-r1 python-any-r1 rocm git-r3
 
@@ -32,7 +32,16 @@ RDEPEND="
 	dev-cpp/tbb:=
 	dev-lang/ispc
 	cuda? ( dev-util/nvidia-cuda-toolkit )
-	hip? ( dev-util/hip )
+	hip? (
+		llvm_slot_18? (
+			=sci-libs/hipBLAS-6.1*:=
+			=dev-util/hip-6.1*:=[llvm_slot_18(-)]
+		)
+		llvm_slot_19? (
+			=sci-libs/hipBLAS-6.3*:=
+			=dev-util/hip-6.3*:=[llvm_slot_18(-)]
+		)
+	)
 	openimageio? ( media-libs/openimageio:= )
 "
 DEPEND="${RDEPEND}"

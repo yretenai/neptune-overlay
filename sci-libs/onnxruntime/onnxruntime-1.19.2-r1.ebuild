@@ -7,10 +7,10 @@ PYTHON_COMPAT=( python3_{11..13} )
 DISTUTILS_USE_PEP517=setuptools
 DISTUTILS_SINGLE_IMPL=1
 DISTUTILS_EXT=1
-ROCM_VERSION="6.1.2"
 CUDA_TARGETS_COMPAT=( sm_50 sm_52 sm_53 sm_60 sm_61 sm_62 sm_70 sm_72 sm_75 sm_80 sm_86 sm_87 sm_89 sm_90 )
-LLVM_COMPAT=( 18 )
+LLVM_COMPAT=( 18 19 )
 CPU_FLAGS="cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512_vbmi2"
+ROCM_VERSION="6.3"
 
 inherit cmake cuda distutils-r1 flag-o-matic llvm-r1 rocm toolchain-funcs
 
@@ -27,7 +27,10 @@ SRC_URI="
 	https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_PV}.tar.gz -> flatbuffers-${FLATBUFFERS_PV}.tar.gz
 	https://github.com/HowardHinnant/date/archive/v${DATE_PV}.tar.gz -> hhdate-${DATE_PV}.tar.gz
 	https://gitlab.com/libeigen/eigen/-/archive/${EIGEN_PV}/eigen-${EIGEN_PV}.tar.bz2
-	hip? ( https://github.com/ROCm/composable_kernel/archive/rocm-${ROCM_VERSION}.tar.gz -> composable-kernel-${ROCM_VERSION}.tar.gz )
+	hip? (
+		llvm_slot_18? ( https://github.com/ROCm/composable_kernel/archive/rocm-6.1.1.tar.gz -> composable-kernel-6.1.1.tar.gz )
+		llvm_slot_19? ( https://github.com/ROCm/composable_kernel/archive/rocm-6.3.0.tar.gz -> composable-kernel-6.3.0.tar.gz )
+	)
 "
 
 LICENSE="MIT"
@@ -69,8 +72,13 @@ BDEPEND="
 	hip? (
 		sci-libs/hipFFT:=
 		sci-libs/hipCUB:=
-		>=dev-libs/rocr-runtime-${ROCM_VERSION}:=
-		>=dev-util/hip-${ROCM_VERSION}:=
+		dev-libs/rocr-runtime:=
+		llvm_slot_18? (
+			=dev-util/hip-6.1*:=[llvm_slot_18(-)]
+		)
+		llvm_slot_19? (
+			=dev-util/hip-6.3*:=[llvm_slot_18(-)]
+		)
 	)
 	xnnpack? ( sci-libs/XNNPACK )
 	python? (
@@ -170,6 +178,12 @@ src_configure() {
 
 	append-cxxflags -Wno-c++20-compat
 
+	if use llvm_slot_18; then
+		OUR_ROCM_VERSION="6.1.1"
+	else
+		OUR_ROCM_VERSION="6.3.0"
+	fi
+
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_INCLUDEDIR="include/${PN}"
 		-Donnxruntime_REQUIRE_PYTHON_EMBED_LIB=OFF
@@ -198,7 +212,7 @@ src_configure() {
 		-DFETCHCONTENT_QUIET=OFF
 		-DFETCHCONTENT_SOURCE_DIR_SAFEINT="${WORKDIR}/SafeInt-${SAFEINT_COMMIT}"
 		-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS="${WORKDIR}/flatbuffers-${FLATBUFFERS_PV}"
-		-DFETCHCONTENT_SOURCE_DIR_COMPOSABLE_KERNEL="${WORKDIR}/composable_kernel-rocm-${ROCM_VERSION}"
+		-DFETCHCONTENT_SOURCE_DIR_COMPOSABLE_KERNEL="${WORKDIR}/composable_kernel-rocm-${OUR_ROCM_VERSION}"
 		-DFETCHCONTENT_SOURCE_DIR_DATE="${WORKDIR}/date-${DATE_PV}"
 		-DFETCHCONTENT_SOURCE_DIR_EIGEN="${WORKDIR}/eigen-${EIGEN_PV}"
 		-Donnxruntime_USE_TENSORRT=$(usex tensorrt)
