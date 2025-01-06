@@ -5,6 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{10..12} )
 LLVM_COMPAT=( 18 19 )
+LLVM_OPTIONAL=1
 ROCM_VERSION=6.3
 inherit python-single-r1 cmake cuda flag-o-matic prefix rocm toolchain-funcs llvm-r1
 
@@ -134,6 +135,14 @@ PATCHES=(
 	"${FILESDIR}"/${P}-glog-0.6.0.patch
 	"${FILESDIR}"/${P}-newfix-functorch-install.patch
 )
+
+pkg_setup() {
+	python-single-r1_pkg_setup
+
+	if use rocm; then
+		llvm-r1_pkg_setup
+	fi
+}
 
 src_prepare() {
 	filter-lto #bug 862672
