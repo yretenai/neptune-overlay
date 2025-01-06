@@ -8,17 +8,19 @@ LLVM_COMPAT=( {15..19} )
 EGIT_LFS="1"
 ROCM_VERSION="6.3"
 
-inherit cmake cuda llvm-r1 python-any-r1 rocm git-r3
+inherit cmake cuda llvm-r1 python-any-r1 rocm
 
 DESCRIPTION="Intel® Open Image Denoise library"
 HOMEPAGE="https://www.openimagedenoise.org https://github.com/RenderKit/oidn"
 LICENSE="Apache-2.0"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/RenderKit/oidn.git"
-
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ ${PV} = *9999 ]]; then
+	EGIT_REPO_URI="https://github.com/RenderKit/oidn.git"
+	EGIT_BRANCH="master"
+	inherit git-r3
+else
+	SRC_URI="https://github.com/RenderKit/${PN}/releases/download/v${PV}/${P}.src.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
 fi
 
@@ -49,6 +51,7 @@ BDEPEND="${PYTHON_DEPS}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.2.2-amdgpu-targets.patch"
+	"${FILESDIR}/${PN}-${PV}-system-composable-kernel.patch"
 )
 
 src_prepare() {
