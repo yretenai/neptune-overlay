@@ -17,7 +17,7 @@ index 144374d..1bb2f7f 100644
          OutElementOp,            // CDEElementwiseOperation
          ConvSpec,                // ConvForwardSpecialization
          GemmSpec,                // GemmSpecialization
-+        4,                       // NumGemmKPrefetchStage
++        1,                       // NumGemmKPrefetchStage
          256,                     // BlockSize
          128,                     // MPerBlock
          64,                      // NPerBlock
