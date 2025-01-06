@@ -52,6 +52,7 @@ BDEPEND="${PYTHON_DEPS}"
 PATCHES=(
 	"${FILESDIR}/${PN}-2.2.2-amdgpu-targets.patch"
 	"${FILESDIR}/${PN}-${PV}-system-composable-kernel.patch"
+	"${FILESDIR}/${PN}-${PV}-composable-kernel-api.patch"
 )
 
 src_prepare() {
