@@ -60,8 +60,6 @@ RDEPEND="
 			>=dev-util/hip-6.3:=[llvm_slot_19(-)]
 		)
 	)
-	hip? (
-	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	clblast? ( sci-libs/clblast:=[cuda?] )
 	vulkan? (

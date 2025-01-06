@@ -100,10 +100,10 @@ RDEPEND="${PYTHON_DEPS}
 	gmp? ( dev-libs/gmp )
 	hip? (
 		llvm_slot_18? (
-			>>=dev-util/hip-6.1:=[llvm_slot_18(-)]
+			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
 		)
 		llvm_slot_19? (
-			>>=dev-util/hip-6.3:=[llvm_slot_19(-)]
+			>=dev-util/hip-6.3:=[llvm_slot_19(-)]
 		)
 	)
 	jack? ( virtual/jack )
@@ -191,8 +191,10 @@ BDEPEND="
 		dev-util/wayland-scanner
 	)
 	llvm? (
-		llvm-core/clang:${LLVM_USEDEP}
-		llvm-core/llvm:${LLVM_USEDEP}
+		$(llvm_gen_dep '
+			llvm-core/clang:${LLVM_SLOT}
+			llvm-core/llvm:${LLVM_SLOT}
+		')
 	)
 "
 
