@@ -236,7 +236,7 @@ src_configure() {
 		-Donnxruntime_TVM_USE_HASH=OFF
 		-Donnxruntime_USE_MIGRAPHX=OFF
 		-Donnxruntime_USE_COMPOSABLE_KERNEL=$(usex hip)
-		-Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=OFF # enable on 6.2.0
+		-Donnxruntime_USE_COMPOSABLE_KERNEL_CK_TILE=$(usex llvm_slot_19)
 		-Donnxruntime_CROSS_COMPILING=$(tc-is-cross-compiler && echo ON || echo OFF)
 		-Donnxruntime_DISABLE_CONTRIB_OPS=ON
 		-Donnxruntime_DISABLE_ML_OPS=ON
