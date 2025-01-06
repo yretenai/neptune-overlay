@@ -54,16 +54,14 @@ PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-system-composable-kernel.patch"
 )
 
-if use llvm_slot_19; then
-	PATCHES+=(
-		"${FILESDIR}/${PN}-${PV}-composable-kernel-api.patch"
-	)
-fi
-
 src_prepare() {
 	if use cuda; then
 		cuda_src_prepare
 		addpredict "/proc/self/task/"
+	fi
+
+	if use llvm_slot_19; then
+		eapply "${FILESDIR}/${PN}-${PV}-composable-kernel-api.patch"
 	fi
 
 	if use hip; then
