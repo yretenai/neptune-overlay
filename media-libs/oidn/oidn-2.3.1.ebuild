@@ -52,8 +52,13 @@ BDEPEND="${PYTHON_DEPS}"
 PATCHES=(
 	"${FILESDIR}/${PN}-2.2.2-amdgpu-targets.patch"
 	"${FILESDIR}/${PN}-${PV}-system-composable-kernel.patch"
-	"${FILESDIR}/${PN}-${PV}-composable-kernel-api.patch"
 )
+
+if use llvm_slot_19; then
+	PATCHES+=(
+		"${FILESDIR}/${PN}-${PV}-composable-kernel-api.patch"
+	)
+fi
 
 src_prepare() {
 	if use cuda; then
