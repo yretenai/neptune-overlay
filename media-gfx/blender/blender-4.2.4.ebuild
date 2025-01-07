@@ -514,19 +514,6 @@ pkg_postinst() {
 	elog "changing the 'Temporary Files' directory in Blender preferences."
 	elog
 
-	if use osl; then
-		ewarn
-		if use hip; then
-			ewarn "OSL is know to cause runtime segfaults if Mesa and/or HIP have been"
-			ewarn "linked to an other LLVM version than what OSL is linked to."
-		else
-			ewarn "OSL is know to cause runtime segfaults if Mesa has been linked to"
-			ewarn "an other LLVM version than what OSL is linked to."
-		fi
-		ewarn "Bug: https://bugs.gentoo.org/880671"
-		ewarn
-	fi
-
 	if ! use python_single_target_python3_11; then
 		ewarn
 		ewarn "You are building Blender with a newer python version than"
