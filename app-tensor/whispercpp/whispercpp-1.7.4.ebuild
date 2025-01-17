@@ -71,20 +71,20 @@ src_configure() {
 		-i "examples/bench/bench.cpp" \
 		-i "examples/command/command.cpp" \
 		-i "examples/lsp/lsp.cpp" \
-		-i "examples/main/main.cpp" \
+		-i "examples/cli/cli.cpp" \
 		-i "examples/server/server.cpp" \
 		-i "examples/stream/stream.cpp" \
 		-i "examples/talk-llama/talk-llama.cpp" \
-		-i "examples/talk/talk.cpp" \
 		-i "examples/wchess/wchess.cmd/wchess.cmd.cpp" || die "can't fix default model path"
 
 	# fix hardcoded macOS specific path
 	sed -e "s|/System/Library/Fonts/Supplemental/Courier New Bold.ttf|${EPREFIX}/usr/share/fonts/roboto/Roboto-Bold.ttf|" \
 		-i "examples/server/server.cpp" \
-		-i "examples/main/main.cpp" || die "can't fix default font path"
+		-i "examples/cli/cli.cpp" || die "can't fix default font path"
 
 	local mycmakeargs=(
-		-DWHISPER_BUILD_EXAMPLES=ON # main is an example
+		-DWHISPER_BUILD_EXAMPLES=ON # cli is an example
+		-DWHISPER_CURL=OFF
 		-DWHISPER_BUILD_SERVER=ON
 		-DWHISPER_BUILD_TESTS=$(usex test)
 		-DWHISPER_FFMPEG=$(usex ffmpeg)
@@ -97,6 +97,7 @@ src_configure() {
 		-DGGML_SYCL=OFF # $(usex sycl)
 		-DGGML_STATIC=OFF
 		-DGGML_LTO=OFF # breaks shared
+		-DGGML_CCACHE=OFF
 		-DGGML_AVX512=$(usex cpu_flags_x86_avx512dq)
 		-DGGML_AVX512_VBMI=$(usex cpu_flags_x86_avx512_vbmi2)
 		-DGGML_AVX512_VNNI=$(usex cpu_flags_x86_avx512_vnni)
