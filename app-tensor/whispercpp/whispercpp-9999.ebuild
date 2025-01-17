@@ -59,11 +59,6 @@ REQUIRED_USE="
 	?? ( hip cuda vulkan openblas )
 "
 
-PATCHES=(
-	"${FILESDIR}/prefix-whisper-name.patch"
-	"${FILESDIR}/install-examples.patch"
-)
-
 src_prepare() {
 	# :(
 	dos2unix "${S}/examples/sycl/CMakeLists.txt"
