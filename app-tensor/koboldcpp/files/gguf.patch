@@ -1,5 +1,5 @@
 diff --git a/convert_hf_to_gguf.py b/convert_hf_to_gguf.py
-index 4e6c0f6..698f412 100644
+index 95f1120..4faac01 100644
 --- a/convert_hf_to_gguf.py
 +++ b/convert_hf_to_gguf.py
 @@ -24,8 +24,6 @@ import torch
@@ -25,7 +25,7 @@ index 29b14e9..a93fab0 100755
  
  logger = logging.getLogger("ggml-to-gguf")
 diff --git a/convert_lora_to_gguf.py b/convert_lora_to_gguf.py
-index ed1014c..58e62fc 100755
+index 6dea14a..7e0d68e 100755
 --- a/convert_lora_to_gguf.py
 +++ b/convert_lora_to_gguf.py
 @@ -19,8 +19,6 @@ import torch
@@ -37,77 +37,77 @@ index ed1014c..58e62fc 100755
  import gguf
  
  # reuse model definitions from convert_hf_to_gguf.py
-diff --git a/gguf-py/scripts/gguf_convert_endian.py b/gguf-py/scripts/gguf_convert_endian.py
-index b698af0..ea6ae8e 100755
---- a/gguf-py/scripts/gguf_convert_endian.py
-+++ b/gguf-py/scripts/gguf_convert_endian.py
+diff --git a/gguf-py/gguf/scripts/gguf_convert_endian.py b/gguf-py/gguf/scripts/gguf_convert_endian.py
+index f97e91b..ea6ae8e 100755
+--- a/gguf-py/gguf/scripts/gguf_convert_endian.py
++++ b/gguf-py/gguf/scripts/gguf_convert_endian.py
 @@ -10,10 +10,6 @@ from pathlib import Path
  
  import numpy as np
  
 -# Necessary to load the local gguf package
--if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent / 'gguf-py').exists():
--    sys.path.insert(0, str(Path(__file__).parent.parent))
+-if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent.parent / 'gguf-py').exists():
+-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 -
  import gguf
  
  logger = logging.getLogger("gguf-convert-endian")
-diff --git a/gguf-py/scripts/gguf_dump.py b/gguf-py/scripts/gguf_dump.py
-index 1b65465..31278d1 100755
---- a/gguf-py/scripts/gguf_dump.py
-+++ b/gguf-py/scripts/gguf_dump.py
+diff --git a/gguf-py/gguf/scripts/gguf_dump.py b/gguf-py/gguf/scripts/gguf_dump.py
+index f95b4fd..31278d1 100755
+--- a/gguf-py/gguf/scripts/gguf_dump.py
++++ b/gguf-py/gguf/scripts/gguf_dump.py
 @@ -11,10 +11,6 @@ from typing import Any
  
  import numpy as np
  
 -# Necessary to load the local gguf package
--if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent / 'gguf-py').exists():
--    sys.path.insert(0, str(Path(__file__).parent.parent))
+-if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent.parent / 'gguf-py').exists():
+-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 -
  from gguf import GGUFReader, GGUFValueType, ReaderTensor  # noqa: E402
  
  logger = logging.getLogger("gguf-dump")
-diff --git a/gguf-py/scripts/gguf_hash.py b/gguf-py/scripts/gguf_hash.py
-index ee34d09..bae689a 100755
---- a/gguf-py/scripts/gguf_hash.py
-+++ b/gguf-py/scripts/gguf_hash.py
+diff --git a/gguf-py/gguf/scripts/gguf_hash.py b/gguf-py/gguf/scripts/gguf_hash.py
+index 3ef9899..bae689a 100755
+--- a/gguf-py/gguf/scripts/gguf_hash.py
++++ b/gguf-py/gguf/scripts/gguf_hash.py
 @@ -12,10 +12,6 @@ from pathlib import Path
  
  from tqdm import tqdm
  
 -# Necessary to load the local gguf package
--if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent / 'gguf-py').exists():
--    sys.path.insert(0, str(Path(__file__).parent.parent))
+-if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent.parent / 'gguf-py').exists():
+-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 -
  from gguf import GGUFReader  # noqa: E402
  
  
-diff --git a/gguf-py/scripts/gguf_new_metadata.py b/gguf-py/scripts/gguf_new_metadata.py
-index fce52a8..ca96427 100755
---- a/gguf-py/scripts/gguf_new_metadata.py
-+++ b/gguf-py/scripts/gguf_new_metadata.py
+diff --git a/gguf-py/gguf/scripts/gguf_new_metadata.py b/gguf-py/gguf/scripts/gguf_new_metadata.py
+index a8cfc9d..ca96427 100755
+--- a/gguf-py/gguf/scripts/gguf_new_metadata.py
++++ b/gguf-py/gguf/scripts/gguf_new_metadata.py
 @@ -12,10 +12,6 @@ import numpy as np
  from tqdm import tqdm
  from typing import Any, Sequence, NamedTuple
  
 -# Necessary to load the local gguf package
--if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent / 'gguf-py').exists():
--    sys.path.insert(0, str(Path(__file__).parent.parent))
+-if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent.parent / 'gguf-py').exists():
+-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 -
  import gguf
  
  logger = logging.getLogger("gguf-new-metadata")
-diff --git a/gguf-py/scripts/gguf_set_metadata.py b/gguf-py/scripts/gguf_set_metadata.py
-index e35b651..18f987f 100755
---- a/gguf-py/scripts/gguf_set_metadata.py
-+++ b/gguf-py/scripts/gguf_set_metadata.py
+diff --git a/gguf-py/gguf/scripts/gguf_set_metadata.py b/gguf-py/gguf/scripts/gguf_set_metadata.py
+index f5809c3..18f987f 100755
+--- a/gguf-py/gguf/scripts/gguf_set_metadata.py
++++ b/gguf-py/gguf/scripts/gguf_set_metadata.py
 @@ -5,10 +5,6 @@ import os
  import sys
  from pathlib import Path
  
 -# Necessary to load the local gguf package
--if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent / 'gguf-py').exists():
--    sys.path.insert(0, str(Path(__file__).parent.parent))
+-if "NO_LOCAL_GGUF" not in os.environ and (Path(__file__).parent.parent.parent.parent / 'gguf-py').exists():
+-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 -
  from gguf import GGUFReader  # noqa: E402
  
