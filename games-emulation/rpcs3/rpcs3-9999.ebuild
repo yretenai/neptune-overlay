@@ -48,7 +48,7 @@ DEPEND="
 	dev-libs/flatbuffers
 	dev-libs/hidapi
 	dev-libs/libevdev
-	dev-libs/pugixml
+	>=dev-libs/pugixml-15
 	dev-libs/xxhash
 	dev-qt/qtbase:6[concurrent,dbus,gui,widgets]
 	dev-qt/qtmultimedia:6
