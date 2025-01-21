@@ -39,13 +39,13 @@ avalonia@11.1.3
 avalonia@11.2.0
 avalonia@11.2.2
 avaloniaedit.textmate@11.1.0
-bannerlord.launchermanager.localization@1.0.138
-bannerlord.launchermanager.models@1.0.138
-bannerlord.launchermanager@1.0.138
+bannerlord.launchermanager.localization@1.0.140
+bannerlord.launchermanager.models@1.0.140
+bannerlord.launchermanager@1.0.140
 bannerlord.modulemanager.models@5.0.221
-bannerlord.modulemanager.models@6.0.242
+bannerlord.modulemanager.models@6.0.246
 bannerlord.modulemanager@5.0.225
-bannerlord.modulemanager@6.0.242
+bannerlord.modulemanager@6.0.246
 benchmarkdotnet.annotations@0.14.0
 benchmarkdotnet@0.14.0
 bitfaster.caching@2.5.2
@@ -78,17 +78,17 @@ fomodinstaller.interface@1.2.0
 fomodinstaller.scripting.xmlscript@1.0.0
 fomodinstaller.scripting@1.0.0
 fomodinstaller.utils@1.0.0
-gamefinder.common@4.3.3
-gamefinder.launcher.heroic@4.3.3
-gamefinder.registryutils@4.3.3
-gamefinder.storehandlers.eadesktop@4.3.3
-gamefinder.storehandlers.egs@4.3.3
-gamefinder.storehandlers.gog@4.3.3
-gamefinder.storehandlers.origin@4.3.3
-gamefinder.storehandlers.steam@4.3.3
-gamefinder.storehandlers.xbox@4.3.3
-gamefinder.wine@4.3.3
-gamefinder@4.3.3
+gamefinder.common@4.4.0
+gamefinder.launcher.heroic@4.4.0
+gamefinder.registryutils@4.4.0
+gamefinder.storehandlers.eadesktop@4.4.0
+gamefinder.storehandlers.egs@4.4.0
+gamefinder.storehandlers.gog@4.4.0
+gamefinder.storehandlers.origin@4.4.0
+gamefinder.storehandlers.steam@4.4.0
+gamefinder.storehandlers.xbox@4.4.0
+gamefinder.wine@4.4.0
+gamefinder@4.4.0
 gee.external.capstone@2.3.0
 githubactionstestlogger@2.4.1
 google.protobuf@3.22.5
@@ -172,7 +172,6 @@ livechartscore.skiasharpview@2.0.0-rc2
 livechartscore@2.0.0-rc2
 magick.net-q16-anycpu@14.0.0
 magick.net.core@14.0.0
-markdig@0.38.0
 markdown.avalonia.tight@11.0.3-a1
 martincostello.logging.xunit@0.3.0
 memorypack.core@1.21.3
@@ -209,7 +208,7 @@ microsoft.codeanalysis.testing.verifiers.xunit@1.1.2
 microsoft.codeanalysis.workspaces.common@1.0.1
 microsoft.codeanalysis.workspaces.common@3.8.0
 microsoft.codeanalysis.workspaces.common@4.8.0
-microsoft.codecoverage@17.11.1
+microsoft.codecoverage@17.12.0
 microsoft.composition@1.0.27
 microsoft.csharp@4.7.0
 microsoft.diagnostics.netcore.client@0.2.251802
@@ -295,7 +294,7 @@ microsoft.extensions.telemetry@9.0.0
 microsoft.extensions.timeprovider.testing@9.0.0
 microsoft.io.recyclablememorystream@3.0.0
 microsoft.net.http.headers@9.0.0
-microsoft.net.test.sdk@17.11.1
+microsoft.net.test.sdk@17.12.0
 microsoft.netcore.platforms@1.1.0
 microsoft.netcore.platforms@2.0.0
 microsoft.netcore.platforms@2.1.2
@@ -304,8 +303,8 @@ microsoft.netcore.targets@1.1.0
 microsoft.sourcelink.common@8.0.0
 microsoft.sourcelink.github@8.0.0
 microsoft.testplatform.objectmodel@17.10.0
-microsoft.testplatform.objectmodel@17.11.1
-microsoft.testplatform.testhost@17.11.1
+microsoft.testplatform.objectmodel@17.12.0
+microsoft.testplatform.testhost@17.12.0
 microsoft.visualstudio.composition.netfxattributes@16.1.8
 microsoft.visualstudio.composition@16.1.8
 microsoft.visualstudio.threading.analyzers@17.10.48
@@ -368,7 +367,10 @@ polly.ratelimiting@8.4.2
 polly@8.5.0
 projektanker.icons.avalonia.materialdesign@9.4.1
 projektanker.icons.avalonia@9.4.1
+protobuf-net.core@3.2.45
+protobuf-net@3.2.45
 qoisharp@1.0.0
+qrcoder@1.6.0
 r3@1.0.0
 r3@1.2.9
 r3extensions.avalonia@1.2.9
@@ -445,6 +447,7 @@ splat.microsoft.extensions.logging@15.2.22
 splat@14.8.12
 splat@15.1.1
 splat@15.2.22
+steamkit2@3.0.0
 strawberryshake.core@14.1.0
 strawberryshake.resources@14.1.0
 strawberryshake.server@14.1.0
@@ -671,26 +674,23 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/Nexus-Mods/NexusMods.App.git"
 else
 	NEXUSDOCS_PV="fe4e8b1b26d2c2917b404b0b091bfa31f135e337"
-	SMAPI_PV="4.1.9"
+	SMAPI_PV="4.1.10"
 
 	SRC_URI="
 		https://github.com/Nexus-Mods/NexusMods.App/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz
 		https://github.com/Pathoschild/SMAPI/archive/refs/tags/${SMAPI_PV}.tar.gz -> SMAPI-${SMAPI_PV}.tar.gz
 		https://github.com/Nexus-Mods/NexusMods.MkDocsMaterial.Themes.Next/archive/${NEXUSDOCS_PV}.tar.gz -> NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}.tar.gz
+		${NUGET_URIS}
 	"
 	S="${WORKDIR}/NexusMods.App-${PV}"
 	KEYWORDS="~amd64"
 fi
 
-SRC_URI="
-	${SRC_URI}
-	${NUGET_URIS}
-"
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
 SLOT="0"
 
 IUSE="p7zip"
-RESTRICT="mirror"
+RESTRICT="${RESTRICT} mirror"
 
 # jemalloc causes a TLS issue?
 RDEPEND="
@@ -742,7 +742,7 @@ DOTNET_PKG_TEST_EXTRA_ARGS+=(
 )
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-SMAPI.patch"
+	"${FILESDIR}/${PN}-SMAPI.patch"
 )
 
 src_unpack() {
@@ -753,15 +753,17 @@ src_unpack() {
 }
 
 src_prepare() {
-	rm -d "${S}/extern/SMAPI"
-	rm -d "${S}/docs/Nexus"
-	mv "${WORKDIR}/SMAPI-${SMAPI_PV}" "${S}/extern/SMAPI"
-	mv "${WORKDIR}/NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}" "${S}/docs/Nexus"
+	if [[ "${PV}" != *9999* ]]; then
+		rm -d "${S}/extern/SMAPI"
+		rm -d "${S}/docs/Nexus"
+		mv "${WORKDIR}/SMAPI-${SMAPI_PV}" "${S}/extern/SMAPI"
+		mv "${WORKDIR}/NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}" "${S}/docs/Nexus"
+	fi
 
 	rm src/src.sln
 
 	dos2unix src/Games/NexusMods.Games.StardewValley.SMAPI/NexusMods.Games.StardewValley.SMAPI.csproj
-	dotnet-pkg_src_prepare
+	neptune-dotnet_src_prepare
 }
 
 src_install() {
