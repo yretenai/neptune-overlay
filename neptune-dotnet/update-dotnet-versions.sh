@@ -19,10 +19,12 @@ dotnet_apply() {
 	fi
 }
 
-TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-sdk dotnet-cli-bin dotnet-man netstandard"
+TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-sdk dotnet-cli-bin dotnet-man"
 for TARGET in $TARGETS; do
-	find "${ADADOTNET_ROOT}/${TARGET}" -iname "*.ebuild" -delete
+	find "${ADADOTNET_ROOT}/${TARGET}" \( -iname "*8.0*.ebuild" -or -iname "*9.0*.ebuild" \) -delete
 done
+
+find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
 
 LATEST_NETSTANDARD_VERSION="2.1.0"
 IS_FIRST=Y
@@ -48,10 +50,14 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
 		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
 		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
+
+		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
 	else
 		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_RUNTIME}"
 		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
 		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
+
+		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
 
 		if [ "${IS_FIRST}" = "Y" ]; then
 			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
@@ -65,7 +71,9 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 		fi
 	fi
 
-	if [ "${RELEASE_CHANNEL}" = "5.0" ]; then
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
+
+	if [ "${RELEASE_CHANNEL}" = "8.0" ]; then
 		break
 	fi
 done

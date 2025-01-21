@@ -12,7 +12,7 @@ update_discord() {
 	echo $NAME version is $VERSION
 	EBUILD_NAME="${EBUILD_PRE}0.0.${VERSION}.ebuild"
 	find "${NETIM_ROOT}/${NAME}" -iname "*.ebuild" -print -delete
-	cp $EBUILD_TEMPLATE $EBUILD_NAME 
+	cp $EBUILD_TEMPLATE $EBUILD_NAME
 	OLD_PWD="$PWD"
 	cd "${NETIM_ROOT}/${NAME}"
 	ebuild "$EBUILD_NAME" manifest

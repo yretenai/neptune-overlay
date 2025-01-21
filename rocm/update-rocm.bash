@@ -25,12 +25,12 @@ PKGMAP="
 	hipBLAS -> sci-libs/hipBLAS
 	hipBLASLt -> sci-libs/hipBLASLt
 	hipFFT -> sci-libs/hipFFT
-	hipFORT -> 
+	hipFORT ->
 	hipRAND -> sci-libs/hipRAND
 	hipSOLVER -> sci-libs/hipSOLVER
 	hipSPARSE -> sci-libs/hipSPARSE
-	hipSPARSELt -> 
-	rocALUTION -> 
+	hipSPARSELt ->
+	rocALUTION ->
 	rocBLAS -> sci-libs/rocBLAS
 	rocFFT -> sci-libs/rocFFT
 	rocRAND -> sci-libs/rocRAND
@@ -152,12 +152,12 @@ curl --silent --fail ${COMPAT_MATRIX_URI} | while IFS="\n" read -r LINE; do
 
 	# (:doc:)?`Name\s+\(\w+\)\s+<uri>
 	MODULE="$(echo ${LINE} | awk -F'[`,(<]' '{print $2}' | xargs)"
-	
+
 	if [ -z "${MODULE}" ]; then
 		continue
 	fi
 
 	VERSION="$(echo ${LINE} | awk -F'[,]' '{print $3}' | xargs)"
-	
+
 	process_pkg "${MODULE}" "${VERSION}"
 done
