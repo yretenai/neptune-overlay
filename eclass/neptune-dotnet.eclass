@@ -153,6 +153,29 @@ neptune-dotnet_dolauncher() {
 	doexe "${executable_target}"
 }
 
+
+# @FUNCTION: neptune-dotnet_restore
+# @USAGE: [args] ...
+# @DESCRIPTION:
+# Restore the package using "dotnet restore".
+# Restore is performed in current directory unless a different directory is
+# passed via "args".
+#
+# Additionally any number of "args" maybe be given, they are appended to
+# the "dotnet" command invocation.
+neptune-dotnet_restore() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	local -a restore_args=(
+		--runtime "${DOTNET_PKG_RUNTIME}"
+		--verbosity "${DOTNET_VERBOSITY}"
+		-maxCpuCount:$(makeopts_jobs)
+		"${@}"
+	)
+
+	edotnet restore "${restore_args[@]}"
+}
+
 # @FUNCTION: neptune-dotnet_pkg_setup
 # @DESCRIPTION:
 # Default "src_configure" for the "neptune-dotnet" eclass.
@@ -160,7 +183,18 @@ neptune-dotnet_dolauncher() {
 #
 neptune-dotnet_src_configure() {
 	addpredict "${EPREFIX}/opt/neptune-dotnet/metadata/"
-	dotnet-pkg_src_configure
+	if [[ "${PV}" == *9999* ]]; then
+		dotnet-pkg-base_info
+
+		dotnet-pkg_foreach-project \
+			neptune-dotnet_restore "${DOTNET_PKG_RESTORE_EXTRA_ARGS[@]}"
+
+		dotnet-pkg-base_foreach-solution \
+			"$(pwd)" \
+			neptune-dotnet_restore "${DOTNET_PKG_RESTORE_EXTRA_ARGS[@]}"
+	else
+		dotnet-pkg_src_configure
+	fi
 }
 
 # @FUNCTION: neptune-dotnet_pkg_setup
@@ -178,6 +212,24 @@ neptune-dotnet_pkg_setup() {
 	export DOTNET_PKG_OUTPUT="$(dotnet-pkg-base_get-output "${P}")"
 }
 
+neptune-dotnet_src_prepare() {
+	dotnet-pkg-base_remove-global-json
+	dotnet-pkg-base_foreach-solution "$(pwd)" dotnet-pkg_remove-bad
+
+	if [[ "${PV}" != *9999* ]]; then
+		find "$(pwd)" -maxdepth 1 -iname "nuget.config" -delete ||
+			die "${FUNCNAME[0]}: failed to remove unwanted \"NuGet.config\" config files"
+		nuget_writeconfig "$(pwd)/"
+	fi
+
+	default
+}
+
+if [[ "${PV}" == *9999* ]]; then
+	# allow nuget downloading
+	RESTRICT="network-sandbox"
 fi
 
-EXPORT_FUNCTIONS src_configure pkg_setup
+fi
+
+EXPORT_FUNCTIONS src_configure pkg_setup src_prepare
