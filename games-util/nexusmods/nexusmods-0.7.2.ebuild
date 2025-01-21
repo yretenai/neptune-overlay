@@ -172,6 +172,7 @@ livechartscore.skiasharpview@2.0.0-rc2
 livechartscore@2.0.0-rc2
 magick.net-q16-anycpu@14.0.0
 magick.net.core@14.0.0
+markdig@0.38.0
 markdown.avalonia.tight@11.0.3-a1
 martincostello.logging.xunit@0.3.0
 memorypack.core@1.21.3
