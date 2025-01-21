@@ -70,7 +70,7 @@ BDEPEND="
 
 src_unpack() {
 	default
-	
+
 	if [[ "${PV}" == *99999999* ]]; then
 		if use atrac9; then
 			git-r3_fetch "${ATRAC9_EGIT_REPO_URI}" "${ATRAC9_EGIT_COMMIT}" "${ATRAC9_EGIT_LOCAL_ID}"

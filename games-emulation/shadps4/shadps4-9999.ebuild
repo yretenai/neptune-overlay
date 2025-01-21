@@ -94,7 +94,7 @@ src_prepare() {
 }
 
 src_configure() {
-	if use clang; then 
+	if use clang; then
 		CC="${CHOST}-clang"
 		CXX="${CHOST}-clang++"
 		AR=llvm-ar

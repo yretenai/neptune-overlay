@@ -8,6 +8,27 @@ DOTNET_PV="${PV}"
 
 inherit unpacker
 
+NUGETS="
+	microsoft.aspnetcore.app.runtime.linux-arm@${PV}
+	microsoft.aspnetcore.app.runtime.linux-arm64@${PV}
+	microsoft.aspnetcore.app.runtime.linux-musl-arm@${PV}
+	microsoft.aspnetcore.app.runtime.linux-musl-arm64@${PV}
+	microsoft.aspnetcore.app.runtime.linux-musl-x64@${PV}
+	microsoft.aspnetcore.app.runtime.linux-x64@${PV}
+	microsoft.netcore.app.host.linux-arm@${PV}
+	microsoft.netcore.app.host.linux-arm64@${PV}
+	microsoft.netcore.app.host.linux-musl-arm@${PV}
+	microsoft.netcore.app.host.linux-musl-arm64@${PV}
+	microsoft.netcore.app.host.linux-musl-x64@${PV}
+	microsoft.netcore.app.host.linux-x64@${PV}
+	microsoft.netcore.app.runtime.linux-arm@${PV}
+	microsoft.netcore.app.runtime.linux-arm64@${PV}
+	microsoft.netcore.app.runtime.linux-musl-arm@${PV}
+	microsoft.netcore.app.runtime.linux-musl-arm64@${PV}
+	microsoft.netcore.app.runtime.linux-musl-x64@${PV}
+	microsoft.netcore.app.runtime.linux-x64@${PV}
+"
+
 DESCRIPTION="dotnet aspnet core runtime"
 HOMEPAGE="https://github.com/dotnet/aspnetcore"
 SRC_URI="

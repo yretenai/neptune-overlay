@@ -117,7 +117,7 @@ electron-r1_stage() {
 electron-r1_doasar() {
 	[[ ${EBUILD_PHASE} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
-	
+
 	insinto "${ELECTRON_DESTDIR}/resources"
 	doins app.asar
 	if [ -d "app.asar.unpacked" ]; then

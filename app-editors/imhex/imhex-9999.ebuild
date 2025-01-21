@@ -28,7 +28,7 @@ inherit git-r3
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 SRC_URI="
 	https://github.com/sammycage/plutovg/archive/refs/tags/v${PLUTOVG_PV}.tar.gz -> ${PN}-plutovg-${PLUTOVG_PV}.tar.gz
-	${NUGET_URIS}	
+	${NUGET_URIS}
 "
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
