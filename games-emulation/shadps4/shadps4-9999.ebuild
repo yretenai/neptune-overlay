@@ -89,6 +89,8 @@ src_prepare() {
 
 	find src \( -iname "*.cpp" -or -iname "*.h" \) -exec sed -e "s|#include <magic_enum/|#include <|" -i "{}" \; || die
 	sed -e "s|magic_enum .* CONFIG|magic_enum CONFIG|" -i CMakeLists.txt || die
+	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c  || die
+	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c  || die
 
 	cmake_src_prepare
 }
