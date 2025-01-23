@@ -11,13 +11,11 @@ inherit cmake flag-o-matic lua-single systemd xdg
 DESCRIPTION="A free open-source voxel game engine with easy modding and game creation"
 HOMEPAGE="https://www.luanti.org"
 
-# todo: move to luanti-org/luanti when they have moved
 if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/minetest/minetest.git"
+	EGIT_REPO_URI="https://github.com/luanti-org/luanti.git"
 else
-	SRC_URI="https://github.com/minetest/minetest/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/minetest-${PV}"
+	SRC_URI="https://github.com/luanti-org/luanti/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
 fi
 
