@@ -1,5 +1,5 @@
 diff --git a/source/blender/draw/engines/overlay/overlay_next_private.hh b/source/blender/draw/engines/overlay/overlay_next_private.hh
-index ea64646fc04..86edcd00ba8 100644
+index 4c9c1d47688..c5bc2a420dc 100644
 --- a/source/blender/draw/engines/overlay/overlay_next_private.hh
 +++ b/source/blender/draw/engines/overlay/overlay_next_private.hh
 @@ -8,6 +8,8 @@
@@ -8,6 +8,6 @@ index ea64646fc04..86edcd00ba8 100644
  
 +#include <functional>
 +
+ #include "BKE_context.hh"
  #include "BKE_movieclip.h"
  #include "BKE_object.hh"
- 
