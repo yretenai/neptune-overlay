@@ -24,10 +24,6 @@ LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 
-RDEPEND="
-	!dev-lang/deno
-"
-
 BDEPEND="
 	app-arch/unzip
 "
@@ -36,8 +32,8 @@ QA_PREBUILT="*"
 
 src_compile() {
 	./deno completions bash > "deno.bash" || die
-	./deno completions zsh  > "deno.zsh"  || die
-	./deno completions fish  > "deno.fish"  || die
+	./deno completions zsh > "deno.zsh" || die
+	./deno completions fish > "deno.fish" || die
 }
 
 src_install() {

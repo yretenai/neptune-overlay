@@ -7,7 +7,6 @@ EAPI=8
 
 MY_PV="${PV/_*/}"
 
-
 CRATES="
 	addr2line@0.24.2
 	adler2@2.0.0
@@ -237,8 +236,8 @@ CRATES="
 
 inherit cargo
 
-DESCRIPTION=""
-HOMEPAGE=""
+DESCRIPTION="TUI downloader & update checker for Nexus Mods"
+HOMEPAGE="https://github.com/dandels/dmodman"
 SRC_URI="
 	https://github.com/dandels/dmodman/archive/refs/tags/v${MY_PV}-beta.tar.gz -> ${PV}-${PV}.tar.gz
 	${CARGO_CRATE_URIS}

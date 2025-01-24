@@ -21,6 +21,7 @@ else
 fi
 
 IUSE="test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	${PYTHON_DEPS}

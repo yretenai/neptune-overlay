@@ -3,6 +3,7 @@
 
 # @ECLASS: neptune-dotnet.eclass
 # @SUPPORTED_EAPIS: 8
+# @PROVIDES: dotnet-pkg-base dotnet-pkg
 # @BLURB: Eclass for dotnet build processes using dotnet-pkg
 # @MAINTAINER:
 # Ada <ada@chronovore.dev>
@@ -153,7 +154,6 @@ neptune-dotnet_dolauncher() {
 	doexe "${executable_target}"
 }
 
-
 # @FUNCTION: neptune-dotnet_restore
 # @USAGE: [args] ...
 # @DESCRIPTION:
@@ -176,11 +176,10 @@ neptune-dotnet_restore() {
 	edotnet restore "${restore_args[@]}"
 }
 
-# @FUNCTION: neptune-dotnet_pkg_setup
+# @FUNCTION: neptune-dotnet_src_configure
 # @DESCRIPTION:
 # Default "src_configure" for the "neptune-dotnet" eclass.
 # Configure the package.
-#
 neptune-dotnet_src_configure() {
 	addpredict "${EPREFIX}/opt/neptune-dotnet/metadata/"
 	if [[ "${PV}" == *9999* ]]; then
@@ -202,7 +201,6 @@ neptune-dotnet_src_configure() {
 # Sets up "DOTNET_PKG_EXECUTABLE" variable for later use in "edotnet".
 # Also sets up "DOTNET_PKG_CONFIGURATION" and "DOTNET_PKG_OUTPUT"
 # for "neptune-dotnet_src_configure" and "dotnet-pkg_src_compile".
-#
 neptune-dotnet_pkg_setup() {
 	export DOTNET_ROOT
 	export DOTNET_PKG_EXECUTABLE

@@ -20,21 +20,21 @@ inherit dotnet-pkg cmake llvm-r1 toolchain-funcs desktop vcs-clean
 DESCRIPTION="A hex editor for reverse engineers, programmers, and eyesight"
 HOMEPAGE="https://github.com/WerWolv/ImHex"
 
-SRC_URI="${NUGET_URIS}"
-LICENSE="GPL-2"
-SLOT="0"
-
 inherit git-r3
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
+
 SRC_URI="
 	https://github.com/sammycage/plutovg/archive/refs/tags/v${PLUTOVG_PV}.tar.gz -> ${PN}-plutovg-${PLUTOVG_PV}.tar.gz
 	${NUGET_URIS}
 "
+
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
 	KEYWORDS="~amd64"
 fi
 
+LICENSE="GPL-2"
+SLOT="0"
 IUSE="+system-llvm lto"
 RESTRICT="mirror"
 

@@ -19,7 +19,6 @@ SRC_URI="
 		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-arm64.tar.gz )
 		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-arm64.tar.gz )
 	)
-	${NUGET_URIS}
 "
 
 S="${WORKDIR}"
@@ -37,11 +36,6 @@ RDEPEND="
 	!neptune-dotnet/dotnet-sdk:${SLOT}
 	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 "
-
-src_unpack() {
-	nuget_link-nuget-archives
-	nuget_unpack-non-nuget-archives
-}
 
 src_install() {
 	# install into existing dotnet env

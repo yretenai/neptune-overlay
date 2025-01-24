@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..12} )
 inherit python-single-r1 desktop xdg
 
 DESCRIPTION="Python fitting assistant, cross-platform fitting tool for EVE Online"
@@ -32,6 +32,7 @@ else
 fi
 
 RDEPEND="
+	${PYTHON_DEPS}
 	$(python_gen_cond_dep '
 		dev-python/wxpython[webkit,${PYTHON_USEDEP}]
 		dev-python/logbook[${PYTHON_USEDEP}]
@@ -54,6 +55,7 @@ DEPEND="${RDEPEND}"
 BDEPEND="
 	sys-devel/gettext
 "
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 src_compile() {
 	find locale/ -type f -name "*.po" -exec msgen "{}" -o "{}" \;

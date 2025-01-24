@@ -3,7 +3,6 @@
 
 EAPI=8
 
-
 CRATES="
 	anstream@0.6.18
 	anstyle-parse@0.2.6

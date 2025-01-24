@@ -53,6 +53,8 @@ BDEPEND="
 	)
 "
 
+RESTRICT="!test? ( test )"
+
 PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-cfg-location.patch"
 )

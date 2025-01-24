@@ -210,8 +210,8 @@ CRATES="
 
 inherit cargo
 
-DESCRIPTION=""
-HOMEPAGE=""
+DESCRIPTION="TUI downloader & update checker for Nexus Mods"
+HOMEPAGE="https://github.com/dandels/dmodman"
 SRC_URI="
 	https://github.com/dandels/dmodman/archive/${COMMIT}.tar.gz -> $PN-$PV.tar.gz
 	${CARGO_CRATE_URIS}

@@ -53,7 +53,6 @@ BDEPEND="
 	app-text/dos2unix
 "
 
-
 REQUIRED_USE="
 	hipuma? ( hip )
 	?? ( hip cuda vulkan openblas )

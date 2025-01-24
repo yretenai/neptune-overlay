@@ -6,17 +6,16 @@ EAPI=8
 PYTHON_COMPAT=( python3_{11..13} )
 GLAD_PV="2.0.6"
 
-inherit cmake git-r3 python-single-r1 xdg-utils
+inherit cmake git-r3 python-single-r1 xdg
 
 DESCRIPTION="A cycle-accurate Nintendo Game Boy Advance emulator"
 HOMEPAGE="https://github.com/nba-emu/NanoBoyAdvance"
-LICENSE="GPL-3"
-SLOT="0"
 
 EGIT_REPO_URI="https://github.com/nba-emu/${PN}.git"
-
 SRC_URI="https://github.com/Dav1dde/glad/archive/refs/tags/v${GLAD_PV}.tar.gz -> glad-${GLAD_PV}.tar.gz"
 
+LICENSE="GPL-3"
+SLOT="0"
 IUSE="qt6 +qt5 +gui"
 REQUIRED_USE="^^ ( qt6 qt5 ) ${PYTHON_REQUIRED_USE}"
 

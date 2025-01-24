@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake git-r3 flag-o-matic toolchain-funcs
 
 DESCRIPTION="shadPS4 is an early PlayStation 4 emulator"
 HOMEPAGE="https://github.com/shadps4-emu/shadPS4"
@@ -89,8 +89,8 @@ src_prepare() {
 
 	find src \( -iname "*.cpp" -or -iname "*.h" \) -exec sed -e "s|#include <magic_enum/|#include <|" -i "{}" \; || die
 	sed -e "s|magic_enum .* CONFIG|magic_enum CONFIG|" -i CMakeLists.txt || die
-	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c  || die
-	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c  || die
+	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
+	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
 
 	cmake_src_prepare
 }
@@ -113,7 +113,6 @@ src_configure() {
 	cmake_src_configure
 }
 
-
 pkg_setup() {
 	[[ ${MERGE_TYPE} == binary ]] && return
 
@@ -125,7 +124,6 @@ pkg_setup() {
 		die "GCC version is too old to compile shadps4!"
 	fi
 }
-
 
 pkg_postinst() {
 	elog

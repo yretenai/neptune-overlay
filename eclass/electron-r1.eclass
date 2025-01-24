@@ -46,6 +46,22 @@
 # @DESCRIPTION:
 # Package Keywords that are at least valid for Electron
 
+# @ECLASS_VARIABLE: ELECTRON_DESTDIR
+# @DESCRIPTION:
+# Electron app directory for this ebuild
+
+# @ECLASS_VARIABLE: ELECTRON_PREBUILT
+# @DESCRIPTION:
+# Expected QA path for prebuilt files
+
+# @ECLASS_VARIABLE: DESTDIR
+# @DESCRIPTION:
+# Set to ELECTRON_DESTDIR if unset
+
+# @ECLASS_VARIABLE: QA_PREBUILT
+# @DESCRIPTION:
+# Appends ELECTRON_PREBUILT
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-arch/unzip
@@ -66,8 +82,10 @@ fi
 
 BDEPEND+="${ELECTRON_BDEPEND}"
 RDEPEND+="${ELECTRON_RDEPEND}"
-DESTDIR="${ELECTRON_DESTDIR}"
 QA_PREBUILT+="${ELECTRON_PREBUILT}"
+if [[ -z "${DESTDIR}" ]]; then
+	DESTDIR="${ELECTRON_DESTDIR}"
+fi
 
 # @FUNCTION: electron-r1_binname
 # @USAGE: electron-r1_binname
@@ -173,7 +191,7 @@ electron-r1_src_prepare() {
 	echo "$(jq --arg version "${ELECTRON_NPM_VER}" '.devDependencies.electron = $version' package.json)" > package.json
 
 	if [[ ${ELECTRON_BUILDER_VER} ]]; then
-	    echo "$(jq 'del(.dependencies["electron-builder"])' package.json)" > package.json
+		echo "$(jq 'del(.dependencies["electron-builder"])' package.json)" > package.json
 		echo "$(jq --arg version "${ELECTRON_BUILDER_VER}" '.devDependencies["electron-builder"] = $version' package.json)" > package.json
 	fi
 

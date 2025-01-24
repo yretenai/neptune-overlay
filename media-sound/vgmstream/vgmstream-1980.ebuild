@@ -45,7 +45,6 @@ fi
 LICENSE="GPL-2 MIT"
 SLOT="0"
 
-
 IUSE="+mp3 +vorbis +speex +ffmpeg +g7221 +g719 +atrac9 +celt +json +tools player audacious"
 RESTRICT="mirror"
 

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake readme.gentoo-r1 toolchain-funcs xdg
+inherit cmake toolchain-funcs xdg
 
 MY_PV="${PV//_/}"
 

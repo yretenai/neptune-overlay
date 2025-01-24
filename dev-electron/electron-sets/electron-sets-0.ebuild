@@ -4,7 +4,7 @@
 EAPI=8
 
 DESCRIPTION="Electron Rebuild Set"
-LICENSE="GPL2"
+LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm64"
 RESTRICT="test"

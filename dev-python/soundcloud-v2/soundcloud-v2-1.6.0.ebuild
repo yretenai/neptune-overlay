@@ -47,3 +47,5 @@ BDEPEND="
 		')
 	)
 "
+
+RESTRICT="!test? ( test )"

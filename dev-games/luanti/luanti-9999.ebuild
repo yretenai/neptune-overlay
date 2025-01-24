@@ -75,8 +75,8 @@ BDEPEND="
 "
 
 PATCHES="
-	${FILESDIR}/${PN}-${PV}-remove-legacy.patch
-	${FILESDIR}/${PN}-${PV}-tracy.patch
+	${FILESDIR}/${PN}-5.10.0-remove-legacy.patch
+	${FILESDIR}/${PN}-5.10.0-tracy.patch
 "
 
 src_prepare() {

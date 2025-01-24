@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..12} )
+PYTHON_COMPAT=( python3_{10..13} )
 LLVM_COMPAT=( 18 19 )
 LLVM_OPTIONAL=1
 ROCM_VERSION=6.3
@@ -64,10 +64,7 @@ RDEPEND="
 		') )
 	onednn? ( =dev-libs/oneDNN-3.5* )
 	opencl? ( virtual/opencl )
-	qnnpack? (
-		!sci-libs/QNNPACK
-		dev-cpp/gemmlowp
-	)
+	qnnpack? ( dev-cpp/gemmlowp )
 	rocm? (
 		llvm_slot_18? (
 			>=dev-util/hip-6.1[llvm_slot_18(-)]
