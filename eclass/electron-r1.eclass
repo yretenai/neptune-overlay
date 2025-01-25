@@ -150,7 +150,7 @@ electron-r1_doasar() {
 }
 
 # @FUNCTION: electron-r1_dobin
-# @USAGE: electron-r1_dobin [name]
+# @USAGE: electron-r1_dobin
 # @DESCRIPTION:
 # Builds a bin wrapper for an electron app
 electron-r1_dobin() {
@@ -159,19 +159,14 @@ electron-r1_dobin() {
 
 	electron-r1_binname
 
-	local name="${PN}"
-	if [[ ${#} -eq 1 ]]; then
-		name="${1}"
-	fi
-
-	cat > "electron-${name}" <<-EOF
+	cat > "electron-${ELECTRON_APPNAME}" <<-EOF
 #!/bin/sh
 
 export ELECTRON_FORCE_IS_PACKAGED=1
 cd "${ELECTRON_DESTDIR}"
-"${ELECTRON_DESTDIR}"/${name} "\$@"
+"${ELECTRON_DESTDIR}"/${ELECTRON_APPNAME} "\$@"
 EOF
-	newbin "electron-${name}" "${name}"
+	newbin "electron-${ELECTRON_APPNAME}" "${ELECTRON_APPNAME}"
 }
 
 # @FUNCTION: electron-r1_patch_electron_builder
