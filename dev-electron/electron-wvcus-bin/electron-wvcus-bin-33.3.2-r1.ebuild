@@ -25,7 +25,7 @@ RESTRICT="mirror test"
 REQUIRED_USE="
 	|| ( wayland X )
 "
-DESTDIR="/usr/share/${MY_PN}/${MY_PV}"
+DESTDIR="/usr/share/electron/${MY_PV}-wvcus"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
