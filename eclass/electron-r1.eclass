@@ -62,13 +62,24 @@
 # @DESCRIPTION:
 # Appends ELECTRON_PREBUILT
 
+# @ECLASS_VARIABLE: ELECTRON_APPNAME
+# @DESCRIPTION:
+# Name of the application, defaults to $PN
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-arch/unzip
 "
 
+if [[ -z ${ELECTRON_APPNAME} ]]; then
+	ELECTRON_APPNAME="${PN}"
+fi
+
 ELECTRON_DESTDIR="/usr/share/electron/apps/${P}"
-ELECTRON_PREBUILT="usr/share/electron/apps/${P}/resources/app.asar.unpacked/*"
+ELECTRON_PREBUILT="
+	usr/share/electron/apps/${P}/resources/app.asar.unpacked/*
+	usr/share/electorn/apps/${P}/${ELECTRON_APPNAME}
+"
 
 if [[ ${ELECTRON_WVCUS} ]]; then
 	ELECTRON_RDEPEND="dev-electron/electron-wvcus-bin:${ELECTRON_SLOT}="
@@ -101,7 +112,7 @@ electron-r1_binname() {
 }
 
 # @FUNCTION: electron-r1_stage
-# @USAGE: electron-r1_stage name
+# @USAGE: electron-r1_stage
 # @DESCRIPTION:
 # stages electron runtime files
 electron-r1_stage() {
@@ -109,11 +120,6 @@ electron-r1_stage() {
 		die "${FUNCNAME} can only be used in src_install"
 
 	electron-r1_binname
-
-	local name="${PN}"
-	if [[ ${#} -eq 1 ]]; then
-		name="${1}"
-	fi
 
 	for x in "${EPREFIX}/usr/share/${ELECTRON_NAME}/${ELECTRON_VER}"/*; do
 		local filename="${x##*/}"
@@ -124,8 +130,8 @@ electron-r1_stage() {
 		dosym "${x}" "${ELECTRON_DESTDIR}/${filename}"
 	done
 
-	exeinto "${ELECTRON_DESTDIR}"
-	newexe "${EPREFIX}/usr/share/${ELECTRON_NAME}/${ELECTRON_VER}/electron" "${name}"
+	# hardlink the actual electron binary so the appid/class and process name are proper
+	ln -v "${EPREFIX}/usr/share/${ELECTRON_NAME}/${ELECTRON_VER}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
 }
 
 # @FUNCTION: electron-r1_doasar
