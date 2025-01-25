@@ -13,7 +13,7 @@
 # @DESCRIPTION:
 # Latest version of electron
 
-# @ECLASS_VARIABLE: LATEST_ELECTRON_WVCUS_VER
+# @ECLASS_VARIABLE: LATEST_ELECTRON_WIDEVINE_VER
 # @DESCRIPTION:
 # Latest version of electron with widevine support
 
@@ -21,6 +21,8 @@
 # @DESCRIPTION:
 # Latest version of electron builder
 
+# NOTE: when updating these, bump the revision of every ebuild that depends on this
+
 LATEST_ELECTRON_VER="34"
-LATEST_ELECTRON_WVCUS_VER="34"
+LATEST_ELECTRON_WIDEVINE_VER="34"
 LATEST_ELECTRON_BUILDER_VER="25.1.8"

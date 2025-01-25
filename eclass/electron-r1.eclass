@@ -21,7 +21,7 @@
 # @DESCRIPTION:
 # If set, this electron-builder version will be used
 
-# @ECLASS_VARIABLE: ELECTRON_WVCUS
+# @ECLASS_VARIABLE: ELECTRON_WIDEVINE
 # @DEFAULT_UNSET
 # @PRE_INHERIT
 # @DESCRIPTION:
@@ -37,10 +37,15 @@
 # @DESCRIPTION:
 # Set by eclass, list of bdepends that are required.
 
+# @ECLASS_VARIABLE: ELECTRON_SUFFIX
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Set by eclass, the name suffix of the selected electron type.
+
 # @ECLASS_VARIABLE: ELECTRON_NAME
 # @DEFAULT_UNSET
 # @DESCRIPTION:
-# Set by eclass, the binary name of the selected electron version.
+# Set by eclass, the binary name of the selected electron type.
 
 # @ECLASS_VARIABLE: ELECTRON_KEYWORDS
 # @DESCRIPTION:
@@ -81,18 +86,20 @@ ELECTRON_PREBUILT="
 	usr/share/electorn/apps/${P}/${ELECTRON_APPNAME}
 "
 
-if [[ ${ELECTRON_WVCUS} ]]; then
-	ELECTRON_RDEPEND="dev-electron/electron-wvcus-bin:${ELECTRON_SLOT}="
+if [[ ${ELECTRON_WIDEVINE} ]]; then
+	ELECTRON_RDEPEND="virtual/electron-widevine:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="~amd64"
+	ELECTRON_SUFFIX="-wvcus"
 	ELECTRON_NAME="electron-wvcus"
 else
-	ELECTRON_RDEPEND="dev-electron/electron-bin:${ELECTRON_SLOT}="
+	ELECTRON_RDEPEND="virtual/electron:${ELECTRON_SLOT}="
 	ELECTRON_KEYWORDS="~amd64 ~arm ~arm64"
+	ELECTRON_SUFFIX=""
 	ELECTRON_NAME="electron"
 fi
 
-BDEPEND+="${ELECTRON_BDEPEND}"
-RDEPEND+="${ELECTRON_RDEPEND}"
+BDEPEND="${ELECTRON_BDEPEND}"
+RDEPEND="${ELECTRON_RDEPEND}"
 QA_PREBUILT+="${ELECTRON_PREBUILT}"
 if [[ -z "${DESTDIR}" ]]; then
 	DESTDIR="${ELECTRON_DESTDIR}"
@@ -108,7 +115,8 @@ electron-r1_binname() {
 	ELECTRON_VER=${ELECTRON_VER#wvcus-} # Remove the wvcus- suffix if it exists
 	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- suffix if it exists
 	export ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
-	export ELECTRON_BIN_NAME="${ELECTRON_NAME}-${ELECTRON_VER}"
+	export ELECTRON_PATH="${EPREFIX}/usr/share/electron/${ELECTRON_VER}${ELECTRON_SUFFIX}" # electron reference path
+	export ELECTRON_BIN_NAME="electron${ELECTRON_SUFFIX}-${ELECTRON_VER}"
 }
 
 # @FUNCTION: electron-r1_stage
@@ -121,7 +129,7 @@ electron-r1_stage() {
 
 	electron-r1_binname
 
-	for x in "${EPREFIX}/usr/share/${ELECTRON_NAME}/${ELECTRON_VER}"/*; do
+	for x in "${ELECTRON_PATH}"/*; do
 		local filename="${x##*/}"
 		if [[ "${filename}" == "resources" || "${filename}" == "electron" ]]; then
 			continue
@@ -131,7 +139,7 @@ electron-r1_stage() {
 	done
 
 	# hardlink the actual electron binary so the appid/class and process name are proper
-	ln -v "${EPREFIX}/usr/share/${ELECTRON_NAME}/${ELECTRON_VER}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
+	ln -v "${ELECTRON_PATH}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
 }
 
 # @FUNCTION: electron-r1_doasar
@@ -183,10 +191,10 @@ electron-r1_src_prepare() {
 
 	electron-r1_binname
 
-	echo "$(jq ".build.electronDist = \"/usr/share/${ELECTRON_NAME}/${ELECTRON_VER}\"" package.json)" > package.json
+	echo "$(jq ".build.electronDist = \"${ELECTRON_PATH}\"" package.json)" > package.json
 	echo "$(jq 'del(.dependencies.electron)' package.json)" > package.json
 	ELECTRON_NPM_VER="${ELECTRON_VER}"
-	if [[ ${ELECTRON_WVCUS} ]]; then
+	if [[ ${ELECTRON_WIDEVINE} ]]; then
 		ELECTRON_NPM_VER="git+https://github.com/castlabs/electron-releases#v${ELECTRON_VER}"
 	fi
 	echo "$(jq --arg version "${ELECTRON_NPM_VER}" '.devDependencies.electron = $version' package.json)" > package.json
