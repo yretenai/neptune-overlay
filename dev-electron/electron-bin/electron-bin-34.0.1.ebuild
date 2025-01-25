@@ -26,7 +26,7 @@ SRC_URI="
 S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="$(ver_cut 1)/${MY_PV}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
 IUSE="debug wayland X appindicator"
 RESTRICT="mirror test"
