@@ -105,12 +105,30 @@ if [[ -z "${DESTDIR}" ]]; then
 	DESTDIR="${ELECTRON_DESTDIR}"
 fi
 
+# @FUNCTION: electron-r1_fullver
+# @USAGE: electron-r1_fullver
+# @DESCRIPTION:
+# Gets the full version of the installed electron target, rather than the slot version
+electron-r1_fullver() {
+	if [[ ${ELECTRON_WIDEVINE} ]]; then
+		TARGET="dev-electron/electron-wvcus"
+	else
+		TARGET="dev-electron/electron"
+	fi
+
+	export ELECTRON_VER="$(best_version ${TARGET})"
+	if [[ -z "${ELECTRON_VER}" ]]; then
+		export ELECTRON_VER="$(best_version ${TARGET}-bin)"
+	fi
+}
+
 # @FUNCTION: electron-r1_binname
 # @USAGE: electron-r1_binname
 # @DESCRIPTION:
 # Gets the electron binary name and electron version
 electron-r1_binname() {
-	ELECTRON_VER=$(best_version ${ELECTRON_RDEPEND})
+	electron-r1_fullver
+
 	ELECTRON_VER=${ELECTRON_VER#*/*-} # reduce it to ${PV}-${PR}
 	ELECTRON_VER=${ELECTRON_VER#wvcus-} # Remove the wvcus- suffix if it exists
 	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- suffix if it exists
