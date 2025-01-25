@@ -5,9 +5,9 @@ EAPI=8
 
 inherit electron-version
 
-ELECTRON_SLOT="${LATEST_ELECTRON_WVCUS_VER}"
+ELECTRON_SLOT="${LATEST_ELECTRON_WIDEVINE_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
-ELECTRON_WVCUS="1"
+ELECTRON_WIDEVINE="1"
 
 inherit desktop xdg electron-r1
 
@@ -35,7 +35,10 @@ BDEPEND="
 
 src_prepare() {
 	default
-	sed -i -e "s|electronDownload:|electronDist: \"/usr/share/electron-wvcus/${ELECTRON_SLOT}\"\nelectronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
+
+	electron-r1_binname
+
+	sed -i -e "s|electronDownload:|electronDist: \"${ELECTRON_PATH}\"\nelectronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
 	sed -i -e "s|electronVersion:.*$|electronVersion: ${ELECTRON_VER_BASE}|" build/electron-builder.base.yml || die
 	sed -i -e "s|version: .*+wvcus|version: ${ELECTRON_VER}|" build/electron-builder.base.yml || die
 }
