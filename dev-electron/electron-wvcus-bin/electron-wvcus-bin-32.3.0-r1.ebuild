@@ -47,7 +47,6 @@ RDEPEND="
 	x11-libs/gtk+:3[X?,wayland?]
 	x11-libs/pango
 	appindicator? ( dev-libs/libayatana-appindicator )
-	dev-electron/electron-sets
 "
 
 BDEPEND="

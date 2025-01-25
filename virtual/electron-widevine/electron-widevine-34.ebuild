@@ -10,6 +10,7 @@ KEYWORDS="-* ~amd64"
 
 # TODO: source-build electron with widevine component updater service
 RDEPEND="
+	dev-electron/electron-sets
 	|| (
 		dev-electron/electron-wvcus-bin:${SLOT}=
 	)

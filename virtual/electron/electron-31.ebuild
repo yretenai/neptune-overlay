@@ -10,6 +10,7 @@ KEYWORDS="-* ~amd64 ~arm ~arm64"
 
 # TODO: source-build electron
 RDEPEND="
+	dev-electron/electron-sets
 	|| (
 		dev-electron/electron-bin:${SLOT}=
 	)
