@@ -82,6 +82,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-install.patch"
 	"${FILESDIR}/${PN}-half.patch"
 	"${FILESDIR}/${PN}-tracy.patch"
+	"${FILESDIR}/${PN}-9999-compat.patch"
 )
 
 src_prepare() {
