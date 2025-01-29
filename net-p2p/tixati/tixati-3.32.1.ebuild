@@ -9,7 +9,7 @@ T_PV="$(ver_cut 1-2)-$(ver_cut 3-3)"
 
 DESCRIPTION="Tixati is a New and Powerful P2P System"
 HOMEPAGE="https://www.tixati.com/"
-SRC_URI="https://download2.tixati.com/download/${PN}-${T_PV}.x86_64.manualinstall.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://download.tixati.com/${PN}-${T_PV}.x86_64.manualinstall.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${T_PV}.x86_64.manualinstall/"
 
 LICENSE="all-rights-reserved"
