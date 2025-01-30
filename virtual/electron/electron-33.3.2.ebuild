@@ -5,13 +5,13 @@ EAPI=8
 
 DESCRIPTION="Electron Virtual"
 
-SLOT="$(ver_cut 1)"
+SLOT="$(ver_cut 1)/${PV}"
 KEYWORDS="-* ~amd64 ~arm ~arm64"
 
 # TODO: source-build electron
 RDEPEND="
 	dev-electron/electron-sets
 	|| (
-		dev-electron/electron-bin:${SLOT}=
+		=dev-electron/electron-bin-${PV}*:=
 	)
 "

@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Electron Rebuild Set"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm64"
+KEYWORDS="-* ~amd64 ~arm ~arm64"
 RESTRICT="test"
 
 src_unpack() {
