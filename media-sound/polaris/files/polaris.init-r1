@@ -1,0 +1,24 @@
+#!/sbin/openrc-run
+
+: ${POLARIS_BIN_PATH:=}
+: ${POLARIS_WEB_DIR:=/var/lib/polaris/web}
+: ${POLARIS_SWAGGER_DIR:=/var/lib/polaris/swagger}
+: ${POLARIS_DB_DIR:=/var/lib/polaris/data}
+: ${POLARIS_LOG_DIR:=/var/log/polaris}
+: ${POLARIS_CACHE_DIR:=/var/cache/polaris}
+: ${POLARIS_PORT:=5050}
+
+
+pidfile="/run/${RC_SVCNAME}.pid"
+command="/usr/bin/polaris"
+command_args="--foreground --port ${POLARIS_PORT} --database ${POLARIS_DB_DIR}/data.sqlite --log ${POLARIS_LOG_DIR}/polaris.log --cache ${POLARIS_CACHE_DIR} --web ${POLARIS_WEB_DIR} --swagger ${POLARIS_SWAGGER_DIR}"
+command_user="${RC_SVCNAME}:${RC_SVCNAME}"
+command_background=true
+
+start_pre() {
+	checkpath --directory --owner polaris:polaris --mode 0775 ${POLARIS_WEB_DIR}
+	checkpath --directory --owner polaris:polaris --mode 0775 ${POLARIS_SWAGGER_DIR}
+	checkpath --directory --owner polaris:polaris --mode 0775 ${POLARIS_DB_DIR}
+	checkpath --directory --owner polaris:polaris --mode 0775 ${POLARIS_LOG_DIR}
+	checkpath --directory --owner polaris:polaris --mode 0775 ${POLARIS_CACHE_DIR}
+}

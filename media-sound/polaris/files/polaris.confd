@@ -1,0 +1,4 @@
+# POLARIS_DB_DIR=/var/lib/polaris/data
+# POLARIS_LOG_DIR=/var/log/polaris
+# POLARIS_CACHE_DIR=/var/cache/polaris
+# POLARIS_PORT=5050
