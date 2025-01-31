@@ -1,30 +1,29 @@
-# Copyright 1999-2024 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} python3_13t )
-LLVM_COMPAT=( {15..19} )
-EGIT_LFS="1"
-ROCM_VERSION="6.3"
+PYTHON_COMPAT=( python3_{10..13} )
+ROCM_VERSION=6.3
 
-inherit cmake cuda llvm-r1 python-any-r1 rocm
+inherit cmake cuda python-any-r1 rocm
 
 DESCRIPTION="Intel® Open Image Denoise library"
 HOMEPAGE="https://www.openimagedenoise.org https://github.com/RenderKit/oidn"
-LICENSE="Apache-2.0"
-SLOT="0"
 
-if [[ ${PV} = *9999 ]]; then
+if [[ ${PV} = *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/RenderKit/oidn.git"
 	EGIT_BRANCH="master"
+	EGIT_LFS="1"
 	inherit git-r3
 else
 	SRC_URI="https://github.com/RenderKit/${PN}/releases/download/v${PV}/${P}.src.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 -arm ~arm64 -ppc ~ppc64 -x86" # 64-bit-only
 fi
 
-IUSE="apps cuda hip hip-safe openimageio test"
+LICENSE="Apache-2.0"
+SLOT="0"
+IUSE="apps cuda hip openimageio test"
 REQUIRED_USE="
 	test? ( apps )
 "
@@ -33,17 +32,8 @@ RESTRICT="!test? ( test )"
 RDEPEND="
 	dev-cpp/tbb:=
 	dev-lang/ispc
-	cuda? ( dev-util/nvidia-cuda-toolkit )
-	hip? (
-		llvm_slot_18? (
-			=sci-libs/hipBLAS-6.1*:=
-			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
-		)
-		llvm_slot_19? (
-			=sci-libs/hipBLAS-6.3*:=
-			>=dev-util/hip-6.3:=[llvm_slot_19(-)]
-		)
-	)
+	cuda? ( dev-util/nvidia-cuda-toolkit:= )
+	hip? ( dev-util/hip:= )
 	openimageio? ( media-libs/openimageio:= )
 "
 DEPEND="${RDEPEND}"
@@ -51,26 +41,37 @@ BDEPEND="${PYTHON_DEPS}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.2.2-amdgpu-targets.patch"
-	"${FILESDIR}/${PN}-2.3.1-system-composable-kernel.patch"
 )
 
 src_prepare() {
 	if use cuda; then
 		cuda_src_prepare
-		addpredict "/proc/self/task/"
-	fi
-
-	if use llvm_slot_19; then
-		eapply "${FILESDIR}/${PN}-${PV}-composable-kernel-api.patch"
 	fi
 
 	if use hip; then
+		if has_version ">=dev-util/hip-6.2"; then
+			eapply "${FILESDIR}/${PN}-2.3.1-hip-clang-19.patch"
+			eapply "${FILESDIR}/${PN}-2.3.1-system-composable-kernel.patch"
+			eapply "${FILESDIR}/${PN}-2.3.1-composable-kernel-api.patch"
+		fi
+
+		if has_version "dev-util/hip[llvm_slot_19]"; then
+			# Fix Clang 19 error
+			# Bug: https://github.com/RenderKit/oidn/issues/250
+			sed -i "s/.template Run(/.template Run<>(/g" \
+				external/composable_kernel/include/ck/tensor_operation/gpu/block/blockwise_gemm_wmma.hpp \
+				external/composable_kernel/include/ck/tensor_operation/gpu/block/blockwise_gemm_xdlops_skip_b_lds.hpp \
+				external/composable_kernel/include/ck/tensor_operation/gpu/block/blockwise_gemm_xdlops.hpp || die
+		fi
+
 		# https://bugs.gentoo.org/930391
-		sed "/-Wno-unused-result/s:): --rocm-path=${EPREFIX}/usr/lib):" \
+		sed "/-Wno-unused-result/s:): --rocm-path=${EPREFIX}/usr):" \
 			-i devices/hip/CMakeLists.txt || die
 	fi
 
 	sed -e "/^install.*llvm_macros.cmake.*cmake/d" -i CMakeLists.txt || die
+	# do not fortify source -- bug 895018
+	sed -e "s/-D_FORTIFY_SOURCE=2//g" -i {cmake/oidn_platform,external/mkl-dnn/cmake/SDL}.cmake || die
 
 	cmake_src_prepare
 }
@@ -96,21 +97,16 @@ src_configure() {
 	if use hip; then
 		mycmakeargs+=(
 			-DROCM_PATH="${EPREFIX}/usr"
-			-DOIDN_DEVICE_HIP_COMPILER="$(get_llvm_prefix)/bin/clang++" # use HIPHOSTCOMPILER
+			-DOIDN_DEVICE_HIP_COMPILER="${ESYSROOT}/usr/bin/hipcc" # use HIPHOSTCOMPILER
+			-DAMDGPU_TARGETS="$(get_amdgpu_flags)"
 		)
-
-		if ! use hip-safe; then
-			mycmakeargs+=(
-				-DAMDGPU_TARGETS="$(get_amdgpu_flags)"
-			)
-		fi
 	fi
 
 	cmake_src_configure
 }
 
 src_test() {
-	"${BUILD_DIR}"/oidnTest || die "There were test faliures!"
+	"${BUILD_DIR}"/oidnTest || die "There were test failures!"
 }
 
 src_install() {
@@ -118,6 +114,6 @@ src_install() {
 
 	if use hip || use cuda ; then
 		# remove garbage in /var/tmp left by subprojects
-		rm -rf "${ED}"/var || die
+		rm -r "${ED}"/var || die
 	fi
 }
