@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<remote-id type="github">Dj-Codeman/doge</remote-id>
+		<remote-id type="github">Dj-Codeman/dog_community</remote-id>
 	</upstream>
 </pkgmetadata>

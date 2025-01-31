@@ -142,9 +142,9 @@ RUST_MIN_VER="1.80.1"
 inherit cargo
 
 DESCRIPTION="A command-line DNS client"
-HOMEPAGE="https://dns.lookup.dog/"
+HOMEPAGE="https://github.com/Dj-Codeman/dog_community"
 SRC_URI="
-	https://github.com/Dj-Codeman/doge/archive/refs/tags/v${PV}.tar.gz -> ${CATEGORY}-${PN}-${PV}.tar.gz
+	https://github.com/Dj-Codeman/dog_community/archive/refs/tags/v${PV}.tar.gz -> ${CATEGORY}-${PN}-${PV}.tar.gz
 	${CARGO_CRATE_URIS}
 "
 
