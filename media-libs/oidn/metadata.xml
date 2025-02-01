@@ -2,14 +2,14 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<use>
-		<flag name="hip-safe">
-			Build OIDN with every AMD HIP kernel.
+		<flag name="apps">
+			Build example applications
+		</flag>
+		<flag name="hip">
+			Build OIDN with AMD HIP support.
 		</flag>
 		<flag name="openimageio">
 			Build OpenImageIO examples
-		</flag>
-		<flag name="apps">
-			Build example applications
 		</flag>
 	</use>
 	<upstream>
