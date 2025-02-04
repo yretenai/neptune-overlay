@@ -27,8 +27,6 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+seccomp +wayland"
-
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
 	sys-apps/yarn
@@ -50,14 +48,6 @@ src_compile() {
 	yarn run eb -l dir || die
 
 	mv revolt-desktop.desktop "${PN}.desktop"
-
-	if ! use seccomp ; then
-		sed -i "/Exec/s/${PN}/${PN} --disable-seccomp-filter-sandbox/" "${PN}.desktop" || die "sed failed for seccomp"
-	fi
-
-	if use wayland ; then
-		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime/" "${PN}.desktop" || die "sed failed for wayland"
-	fi
 }
 
 src_install() {

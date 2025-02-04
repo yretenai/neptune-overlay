@@ -26,7 +26,6 @@ fi
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="+seccomp +wayland"
 
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror strip test"
@@ -54,14 +53,6 @@ src_configure() {
 src_compile() {
 	pnpm package:dir || die
 	cp "${FILESDIR}/vesktop.desktop" "${PN}.desktop"
-
-	if ! use seccomp ; then
-		sed -i "/Exec/s/${PN}/${PN} --disable-seccomp-filter-sandbox/" "${PN}.desktop" || die "sed failed for seccomp"
-	fi
-
-	if use wayland ; then
-		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime/" "${PN}.desktop" || die "sed failed for wayland"
-	fi
 }
 
 src_install() {

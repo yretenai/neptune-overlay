@@ -71,6 +71,11 @@
 # @DESCRIPTION:
 # Name of the application, defaults to $PN
 
+# @ECLASS_VARIABLE: ELECTRON_FLAGS
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The electron flags to be passed to the .desktop and launch file
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-arch/unzip
@@ -104,6 +109,7 @@ QA_PREBUILT+="${ELECTRON_PREBUILT}"
 if [[ -z "${DESTDIR}" ]]; then
 	DESTDIR="${ELECTRON_DESTDIR}"
 fi
+IUSE="wayland +seccomp vulkan"
 
 # @FUNCTION: electron-r1_fullver
 # @USAGE: electron-r1_fullver
@@ -135,6 +141,39 @@ electron-r1_binname() {
 	export ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
 	export ELECTRON_PATH="${EPREFIX}/usr/share/electron/${ELECTRON_VER}${ELECTRON_SUFFIX}" # electron reference path
 	export ELECTRON_BIN_NAME="electron${ELECTRON_SUFFIX}-${ELECTRON_VER}"
+}
+
+# @FUNCTION: electron-r1_binname
+# @USAGE: electron-r1_binname
+# @DESCRIPTION:
+# Gets the electron launch flags
+electron-r1_execflags() {
+	name="${ELECTRON_APPNAME}"
+
+	if [[ -n "${1}" ]] ; then
+		name="${1}"
+		shift
+	fi
+
+	EXEC=""
+
+	if ! use seccomp ; then
+		EXEC+=" --disable-seccomp-filter-sandbox"
+	fi
+
+	if use wayland ; then
+		EXEC+=" --ozone-platform-hint=auto --enable-wayland-ime"
+	fi
+
+	if use vulkan ; then
+		EXEC+=" --disable-gpu-driver-bug-workaround --use-gl=angle --use-angle=vulkan --enable-features=AcceleratedVideoEncoder,VaapiOnNvidiaGPUs,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+	fi
+
+	if [[ -n ${ELECTRON_FLAGS} ]]; then
+		EXEC+=" ${ELECTRON_FLAGS}"
+	fi
+
+	export ELECTRON_EXEC="${EXEC}"
 }
 
 # @FUNCTION: electron-r1_stage
@@ -176,7 +215,7 @@ electron-r1_doasar() {
 }
 
 # @FUNCTION: electron-r1_dobin
-# @USAGE: electron-r1_dobin
+# @USAGE: electron-r1_dobin [name]
 # @DESCRIPTION:
 # Builds a bin wrapper for an electron app
 electron-r1_dobin() {
@@ -185,14 +224,23 @@ electron-r1_dobin() {
 
 	electron-r1_binname
 
-	cat > "electron-${ELECTRON_APPNAME}" <<-EOF
+	appName="${ELECTRON_APPNAME}"
+
+	if [[ -n "${1}" ]] ; then
+		appName="${1}"
+		shift
+	fi
+
+	electron-r1_execflags "${appName}"
+
+	cat > "electron-${appName}" <<-EOF
 #!/bin/sh
 
 export ELECTRON_FORCE_IS_PACKAGED=1
 cd "${ELECTRON_DESTDIR}"
-"${ELECTRON_DESTDIR}"/${ELECTRON_APPNAME} "\$@"
+"${ELECTRON_DESTDIR}"/${appName} ${ELECTRON_EXEC} \${${appName^^}_FLAGS} "\$@"
 EOF
-	newbin "electron-${ELECTRON_APPNAME}" "${ELECTRON_APPNAME}"
+	newbin "electron-${appName}" "${appName}"
 }
 
 # @FUNCTION: electron-r1_patch_electron_builder

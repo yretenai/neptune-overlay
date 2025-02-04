@@ -26,8 +26,6 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+seccomp +wayland"
-
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror strip test"
 
@@ -54,14 +52,6 @@ src_compile() {
 	npx electron-builder --dir || die
 	cp "${FILESDIR}/blockbench.desktop" "${PN}.desktop"
 	cp "${FILESDIR}/bbmodel.xml" "bbmodel.xml"
-
-	if ! use seccomp ; then
-		sed -i "/Exec/s/${PN}/${PN} --disable-seccomp-filter-sandbox/" "${PN}.desktop" || die "sed failed for seccomp"
-	fi
-
-	if use wayland ; then
-		sed -i "/Exec/s/${PN}/${PN} --ozone-platform-hint=auto --enable-wayland-ime/" "${PN}.desktop" || die "sed failed for wayland"
-	fi
 }
 
 src_install() {

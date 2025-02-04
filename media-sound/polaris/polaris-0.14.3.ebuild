@@ -331,7 +331,7 @@ src_install() {
 	fowners -R polaris:polaris /var/lib/polaris
 
 	newtmpfiles - polaris.conf <<<"d /var/cache/polaris 0775 polaris polaris -"
-	
+
 	newinitd "${FILESDIR}/polaris.init-r1" "polaris"
 	newconfd "${FILESDIR}"/polaris.confd "polaris"
 	systemd_dounit "${FILESDIR}/polaris.service"

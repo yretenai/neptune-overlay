@@ -23,8 +23,6 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+seccomp +wayland"
-
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror strip test"
 
@@ -64,17 +62,7 @@ src_compile() {
 src_install() {
 	newicon "assets/youtube-music.svg" ${PN}.svg
 
-	EXEC="/usr/bin/${PN}"
-
-	if ! use seccomp ; then
-		EXEC="${EXEC} --disable-seccomp-filter-sandbox"
-	fi
-
-	if use wayland ; then
-		EXEC="${EXEC} --ozone-platform-hint=auto --enable-wayland-ime"
-	fi
-
-	make_desktop_entry "$EXEC" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
+	make_desktop_entry "/usr/bin/${PN}" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
 
 	cd pack/linux-unpacked/resources
 	electron-r1_src_install

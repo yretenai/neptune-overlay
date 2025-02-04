@@ -24,8 +24,6 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+seccomp +wayland"
-
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror strip test"
 
@@ -55,17 +53,7 @@ src_compile() {
 src_install() {
 	newicon "build/icon.png" ${PN}.png
 
-	EXEC="/usr/bin/${PN}"
-
-	if ! use seccomp ; then
-		EXEC="${EXEC} --disable-seccomp-filter-sandbox"
-	fi
-
-	if use wayland ; then
-		EXEC="${EXEC} --ozone-platform-hint=auto --enable-wayland-ime"
-	fi
-
-	make_desktop_entry "$EXEC" "TIDAL Hi-Fi" "${PN}" "Network;AudioVideo;Audio;Video"
+	make_desktop_entry "/usr/bin/${PN}" "TIDAL Hi-Fi" "${PN}" "Network;AudioVideo;Audio;Video"
 
 	cd dist/linux-unpacked/resources
 	electron-r1_src_install
