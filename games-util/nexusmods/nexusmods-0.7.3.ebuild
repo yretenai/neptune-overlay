@@ -7,6 +7,7 @@ DOTNET_PKG_COMPAT=9.0
 DOTNET_NEPTUNE_TARGETS="9.0"
 
 NUGETS="
+
 argon@0.24.2
 autofixture.xunit2@4.18.1
 autofixture@4.18.1
@@ -163,10 +164,13 @@ humanizer.core@2.2.0
 humanizer@2.14.1
 iced@1.17.0
 ini-parser-netstandard@2.5.2
+jamarino.intervaltree@1.2.2
 jetbrains.annotations@2024.3.0
+jitbit.fastcache@1.1.0
 k4os.compression.lz4@1.3.7-beta
 k4os.compression.lz4@1.3.8
 linqgen@0.3.1
+linuxdesktoputils.xdgdesktopportal@1.0.0
 livechartscore.skiasharpview.avalonia@2.0.0-rc2
 livechartscore.skiasharpview@2.0.0-rc2
 livechartscore@2.0.0-rc2
@@ -187,6 +191,7 @@ microsoft.bcl.asyncinterfaces@1.1.0
 microsoft.bcl.asyncinterfaces@1.1.1
 microsoft.bcl.asyncinterfaces@6.0.0
 microsoft.bcl.asyncinterfaces@7.0.0
+microsoft.bcl.asyncinterfaces@8.0.0
 microsoft.build.tasks.git@8.0.0
 microsoft.codeanalysis.analyzer.testing@1.1.2
 microsoft.codeanalysis.analyzers@3.3.3
@@ -329,14 +334,15 @@ nexusmods.archives.nx@0.6.1
 nexusmods.archives.nx@0.6.3
 nexusmods.hashing.xxhash3.paths@3.0.3
 nexusmods.hashing.xxhash3@3.0.3
-nexusmods.mnemonicdb.abstractions@0.9.97
-nexusmods.mnemonicdb.sourcegenerator@0.9.97
-nexusmods.mnemonicdb@0.9.97
+nexusmods.mnemonicdb.abstractions@0.9.98
+nexusmods.mnemonicdb.sourcegenerator@0.9.98
+nexusmods.mnemonicdb@0.9.98
 nexusmods.paths.extensions.nx@0.15.0
 nexusmods.paths.testinghelpers@0.15.0
 nexusmods.paths@0.10.0
 nexusmods.paths@0.15.0
 nlog.extensions.logging@5.3.14
+nlog@5.2.8
 nlog@5.3.4
 noggog.csharpext@2.67.3
 nsubstitute.analyzers.csharp@1.0.17
@@ -441,6 +447,7 @@ skiasharp.nativeassets.win32@2.88.9
 skiasharp@2.88.6
 skiasharp@2.88.8
 skiasharp@2.88.9
+smartformat@3.5.1
 spectre.console.cli@0.49.1
 spectre.console.testing@0.49.1
 spectre.console@0.49.1
@@ -624,6 +631,7 @@ textmatesharp.grammars@1.0.59
 textmatesharp.grammars@1.0.64
 textmatesharp@1.0.59
 textmatesharp@1.0.64
+tmds.dbus.protocol@0.18.0
 tmds.dbus.protocol@0.20.0
 transparentvalueobjects@1.0.2
 validation@2.3.7
