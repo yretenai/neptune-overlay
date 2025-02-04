@@ -43,15 +43,22 @@ BDEPEND="
 		>=dev-python/jinja2-2.7[${PYTHON_USEDEP}]
 	')
 	>=dev-cpp/toml11-3.7
+	app-text/dos2unix
 "
-
-PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-toml11.patch"
-)
 
 src_unpack() {
 	default
 	git-r3_src_unpack
+}
+
+src_prepare() {
+	default
+
+	dos2unix src/platform/qt/src/config.hpp src/platform/qt/src/config.cpp
+
+	eapply "${FILESDIR}/${PN}-${PV}-toml11.patch"
+
+	cmake_src_prepare
 }
 
 src_configure() {
