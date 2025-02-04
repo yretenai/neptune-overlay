@@ -48,6 +48,7 @@ src_compile() {
 	yarn run eb -l dir || die
 
 	mv revolt-desktop.desktop "${PN}.desktop"
+	sed -i "/Exec/s/revolt-desktop/revolt/" "${PN}.desktop" || die
 }
 
 src_install() {
