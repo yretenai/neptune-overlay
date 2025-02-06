@@ -40,7 +40,7 @@ fi
 
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
+	debug +embree +ffmpeg +fftw +gmp hip jack jpeg2k
 	+nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
@@ -96,7 +96,6 @@ RDEPEND="${PYTHON_DEPS}
 		)
 	)
 	jack? ( virtual/jack )
-	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
 		app-misc/spacenavd
@@ -314,7 +313,7 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
+		-DWITH_MEM_JEMALLOC=off
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)
