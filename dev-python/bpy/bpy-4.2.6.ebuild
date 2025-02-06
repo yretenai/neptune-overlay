@@ -391,7 +391,7 @@ src_configure() {
 }
 
 src_install() {
-	default
+	cmake_src_install
 
 	python_optimize "${D}$(python_get_sitedir)"
 }
