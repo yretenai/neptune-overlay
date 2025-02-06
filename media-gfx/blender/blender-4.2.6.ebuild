@@ -26,8 +26,6 @@ LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
-ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
 ASSETS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-assets"
 
@@ -199,8 +197,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
-	"${FILESDIR}/${PN}-9999-clang.patch"
+	"${FILESDIR}/${PN}-4.1.1-openvdb-11.patch"
+	"${FILESDIR}/${PN}-4.1.1-clang.patch"
 )
 
 if [[ ${PV} == *9999* ]]; then
@@ -255,8 +253,6 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_COMMIT}" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${ASSETS_EGIT_BRANCH}" "${ASSETS_EGIT_LOCAL_ID}"
 	git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${ASSETS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
@@ -305,10 +301,6 @@ src_prepare() {
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-	fi
-
-	if use experimental; then
-		sed -e "s|BLO_sanitize_experimental_features_userpref_blend|// BLO_sanitize_experimental_features_userpref_blend|" -i source/blender/windowmanager/intern/wm_files.cc || die
 	fi
 
 	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die

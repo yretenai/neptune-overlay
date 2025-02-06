@@ -1,0 +1,13 @@
+diff --git a/extern/hipew/src/hipew.c b/extern/hipew/src/hipew.c
+index 5259f8b2f31..797bde0d324 100644
+--- a/extern/hipew/src/hipew.c
++++ b/extern/hipew/src/hipew.c
+@@ -548,7 +548,7 @@ const char *hipewCompilerPath(void) {
+       }
+     }
+     #else
+-    const char *hipPath =  "opt/rocm/hip/bin";
++    const char *hipPath =  "/usr/bin";
+     const char *executable = "hipcc";
+ 
+     static char hipcc[65536];

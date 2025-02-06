@@ -1,0 +1,12 @@
+diff --git a/build_files/cmake/Modules/FindClang.cmake b/build_files/cmake/Modules/FindClang.cmake
+index 063bbaa97f7..33e8b03805e 100644
+--- a/build_files/cmake/Modules/FindClang.cmake
++++ b/build_files/cmake/Modules/FindClang.cmake
+@@ -85,6 +85,7 @@ set(_clang_FIND_COMPONENTS
+   clangAST
+   clangLex
+   clangBasic
++  clang
+ )
+ 
+ set(_clang_LIBRARIES)

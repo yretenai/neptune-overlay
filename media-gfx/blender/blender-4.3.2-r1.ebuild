@@ -199,11 +199,11 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-9999-openvdb-11.patch"
-	"${FILESDIR}/${PN}-9999-clang.patch"
+	"${FILESDIR}/${PN}-4.1.1-openvdb-11.patch"
+	"${FILESDIR}/${PN}-4.1.1-clang.patch"
 	"${FILESDIR}/${PN}-4.3.2-hiprt-parallel.patch"
-	"${FILESDIR}/${PN}-9999-hipcc-path.patch"
-	"${FILESDIR}/${PN}-9999-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
+	"${FILESDIR}/${PN}-4.3.2-cycles-runtime-path.patch"
 )
 
 if [[ ${PV} == *9999* ]]; then
@@ -306,10 +306,6 @@ src_prepare() {
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-	fi
-
-	if use experimental; then
-		sed -e "s|BLO_sanitize_experimental_features_userpref_blend|// BLO_sanitize_experimental_features_userpref_blend|" -i source/blender/windowmanager/intern/wm_files.cc || die
 	fi
 
 	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
