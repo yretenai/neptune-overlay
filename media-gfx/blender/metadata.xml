@@ -33,8 +33,17 @@
 		<flag name="embree">
 			Use embree to accelerate certain areas of the Cycles render engine.
 		</flag>
+		<flag name="experimental">
+			Build Experimental Blender Modules
+		</flag>
 		<flag name="fluid">
 			Adds fluid simulation support via the built-in Mantaflow library.
+		</flag>
+		<flag name="hiprt">
+			Build Blender with AMD HIP RT support.
+		</flag>
+		<flag name="llvm">
+			Compile with LLVM support (needed for OSL.)
 		</flag>
 		<flag name="nanovdb">
 			Enable nanoVDB support in Cycles. Uses less memory than regular openVDB when rendering.
@@ -63,23 +72,14 @@
 		<flag name="pugixml">
 			Enable PugiXML support (Used for OpenImageIO, Grease Pencil SVG export)
 		</flag>
-		<flag name="tbb">
-			Use threading building blocks library from <pkg>dev-cpp/tbb</pkg>.
-		</flag>
-		<flag name="experimental">
-			Build Experimental Blender Modules
-		</flag>
-		<flag name="vulkan">
-			Add support for the experimental Vulkan viewport backend
-		</flag>
-		<flag name="hiprt">
-			Build Blender with AMD HIP RT support.
-		</flag>
 		<flag name="renderdoc">
 			Build Blender with renderdoc support.
 		</flag>
-		<flag name="llvm">
-			Compile with LLVM support (needed for OSL.)
+		<flag name="tbb">
+			Use threading building blocks library from <pkg>dev-cpp/tbb</pkg>.
+		</flag>
+		<flag name="vulkan">
+			Add support for the experimental Vulkan viewport backend
 		</flag>
 	</use>
 	<upstream>

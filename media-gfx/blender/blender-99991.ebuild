@@ -308,6 +308,10 @@ src_prepare() {
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
 	fi
 
+	if use experimental; then
+		sed -e "s/BLO_sanitize_experimental_features_userpref_blend/# BLO_sanitize_experimental_features_userpref_blend/" -i source/blender/windowmanager/intern/wm_files.cc || die
+	fi
+
 	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 }
 
@@ -409,6 +413,9 @@ src_configure() {
 		-DWITH_USD=no # TODO: Package USD
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_XR_OPENXR=no
+		-DWITH_PYTHON=on
+		-DWITH_PYTHON_SECURITY=on
+		-DWITH_PYTHON_MODULE=off
 	)
 
 	if has_version ">=dev-python/numpy-2"; then
