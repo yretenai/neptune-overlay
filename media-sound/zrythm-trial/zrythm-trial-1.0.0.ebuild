@@ -11,12 +11,8 @@ HOMEPAGE="
 	https://gitlab.zrythm.org/zrythm/zrythm
 "
 
-MY_PV_VER="${PV:0-1}"
-MY_PV="${PV%_*}-rc.${MY_PV_VER}"
-MY_PV_ZIP="${PV%_*}.rc.${MY_PV_VER}"
-
-SRC_URI="https://github.com/zrythm/zrythm/releases/download/v${MY_PV}/${PN}-${MY_PV_ZIP}-installer.zip -> ${P}.zip"
-S="${WORKDIR}/${PN}-${MY_PV_ZIP}-installer/opt/${PN}-${MY_PV_ZIP}"
+SRC_URI="https://github.com/zrythm/zrythm/releases/download/v${PV}/${PN}-${PV}-installer.zip -> ${P}.zip"
+S="${WORKDIR}/${PN}-${PV}-installer/opt/${PN}-${PV}"
 LICENSE="AGPL-3+"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -42,7 +38,7 @@ src_install() {
 	insinto "/usr/share/mime/application"
 	doins "share/mime/packages/org.zrythm.Zrythm-mime.xml"
 
-	exeinto "/opt/${PN}-${MY_PV_ZIP}/bin"
+	exeinto "/opt/${PN}-${PV}/bin"
 
 	doexe \
 		bin/zrythm \
@@ -50,7 +46,7 @@ src_install() {
 		bin/zrythm_launch \
 		bin/zrythm_valgrind
 
-	insinto "/opt/${PN}-${MY_PV_ZIP}"
+	insinto "/opt/${PN}-${PV}"
 
 	# this is dirty, a lot of these libraries already exist in system but there's heaps.
 	# todo: figure out which exist
