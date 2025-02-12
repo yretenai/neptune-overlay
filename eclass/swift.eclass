@@ -107,7 +107,7 @@ swift_src_configure() {
 
 swift_src_compile() {
 	addpredict "${EPREFIX}/var/lib/portage/home/.swiftpm"
-	eswift build --disable-automatic-resolution --disable-dependency-cache --disable-local-rpath --disable-build-manifest-caching --disable-prefetching -c "${SWIFT_BUILD_TARGET}" ${SWIFT_BUILD_ARGS}
+	eswift build --disable-automatic-resolution --disable-dependency-cache --disable-local-rpath --disable-build-manifest-caching --disable-prefetching -c "${SWIFT_BUILD_TARGET}" ${SWIFTARGS} ${SWIFT_BUILD_ARGS}
 }
 
 _swift_src_install_direct() {
