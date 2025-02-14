@@ -289,9 +289,9 @@ CRATES="
 	zstd@0.12.4
 "
 
-inherit cargo
+inherit cargo tmpfiles systemd
 
-DESCRIPTION="A music streaming application, designed to let you enjoy your music collection from any device"
+DESCRIPTION="A music streaming application designed to let you enjoy your music collection"
 HOMEPAGE="https://github.com/agersant/polaris"
 SRC_URI="
 	https://github.com/agersant/polaris/releases/download/${PV}/Polaris_${PV}.tar.gz

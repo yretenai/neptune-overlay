@@ -14,7 +14,7 @@ HOMEPAGE="
 "
 
 SRC_URI="
-	https://github.com/yretenai/pyswiftebuild/archive/refs/tags/v${PV}.tar.gz
+	https://github.com/yretenai/pyswiftebuild/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz
 "
 
 LICENSE="EUPL-1.2"

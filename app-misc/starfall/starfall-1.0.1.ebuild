@@ -21,9 +21,9 @@ inherit swift
 DESCRIPTION="pretty view of star constellations"
 HOMEPAGE="https://github.com/yretenai/starfall"
 LICENSE="GPL-3"
-SLOT="0"
 SRC_URI="
 	https://github.com/yretenai/starfall/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz
 	${SWIFT_URIS}
 "
 KEYWORDS="~amd64"
+SLOT="0"

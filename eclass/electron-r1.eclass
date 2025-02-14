@@ -143,8 +143,8 @@ electron-r1_binname() {
 	export ELECTRON_BIN_NAME="electron${ELECTRON_SUFFIX}-${ELECTRON_VER}"
 }
 
-# @FUNCTION: electron-r1_binname
-# @USAGE: electron-r1_binname
+# @FUNCTION: electron-r1_execflags
+# @USAGE: electron-r1_execflags
 # @DESCRIPTION:
 # Gets the electron launch flags
 electron-r1_execflags() {

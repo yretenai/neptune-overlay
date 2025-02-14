@@ -3,9 +3,9 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
-DESCRIPTION="a vulkan post processing layer for linux"
+DESCRIPTION="Unofficial userland library for the Sony PlayStation DualSense Controller"
 HOMEPAGE="https://git.sr.ht/~chronovore/titania"
 LICENSE="MPL-2.0 GPL-3"
 SLOT="0"
@@ -16,7 +16,7 @@ if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.sr.ht/~chronovore/titania"
 else
-	SRC_URI="https://git.sr.ht/~chronovore/titania/archive/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	SRC_URI="https://git.sr.ht/~chronovore/titania/archive/v${PV}.tar.gz -> ${PN}-v${PV}.tar.gz"
 	S="${WORKDIR}/${PN}-v${PV}"
 	KEYWORDS="~amd64"
 fi

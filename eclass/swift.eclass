@@ -64,8 +64,6 @@ done
 
 unset SWIFT_CHECKOUT
 
-local __SWIFT_CHECKOUTS=SWIFT_CHECKOUTS
-
 if [[ -z "${SWIFT_WORKDIR}" ]]; then
 	SWIFT_WORKDIR="${S}"
 fi
@@ -85,6 +83,10 @@ eswift() {
 	${SWIFTC} $@ || die "could not build"
 }
 
+# @FUNCTION: _swift_checkout_dep
+# @USAGE: _swift_checkout_dep path/to/dep checkout-name
+# @DESCRIPTION:
+# Links a dependency to the checkouts directory
 _swift_checkout_dep() {
 	local path="$1"
 	local target="${SWIFT_WORKDIR}/.build/checkouts/$2"
@@ -110,6 +112,10 @@ swift_src_compile() {
 	eswift build --disable-automatic-resolution --disable-dependency-cache --disable-local-rpath --disable-build-manifest-caching --disable-prefetching -c "${SWIFT_BUILD_TARGET}" ${SWIFTARGS} ${SWIFT_BUILD_ARGS}
 }
 
+# @FUNCTION: _swift_src_install_direct
+# @USAGE: _swift_src_install_direct
+# @DESCRIPTION:
+# Installs swift artifacts
 _swift_src_install_direct() {
 	for SWIFT_ARTIFACT in "${SWIFT_ARTIFACTS[@]}"; do
 		local artifact=($SWIFT_ARTIFACT)
@@ -128,7 +134,11 @@ _swift_src_install_direct() {
 	done
 }
 
-# this is technically bad, as the resources will need to be copied over for library users
+# @FUNCTION: _swift_src_install_bundle
+# @USAGE: _swift_src_install_bundle
+# @DESCRIPTION:
+# Installs swift artifacts to /usr/share/swift/${PN}
+# This is technically bad, as the resources will need to be copied over for library users
 _swift_src_install_bundle() {
 	exeinto "/usr/share/swift/${PN}"
 	insinto "/usr/share/swift/${PN}"

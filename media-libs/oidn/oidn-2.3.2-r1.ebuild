@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{10..13} python3_13t )
 ROCM_VERSION=6.3
 
 inherit cmake cuda python-any-r1 rocm
