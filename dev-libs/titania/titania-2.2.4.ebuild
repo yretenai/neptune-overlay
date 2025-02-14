@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Unofficial userland library for the Sony PlayStation DualSense Controller"
 HOMEPAGE="https://git.sr.ht/~chronovore/titania"
@@ -12,8 +12,12 @@ SLOT="0"
 
 EGIT_REPO_URI="https://git.sr.ht/~chronovore/titania"
 
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ "${PV}" == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://git.sr.ht/~chronovore/titania"
+else
+	SRC_URI="https://git.sr.ht/~chronovore/titania/archive/v${PV}.tar.gz -> ${PN}-v${PV}.tar.gz"
+	S="${WORKDIR}/${PN}-v${PV}"
 	KEYWORDS="~amd64"
 fi
 IUSE="+doc +cli debug"
