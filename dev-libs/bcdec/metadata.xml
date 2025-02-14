@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="precise-bc3">
+			Enables more precise but slower BC3 decoding.
+		</flag>
+		<flag name="precise-bc3">
+			Enables more precise but slower BC4/BC5 decoding and enables signed/unsigned mode.
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">yretenai/bcdec</remote-id>
+	</upstream>
+</pkgmetadata>
