@@ -5,7 +5,7 @@ EAPI=8
 
 inherit meson git-r3
 
-DESCRIPTION="a vulkan post processing layer for linux"
+DESCRIPTION="Unofficial userland library for the Sony PlayStation DualSense Controller"
 HOMEPAGE="https://git.sr.ht/~chronovore/titania"
 LICENSE="MPL-2.0 GPL-3"
 SLOT="0"
