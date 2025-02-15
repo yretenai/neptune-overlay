@@ -347,11 +347,6 @@ RESTRICT="
 	!test? ( test )
 "
 
-# mbedtls: "can" use >=mbedtls-3 but the module needs updates handle
-# the new tls1.3 default among other things, and the bundled 3.x copy
-# builds it #undef MBEDTLS_SSL_PROTO_TLS1_3 + a patch or else will get
-# "ERROR: TLS handshake error: -27648" with system's on startup
-# https://github.com/godotengine/godot/commit/40fa684c181d
 # dlopen: libglvnd
 # dotnet: 4.4 uses both 6.0 and 8.0
 RDEPEND="
@@ -365,7 +360,7 @@ RDEPEND="
 	media-libs/libogg
 	media-libs/libpng:=
 	media-libs/libvorbis
-	<net-libs/mbedtls-3:=
+	net-libs/mbedtls:3=
 	net-libs/wslay
 	sys-libs/zlib:=
 	app-misc/ca-certificates
@@ -413,8 +408,8 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-scons.patch"
-	"${FILESDIR}/${PN}-${PV}-mono-path.patch"
+	"${FILESDIR}/${PN}-9999-scons.patch"
+	"${FILESDIR}/${PN}-4.3-mono-path.patch"
 )
 
 godot_get_version() {
@@ -447,6 +442,8 @@ src_prepare() {
 		-i misc/dist/shell/{godot.bash-completion,godot.fish,_godot.zsh-completion} || die
 
 	sed -i "s|pkg-config |$(tc-getPKG_CONFIG) |" platform/linuxbsd/detect.py || die
+	sed -i "s/mbedtls mbedcrypto mbedx509/mbedtls3 mbedcrypto3 mbedx5093/" platform/linuxbsd/detect.py || die
+	sed -i "s/--exists mbedtls/--exists mbedtls3/" platform/linuxbsd/detect.py || die
 	sed -e "s/app_id = \"org.godotengine.Editor\"/app_id = \"org.godotengine.Editor${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 	sed -e "s/app_id = \"org.godotengine.ProjectManager\"/app_id = \"org.godotengine.ProjectManager${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 	sed -e "s/app_id = \"org.godotengine.Godot\"/app_id = \"org.godotengine.Godot${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
