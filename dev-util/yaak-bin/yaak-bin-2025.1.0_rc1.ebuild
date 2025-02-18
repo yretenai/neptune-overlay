@@ -4,7 +4,7 @@
 EAPI=8
 
 MY_PN="${PN/-bin/}"
-MY_PV="${PV/-r*/}"
+MY_PV="${PV/_rc/-rc.}"
 
 inherit desktop unpacker xdg
 
