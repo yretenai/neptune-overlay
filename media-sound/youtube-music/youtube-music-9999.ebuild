@@ -37,8 +37,8 @@ BDEPEND="
 "
 
 PATCHES="
-	${FILESDIR}/${PN}-${PV}-disable-updates.patch
-	${FILESDIR}/${PN}-${PV}-disable-devtools.patch
+	${FILESDIR}/${PN}-3.7.2-disable-updates.patch
+	${FILESDIR}/${PN}-3.7.2-disable-devtools.patch
 "
 
 src_prepare() {
