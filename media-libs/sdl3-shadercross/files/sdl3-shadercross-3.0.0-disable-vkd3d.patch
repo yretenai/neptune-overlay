@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ea4469e..d31dc3b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -447,7 +447,7 @@ if(SDLSHADERCROSS_INSTALL_RUNTIME)
+ 	endif()
+ 	include(ExternalProject)
+ 
+-	if(NOT WIN32)
++	if(false)
+ 		set(configure_CFLAGS "${CMAKE_C_FLAGS}")
+ 		if(APPLE)
+ 			foreach(osx_arch IN LISTS CMAKE_OSX_ARCHITECTURES)
