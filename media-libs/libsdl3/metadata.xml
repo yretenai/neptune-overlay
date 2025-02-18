@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<remote-id type="github">libsdl-org/SDL</remote-id>
+	</upstream>
+	<use>
+		<flag name="fcitx">Enable support for <pkg>app-i18n/fcitx</pkg></flag>
+		<flag name="haptic">Enable the haptic (force feedback) subsystem</flag>
+		<flag name="ibus">Enable support for <pkg>app-i18n/ibus</pkg></flag>
+		<flag name="kms">Build the KMSDRM video driver</flag>
+		<flag name="sndio">Enable support for the <pkg>media-sound/sndio</pkg> backend</flag>
+		<flag name="pipewire">Enable support for the <pkg>media-video/pipewire</pkg> audio backend</flag>
+		<flag name="video">Enable video support</flag>
+	</use>
+</pkgmetadata>
