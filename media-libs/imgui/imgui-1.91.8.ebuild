@@ -19,6 +19,7 @@ SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64"
 IUSE="allegro5 glfw sdl2 sdl3 sdl2-renderer sdl3-renderer opengl vulkan webgpu"
 
+# todo: dawn as a backend
 RDEPEND="
 	dev-libs/stb:=
 	media-libs/libglvnd[${MULTILIB_USEDEP}]
@@ -34,7 +35,10 @@ RDEPEND="
 		<media-libs/mesa-24.1.0_rc1[gles2,egl(+),${MULTILIB_USEDEP}]
 	) )
 	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )
-	webgpu? ( dev-util/webgpu-headers )
+	webgpu? (
+		dev-util/webgpu-headers:=
+		media-libs/wgpu-native:=
+	)
 "
 DEPEND="
 	${RDEPEND}
@@ -43,6 +47,10 @@ DEPEND="
 BDEPEND="
 	virtual/pkgconfig
 "
+
+PATCHES=(
+	"${FILESDIR}/imgui-1.91.8-wgpu.patch"
+)
 
 src_prepare() {
 	default
@@ -68,6 +76,7 @@ multilib_src_configure() {
 		$(meson_feature sdl3)
 		$(meson_feature sdl3-renderer sdl3_renderer)
 		$(meson_feature webgpu)
+		-Dwebgpu_backend=wgpu
 		-Dosx=disabled
 		-Dwin=disabled
 		$(meson_feature allegro5)

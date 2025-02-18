@@ -90,7 +90,14 @@ if vulkan_dep.found()
   headers += files('backends/imgui_impl_vulkan.h')
 endif
 if cpp.has_header('webgpu/webgpu.h', required: get_option('webgpu'))
-  cpp_args += '-DIMGUI_IMPL_WEBGPU_BACKEND_WGPU'
+  webgpu_backend = get_option('webgpu_backend')
+  if webgpu_backend == 'dawn'
+    cpp_args += '-DIMGUI_IMPL_WEBGPU_BACKEND_DAWN'
+    dependencies += dependency('dawn', required: true)
+  elif webgpu_backend == 'wgpu'
+    cpp_args += '-DIMGUI_IMPL_WEBGPU_BACKEND_WGPU'
+    dependencies += cpp.find_library('wgpu_native', required: true)
+  endif
   sources += 'backends/imgui_impl_wgpu.cpp'
   headers += files('backends/imgui_impl_wgpu.h')
 endif
