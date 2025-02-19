@@ -21,7 +21,7 @@ SRC_URI="
 S="${WORKDIR}"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="0/$(ver_cut 0-1)"
 KEYWORDS="~amd64 ~arm64"
 
 BDEPEND="
