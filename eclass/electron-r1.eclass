@@ -139,7 +139,8 @@ electron-r1_binname() {
 	ELECTRON_VER=${ELECTRON_VER#wvcus-} # Remove the wvcus- suffix if it exists
 	ELECTRON_VER=${ELECTRON_VER#bin-} # Remove the bin- suffix if it exists
 	export ELECTRON_VER=${ELECTRON_VER%%[_-]*} # main version without beta/pre/patch/revision
-	export ELECTRON_PATH="${EPREFIX}/usr/share/electron/${ELECTRON_VER}${ELECTRON_SUFFIX}" # electron reference path
+	export ELECTRON_NORMATIVE_NAME="${ELECTRON_VER}${ELECTRON_SUFFIX}"
+	export ELECTRON_PATH="${EPREFIX}/usr/share/electron/${ELECTRON_NORMATIVE_NAME}" # electron reference path
 	export ELECTRON_BIN_NAME="electron${ELECTRON_SUFFIX}-${ELECTRON_VER}"
 }
 
@@ -188,15 +189,27 @@ electron-r1_stage() {
 
 	for x in "${ELECTRON_PATH}"/*; do
 		local filename="${x##*/}"
-		if [[ "${filename}" == "resources" || "${filename}" == "electron" ]]; then
+		if [[ "${filename}" == "resources" || "${filename}" == "electron" || "${filename}" == "locales" ]]; then
 			continue
 		fi
 
-		dosym "${x}" "${ELECTRON_DESTDIR}/${filename}"
+		dosym "../../${ELECTRON_NORMATIVE_NAME}/${filename}" "${ELECTRON_DESTDIR}/${filename}"
+	done
+
+	mkdir "${ELECTRON_DESTDIR}/locales"
+
+	for x in "${ELECTRON_PATH}/locales"/*; do
+		local filename="${x##*/}"
+		if [[ "${filename}" != *.pak ]]; then
+			continue
+		fi
+
+		dosym "../../../${ELECTRON_NORMATIVE_NAME}/locales/${filename}" "${ELECTRON_DESTDIR}/locales/${filename}"
 	done
 
 	# hardlink the actual electron binary so the appid/class and process name are proper
 	ln -v "${ELECTRON_PATH}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
+	chmod 0755 "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" # fperms fails?
 }
 
 # @FUNCTION: electron-r1_doasar

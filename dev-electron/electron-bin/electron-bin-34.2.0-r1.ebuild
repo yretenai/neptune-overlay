@@ -3,29 +3,37 @@
 
 EAPI=8
 
-DESCRIPTION="Electron for Content Security from castLabs"
+DESCRIPTION="Build cross-platform desktop apps with JavaScript, HTML, and CSS"
 HOMEPAGE="
-	https://github.com/castlabs/electron-releases
+	https://github.com/electron/electron/
+	https://www.electronjs.org/
 "
 
 MY_PN="${PN/-bin*/}"
 MY_PV="${PV/-r*/}"
 
 SRC_URI="
-	https://github.com/castlabs/electron-releases/releases/download/v${MY_PV}+wvcus/electron-v${MY_PV}+wvcus-linux-x64.zip
+	debug? (
+		amd64? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-x64-debug.zip )
+		arm64? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-arm64-debug.zip )
+		arm? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-armv7l-debug.zip )
+	)
+	amd64? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-x64.zip )
+	arm64? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-arm64.zip )
+	arm? ( https://github.com/electron/electron/releases/download/v${MY_PV}/electron-v${MY_PV}-linux-armv7l.zip )
 "
 
 S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="$(ver_cut 1)/${MY_PV}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm ~arm64"
 
-IUSE="wayland X appindicator"
+IUSE="debug wayland X appindicator"
 RESTRICT="mirror test"
 REQUIRED_USE="
 	|| ( wayland X )
 "
-DESTDIR="/usr/share/electron/${MY_PV}-wvcus"
+DESTDIR="/usr/share/${MY_PN}/${MY_PV}"
 
 RDEPEND="
 	>=app-accessibility/at-spi2-core-2.46.0:2
@@ -55,7 +63,7 @@ BDEPEND="
 
 src_install() {
 	exeinto "${DESTDIR}"
-	doexe electron chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
+	doexe "${MY_PN}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
 	[[ -x chrome_crashpad_handler ]] && doexe chrome_crashpad_handler
 
 	insinto "${DESTDIR}"
@@ -63,7 +71,13 @@ src_install() {
 	insopts -m0755
 	doins -r locales resources
 
-	dosym "${DESTDIR}/electron" "/usr/bin/${MY_PN}-${MY_PV}"
+	if use debug; then
+		cd debug
+		doins -r *.debug
+	fi
+
+	fperms 0755 "${DESTDIR}/${MY_PN}"
+	dosym "${DESTDIR}/${MY_PN}" "/usr/bin/${MY_PN}-${MY_PV}"
 
 	fowners root "${DESTDIR}/chrome-sandbox"
 	fperms 4711 "${DESTDIR}/chrome-sandbox"
