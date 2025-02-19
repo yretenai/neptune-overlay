@@ -62,10 +62,15 @@ BDEPEND="
 "
 
 if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
+	# is cmake needed?
 	BDEPEND+="
 		dev-build/gn
 		dev-build/cmake
 		dev-build/ninja
+		$(llvm_gen_dep '
+			llvm-core/clang:${LLVM_SLOT}=
+			llvm-runtimes/compiler-rt:${LLVM_SLOT}=
+		')
 	"
 fi
 
@@ -82,7 +87,7 @@ src_prepare() {
 
 	if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
 		# merge LLVM and Clang into one lib folder, because chromium-clang expects it like this.
-		# note: using symbols, cross filesystem issues maybe?
+		# note: using symlinks, cross filesystem issues maybe?
 		cp -rfvs "$(get_llvm_prefix -b)" "$T/llvm-merged"
 		mkdir "$T/llvm-merged/lib/clang"
 		ln -s "${BROOT}/usr/lib/clang/${LLVM_SLOT}" "$T/llvm-merged/lib/clang/${LLVM_SLOT}"
