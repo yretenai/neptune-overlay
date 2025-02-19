@@ -121,7 +121,6 @@ if [[ -z "${DESTDIR}" ]]; then
 fi
 IUSE="wayland X +seccomp vulkan"
 REQUIRED_USE="
-	vulkan? ( !wayland )
 	^^ ( wayland X )
 "
 
@@ -185,7 +184,7 @@ electron-r1_execflags() {
 		ELECTRON_EXEC+=" --ozone-platform-hint=x11"
 	fi
 
-	if use vulkan ; then
+	if use vulkan ; then # this will make warnings on electron 34, but still enable proper GL contexts
 		ELECTRON_EXEC+=" --use-gl=angle --use-angle=vulkan"
 		ELECTRON_FEATURES+=",Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
 	fi
