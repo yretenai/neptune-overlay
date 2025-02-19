@@ -3,8 +3,6 @@
 
 EAPI=8
 
-inherit shell-completion
-
 DESCRIPTION="Modern runtime for JavaScript and TypeScript"
 HOMEPAGE="
 	https://deno.com/
@@ -30,15 +28,6 @@ BDEPEND="
 
 QA_PREBUILT="*"
 
-src_compile() {
-	./deno completions bash > "deno-bin.bash" || die
-	./deno completions zsh > "deno-bin.zsh" || die
-	./deno completions fish > "deno-bin.fish" || die
-}
-
 src_install() {
 	newbin deno deno-bin
-	dofishcomp deno-bin.fish
-	newzshcomp deno-bin.zsh _deno-bin
-	newbashcomp deno-bin.bash deno-bin
 }
