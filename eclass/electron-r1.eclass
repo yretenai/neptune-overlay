@@ -76,6 +76,16 @@
 # @DESCRIPTION:
 # The electron flags to be passed to the .desktop and launch file
 
+# @ECLASS_VARIABLE: ELECTRON_ENABLE_FEATURES
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Comma separated (no spaces) list of features to enable
+
+# @ECLASS_VARIABLE: ELECTRON_DISABLE_FEATURES
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Comma separated (no spaces) list of features to disable
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-arch/unzip
@@ -109,7 +119,11 @@ QA_PREBUILT+="${ELECTRON_PREBUILT}"
 if [[ -z "${DESTDIR}" ]]; then
 	DESTDIR="${ELECTRON_DESTDIR}"
 fi
-IUSE="wayland +seccomp vulkan"
+IUSE="wayland X +seccomp vulkan"
+REQUIRED_USE="
+	vulkan? ( !wayland )
+	^^ ( wayland X )
+"
 
 # @FUNCTION: electron-r1_fullver
 # @USAGE: electron-r1_fullver
@@ -156,25 +170,43 @@ electron-r1_execflags() {
 		shift
 	fi
 
-	EXEC=""
+	local ELECTRON_FEATURES="AcceleratedVideoDecodeLinuxGL,VaapiVideoDecodeLinuxGL,AcceleratedVideoEncoder,VaapiIgnoreDriverChecks,VaapiOnNvidiaGPUs"
+	ELECTRON_EXEC=""
 
 	if ! use seccomp ; then
-		EXEC+=" --disable-seccomp-filter-sandbox"
+		ELECTRON_EXEC+=" --disable-seccomp-filter-sandbox"
 	fi
 
 	if use wayland ; then
-		EXEC+=" --ozone-platform-hint=auto --enable-wayland-ime"
+		ELECTRON_EXEC+=" --ozone-platform-hint=wayland --enable-wayland-ime"
+	fi
+
+	if use X ; then
+		ELECTRON_EXEC+=" --ozone-platform-hint=x11"
 	fi
 
 	if use vulkan ; then
-		EXEC+=" --disable-gpu-driver-bug-workaround --use-gl=angle --use-angle=vulkan --enable-features=AcceleratedVideoEncoder,VaapiOnNvidiaGPUs,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
+		ELECTRON_EXEC+=" --use-gl=angle --use-angle=vulkan"
+		ELECTRON_FEATURES+=",Vulkan,DefaultANGLEVulkan,VulkanFromANGLE"
 	fi
 
-	if [[ -n ${ELECTRON_FLAGS} ]]; then
-		EXEC+=" ${ELECTRON_FLAGS}"
+	if [[ -n "${ELECTRON_FLAGS}" ]]; then
+		ELECTRON_EXEC+=" ${ELECTRON_FLAGS}"
 	fi
 
-	export ELECTRON_EXEC="${EXEC}"
+	if [[ -n "${ELECTRON_ENABLE_FEATURES}" ]]; then
+		ELECTRON_FEATURES="${ELECTRON_FEATURES},${ELECTRON_ENABLE_FEATURES}"
+	fi
+
+	ELECTRON_FEATURES="--enable-features=${ELECTRON_FEATURES}"
+
+	if [[ -n "${ELECTRON_DISABLE_FEATURES}" ]]; then
+		ELECTRON_FEATURES+=" --disable-features=${ELECTRON_DISABLE_FEATURES}"
+	fi
+
+	ELECTRON_EXEC="${ELECTRON_FEATURES} ${ELECTRON_EXEC}"
+
+	export ELECTRON_EXEC="${ELECTRON_EXEC}"
 }
 
 # @FUNCTION: electron-r1_stage
