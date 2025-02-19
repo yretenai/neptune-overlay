@@ -22,10 +22,16 @@ src_unpack() {
 }
 
 src_prepare() {
+	default
+
 	mv examples/pdb_lines.rs examples/pdb-lines.rs
 	mv examples/pdb_framedata.rs examples/pdb-framedata.rs
 	mv examples/pdb_symbols.rs examples/pdb-symbols.rs
 	mv examples/stream_names.rs examples/pdb-stream-names.rs
+}
+
+src_configure() {
+	cargo_src_configure --frozen
 }
 
 src_compile() {

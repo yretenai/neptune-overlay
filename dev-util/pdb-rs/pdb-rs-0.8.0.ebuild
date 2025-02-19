@@ -16,7 +16,7 @@ CRATES="
 inherit cargo
 
 DESCRIPTION="A parser for Microsoft PDB (Program Database) debugging information"
-HOMEPAGE=""
+HOMEPAGE="https://github.com/Vector35/pdb-rs"
 SRC_URI="
 	https://github.com/Vector35/pdb-rs/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
 	${CARGO_CRATE_URIS}
@@ -29,6 +29,8 @@ SLOT="0"
 KEYWORDS="~amd64"
 
 src_prepare() {
+	default
+
 	mv examples/pdb_lines.rs examples/pdb-lines.rs
 	mv examples/pdb_framedata.rs examples/pdb-framedata.rs
 	mv examples/pdb_symbols.rs examples/pdb-symbols.rs
