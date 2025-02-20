@@ -9,7 +9,7 @@ CMAKE_BUILD_TYPE="Release"
 EGIT_LFS="no" # fetches test data
 ROCM_VERSION="6.3"
 
-inherit rocm cmake git-r3 python-single-r1 llvm-r1
+inherit rocm cmake python-single-r1 llvm-r1
 
 DESCRIPTION="HIP RT is a ray tracing library for HIP."
 HOMEPAGE="
@@ -17,11 +17,12 @@ HOMEPAGE="
 	https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT
 "
 
-EGIT_REPO_URI="https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT.git"
-EGIT_COMMIT="3a8b83609bc347270643db12b422a6315cb89f81"
+COMMIT="3a8b83609bc347270643db12b422a6315cb89f81"
+SRC_URI="https://github.com/GPUOpen-LibrariesAndSDKs/HIPRT/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+S="${WORKDIR}/HIPRT-${COMMIT}"
 
 LICENSE="MIT"
-SLOT="0"
+SLOT="$(ver_cut 0-2)"
 KEYWORDS="~amd64"
 IUSE="cuda"
 
@@ -45,8 +46,10 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-precompile.patch"
-	"${FILESDIR}/${PN}-output.patch"
+	"${FILESDIR}/${PN}-2.4-precompile.patch"
+	"${FILESDIR}/${PN}-2.3-datadir.patch"
+	"${FILESDIR}/${PN}-2.3-output.patch"
+	"${FILESDIR}/${PN}-2.3-output2.patch"
 )
 
 RESTRICT="test"
@@ -60,7 +63,7 @@ src_prepare() {
 	cmake_src_prepare
 
 	if ! use cuda; then
-		eapply "${FILESDIR}/${PN}-${PV}-no-nvidia.patch"
+		eapply "${FILESDIR}/${PN}-2.3-no-nvidia.patch"
 	fi
 
 	sed -e "s|set(HIPRT_NAME \"hiprt\${version_str_}\")|set(HIPRT_NAME \"hiprt\")|" -i CMakeLists.txt || die
@@ -72,6 +75,8 @@ src_prepare() {
 	sed -e "s|__AMDGPU_FLAGS__|$(get_amdgpu_flags)|" -i scripts/bitcodes/precompile_bitcode.py || die
 
 	chmod +x contrib/easy-encryption/bin/linux/ee64 || die
+
+	sed -E "s|SOVERSION 1|SOVERSION ${SLOT}|" -i CMakeLists.txt || die
 }
 
 src_configure() {
@@ -92,4 +97,9 @@ src_configure() {
 src_compile() {
 	export PYTHON_BIN="${EPYTHON}"
 	cmake_src_compile
+}
+
+src_install() {
+	cmake_src_install
+	rm "${ED}"/usr/$(get_libdir)/libhiprt64.so || die
 }
