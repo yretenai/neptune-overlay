@@ -154,7 +154,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	hiprt? ( =dev-libs/hiprt:2.3=[${LLVM_USEDEP}] )
+	hiprt? ( dev-libs/hiprt:2.3=[${LLVM_USEDEP}] )
 "
 
 DEPEND="${RDEPEND}
