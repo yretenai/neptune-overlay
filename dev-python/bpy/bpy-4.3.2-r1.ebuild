@@ -154,7 +154,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	hiprt? ( =dev-libs/hiprt-2.3*:=[${LLVM_USEDEP}] )
+	hiprt? ( =dev-libs/hiprt:2.3=[${LLVM_USEDEP}] )
 "
 
 DEPEND="${RDEPEND}
@@ -250,6 +250,8 @@ src_prepare() {
 	fi
 
 	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
+
+	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.3\"/" -i extern/hipew/src/hiprtew.cc || die
 }
 
 src_configure() {
@@ -269,6 +271,7 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
+		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02003/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"

@@ -29,7 +29,7 @@ ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
+	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
@@ -41,7 +41,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles llvm )
-	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -181,7 +180,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-${PV}-openvdb-11.patch"
 	"${FILESDIR}/${PN}-${PV}-clang.patch"
 	"${FILESDIR}/${PN}-${PV}-goo-paths.patch"
-	# "${FILESDIR}/${PN}-9999-hiprt.patch"
 )
 
 blender_check_requirements() {
@@ -282,7 +280,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		# -DHIPRT_ROOT_DIR=/opt/hiprt
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -296,7 +293,6 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
-		# -DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
