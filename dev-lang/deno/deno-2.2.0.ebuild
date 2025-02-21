@@ -37,12 +37,12 @@ if [[ ${DENO_V8_LLVM_SUPPORTED} == 0 ]]; then
 	RUST_V8_VER="134.4.0"
 	SRC_URI+="
 		amd64? (
-			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_x86_64-unknown-linux-gnu.a.gz -> ${P}-rustyv8-amd64-debug.a.gz )
-			!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz -> ${P}-rustyv8-amd64-release.a.gz )
+			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-debug.a.gz )
+			!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-release.a.gz )
 		)
 		arm64? (
-			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_aarch64-unknown-linux-gnu.a.gz -> ${P}-rustyv8-arm64-debug.a.gz )
-			!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz -> ${P}-rustyv8-arm64-release.a.gz )
+			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_aarch64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-arm64-debug.a.gz )
+			!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-arm64-release.a.gz )
 		)
 	"
 fi
@@ -102,9 +102,9 @@ src_compile() {
 		export CLANG_BASE_PATH="$T/llvm-merged"
 	else
 		if use debug; then
-			export RUSTY_V8_ARCHIVE="${WORKDIR}/${P}-rustyv8-${ARCH}-debug.a"
+			export RUSTY_V8_ARCHIVE="${WORKDIR}/${PN}-rustyv8-${RUST_V8_VER}-${ARCH}-debug.a"
 		else
-			export RUSTY_V8_ARCHIVE="${WORKDIR}/${P}-rustyv8-${ARCH}-release.a"
+			export RUSTY_V8_ARCHIVE="${WORKDIR}/${PN}-rustyv8-${RUST_V8_VER}-${ARCH}-release.a"
 		fi
 	fi
 
