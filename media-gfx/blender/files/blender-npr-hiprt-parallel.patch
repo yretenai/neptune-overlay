@@ -1,0 +1,44 @@
+diff --git a/intern/cycles/kernel/CMakeLists.txt b/intern/cycles/kernel/CMakeLists.txt
+index 5f56257b4b6..54ccd12161d 100644
+--- a/intern/cycles/kernel/CMakeLists.txt
++++ b/intern/cycles/kernel/CMakeLists.txt
+@@ -771,7 +771,6 @@ if(WITH_CYCLES_DEVICE_HIPRT)
+     -amdgpu-early-inline-all=false
+     -mllvm
+     -amdgpu-function-calls=true
+-    -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+     --genco
+     -I ${HIPRT_INCLUDE_DIR}
+     -Wno-parentheses-equality
+@@ -792,7 +791,6 @@ if(WITH_CYCLES_DEVICE_HIPRT)
+     -amdgpu-early-inline-all=false
+     -mllvm
+     -amdgpu-function-calls=true
+-    -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+     --genco
+     -I ${HIPRT_INCLUDE_DIR}/contrib/Orochi
+     -include hip/hip_runtime.h
+@@ -841,7 +839,6 @@ if(WITH_CYCLES_DEVICE_HIPRT)
+       -fgpu-rdc
+       -c
+       --gpu-bundle-output
+-      -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+       -emit-llvm
+       -I ${HIPRT_INCLUDE_DIR}
+       -Wno-parentheses-equality
+@@ -863,7 +860,6 @@ if(WITH_CYCLES_DEVICE_HIPRT)
+       -fgpu-rdc
+       -c
+       --gpu-bundle-output
+-      -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+       -emit-llvm
+       -I ${CMAKE_CURRENT_SOURCE_DIR}/..
+       -I ${CMAKE_CURRENT_SOURCE_DIR}/device/hiprt
+@@ -902,7 +898,6 @@ if(WITH_CYCLES_DEVICE_HIPRT)
+       -fgpu-rdc
+       --hip-link
+       --cuda-device-only
+-      -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+       ${cycles_bitcode_file}
+       ${sdk_bitcode_file}
+       -o ${hiprt_file}

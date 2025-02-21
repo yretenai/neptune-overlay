@@ -200,7 +200,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
+	"${FILESDIR}/${PN}-npr-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.3.2-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
