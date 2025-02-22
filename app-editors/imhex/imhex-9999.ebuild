@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PLUTOVG_PV="0.0.4"
+PLUTOVG_PV="0.0.12"
 
 DOTNET_PKG_COMPAT="8.0"
 CMAKE_BUILD_TYPE="Release"
@@ -111,7 +111,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-D CMAKE_BUILD_TYPE="Release" \
-		-D CMAKE_SKIP_RPATH=ON \
+		-D CMAKE_SKIP_RPATH=OFF \
 		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
 		-D IMHEX_ENABLE_LTO=$(usex lto) \
