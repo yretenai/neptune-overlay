@@ -84,6 +84,9 @@ src_install() {
 	# remove netstandard
 	rm -rf packs/NETStandard.Library.Ref
 
+	# remove stray manifests
+	find sdk-manifests/ -maxdepth 1 -type d \( -not -iname "${SDK_SLOT}*" -and -not -iname "sdk-manifests" \) -exec rm -rv {} \;
+
 	# install dotnet packs
 	TARGETS="host packs sdk sdk-manifests shared templates metadata"
 	for DIRECTORY in $TARGETS; do
