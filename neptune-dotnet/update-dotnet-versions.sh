@@ -15,13 +15,13 @@ dotnet_apply() {
 
 	cp "${EBUILD_NAME}.ebuild" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild"
 	if ! [ "${VERSION_SAFE}" = "${VERSION}" ]; then
-		sed -i "/\${PV}/s//${VERSION}/g" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild"
+		sed -i "/\${PV}/s//${VERSION}/g" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild" || exit
 	fi
 }
 
 TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-sdk dotnet-cli-bin dotnet-man"
 for TARGET in $TARGETS; do
-	find "${ADADOTNET_ROOT}/${TARGET}" \( -iname "*8.0*.ebuild" -or -iname "*9.0*.ebuild" \) -delete
+	find "${ADADOTNET_ROOT}/${TARGET}" \( -iname "*8.0*.ebuild" -or -iname "*9.0*.ebuild" -or -iname "*10.0*.ebuild" \) -delete
 done
 
 find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
@@ -40,6 +40,7 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 	RELEASE_TYPE=$4
 	RELEASE_INDEX=$5
 	unset IFS
+	RELEASE_SDK_SAFE="$(dotnet_strip "${RELEASE_SDK}")"
 
 	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
 
@@ -51,19 +52,19 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
 		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
 
-		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
+		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 	else
 		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_RUNTIME}"
 		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
 		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
 
-		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
+		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 
 		if [ "${IS_FIRST}" = "Y" ]; then
 			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
 			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_SDK}" | sed 's/..$/00/')"
 
-			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild"
+			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild" || exit
 
 			LATEST_VERSION="${RELEASE_RUNTIME}"
 			LATEST_SDK_VERSION="${RELEASE_SDK}"
@@ -71,7 +72,7 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 		fi
 	fi
 
-	sed -i "/__DOTNET_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK}.ebuild"
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 
 	if [ "${RELEASE_CHANNEL}" = "8.0" ]; then
 		break
