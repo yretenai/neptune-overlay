@@ -220,12 +220,16 @@ electron-r1_stage() {
 
 	for x in "${ELECTRON_PATH}"/*; do
 		local filename="${x##*/}"
-		if [[ "${filename}" == "resources" || "${filename}" == "electron" || "${filename}" == "locales" ]]; then
+		if [[ "${filename}" == "resources" || "${filename}" == "version" || "${filename}" == "electron" || "${filename}" == "electron.debug" || "${filename}" == "locales" ]]; then
 			continue
 		fi
 
 		dosym "../../${ELECTRON_NORMATIVE_NAME}/${filename}" "${ELECTRON_DESTDIR}/${filename}"
 	done
+
+	if [[ -f "${ELECTRON_PATH}/electron.debug" ]]; then
+		dosym "../../${ELECTRON_NORMATIVE_NAME}/electron.debug" "${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}.debug"
+	fi
 
 	mkdir "${ELECTRON_DESTDIR}/locales"
 
