@@ -48,6 +48,8 @@ DEPEND="
 	exrview? (
 		media-libs/glew
 		x11-libs/libX11
+	)
+	gtk? (
 		x11-libs/gtk+:3
 	)
 	openmp? (
