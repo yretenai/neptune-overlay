@@ -1,0 +1,168 @@
+project('tinyexr', ['cpp', 'c'],
+	license : 'MIT',
+	meson_version : '>=1.2.0',
+	version : '__PV__',
+	default_options : [
+		'cpp_std=c++11',
+		'c_std=c11',
+		'warning_level=3',
+		'default_library=both'
+	])
+
+libs = []
+defines = []
+includes = []
+sources = ['tinyexr.cc']
+
+miniz = dependency('miniz', required: false)
+
+zlib_impl = get_option('zlib_impl')
+if zlib_impl == 'miniz'
+	dependency('miniz', required: true)
+	libs += [miniz]
+	defines += ['-DTINYEXR_USE_MINIZ=1']
+elif zlib_impl == 'nanozlib'
+	defines += ['-DTINYEXR_USE_MINIZ=0', '-DTINYEXR_USE_NANOZLIB=1']
+	includes += ['deps/nanozlib']
+elif zlib_impl == 'stb'
+	defines += ['-DTINYEXR_USE_MINIZ=0', '-DTINYEXR_USE_STB_ZLIB=1']
+	libs += [dependency('stb', required: true)]
+elif zlib_impl == 'zlib-ng'
+	defines += ['-DTINYEXR_USE_MINIZ=0', '-DTINYEXR_USE_ZLIBNG=1']
+	libs += [dependency('zlib-ng', required: true)]
+elif zlib_impl == 'zlib'
+	defines += ['-DTINYEXR_USE_MINIZ=0', '-DTINYEXR_USE_ZLIB=1']
+	libs += [dependency('zlib', required: true)]
+else
+	error('wrong zlib implementation')
+endif
+
+if get_option('with_openmp').enabled()
+	libs += [dependency('openmp', required: true)]
+	defines += ['-DTINYEXR_USE_OPENMP=1']
+else
+	defines += ['-DTINYEXR_USE_OPENMP=0']
+endif
+
+if get_option('with_threads').enabled()
+	libs += [dependency('threads', required: true)]
+	defines += ['-DTINYEXR_USE_THREAD=1']
+else
+	defines += ['-DTINYEXR_USE_THREAD=0']
+endif
+
+if get_option('with_zfp').enabled()
+	libs += [dependency('zfp', required: true)]
+	defines += ['-DTINYEXR_USE_ZFP=1']
+else
+	defines += ['-DTINYEXR_USE_ZFP=0']
+endif
+
+defines += [
+	'-DTINYEXR_USE_COMPILER_FP16=' + (get_option('with_fp16').enabled() ? '1' : '0'),
+	'-DTINYEXR_USE_PIZ=' + (get_option('with_piz').enabled() ? '1' : '0'),
+]
+
+tinyexr_lib = library(meson.project_name(), sources,
+	dependencies : libs,
+	gnu_symbol_visibility : 'default',
+	cpp_args : defines,
+	install : true,
+	soversion : meson.project_version(),
+	include_directories : includes)
+tinyexr_dep = declare_dependency(link_with : tinyexr_lib, include_directories : '.')
+
+install_headers('tinyexr.h')
+
+
+import('pkgconfig').generate(
+	tinyexr_lib,
+	description : 'Tiny OpenEXR image loader/saver library',
+	url : 'https://github.com/syoyo/tinyexr',
+	version : meson.project_version()
+)
+
+if get_option('build_examples')
+	cxxopts = dependency('cxxopts', required: true)
+	stb = dependency('stb', required: true)
+	
+	executable('exrcube2longlat', ['examples/cube2longlat/cube2longlat.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('exr2fptiff', ['examples/exr2fptiff/exr2fptiff.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('exr2ldr', ['examples/exr2ldr/exr2ldr.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('ldr2exr', ['examples/ldr2exr/ldr2exr.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('exr2rgbe', ['examples/exr2rgbe/exr2rgbe.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('rgbe2exr', ['examples/rgbe2exr/rgbe2exr.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('exrfilter', ['examples/exrfilter/exrfilter.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb],
+		install : true)
+
+	executable('exrnormalmap', ['examples/nornalmap/main.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb, miniz],
+		install : true)
+
+	executable('exrresize', ['examples/resize/resize.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb, miniz],
+		install : true)
+
+	executable('exrmapgen', ['examples/testmapgen/testmapgen.cc'], 
+		dependencies : [tinyexr_dep, cxxopts, stb, miniz],
+		install : true)
+	
+	glut = dependency('glut',required: false)
+	glu = dependency('glu', required: false)
+	gl = dependency('gl', required: false)
+	if glut.found() and glu.found() and gl.found() and get_option('build_gl_examples')
+		executable('exrdeepview', ['examples/deepview/main.cc', 'examples/deepview/trackball.cc'], 
+			dependencies : [tinyexr_dep, glut, glu, gl, cxxopts, stb, miniz],
+			install : true)
+
+		threads = dependency('threads', required: false)
+		x11 = dependency('X11', required: false)
+		dl = dependency('dl', required: false)
+		glew = dependency('glew', required: false)
+
+		if threads.found() and x11.found() and dl.found() and glew.found() and get_option('build_exrview')
+			exrview_src = []
+			exrview_lib = []
+			exrview_def = []
+			gtk = dependency('gtk+-3.0', required: false)
+			if gtk.found()
+				exrview_src += [
+				'examples/exrview/ThirdPartyLibs/nativefiledialog/src/nfd_common.c',
+				'examples/exrview/ThirdPartyLibs/nativefiledialog/src/nfd_gtk.c'
+				]
+				exrview_def += ['-DUSE_NATIVEFILEDIALOG=1']
+				exrview_lib += [gtk]
+			endif
+
+			executable('exrview', [
+				'examples/exrview/main.cc',
+				'examples/exrview/exr-io.cc',
+				'examples/exrview/OpenGLWindow/X11OpenGLWindow.cpp',
+				'examples/exrview/OpenGLWindow/X11OpenGLWindow.h'
+			] + exrview_src, 
+			dependencies: [tinyexr_dep, glut, glu, gl, threads, x11, dl, glew, miniz] + exrview_lib,
+			include_directories : ['examples/exrview/ThirdPartyLibs/nativefiledialog/src/include'],
+			cpp_args: exrview_def,
+			install : true)
+		endif
+	endif
+endif

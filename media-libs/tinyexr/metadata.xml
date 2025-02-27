@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="miniz">
+			Use miniz as the zlib implementation provider
+		</flag>
+		<flag name="nanozlib">
+			Use nanozlib as the zlib implementation provider
+		</flag>
+		<flag name="zlib">
+			Use zlib as the zlib implementation provider
+		</flag>
+		<flag name="zlib-ng">
+			Use zlib-ng as the zlib implementation provider
+		</flag>
+		<flag name="stb">
+			Use stb as the zlib implementation provider
+		</flag>
+		<flag name="examples">
+			Build example programs
+		</flag>
+		<flag name="gl">
+			Build GL examples
+		</flag>
+		<flag name="exrview">
+			Build EXRView
+		</flag>
+		<flag name="zfp">
+			Enable ZFP compression support (experimental)
+		</flag>
+		<flag name="piz">
+			Enable PIZ compression support
+		</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">syoyo/tinyexr</remote-id>
+	</upstream>
+</pkgmetadata>
