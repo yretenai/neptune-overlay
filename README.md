@@ -12,6 +12,15 @@ eselect repository add neptune git https://github.com/yretenai/neptune-overlay.g
 emerge --sync
 ```
 
+## Notes
+
+All Packages have been tested on clang and confirmed to be working, with the execption of:
+
+- games-emulation/rpcs3
+- media-libs/sdl3-shadercross
+
+With the exception of those packages, one can safely enjoy clang while using packages from this overlay.
+
 ## Only unmask packages you use from this repository
 
 Based on [Masking installed but unsafe ebuild repositories](https://wiki.gentoo.org/wiki/Ebuild_repository#Masking_installed_but_unsafe_ebuild_repositories).
