@@ -9,7 +9,7 @@ ASMJIT_COMMIT="416f7356967c1f66784dc1580fe157f9406d8bff"
 GLSLANG_COMMIT="36d08c0d940cf307a23928299ef52c7970d8cee6"
 MINIUPNP_COMMIT="7f189988a0decca0ab7da89000051ab91751f70d"
 RTMIDI_COMMIT="1e5b49925aa60065db52de44c366d446a902547b"
-WOLFSSL_COMMIT="00e42151ca061463ba6a95adb2290f678cbca472"
+WOLFSSL_COMMIT="239b85c80438bf60d9a5b9e0ebe9ff097a760d0d"
 SOUNDTOUCH_COMMIT="394e1f58b23dc80599214d2e9b6a5e0dfd0bbe07"
 YAMLCPP_COMMIT="456c68f452da09d8ca84b375faa2b1397713eaba"
 
@@ -41,18 +41,19 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="discord faudio +llvm vulkan wayland"
+IUSE="discord faudio +llvm opencv vulkan wayland"
 
 DEPEND="
 	app-arch/p7zip
 	dev-libs/flatbuffers
 	dev-libs/hidapi
 	dev-libs/libevdev
-	dev-libs/pugixml
+	>=dev-libs/pugixml-1.15
 	dev-libs/xxhash
 	dev-qt/qtbase:6[concurrent,dbus,gui,widgets]
 	dev-qt/qtmultimedia:6
 	dev-qt/qtsvg:6
+	media-libs/alsa-lib
 	media-libs/cubeb
 	media-libs/glew
 	media-libs/libglvnd
@@ -63,7 +64,9 @@ DEPEND="
 	llvm-core/llvm:=
 	sys-libs/zlib
 	virtual/libusb:1
+	x11-libs/libX11
 	faudio? ( app-emulation/faudio )
+	opencv? ( media-libs/opencv )
 	vulkan? ( media-libs/vulkan-loader[wayland?] )
 	wayland? ( dev-libs/wayland )
 "
@@ -125,6 +128,10 @@ src_prepare() {
 	# sed -i -e 's/3rdparty::yaml-cpp/yaml-cpp/' rpcs3/Emu/CMakeLists.txt \
 	#	rpcs3/rpcs3qt/CMakeLists.txt || die
 
+	# Fix build with GCC 15
+	# https://github.com/KhronosGroup/glslang/commit/e40c14a3e007fac0e4f2e4164fdf14d1712355bd
+	sed -i '/<algorithm>/a#include <cstdint>' 3rdparty/glslang/glslang/SPIRV/SpvBuilder.h || die
+
 	cmake_src_prepare
 }
 
@@ -144,12 +151,13 @@ src_configure() {
 		-DUSE_SYSTEM_ZLIB=ON
 		-DUSE_DISCORD_RPC=$(usex discord)
 		-DUSE_FAUDIO=$(usex faudio)
+		-DUSE_SYSTEM_OPENCV=$(usex opencv)
 		-DUSE_VULKAN=$(usex vulkan)
 		-DWITH_LLVM=$(usex llvm)
+		$(cmake_use_find_package wayland Wayland)
 	)
 	# These options are defined conditionally to suppress QA notice
 	use faudio && mycmakeargs+=( -DUSE_SYSTEM_FAUDIO=$(usex faudio) )
-	use vulkan && mycmakeargs+=( $(cmake_use_find_package wayland Wayland) )
 
 	cmake_src_configure
 
