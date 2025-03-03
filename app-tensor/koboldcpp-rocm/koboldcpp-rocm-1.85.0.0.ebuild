@@ -82,8 +82,9 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/makefile.patch"
-	"${FILESDIR}/gguf.patch"
+	"${FILESDIR}/${PN}-1.85.0.0-makefile.patch"
+	"${FILESDIR}/${PN}-1.85.0.0-gguf.patch"
+	"${FILESDIR}/${PN}-1.85.0.0-tae-uninitialized.patch"
 )
 
 src_prepare() {
@@ -131,13 +132,13 @@ src_compile() {
 }
 
 src_install() {
-	cp "${FILESDIR}/koboldcpp" koboldcpp
-	sed -e "s|EPYTHON|${EPYTHON}|" -i koboldcpp
-	sed -e "s|EPREFIX|${EPREFIX}|" -i koboldcpp
-	dobin koboldcpp
+	cp "${FILESDIR}/koboldcpp-rocm" koboldcpp-rocm
+	sed -e "s|EPYTHON|${EPYTHON}|" -i koboldcpp-rocm
+	sed -e "s|EPREFIX|${EPREFIX}|" -i koboldcpp-rocm
+	dobin koboldcpp-rocm
 
-	insinto /opt/koboldcpp
-	exeinto /opt/koboldcpp
+	insinto /opt/koboldcpp-rocm
+	exeinto /opt/koboldcpp-rocm
 	sed -e "s|/usr/bin/env python3|/usr/bin/env ${EPYTHON}|" \
 		-i koboldcpp.py \
 		-i convert_hf_to_gguf.py \
@@ -177,7 +178,7 @@ src_install() {
 	fi
 
 	if use tools; then
-		exeinto /opt/koboldcpp/tools
+		exeinto /opt/koboldcpp-rocm/tools
 		doexe convert_hf_to_gguf.py \
 			convert_hf_to_gguf_update.py \
 			convert_llama_ggml_to_gguf.py \

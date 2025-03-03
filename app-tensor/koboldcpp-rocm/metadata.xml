@@ -10,7 +10,7 @@
 		</flag>
 	</use>
 	<upstream>
-		<changelog>https://github.com/LostRuins/koboldcpp/releases</changelog>
-		<remote-id type="github">LostRuins/koboldcpp</remote-id>
+		<changelog>https://github.com/YellowRoseCx/koboldcpp-rocm/releases</changelog>
+		<remote-id type="github">YellowRoseCx/koboldcpp-rocm</remote-id>
 	</upstream>
 </pkgmetadata>
