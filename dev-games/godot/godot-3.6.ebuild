@@ -4,8 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..13} )
-inherit desktop python-any-r1 scons-utils
-inherit shell-completion toolchain-funcs xdg git-r3
+inherit desktop python-any-r1 scons-utils shell-completion toolchain-funcs xdg
 
 DESCRIPTION="Multi-platform 2D and 3D game engine with a feature-rich editor"
 HOMEPAGE="https://godotengine.org/"
@@ -16,9 +15,12 @@ LICENSE="
 	gui? ( CC-BY-4.0 )
 "
 SLOT="${PV}"
-EGIT_REPO_URI="https://github.com/godotengine/godot.git"
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="${PV}-stable"
+if [[ "${PV}" == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/godotengine/godot.git"
+else
+	SRC_URI="https://github.com/godotengine/godot/archive/refs/tags/${PV}-stable.tar.gz"
+	S="${WORKDIR}/${P}-stable"
 	KEYWORDS="~amd64"
 fi
 # Enable roughly same as upstream by default so it works as expected,

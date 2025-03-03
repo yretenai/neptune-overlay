@@ -161,7 +161,7 @@ xunit@2.4.2
 "
 
 PYTHON_COMPAT=( python3_{11..13} )
-inherit desktop python-any-r1 flag-o-matic scons-utils shell-completion toolchain-funcs xdg nuget git-r3
+inherit desktop python-any-r1 flag-o-matic scons-utils shell-completion toolchain-funcs xdg nuget
 
 DESCRIPTION="Multi-platform 2D and 3D game engine with a feature-rich editor"
 HOMEPAGE="https://godotengine.org/"
