@@ -11,9 +11,7 @@ if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
 	LLVM_COMPAT=(20)
 fi
 PYTHON_COMPAT=( python3_{11..13} )
-RUST_MAX_VER="1.82.100"
 RUST_MIN_VER="1.82.0"
-RUST_REQ_USE="clippy,rustfmt"
 
 inherit cargo shell-completion python-any-r1
 
