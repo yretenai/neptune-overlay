@@ -161,7 +161,7 @@ xunit@2.4.2
 "
 
 PYTHON_COMPAT=( python3_{11..13} )
-inherit desktop python-any-r1 flag-o-matic scons-utils shell-completion toolchain-funcs xdg nuget git-r3
+inherit desktop python-any-r1 flag-o-matic scons-utils shell-completion toolchain-funcs xdg nuget
 
 DESCRIPTION="Multi-platform 2D and 3D game engine with a feature-rich editor"
 HOMEPAGE="https://godotengine.org/"
@@ -176,7 +176,7 @@ if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/godotengine/godot.git"
 else
-	SRC_URI="https://github.com/godotengine/godot/archive/refs/tags/${PV}-stable.tar.gz"
+	SRC_URI+="https://github.com/godotengine/godot/archive/refs/tags/${PV}-stable.tar.gz"
 	S="${WORKDIR}/${P}-stable"
 	KEYWORDS="~amd64"
 fi
@@ -263,12 +263,25 @@ godot_get_version() {
 	)
 }
 
+dotnet_unpack() {
+	nuget_link-system-nugets
+	nuget_link-nuget-archives
+	nuget_unpack-non-nuget-archives
+}
+
 src_unpack() {
-	git-r3_src_unpack
-	if use dotnet; then
-		nuget_link-system-nugets
-		nuget_link-nuget-archives
-		nuget_unpack-non-nuget-archives
+	if [[ "${PV}" == *9999* ]]; then
+		git-r3_src_unpack
+
+		if use dotnet; then
+			dotnet_unpack
+		fi
+	else
+		if use dotnet; then
+			dotnet_unpack
+		else
+			default
+		fi
 	fi
 }
 
