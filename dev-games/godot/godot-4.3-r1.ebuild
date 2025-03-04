@@ -423,9 +423,10 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-${PV}-scons.patch"
-	"${FILESDIR}/${PN}-${PV}-mono-path.patch"
-	"${FILESDIR}/${PN}-${PV}-fix-jpeg-compressor.patch"
+	"${FILESDIR}/${PN}-4.3-gcc15.patch"
+	"${FILESDIR}/${PN}-4.3-scons.patch"
+	"${FILESDIR}/${PN}-4.3-mono-path.patch"
+	"${FILESDIR}/${PN}-4.3-fix-jpeg-compressor.patch"
 )
 
 godot_get_version() {

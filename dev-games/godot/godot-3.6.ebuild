@@ -74,8 +74,8 @@ DEPEND="
 BDEPEND="virtual/pkgconfig"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-3.6-musl.patch
-	"${FILESDIR}"/${PN}-3.6-scons.patch
+	"${FILESDIR}/${PN}-3.6-musl.patch"
+	"${FILESDIR}/${PN}-3.6-scons.patch"
 )
 
 godot_get_version() {
