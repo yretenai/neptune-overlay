@@ -136,25 +136,20 @@ CRATES="
 	xml-rs@0.8.22
 	zerocopy-derive@0.7.35
 	zerocopy@0.7.35
+	naga@24.0.0
+	wgpu-core@24.0.2
+	wgpu-hal@24.0.2
+	wgpu-types@24.0.0
 "
-
-declare -A GIT_CRATES=(
-	[naga]='https://github.com/gfx-rs/wgpu;779261e64daa6cf76c826532b7a1561d8ec203fd;wgpu-%commit%/naga'
-	[wgpu-core]='https://github.com/gfx-rs/wgpu;779261e64daa6cf76c826532b7a1561d8ec203fd;wgpu-%commit%/wgpu-core'
-	[wgpu-hal]='https://github.com/gfx-rs/wgpu;779261e64daa6cf76c826532b7a1561d8ec203fd;wgpu-%commit%/wgpu-hal'
-	[wgpu-types]='https://github.com/gfx-rs/wgpu;779261e64daa6cf76c826532b7a1561d8ec203fd;wgpu-%commit%/wgpu-types'
-)
 
 inherit cargo
 
 DESCRIPTION="Native WebGPU implementation based on wgpu-core"
 HOMEPAGE="https://github.com/gfx-rs/wgpu-native"
-COMMIT="f29ebee88362934f8f9fab530f3ccb7fde2d49a9"
 SRC_URI="
-	https://github.com/gfx-rs/wgpu-native/archive/${COMMIT}.tar.gz -> ${P}.tar.gz
+	https://github.com/gfx-rs/wgpu-native/archive/v${PV}.tar.gz -> ${P}.tar.gz
 	${CARGO_CRATE_URIS}
 "
-S="${WORKDIR}/${PN}-${COMMIT}"
 
 BDEPEND="
 	dev-util/webgpu-headers:=
@@ -173,8 +168,13 @@ PATCHES=(
 src_prepare() {
 	default
 
+	sed -e "s|git = \"https://github.com/gfx-rs/wgpu\"|#|" -i Cargo.toml
+	sed -e "s|tag = \"v$(ver_cut 0-3)\"|version = \"$(ver_cut 0-3)\"|" -i Cargo.toml
+
 	rmdir ffi/webgpu-headers
 	ln -s "${EPREFIX}/usr/include/webgpu" ffi/webgpu-headers
+
+	cargo_update_crates
 }
 
 src_install() {
