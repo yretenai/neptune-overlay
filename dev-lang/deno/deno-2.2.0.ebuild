@@ -3,21 +3,10 @@
 
 EAPI=8
 
-# change this to 1 when llvm-20 is released.
-# this is a switch because v8 will use llvm-21 alpha because they're sickos.
-DENO_V8_LLVM_SUPPORTED=0
-
-if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-	LLVM_COMPAT=(20)
-fi
 PYTHON_COMPAT=( python3_{11..13} )
 RUST_MIN_VER="1.82.0"
 
 inherit cargo shell-completion python-any-r1
-
-if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-	inherit llvm-r1
-fi
 
 DESCRIPTION="Modern runtime for JavaScript and TypeScript"
 HOMEPAGE="
@@ -25,25 +14,20 @@ HOMEPAGE="
 	https://github.com/denoland/deno/
 "
 
+RUST_V8_VER="134.4.0"
 SRC_URI="
 	https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/yretenai/neptune-overlay/releases/download/deps/${P}-crates.tar.xz
+	amd64? (
+		debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-debug.a.gz )
+		!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-release.a.gz )
+	)
+	arm64? (
+		debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_aarch64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-arm64-debug.a.gz )
+		!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-arm64-release.a.gz )
+	)
 "
 S="${WORKDIR}/deno-${PV}/cli"
-
-if [[ ${DENO_V8_LLVM_SUPPORTED} == 0 ]]; then
-	RUST_V8_VER="134.4.0"
-	SRC_URI+="
-		amd64? (
-			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-debug.a.gz )
-			!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-release.a.gz )
-		)
-		arm64? (
-			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_aarch64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-arm64-debug.a.gz )
-			!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-arm64-release.a.gz )
-		)
-	"
-fi
 
 LICENSE="MIT"
 # Dependent crate licenses
@@ -59,51 +43,18 @@ BDEPEND="
 	${PYTHON_DEPS}
 "
 
-if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-	# is cmake needed?
-	BDEPEND+="
-		dev-build/gn
-		dev-build/cmake
-		dev-build/ninja
-		$(llvm_gen_dep '
-			llvm-core/clang:${LLVM_SLOT}=
-			llvm-runtimes/compiler-rt:${LLVM_SLOT}=
-		')
-	"
-fi
-
 pkg_setup() {
-	if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-		llvm-r1_pkg_setup
-	fi
 	python-any-r1_pkg_setup
 	rust_pkg_setup
-}
-
-src_prepare() {
-	default
-
-	if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-		# merge LLVM and Clang into one lib folder, because chromium-clang expects it like this.
-		# note: using symlinks, cross filesystem issues maybe?
-		cp -rfvs "$(get_llvm_prefix -b)" "$T/llvm-merged"
-		mkdir "$T/llvm-merged/lib/clang"
-		ln -s "${BROOT}/usr/lib/clang/${LLVM_SLOT}" "$T/llvm-merged/lib/clang/${LLVM_SLOT}"
-	fi
 }
 
 src_compile() {
 	export PYTHON="${EPYTHON}"
 
-	if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-		export V8_FROM_SOURCE=1
-		export CLANG_BASE_PATH="$T/llvm-merged"
+	if use debug; then
+		export RUSTY_V8_ARCHIVE="${WORKDIR}/${PN}-rustyv8-${RUST_V8_VER}-${ARCH}-debug.a"
 	else
-		if use debug; then
-			export RUSTY_V8_ARCHIVE="${WORKDIR}/${PN}-rustyv8-${RUST_V8_VER}-${ARCH}-debug.a"
-		else
-			export RUSTY_V8_ARCHIVE="${WORKDIR}/${PN}-rustyv8-${RUST_V8_VER}-${ARCH}-release.a"
-		fi
+		export RUSTY_V8_ARCHIVE="${WORKDIR}/${PN}-rustyv8-${RUST_V8_VER}-${ARCH}-release.a"
 	fi
 
 	cargo_src_compile
