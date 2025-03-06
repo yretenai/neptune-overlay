@@ -5,7 +5,7 @@ EAPI=8
 
 # change this to 1 when llvm-20 is released.
 # this is a switch because v8 will use llvm-21 alpha because they're sickos.
-DENO_V8_LLVM_SUPPORTED=0
+DENO_V8_LLVM_SUPPORTED=1
 
 if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
 	LLVM_COMPAT=(20)
@@ -32,7 +32,7 @@ SRC_URI="
 S="${WORKDIR}/deno-${PV}/cli"
 
 if [[ ${DENO_V8_LLVM_SUPPORTED} == 0 ]]; then
-	RUST_V8_VER="134.5.0"
+	RUST_V8_VER="134.4.0"
 	SRC_URI+="
 		amd64? (
 			debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-debug.a.gz )

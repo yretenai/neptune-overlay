@@ -5,7 +5,7 @@ EAPI=8
 
 # change this to 1 when llvm-20 is released.
 # this is a switch because v8 will use llvm-21 alpha because they're sickos.
-DENO_V8_LLVM_SUPPORTED=0
+DENO_V8_LLVM_SUPPORTED=1
 
 if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
 	LLVM_COMPAT=(20)
