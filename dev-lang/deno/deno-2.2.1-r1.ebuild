@@ -51,11 +51,7 @@ LICENSE+="
 	Apache-2.0 Apache-2.0-with-LLVM-exceptions BSD-2 BSD Boost-1.0
 	CC0-1.0 ISC MPL-2.0 Unicode-3.0 Unicode-DFS-2016 ZLIB
 "
-if [[ ${DENO_V8_LLVM_SUPPORTED} > 0 ]]; then
-SLOT="0/$(ver_cut 0-1)/v8"
-else
-SLOT="0/$(ver_cut 0-1)/v8-bin"
-fi
+SLOT="0/$(ver_cut 0-1)"
 KEYWORDS="~amd64 ~arm64"
 RESTRICT="test" # requires network access, and /etc/hosts to be modified.
 
