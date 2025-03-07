@@ -185,6 +185,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
+	"${FILESDIR}/${PN}-4.5.0-oiio-shared_ptr.patch"
 )
 
 blender_check_requirements() {
