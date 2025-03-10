@@ -3,16 +3,18 @@
 
 EAPI=8
 
-inherit git-r3 shell-completion flag-o-matic
+inherit shell-completion flag-o-matic
 
 DESCRIPTION="mommy's here to support you ❤️"
 HOMEPAGE="https://github.com/FWDekker/mommy"
 LICENSE="Unlicense"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/FWDekker/mommy.git"
-if [[ ${PV} != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/FWDekker/mommy.git"
+else
+	SRC_URI="https://github.com/FWDekker/mommy/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
 fi
 
