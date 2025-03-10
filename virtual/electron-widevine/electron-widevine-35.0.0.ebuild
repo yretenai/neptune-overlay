@@ -12,6 +12,6 @@ KEYWORDS="-* ~amd64"
 RDEPEND="
 	dev-electron/electron-sets
 	|| (
-		=dev-electron/electron-wvcus-bin-${PV}*:=
+		=dev-electron/electron-wvcus-bin-${PV}*
 	)
 "
