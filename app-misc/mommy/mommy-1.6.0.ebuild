@@ -33,7 +33,7 @@ src_test() {
 }
 
 src_configure() {
-	sed -e "s|@gzip|#@gzip|" -i GNUmakefile || die
+	sed -e "/@gzip/d" -i GNUmakefile || die
 }
 
 src_compile() {
