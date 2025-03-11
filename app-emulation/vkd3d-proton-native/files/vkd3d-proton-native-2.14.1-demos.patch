@@ -1,0 +1,20 @@
+diff --git a/demos/meson.build b/demos/meson.build
+index 088bf2c..21271ef 100644
+--- a/demos/meson.build
++++ b/demos/meson.build
+@@ -16,13 +16,13 @@ else
+   ]
+ endif
+ 
+-executable('gears', 'gears.c',
++executable('vkd3d-proton-gears', 'gears.c',
+   dependencies        : demo_vkd3d_deps,
+   include_directories : vkd3d_public_includes,
+   install             : true,
+   gui_app             : true)
+ 
+-executable('triangle', 'triangle.c',
++executable('vkd3d-proton-triangle', 'triangle.c',
+   dependencies        : demo_vkd3d_deps,
+   include_directories : vkd3d_public_includes,
+   install             : true,
