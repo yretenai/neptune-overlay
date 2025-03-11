@@ -9,7 +9,6 @@ inherit flag-o-matic meson python-any-r1
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/doitsujin/dxvk.git"
-	S="${WORKDIR}/dxvk"
 else
 	HASH_SPIRV=8b246ff75c6615ba4532fe4fde20f1be090c3764
 	HASH_VULKAN=46dc0f6e514f5730784bb2cac2a7c731636839e8
