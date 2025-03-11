@@ -17,7 +17,7 @@ fi
 
 LICENSE="LGPL-2.1+"
 SLOT="0"
-IUSE="ncurses spirv-tools"
+IUSE="ncurses spirv-tools examples"
 RESTRICT="test" #838655
 
 RDEPEND="
@@ -29,6 +29,12 @@ DEPEND="
 	${RDEPEND}
 	dev-util/spirv-headers
 	dev-util/vulkan-headers
+	examples? (
+		x11-libs/libxcb[${MULTILIB_USEDEP}]
+		x11-libs/xcb-util[${MULTILIB_USEDEP}]
+		x11-libs/xcb-util-wm[${MULTILIB_USEDEP}]
+		x11-libs/xcb-util-keysyms[${MULTILIB_USEDEP}]
+	)
 "
 BDEPEND="
 	sys-devel/flex
@@ -41,7 +47,8 @@ multilib_src_configure() {
 		$(multilib_native_use_with ncurses)
 		$(use_with spirv-tools)
 		--disable-doxygen-pdf
-		--without-xcb
+		$(use_with examples xcb)
+		$(use_enable examples demos)
 		# let users' flags control lto (bug #933178)
 		vkd3d_cv_cflags__flto_auto=
 	)
