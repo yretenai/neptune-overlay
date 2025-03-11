@@ -3,6 +3,9 @@
 <pkgmetadata>
 	<use>
 		<flag name="extras">Install extra tools</flag>
+		<flag name="renderdoc">Enable renderdoc related debugging features</flag>
+		<flag name="descriptor_qa">Enable descriptor updates and copy logging</flag>
+		<flag name="profiling">Enable profiling features</flag>
 	</use>
 	<upstream>
 		<remote-id type="github">HansKristian-Work/vkd3d-proton</remote-id>
