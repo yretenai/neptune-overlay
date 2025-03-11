@@ -75,7 +75,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/libjpeg-turbo:=
 	media-libs/libpng:=
 	media-libs/libsamplerate
-	>=media-libs/openimageio-2.4.6.0:=
+	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
 	virtual/glu
 	virtual/libintl
@@ -84,10 +84,13 @@ RDEPEND="${PYTHON_DEPS}
 	collada? ( >=media-libs/opencollada-1.6.68 )
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
-	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?,vpx,vorbis,opus,xvid] )
+	embree? ( media-libs/embree:=[raymask] )
+	ffmpeg? (
+		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
+	)
 	fftw? ( sci-libs/fftw:3.0= )
-	gmp? ( dev-libs/gmp )
+	gmp? ( dev-libs/gmp[cxx] )
 	hip? (
 		llvm_slot_18? (
 			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
@@ -106,16 +109,16 @@ RDEPEND="${PYTHON_DEPS}
 	openal? ( media-libs/openal )
 	oidn? ( >=media-libs/oidn-2.3.2:= )
 	openexr? (
-		>=dev-libs/imath-3.1.4-r2:=
-		>=media-libs/openexr-3:0=
+		>=dev-libs/imath-3.1.7:=
+		>=media-libs/openexr-3.2.1:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
 	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,openmp?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
+		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
-	optix? ( <dev-libs/optix-7.5.0 )
+	optix? ( dev-libs/optix )
 	osl? (
 		>=media-libs/osl-1.13:=[${LLVM_USEDEP}]
 		media-libs/mesa[${LLVM_USEDEP}]

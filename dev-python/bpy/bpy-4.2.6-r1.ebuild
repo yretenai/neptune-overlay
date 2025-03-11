@@ -1,29 +1,20 @@
 # Copyright 2023-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# TODO
-# - Package Hydra
-# 	https://github.com/Ray-Tracing-Systems/HydraCore
-# 	https://github.com/Ray-Tracing-Systems/HydraAPI
-# - Package USD
-# 	https://github.com/PixarAnimationStudios/OpenUSD
-# - Package Draco
-# 	https://github.com/google/draco
-
 EAPI=8
 
-PYTHON_COMPAT=( python3_13 )
+PYTHON_COMPAT=( python3_{11..12} )
 LLVM_COMPAT=( 18 19 )
 LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit rocm git-r3 check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
-SLOT="$(ver_cut 1-2)"
+SLOT="0/$(ver_cut 1-2)"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
@@ -49,8 +40,8 @@ fi
 
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
-	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
+	debug +embree +ffmpeg +fftw +gmp hip jack jpeg2k
+	+nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
 RESTRICT="test"
@@ -61,7 +52,6 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles llvm )
-	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -94,9 +84,12 @@ RDEPEND="${PYTHON_DEPS}
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
-	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?,vpx,vorbis,opus,xvid] )
+	ffmpeg? (
+		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
+	)
 	fftw? ( sci-libs/fftw:3.0= )
-	gmp? ( dev-libs/gmp )
+	gmp? ( dev-libs/gmp[cxx] )
 	hip? (
 		llvm_slot_18? (
 			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
@@ -106,7 +99,6 @@ RDEPEND="${PYTHON_DEPS}
 		)
 	)
 	jack? ( virtual/jack )
-	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
 		app-misc/spacenavd
@@ -125,7 +117,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
-	optix? ( <dev-libs/optix-7.5.0 )
+	optix? ( dev-libs/optix )
 	osl? (
 		>=media-libs/osl-1.13:=[${LLVM_USEDEP}]
 		media-libs/mesa[${LLVM_USEDEP}]
@@ -164,7 +156,6 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	hiprt? ( dev-libs/hiprt:2.5=[${LLVM_USEDEP}] )
 "
 
 DEPEND="${RDEPEND}
@@ -173,15 +164,6 @@ DEPEND="${RDEPEND}
 
 BDEPEND="
 	virtual/pkgconfig
-	doc? (
-		app-text/doxygen[dot]
-		dev-python/sphinx[latex]
-		dev-texlive/texlive-bibtexextra
-		dev-texlive/texlive-fontsextra
-		dev-texlive/texlive-fontutils
-		dev-texlive/texlive-latex
-		dev-texlive/texlive-latexextra
-	)
 	vulkan? (
 		dev-util/spirv-headers
 		dev-util/vulkan-headers
@@ -199,20 +181,9 @@ BDEPEND="
 "
 
 PATCHES=(
+	"${FILESDIR}/${PN}-4.1.1-openvdb-11.patch"
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
-	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
-	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
-	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 )
-
-if [[ ${PV} == *9999* ]]; then
-	if [[ ${PV} != *9999 ]]; then
-		PATCHES+=(
-			"${FILESDIR}/${PN}-9999-branch.patch"
-		)
-	fi
-fi
 
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
@@ -221,7 +192,6 @@ blender_check_requirements() {
 
 	use debug && ((REQ_TOT += 1))
 	[[ ${MERGE_TYPE} != binary ]] && has splitdebug $FEATURES && ((REQ_TOT += 9))
-	use doc && ((REQ_TOT += 2))
 
 	CHECKREQS_DISK_BUILD="${REQ_TOT}G" check-reqs_pkg_pretend
 }
@@ -266,14 +236,6 @@ src_unpack() {
 src_prepare() {
 	cmake_src_prepare
 
-	if [[ ${PV} == *9999* ]]; then
-		if [[ ${PV} != *9999 ]]; then
-			sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
-				-i build_files/cmake/macros.cmake \
-				-i source/blender/blenkernel/intern/appdir.cc || die
-		fi
-	fi
-
 	blender_get_version
 
 	# Disable MS Windows help generation. The variable doesn't do what it
@@ -281,36 +243,11 @@ src_prepare() {
 	sed -e "s|GENERATE_HTMLHELP      = YES|GENERATE_HTMLHELP      = NO|" \
 		-i doc/doxygen/Doxyfile || die
 
-	# Prepare icons and .desktop files for slotting.
-	sed \
-		-e "s|blender.svg|blender-${BV}.svg|" \
-		-e "s|blender-symbolic.svg|blender-${BV}-symbolic.svg|" \
-		-e "s|blender.desktop|blender-${BV}.desktop|" \
-		-e "s|org.blender.Blender.metainfo.xml|blender-${BV}.metainfo.xml|" \
-		-i source/creator/CMakeLists.txt || die
-
-	sed \
-		-e "s|Name=Blender|Name=Blender ${BV}|" \
-		-e "s|Exec=blender|Exec=blender-${BV}|" \
-		-e "s|Icon=blender|Icon=blender-${BV}|" \
-		-i release/freedesktop/blender.desktop || die
-
-	mv \
-		release/freedesktop/icons/scalable/apps/blender.svg \
-		"release/freedesktop/icons/scalable/apps/blender-${BV}.svg" || die
-	mv \
-		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg \
-		"release/freedesktop/icons/symbolic/apps/blender-${BV}-symbolic.svg" || die
-	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
-	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml"
-
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
 	fi
 
 	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
-
-	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 }
 
 src_configure() {
@@ -329,8 +266,6 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
-		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -344,7 +279,6 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
-		-DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
@@ -357,7 +291,7 @@ src_configure() {
 		-DWITH_CYCLES_STANDALONE_GUI=no
 		-DWITH_CYCLES_STANDALONE=no
 		-DWITH_CYCLES=$(usex cycles)
-		-DWITH_DOC_MANPAGE=$(usex man)
+		-DWITH_DOC_MANPAGE=no
 		-DWITH_DRACO=no # TODO: Package Draco
 		-DWITH_EXPERIMENTAL_FEATURES=$(usex experimental)
 		-DWITH_FFTW3=$(usex fftw)
@@ -382,7 +316,7 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
+		-DWITH_MEM_JEMALLOC=off
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)
@@ -414,7 +348,7 @@ src_configure() {
 		-DWITH_XR_OPENXR=no
 		-DWITH_PYTHON=on
 		-DWITH_PYTHON_SECURITY=on
-		-DWITH_PYTHON_MODULE=off
+		-DWITH_PYTHON_MODULE=on
 	)
 
 	if has_version ">=dev-python/numpy-2"; then
@@ -459,96 +393,19 @@ src_configure() {
 }
 
 src_install() {
-	blender_get_version
-
-	# Pax mark blender for hardened support.
-	pax-mark m "${BUILD_DIR}"/bin/blender
-
 	cmake_src_install
 
-	if use man; then
-		# Slot the man page
-		mv "${ED}/usr/share/man/man1/blender.1" "${ED}/usr/share/man/man1/blender-${BV}.1" || die
-	fi
-
-	if use doc; then
-		# Define custom blender data/script file paths. Otherwise Blender will not be able to find them during doc building.
-		# (Because the data is in the image directory and it will default to look in /usr/share)
-		export BLENDER_SYSTEM_SCRIPTS="${ED}/usr/share/blender/${BV}/scripts"
-		export BLENDER_SYSTEM_DATAFILES="${ED}/usr/share/blender/${BV}/datafiles"
-
-		# Workaround for binary drivers.
-		addwrite /dev/ati
-		addwrite /dev/dri
-		addwrite /dev/nvidiactl
-
-		einfo "Generating Blender C/C++ API docs ..."
-		cd "${CMAKE_USE_DIR}"/doc/doxygen || die
-		doxygen -u Doxyfile || die
-		doxygen || die "doxygen failed to build API docs."
-
-		cd "${CMAKE_USE_DIR}" || die
-		einfo "Generating (BPY) Blender Python API docs ..."
-		"${BUILD_DIR}"/bin/blender --background --python doc/python_api/sphinx_doc_gen.py -noaudio || die "sphinx failed."
-
-		cd "${CMAKE_USE_DIR}"/doc/python_api || die
-		sphinx-build sphinx-in BPY_API || die "sphinx failed."
-
-		docinto "html/API/python"
-		dodoc -r "${CMAKE_USE_DIR}"/doc/python_api/BPY_API/.
-
-		docinto "html/API/blender"
-		dodoc -r "${CMAKE_USE_DIR}"/doc/doxygen/html/.
-	fi
-
-	# Fix doc installdir
-	docinto html
-	dodoc "${CMAKE_USE_DIR}"/release/text/readme.html
-	rm -r "${ED}"/usr/share/doc/blender || die
-
-	python_optimize "${ED}/usr/share/blender/${BV}/scripts"
-
-	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/blender-${BV}-thumbnailer" || die
-	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/blender-${BV}" || die
-
-	insinto "/usr/share/blender/${BV}/datafiles/assets"
-	doins -r "${WORKDIR}/blender-assets/publish/"*
+	python_optimize "${D}$(python_get_sitedir)"
 }
 
 pkg_postinst() {
-	elog
-	elog "Blender uses python integration. As such, may have some"
-	elog "inherent risks with running unknown python scripts."
-	elog
-	elog "It is recommended to change your blender temp directory"
-	elog "from /tmp to /home/user/tmp or another tmp file under your"
-	elog "home directory. This can be done by starting blender, then"
-	elog "changing the 'Temporary Files' directory in Blender preferences."
-	elog
-
-	if ! use python_single_target_python3_13; then
+	if ! use python_single_target_python3_11; then
 		ewarn
 		ewarn "You are building Blender with a newer python version than"
 		ewarn "supported by this version upstream."
 		ewarn "If you experience breakages with e.g. plugins, please switch to"
-		ewarn "python_single_target_python3_13 instead."
+		ewarn "python_single_target_python3_11 instead."
 		ewarn "Bug: https://bugs.gentoo.org/737388"
 		ewarn
 	fi
-
-	xdg_icon_cache_update
-	xdg_mimeinfo_database_update
-	xdg_desktop_database_update
-}
-
-pkg_postrm() {
-	xdg_icon_cache_update
-	xdg_mimeinfo_database_update
-	xdg_desktop_database_update
-
-	ewarn
-	ewarn "You may want to remove the following directory."
-	ewarn "~/.cache/cycles/"
-	ewarn "It may contain extra render kernels not tracked by portage"
-	ewarn
 }

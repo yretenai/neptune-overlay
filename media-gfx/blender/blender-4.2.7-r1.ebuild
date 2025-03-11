@@ -26,8 +26,6 @@ LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
 EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
-ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
 ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
 ASSETS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-assets"
 
@@ -95,9 +93,12 @@ RDEPEND="${PYTHON_DEPS}
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
-	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?,vpx,vorbis,opus,xvid] )
+	ffmpeg? (
+		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
+	)
 	fftw? ( sci-libs/fftw:3.0= )
-	gmp? ( dev-libs/gmp )
+	gmp? ( dev-libs/gmp[cxx] )
 	hip? (
 		llvm_slot_18? (
 			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
@@ -126,7 +127,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
-	optix? ( <dev-libs/optix-7.5.0 )
+	optix? ( dev-libs/optix )
 	osl? (
 		>=media-libs/osl-1.13:=[${LLVM_USEDEP}]
 		media-libs/mesa[${LLVM_USEDEP}]
@@ -145,7 +146,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=dev-libs/wayland-protocols-1.15
 		>=x11-libs/libxkbcommon-0.2.0
 		dev-util/wayland-scanner
-		media-libs/mesa[wayland]
+		media-libs/mesa[wayland,${LLVM_USEDEP}]
 		sys-apps/dbus
 	)
 	vulkan? (
@@ -255,8 +256,6 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_COMMIT}" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
 	git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${ASSETS_EGIT_BRANCH}" "${ASSETS_EGIT_LOCAL_ID}"
 	git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${ASSETS_EGIT_LOCAL_ID}"
 	git-r3_src_unpack
@@ -335,6 +334,7 @@ src_configure() {
 		-DWITH_CLANG=$(usex llvm)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
+		-DWITH_CPU_CHECK=no
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)

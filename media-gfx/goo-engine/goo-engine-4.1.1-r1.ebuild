@@ -73,9 +73,12 @@ RDEPEND="${PYTHON_DEPS}
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
-	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?,vpx,vorbis,opus,xvid] )
+	ffmpeg? (
+		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
+	)
 	fftw? ( sci-libs/fftw:3.0= )
-	gmp? ( dev-libs/gmp )
+	gmp? ( dev-libs/gmp[cxx] )
 	hip? (
 		llvm_slot_18? (
 			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
@@ -104,7 +107,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
-	optix? ( <dev-libs/optix-7.5.0 )
+	optix? ( dev-libs/optix )
 	osl? (
 		>=media-libs/osl-1.13:=[${LLVM_USEDEP}]
 		media-libs/mesa[${LLVM_USEDEP}]
