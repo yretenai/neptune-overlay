@@ -3,7 +3,7 @@
 
 EAPI=8
 
-LLVM_COMPAT=( 18 19 )
+LLVM_COMPAT=( {18..20} )
 inherit ffmpeg-compat cmake llvm-r1
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++ "

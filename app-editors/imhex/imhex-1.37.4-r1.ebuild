@@ -13,7 +13,7 @@ system.buffers@4.4.0
 system.numerics.vectors@4.4.0
 system.runtime.compilerservices.unsafe@4.4.0
 "
-LLVM_COMPAT=( {16..18} )
+LLVM_COMPAT=( {16..20} )
 
 inherit dotnet-pkg cmake llvm-r1 toolchain-funcs desktop vcs-clean
 
