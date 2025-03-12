@@ -29,6 +29,10 @@ RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"
 
+DEPEND="
+	!!neptune-dotnet/netstandard:0
+"
+
 RDEPEND="
 	neptune-dotnet/dotnet-cli-bin
 "
