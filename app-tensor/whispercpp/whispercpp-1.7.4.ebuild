@@ -90,7 +90,7 @@ src_configure() {
 		-DWHISPER_SDL2=$(usex sdl)
 		-DGGML_BLAS=$(usex openblas)
 		-DGGML_CUDA=$(usex cuda)
-		-DGGML_HIPBLAS=$(usex hip)
+		-DGGML_HIP=$(usex hip)
 		-DGGML_HIP_UMA=$(usex hipuma)
 		-DGGML_VULKAN=$(usex vulkan)
 		-DGGML_SYCL=OFF # $(usex sycl)
