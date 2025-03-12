@@ -29,8 +29,6 @@ find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
 LATEST_NETSTANDARD_VERSION="2.1.0"
 IS_FIRST=Y
 
-dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}"
-
 for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json | jq -r '.["releases-index"][] | [.["channel-version", "latest-sdk", "latest-runtime", "support-phase", "releases.json"]] | join("^")'); do
 	IFS="^"
 	set -- $RELEASE
@@ -63,8 +61,9 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 		if [ "${IS_FIRST}" = "Y" ]; then
 			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
 			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_SDK}" | sed 's/..$/00/')"
+			dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}.${RELEASE_SDK}"
 
-			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.ebuild" || exit
+			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.${RELEASE_SDK}.ebuild" || exit
 
 			LATEST_VERSION="${RELEASE_RUNTIME}"
 			LATEST_SDK_VERSION="${RELEASE_SDK}"
@@ -97,5 +96,6 @@ if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
 	for TARGET in $TARGETS; do
 		pkgdev_do $TARGET
 	done
+	pkgdev_do netstandard
 	cd "${OLD_PWD}"
 fi
