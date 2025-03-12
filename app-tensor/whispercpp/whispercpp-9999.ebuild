@@ -4,7 +4,7 @@
 EAPI=8
 
 LLVM_COMPAT=( 18 19 )
-inherit cmake llvm-r1
+inherit ffmpeg-compat cmake llvm-r1
 
 DESCRIPTION="Port of OpenAI's Whisper model in C/C++ "
 HOMEPAGE="https://github.com/ggerganov/whisper.cpp"
@@ -39,7 +39,7 @@ DEPEND="
 	openblas? ( sci-libs/openblas:= )
 	sdl? ( media-libs/libsdl2:= )
 	torch? ( sci-libs/pytorch )
-	ffmpeg? ( media-video/ffmpeg:= )
+	ffmpeg? ( media-video/ffmpeg-compat:6= )
 	media-fonts/roboto
 "
 
@@ -105,6 +105,12 @@ src_configure() {
 		-DGGML_FMA=$(usex cpu_flags_x86_fma3)
 		-DGGML_F16C=$(usex cpu_flags_x86_f16c)
 	)
+
+	if use ffmpeg; then
+		ffmpeg_compat_setup 6
+		ffmpeg_compat_add_flags
+		mycmakeargs+=( -DFFMPEG_DIR="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
+	fi
 
 	if use hip; then
 		# it looks in /usr/local otherwise

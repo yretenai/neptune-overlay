@@ -9,7 +9,7 @@ LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit ffmpeg-compat rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
 DESCRIPTION="Custom build of blender with some extra NPR features."
 HOMEPAGE="
@@ -74,8 +74,7 @@ RDEPEND="${PYTHON_DEPS}
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
 	ffmpeg? (
-		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
-		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
+		media-video/ffmpeg-compat:6=[encode(+),lame,jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
 	)
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp[cxx] )
@@ -363,6 +362,12 @@ src_configure() {
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_XR_OPENXR=no
 	)
+
+	if use ffmpeg; then
+		ffmpeg_compat_setup 6
+		ffmpeg_compat_add_flags
+		mycmakeargs+=( -DFFMPEG_DIR="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
+	fi
 
 	if use optix; then
 		mycmakeargs+=(

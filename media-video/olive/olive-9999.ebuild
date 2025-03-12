@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3 xdg
+inherit ffmpeg-compat cmake git-r3 xdg
 
 DESCRIPTION="Professional open-source non-linear video editor"
 HOMEPAGE="
@@ -47,7 +47,7 @@ DEPEND="
 	media-libs/openimageio:=
 	media-libs/opentimelineio:=
 	media-libs/portaudio
-	media-video/ffmpeg
+	media-video/ffmpeg-compat:6=
 	virtual/opengl
 "
 RDEPEND="${DEPEND}"
@@ -81,6 +81,11 @@ src_configure() {
 		-DBUILD_DOXYGEN="$(usex doc)"
 		-DBUILD_TESTS="$(usex test)"
 	)
+
+	ffmpeg_compat_setup 6
+	ffmpeg_compat_add_flags
+	mycmakeargs+=( -DFFMPEG_DIR="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
+
 	cmake_src_configure
 }
 

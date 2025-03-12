@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit ffmpeg-compat cmake git-r3
 
 DESCRIPTION="Common components shared between Olive libraries"
 HOMEPAGE="
@@ -28,7 +28,7 @@ RESTRICT="
 DEPEND="
 	dev-libs/imath
 	media-libs/opentimelineio
-	>=media-video/ffmpeg-3.0:=
+	media-video/ffmpeg-compat:6=
 	virtual/opengl
 "
 RDEPEND="${DEPEND}"
@@ -37,6 +37,10 @@ src_configure() {
 	local mycmakeargs=(
 		-DOLIVECORE_BUILD_TESTS=$(usex test)
 	)
+
+	ffmpeg_compat_setup 6
+	ffmpeg_compat_add_flags
+	mycmakeargs+=( -DFFMPEG_DIR="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
 
 	cmake_src_configure
 }
