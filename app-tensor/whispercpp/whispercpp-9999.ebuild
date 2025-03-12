@@ -109,7 +109,6 @@ src_configure() {
 	if use ffmpeg; then
 		ffmpeg_compat_setup 6
 		ffmpeg_compat_add_flags
-		mycmakeargs+=( -DFFMPEG_DIR="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
 	fi
 
 	if use hip; then

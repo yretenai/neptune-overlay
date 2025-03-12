@@ -422,7 +422,7 @@ src_configure() {
 	if use ffmpeg; then
 		ffmpeg_compat_setup 6
 		ffmpeg_compat_add_flags
-		mycmakeargs+=( -DFFMPEG_DIR="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
+		mycmakeargs+=( -DFFMPEG_ROOT="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
 	fi
 
 	if has_version ">=dev-python/numpy-2"; then
