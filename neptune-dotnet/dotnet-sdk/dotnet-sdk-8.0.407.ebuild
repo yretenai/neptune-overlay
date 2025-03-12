@@ -6,8 +6,8 @@ EAPI=8
 MY_PV="${PV/-r*/}"
 DN_PV="${PV}"
 
-RUNTIME_PV="8.0.13"
-ASP_PV="8.0.13"
+RUNTIME_PV="8.0.14"
+ASP_PV="8.0.14"
 
 NUGETS="
 	microsoft.aspnetcore.app.ref@${ASP_PV}
