@@ -96,6 +96,7 @@ src_unpack() {
 	if [[ "${PV}" == *9999* ]]; then
 		git-r3_src_unpack
 	fi
+	neptune-dotnet_src_unpack
 }
 
 src_prepare() {

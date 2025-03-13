@@ -176,13 +176,15 @@ neptune-dotnet_restore() {
 	edotnet restore "${restore_args[@]}"
 }
 
-# @FUNCTION: neptune-dotnet_src_configure
+# @FUNCTION: neptune-dotnet_src_unpack
 # @DESCRIPTION:
-# Default "src_configure" for the "neptune-dotnet" eclass.
-# Configure the package.
-neptune-dotnet_src_configure() {
+# Default "src_unpack" for the "neptune-dotnet" eclass.
+# Restores nuget packages.
+neptune-dotnet_src_unpack() {
 	addpredict "${EPREFIX}/opt/neptune-dotnet/metadata/"
 	if [[ "${PV}" == *9999* ]]; then
+		cd "${S}"
+
 		dotnet-pkg-base_info
 
 		dotnet-pkg_foreach-project \
@@ -191,7 +193,15 @@ neptune-dotnet_src_configure() {
 		dotnet-pkg-base_foreach-solution \
 			"$(pwd)" \
 			neptune-dotnet_restore "${DOTNET_PKG_RESTORE_EXTRA_ARGS[@]}"
-	else
+	fi
+}
+
+# @FUNCTION: neptune-dotnet_src_configure
+# @DESCRIPTION:
+# Default "src_configure" for the "neptune-dotnet" eclass.
+# Configure the package.
+neptune-dotnet_src_configure() {
+	if [[ "${PV}" != *9999* ]]; then
 		dotnet-pkg_src_configure
 	fi
 }
@@ -222,11 +232,6 @@ neptune-dotnet_src_prepare() {
 
 	default
 }
-
-if [[ "${PV}" == *9999* ]]; then
-	# allow nuget downloading
-	RESTRICT="network-sandbox"
-fi
 
 fi
 
