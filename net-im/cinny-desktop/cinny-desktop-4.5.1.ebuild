@@ -84,6 +84,6 @@ src_compile() {
 src_install() {
 	cd "${S_TAURI}"
 	cargo_src_install
-	make_desktop_entry Cinny Cinny cinny "Network;InstantMessaging"
+	make_desktop_entry cinny Cinny cinny "Network;InstantMessaging"
 	newicon "icons/icon.png" cinny.png
 }
