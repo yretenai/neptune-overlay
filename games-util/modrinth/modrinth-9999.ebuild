@@ -3,16 +3,15 @@
 
 EAPI=8
 
-RUST_MIN_VER="1.80.1"
-
 inherit cargo git-r3 desktop xdg
 
 DESCRIPTION="The Modrinth App is a desktop application for managing your Minecraft mods"
 HOMEPAGE="https://github.com/modrinth/code"
 
-S_ROOT="${WORKDIR}/${P}"
-S="${S_ROOT}/apps/app"
-S_FRONTEND="${S_ROOT}/apps/app-frontend"
+S_HOME="${WORKDIR}/${P}"
+S="${S_HOME}"
+S_THESEUS="${S}/apps/app"
+S_FRONTEND="${S}/apps/app-frontend"
 
 LICENSE="GPL-3"
 # Dependent crate licenses
@@ -32,6 +31,12 @@ fi
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror test"
 
+DEPEND="
+	net-libs/webkit-gtk:4.1
+	dev-libs/libayatana-appindicator
+	gnome-base/librsvg
+"
+
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
 	>=sys-apps/pnpm-bin-9.5.0
@@ -42,24 +47,14 @@ PATCHES=(
 )
 
 src_unpack() {
-	git-r3_src_unpack
-
-	cd "${S}"
-	cargo generate-lockfile
-	if [[ ${PV} != *9999* ]]; then
-		cargo_src_unpack
+	# overriding S is necessary because cargo has no way to override where root is.
+	if [[ ${PV} == *9999* ]]; then
+		git-r3_src_unpack
+		S="${S_THESEUS}" cargo_live_src_unpack
 	else
-		cargo_live_src_unpack
+		S="${S_THESEUS}" cargo_src_unpack
 	fi
-}
 
-src_prepare() {
-	cd "${S_ROOT}"
-	default
-	sed -e "s|staging-api.modrinth.com|api.modrinth.com|" -i "packages/app-lib/src/config.rs" || die "can't patch api endpoint to be prod"
-}
-
-src_configure() {
 	export COREPACK_ENABLE_STRICT=0
 	export BASE_URL="https://api.modrinth.com/v2/"
 	export BROWSER_BASE_URL="https://api.modrinth.com/v2/"
@@ -67,9 +62,16 @@ src_configure() {
 	cd "${S_FRONTEND}"
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i --loglevel verbose --reporter append-only || die
+}
 
-	cd "${S}"
-	cargo_src_configure
+src_prepare() {
+	default
+	sed -e "s|staging-api.modrinth.com|api.modrinth.com|" -i "packages/app-lib/src/config.rs" || die "can't patch api endpoint to be prod"
+}
+
+src_configure() {
+	cd "${S_THESEUS}"
+	cargo_src_configure --frozen
 }
 
 src_compile() {
@@ -79,27 +81,13 @@ src_compile() {
 	cd "${S_FRONTEND}"
 	pnpm build || die
 
-	cd "${S}"
+	cd "${S_THESEUS}"
 	cargo_src_compile
 }
 
 src_install() {
 	# cargo_src_install # fucks up because codegen regenerates a frozen file. i love rust, truly.
-	cd "${S_ROOT}"
-
-	if [[ "$ARCH" == "amd64" ]]; then
-		R_TARGET="$(usex elibc_musl "x86_64-unknown-linux-musl" "x86_64-unknown-linux-gnu")"
-	elif [[ "$ARCH" == "x86" ]]; then
-		R_TARGET="i686-unknown-linux-gnu"
-	elif [[ "$ARCH" == "arm64" ]]; then
-		R_TARGET="$(usex elibc_musl "aarch64-unknown-linux-musl" "aarch64-unknown-linux-gnu")"
-	elif [[ "$ARCH" == "arm" ]]; then
-		R_TARGET="armv7-unknown-linux-gnueabihf"
-	else
-		die "invalid ARCH (${ARCH})"
-	fi
-
-	newbin "target/${R_TARGET}/release/theseus_gui" modrinth
+	newbin "$(cargo_target_dir)/theseus_gui" modrinth
 	make_desktop_entry modrinth "Modrinth App" modrinth Game "MimeType=application/zip+mrpack;x-scheme-handler/modrinth"
 	newicon "apps/app/icons/icon.png" modrinth.png
 }
