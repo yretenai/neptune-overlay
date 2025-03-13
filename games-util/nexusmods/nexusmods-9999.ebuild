@@ -15,6 +15,7 @@ HOMEPAGE="
 "
 
 if [[ "${PV}" == *9999* ]]; then
+	PROPERTIES=live
 	GIT_LFS=1
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Nexus-Mods/NexusMods.App.git"

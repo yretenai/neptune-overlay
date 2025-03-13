@@ -7,7 +7,6 @@ DOTNET_PKG_COMPAT=9.0
 DOTNET_NEPTUNE_TARGETS="9.0"
 
 NUGETS="
-
 argon@0.24.2
 autofixture.xunit2@4.18.1
 autofixture@4.18.1
@@ -678,6 +677,7 @@ HOMEPAGE="
 "
 
 if [[ "${PV}" == *9999* ]]; then
+	PROPERTIES=live
 	GIT_LFS=1
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/Nexus-Mods/NexusMods.App.git"

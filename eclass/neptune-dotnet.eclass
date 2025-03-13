@@ -182,7 +182,7 @@ neptune-dotnet_restore() {
 # Restores nuget packages.
 neptune-dotnet_src_unpack() {
 	addpredict "${EPREFIX}/opt/neptune-dotnet/metadata/"
-	if [[ "${PV}" == *9999* ]]; then
+	if has live ${PROPERTIES}; then
 		cd "${S}"
 
 		dotnet-pkg-base_info
@@ -201,7 +201,7 @@ neptune-dotnet_src_unpack() {
 # Default "src_configure" for the "neptune-dotnet" eclass.
 # Configure the package.
 neptune-dotnet_src_configure() {
-	if [[ "${PV}" != *9999* ]]; then
+	if ! has live ${PROPERTIES}; then
 		dotnet-pkg_src_configure
 	fi
 }
@@ -224,7 +224,7 @@ neptune-dotnet_src_prepare() {
 	dotnet-pkg-base_remove-global-json
 	dotnet-pkg-base_foreach-solution "$(pwd)" dotnet-pkg_remove-bad
 
-	if [[ "${PV}" != *9999* ]]; then
+	if ! has live ${PROPERTIES}; then
 		find "$(pwd)" -maxdepth 1 -iname "nuget.config" -delete ||
 			die "${FUNCNAME[0]}: failed to remove unwanted \"NuGet.config\" config files"
 		nuget_writeconfig "$(pwd)/"
