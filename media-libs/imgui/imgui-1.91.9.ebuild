@@ -45,10 +45,6 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
-PATCHES=(
-	"${FILESDIR}/imgui-1.91.8-wgpu.patch"
-)
-
 src_prepare() {
 	default
 
