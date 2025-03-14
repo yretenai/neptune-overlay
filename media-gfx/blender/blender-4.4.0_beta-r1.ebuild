@@ -260,6 +260,9 @@ src_unpack() {
 }
 
 src_prepare() {
+	# llvm assertion error with this patchset, will check if it's fixed on release but it's nasty.
+	git revert 9ad3b748675abb17c1982a231fcbb83137c7fb67
+
 	cmake_src_prepare
 
 	if [[ ${PV} == *9999* ]]; then
