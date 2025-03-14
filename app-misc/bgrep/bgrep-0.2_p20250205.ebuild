@@ -8,8 +8,8 @@ COMMIT="6eb0e4730c5ae88574bdab83b07d7b25ac544778"
 inherit toolchain-funcs
 
 DESCRIPTION="Grep-like tool to search for binary strings"
-HOMEPAGE="https://github.com/yretenai/bgrep/"
-SRC_URI="https://github.com/yretenai/bgrep/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://github.com/tmbinc/bgrep/"
+SRC_URI="https://github.com/tmbinc/bgrep/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/${PN}-${COMMIT}"
 
