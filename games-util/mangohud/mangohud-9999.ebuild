@@ -26,13 +26,13 @@ SRC_URI="
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/flightlessmango/MangoHud.git"
+	EGIT_SUBMODULES=()
 else
-	SRC_URI+="
-		https://github.com/flightlessmango/MangoHud/archive/v${MY_PV}${MY_PV_REV}.tar.gz
-			-> ${P}.tar.gz
+	SRC_URI="
+		https://github.com/flightlessmango/MangoHud/archive/v${MY_PV}${MY_PV_REV}.tar.gz -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64"
-	S="${WORKDIR}/MangoHud-${PV}"
+	S="${WORKDIR}/MangoHud-${MY_PV}${MY_PV_REV}"
 fi
 
 LICENSE="MIT"
@@ -92,21 +92,13 @@ RDEPEND="
 	)
 "
 
-PATCHES=(
-	"${FILESDIR}/${PN}-0.8.0-imgui-1.90.patch"
-)
-
 src_unpack() {
 	default
-
-	[[ -n "${MY_PV_REV}" ]] && ( mv "${WORKDIR}/MangoHud-${MY_PV}${MY_PV_REV}" "${WORKDIR}/MangoHud-${PV}" || die )
 
 	if [[ $PV == 9999 ]]; then
 		git-r3_src_unpack
 	fi
 
-	unpack vulkan-headers-${VK_HEADERS_VER}.tar.gz
-	unpack vulkan-headers-${VK_HEADERS_VER}-${VK_HEADERS_MESON_WRAP_VER}-meson-wrap.zip
 	mv "${WORKDIR}/Vulkan-Headers-${VK_HEADERS_VER}" "${S}/subprojects/" || die
 }
 
