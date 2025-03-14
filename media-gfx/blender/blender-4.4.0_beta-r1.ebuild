@@ -100,14 +100,7 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp[cxx] )
-	hip? (
-		llvm_slot_18? (
-			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
-		)
-		llvm_slot_19? (
-			>=dev-util/hip-6.3:=[llvm_slot_19(-)]
-		)
-	)
+	hip? ( dev-util/hip:= )
 	jack? ( virtual/jack )
 	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
@@ -147,7 +140,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=dev-libs/wayland-protocols-1.15
 		>=x11-libs/libxkbcommon-0.2.0
 		dev-util/wayland-scanner
-		media-libs/mesa[wayland,${LLVM_USEDEP}]
+		media-libs/mesa[wayland]
 		sys-apps/dbus
 	)
 	vulkan? (
