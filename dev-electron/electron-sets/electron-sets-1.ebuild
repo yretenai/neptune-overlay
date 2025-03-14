@@ -5,7 +5,7 @@ EAPI=8
 
 DESCRIPTION="Electron Rebuild Set"
 HOMEPAGE="
-	https://github.com/yretenai/neptune-overlay
+	https://non-existant.local
 "
 LICENSE="GPL-2"
 SLOT="0"
