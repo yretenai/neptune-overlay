@@ -89,4 +89,3 @@ src_unpack() {
 	default
 	cargo_src_unpack
 }
-

@@ -95,7 +95,7 @@ _swift_checkout_dep() {
 
 swift_src_prepare() {
 	default
-	
+
 	mkdir -p "${SWIFT_WORKDIR}/.build/checkouts/" || die "could not make checkouts directory"
 	for SWIFT_CHECKOUT in "${SWIFT_CHECKOUTS[@]}"; do
 		local checkout=($SWIFT_CHECKOUT)

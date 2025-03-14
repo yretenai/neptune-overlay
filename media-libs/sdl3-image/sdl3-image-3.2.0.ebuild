@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake-multilib
+inherit cmake-multilib multilib
 
 MY_P="SDL3_image-${PV}"
 DESCRIPTION="Image file loading library"

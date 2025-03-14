@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="mangoapp">Build and install mangoapp and mangoapp layer</flag>
+		<flag name="mangohudctl">Build and install mangohudctl</flag>
+		<flag name="mangoplot">Install mangoplot python script</flag>
+		<flag name="xnvctrl">Use XNVctrl as fall back for older Nvidia devices.</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">flightlessmango/MangoHud</remote-id>
+	</upstream>
+</pkgmetadata>

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit flag-o-matic meson toolchain-funcs
+inherit flag-o-matic meson
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3

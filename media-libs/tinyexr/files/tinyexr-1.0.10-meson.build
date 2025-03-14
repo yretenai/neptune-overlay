@@ -85,7 +85,7 @@ import('pkgconfig').generate(
 if get_option('build_examples')
 	cxxopts = dependency('cxxopts', required: true)
 	stb = dependency('stb', required: true)
-	
+
 	executable('exrcube2longlat', ['examples/cube2longlat/cube2longlat.cc'], 
 		dependencies : [tinyexr_dep, cxxopts, stb],
 		install : true)
@@ -125,7 +125,7 @@ if get_option('build_examples')
 	executable('exrmapgen', ['examples/testmapgen/testmapgen.cc'], 
 		dependencies : [tinyexr_dep, cxxopts, stb, miniz],
 		install : true)
-	
+
 	glut = dependency('glut',required: false)
 	glu = dependency('glu', required: false)
 	gl = dependency('gl', required: false)

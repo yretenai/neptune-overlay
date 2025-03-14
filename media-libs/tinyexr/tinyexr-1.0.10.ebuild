@@ -7,8 +7,6 @@ inherit meson
 
 DESCRIPTION="Tiny OpenEXR image loader/saver library"
 HOMEPAGE="https://github.com/syoyo/tinyexr"
-LICENSE="MIT"
-SLOT="0"
 
 TINYDNG_PV="0534fd3cba56f2f00428f78ec6905b7595df71ec"
 
@@ -16,6 +14,8 @@ SRC_URI="
 	https://github.com/syoyo/tinyexr/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/syoyo/tinydng/archive/${TINYDNG_PV}.tar.gz -> tinydng-${TINYDNG_PV}.tar.gz
 "
+LICENSE="MIT"
+SLOT="0"
 KEYWORDS="~amd64"
 
 IUSE="+miniz zlib zlib-ng nanozlib stb examples gl gtk exrview openmp threads zfp +piz cpu_flags_x86_f16c"
@@ -35,7 +35,7 @@ DEPEND="
 	zfp? (
 		dev-libs/zfp:=
 	)
-	examples? ( 
+	examples? (
 		dev-libs/cxxopts:=
 		dev-libs/stb:=
 		dev-libs/miniz

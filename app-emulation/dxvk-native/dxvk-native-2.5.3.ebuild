@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{10..13} )
+PYTHON_COMPAT=( python3_{10..13} python3_13t )
 inherit flag-o-matic meson python-any-r1
 
 if [[ ${PV} == 9999 ]]; then

@@ -23,7 +23,7 @@ LICENSE+="
 SLOT="0"
 
 if [[ ${PV} == *9999* ]]; then
-	inherit git-r3 
+	inherit git-r3
 	EGIT_REPO_URI="https://github.com/cinnyapp/cinny-desktop.git"
 else
 	SRC_URI="

@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..12} )
-LLVM_COMPAT=( {18..20} )
+LLVM_COMPAT=( {18..19} )
 LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
@@ -341,6 +341,12 @@ src_configure() {
 		-DWITH_PYTHON_SECURITY=on
 		-DWITH_PYTHON_MODULE=on
 	)
+
+	if use ffmpeg; then
+		ffmpeg_compat_setup 6
+		ffmpeg_compat_add_flags
+		mycmakeargs+=( -DFFMPEG_ROOT="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
+	fi
 
 	if has_version ">=dev-python/numpy-2"; then
 		mycmakeargs+=(

@@ -8,8 +8,15 @@ HOMEPAGE="https://github.com/webgpu-native/webgpu-headers"
 LICENSE="BSD"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/webgpu-native/${PN}.git"
-inherit git-r3
+if [[ "${PV}" == *99999999* ]] ; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/webgpu-native/${PN}.git"
+else
+	COMMIT=
+	SRC_URI="https://github.com/webgpu-native/${PN}/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-${COMMIT}"
+	KEYWORDS="~amd64 ~x86"
+fi
 
 src_prepare() {
 	default

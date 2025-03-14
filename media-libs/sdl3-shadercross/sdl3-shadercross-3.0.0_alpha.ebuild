@@ -3,14 +3,13 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="Image file loading library"
 HOMEPAGE="https://www.libsdl.org/projects/SDL_image/"
 COMMIT="816fe3628b9c6be934033cf0dc2a70467d163256"
 SRC_URI="
-	https://github.com/libsdl-org/SDL_shadercross/archive/${COMMIT}.zip
-	
+	https://github.com/libsdl-org/SDL_shadercross/archive/${COMMIT}.tar.gz -> ${P}.tar.gz
 "
 S="${WORKDIR}/SDL_shadercross-${COMMIT}"
 

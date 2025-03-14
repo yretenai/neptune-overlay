@@ -30,10 +30,7 @@ RDEPEND="
 	sdl2-renderer? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
 	sdl3? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
 	sdl3-renderer? ( media-libs/libsdl2[${MULTILIB_USEDEP}] )
-	opengl? ( || (
-		>=media-libs/mesa-24.1.0_rc1[opengl,${MULTILIB_USEDEP}]
-		<media-libs/mesa-24.1.0_rc1[gles2,egl(+),${MULTILIB_USEDEP}]
-	) )
+	opengl? ( media-libs/mesa[opengl,${MULTILIB_USEDEP}] )
 	vulkan? ( media-libs/vulkan-loader[${MULTILIB_USEDEP}] )
 	webgpu? (
 		dev-util/webgpu-headers:=
