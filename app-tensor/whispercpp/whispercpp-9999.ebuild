@@ -25,14 +25,8 @@ RESTRICT="!test? ( test )"
 
 DEPEND="
 	hip? (
-		llvm_slot_18? (
-			=sci-libs/hipBLAS-6.1*:=
-			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
-		)
-		llvm_slot_19? (
-			=sci-libs/hipBLAS-6.3*:=
-			>=dev-util/hip-6.3:=[llvm_slot_19(-)]
-		)
+		sci-libs/hipBLAS:=
+		dev-util/hip:=
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	vulkan? ( media-libs/vulkan-loader )

@@ -51,14 +51,8 @@ RDEPEND="
 		>=sci-libs/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
 	')
 	hip? (
-		llvm_slot_18? (
-			=sci-libs/hipBLAS-6.1*:=
-			>=dev-util/hip-6.1:=[llvm_slot_18(-)]
-		)
-		llvm_slot_19? (
-			=sci-libs/hipBLAS-6.3*:=
-			>=dev-util/hip-6.3:=[llvm_slot_19(-)]
-		)
+		sci-libs/hipBLAS:=
+		dev-util/hip:=
 	)
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	clblast? ( sci-libs/clblast:=[cuda?] )
