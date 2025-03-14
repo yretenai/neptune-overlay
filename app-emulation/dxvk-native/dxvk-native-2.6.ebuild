@@ -29,7 +29,7 @@ else
 	KEYWORDS="-* amd64 x86"
 fi
 
-DESCRIPTION="Vulkan-based implementation of D3D9, D3D10 and D3D11 for Linux / Wine"
+DESCRIPTION="Vulkan-based implementation of D3D9, D3D10 and D3D11 for Linux"
 HOMEPAGE="https://github.com/doitsujin/dxvk/"
 
 LICENSE="ZLIB Apache-2.0 MIT"
