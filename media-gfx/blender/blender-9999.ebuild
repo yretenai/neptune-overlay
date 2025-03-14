@@ -160,7 +160,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	hiprt? ( dev-libs/hiprt:2.5=[${LLVM_USEDEP}] )
+	hiprt? ( dev-libs/hiprt:2.5=)
 "
 
 DEPEND="${RDEPEND}
@@ -200,7 +200,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
-	"${FILESDIR}/${PN}-4.5.0-oiio-shared_ptr.patch"
 )
 
 if [[ ${PV} == *9999* ]]; then
