@@ -32,7 +32,7 @@ DEPEND="
 	vulkan? ( media-libs/vulkan-loader )
 	openblas? ( sci-libs/openblas:= )
 	sdl? ( media-libs/libsdl2:= )
-	torch? ( sci-libs/pytorch )
+	torch? ( sci-ml/pytorch )
 	ffmpeg? ( media-video/ffmpeg-compat:6= )
 	media-fonts/roboto
 "

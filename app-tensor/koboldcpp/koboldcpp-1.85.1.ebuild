@@ -40,8 +40,8 @@ RDEPEND="
 		>=dev-python/protobuf-4.21.0[${PYTHON_USEDEP}]
 		>=dev-python/urllib3-2.0.0[${PYTHON_USEDEP}]
 		>=dev-python/psutil-5.9.4[${PYTHON_USEDEP}]
-		>=sci-libs/transformers-4.34.0[${PYTHON_SINGLE_USEDEP}]
-		>=sci-libs/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
+		>=sci-ml/transformers-4.34.0[${PYTHON_SINGLE_USEDEP}]
+		>=sci-ml/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
 	')
 	hip? (
 		sci-libs/hipBLAS:=
@@ -54,7 +54,7 @@ RDEPEND="
 		media-libs/vulkan-loader
 	)
 	tools? (
-		sci-libs/pytorch
+		sci-ml/pytorch
 	)
 "
 
