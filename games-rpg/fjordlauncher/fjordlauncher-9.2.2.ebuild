@@ -70,6 +70,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-9.2.2-gulrak-filesystem.patch"
 	"${FILESDIR}/${PN}-9.2.2-tomlplusplus.patch"
 	"${FILESDIR}/${PN}-9.2.2-loud.patch"
+	"${FILESDIR}/${PN}-9.2.2-mcpack.patch"
+	"${FILESDIR}/${PN}-9.2.2-gamemode.patch"
 )
 
 src_unpack() {

@@ -70,6 +70,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-8.0-gulrak-filesystem.patch"
 	"${FILESDIR}/${PN}-8.0-tomlplusplus.patch"
 	"${FILESDIR}/${PN}-8.0-loud.patch"
+	"${FILESDIR}/${PN}-8.0-mcpack.patch"
+	"${FILESDIR}/${PN}-8.0-gamemode.patch"
 )
 
 src_unpack() {
