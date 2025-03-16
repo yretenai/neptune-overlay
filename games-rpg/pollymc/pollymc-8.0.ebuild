@@ -18,7 +18,7 @@ KEYWORDS="~amd64 ~arm64"
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2+ GPL-3 ISC LGPL-2.1+ LGPL-3+ MIT"
 SLOT="0"
 
-IUSE="debug lto qt5 qt6 test"
+IUSE="debug lto qt5 +qt6 test"
 REQUIRED_USE="
 	lto? ( !debug )
 	^^ ( qt5 qt6 )
