@@ -1,0 +1,55 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fcbada9..669564e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -330,9 +330,6 @@ if(NOT Launcher_FORCE_BUNDLED_LIBS)
+     # Find toml++
+     find_package(tomlplusplus 3.2.0 QUIET)
+ 
+-    # Find ghc_filesystem
+-    find_package(ghc_filesystem QUIET)
+-
+     # Find cmark
+     find_package(cmark QUIET)
+ endif()
+@@ -515,12 +512,6 @@ endif()
+ add_subdirectory(libraries/katabasis) # An OAuth2 library that tried to do too much
+ add_subdirectory(libraries/gamemode)
+ add_subdirectory(libraries/murmur2) # Hash for usage with the CurseForge API
+-if (NOT ghc_filesystem_FOUND)
+-    message(STATUS "Using bundled ghc_filesystem")
+-    add_subdirectory(libraries/filesystem) # Implementation of std::filesystem for old C++, for usage in old macOS
+-else()
+-    message(STATUS "Using system ghc_filesystem")
+-endif()
+ add_subdirectory(libraries/qdcss) # css parser
+ 
+ ############################### Built Artifacts ###############################
+diff --git a/launcher/CMakeLists.txt b/launcher/CMakeLists.txt
+index f883093..de1f9db 100644
+--- a/launcher/CMakeLists.txt
++++ b/launcher/CMakeLists.txt
+@@ -1283,7 +1283,6 @@ target_link_libraries(Launcher_logic
+     BuildConfig
+     Katabasis
+     Qt${QT_VERSION_MAJOR}::Widgets
+-    ghcFilesystem::ghc_filesystem
+ )
+ 
+ if (UNIX AND NOT CYGWIN AND NOT APPLE)
+@@ -1363,7 +1362,6 @@ if(Launcher_BUILD_UPDATER)
+         ${ZLIB_LIBRARIES}
+         systeminfo
+         BuildConfig
+-        ghcFilesystem::ghc_filesystem
+         Qt${QT_VERSION_MAJOR}::Widgets
+         Qt${QT_VERSION_MAJOR}::Core
+         Qt${QT_VERSION_MAJOR}::Network
+@@ -1403,7 +1401,6 @@ if(WIN32 OR (DEFINED Launcher_BUILD_FILELINKER AND Launcher_BUILD_FILELINKER))
+     target_link_libraries(filelink_logic
+         systeminfo
+         BuildConfig
+-        ghcFilesystem::ghc_filesystem
+         Qt${QT_VERSION_MAJOR}::Widgets
+         Qt${QT_VERSION_MAJOR}::Core
+         Qt${QT_VERSION_MAJOR}::Network

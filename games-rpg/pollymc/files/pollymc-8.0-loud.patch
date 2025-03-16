@@ -1,0 +1,53 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index baaa477..d408f1c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -149,7 +149,7 @@ endif()
+ 
+ option(BUILD_TESTING "Build the testing tree." ON)
+ 
+-find_package(ECM QUIET NO_MODULE)
++find_package(ECM NO_MODULE)
+ if(NOT ECM_FOUND)
+     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libraries/extra-cmake-modules/CMakeLists.txt")
+         message(STATUS "Using bundled ECM")
+@@ -270,7 +270,7 @@ set(Launcher_BUILD_TIMESTAMP "${TODAY}")
+ # Successive configurations of cmake without cleaning the build dir will cause zlib fallback to fail due to cached values
+ # Record when fallback triggered and skip this find_package
+ if(NOT Launcher_FORCE_BUNDLED_LIBS AND NOT FORCE_BUNDLED_ZLIB)
+-    find_package(ZLIB QUIET)
++    find_package(ZLIB)
+ endif()
+ if(NOT ZLIB_FOUND)
+     set(FORCE_BUNDLED_ZLIB TRUE CACHE BOOL "")
+@@ -284,7 +284,7 @@ if(Launcher_QT_VERSION_MAJOR EQUAL 5)
+     find_package(Qt5 REQUIRED COMPONENTS Core Widgets Concurrent Network Test Xml)
+ 
+     if(NOT Launcher_FORCE_BUNDLED_LIBS)
+-        find_package(QuaZip-Qt5 1.3 QUIET)
++        find_package(QuaZip-Qt5 1.3)
+     endif()
+     if (NOT QuaZip-Qt5_FOUND)
+         set(QUAZIP_QT_MAJOR_VERSION ${QT_VERSION_MAJOR} CACHE STRING "Qt version to use (4, 5 or 6), defaults to ${QT_VERSION_MAJOR}" FORCE)
+@@ -299,7 +299,7 @@ elseif(Launcher_QT_VERSION_MAJOR EQUAL 6)
+     list(APPEND Launcher_QT_LIBS Qt6::Core5Compat)
+ 
+     if(NOT Launcher_FORCE_BUNDLED_LIBS)
+-        find_package(QuaZip-Qt6 1.3 QUIET)
++        find_package(QuaZip-Qt6 1.3)
+     endif()
+     if (NOT QuaZip-Qt6_FOUND)
+         set(QUAZIP_QT_MAJOR_VERSION ${QT_VERSION_MAJOR} CACHE STRING "Qt version to use (4, 5 or 6), defaults to ${QT_VERSION_MAJOR}" FORCE)
+@@ -327,10 +327,10 @@ endif()
+ 
+ if(NOT Launcher_FORCE_BUNDLED_LIBS)
+     # Find toml++
+-    find_package(tomlplusplus QUIET)
++    find_package(tomlplusplus)
+ 
+     # Find cmark
+-    find_package(cmark QUIET)
++    find_package(cmark)
+ endif()
+ 
+ include(ECMQtDeclareLoggingCategory)
