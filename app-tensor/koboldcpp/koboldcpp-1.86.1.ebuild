@@ -44,6 +44,7 @@ RDEPEND="
 		>=sci-ml/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
 	')
 	hip? (
+		sci-libs/rocWMMA:=
 		sci-libs/hipBLAS:=
 		dev-util/hip:=
 	)
