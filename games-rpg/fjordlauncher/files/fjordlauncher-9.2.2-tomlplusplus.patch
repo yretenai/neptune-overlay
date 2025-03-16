@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index baaa477..6a7bec9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -327,7 +327,7 @@ endif()
+ 
+ if(NOT Launcher_FORCE_BUNDLED_LIBS)
+     # Find toml++
+-    find_package(tomlplusplus 3.2.0 QUIET)
++    find_package(tomlplusplus QUIET)
+ 
+     # Find cmark
+     find_package(cmark QUIET)
