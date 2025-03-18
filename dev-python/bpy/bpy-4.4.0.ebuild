@@ -50,13 +50,6 @@ else
 	else
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	fi
-
-	# special branches
-	if [[ ${PV} == *99991* ]]; then
-		EGIT_BRANCH="npr-prototype"
-		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
-		SLOT="${EGIT_BRANCH}"
-	fi
 fi
 
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
@@ -224,12 +217,6 @@ blender_get_version() {
 	else
 		# Add period and skip the middle number (301 -> 3.1)
 		BV=${BV:0:1}.${BV:2}
-	fi
-
-	if [[ ${PV} == *9999* ]]; then
-		if [[ ${PV} != *9999 ]]; then
-			BV="${BV}-${SLOT}"
-		fi
 	fi
 }
 
