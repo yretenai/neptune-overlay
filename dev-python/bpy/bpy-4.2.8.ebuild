@@ -9,27 +9,48 @@ LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit ffmpeg-compat rocm git-r3 check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
+inherit ffmpeg-compat rocm check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="0/$(ver_cut 1-2)"
 
-EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
-ASSETS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-assets"
+HAS_ASSETS=1
+HAS_ADDONS=0
+HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
 
-if [[ ${PV} != *9999* ]]; then
+if [ "${HAS_RELEASED}" -eq 1 ]; then
+	IS_LIVE=0
+	SRC_URI="
+		https://projects.blender.org/blender/blender/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	"
+	S="${WORKDIR}/${PN}"
+
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		SRC_URI+="
+			https://projects.blender.org/blender/blender-assets/archive/v${PV}.tar.gz -> ${P}-assets.tar.gz
+		"
+	fi
+
+	if [ "${HAS_ADDONS}" -eq 1 ]; then
+		SRC_URI+="
+			https://projects.blender.org/blender/blender-addons/archive/v${PV}.tar.gz -> ${P}-addons.tar.gz
+		"
+	fi
+
+	KEYWORDS="~amd64"
+else
+	inherit git-r3
+	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
+	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
+	ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 	if [[ ${PV} != *_beta* ]]; then
-		EGIT_COMMIT="v${PV}"
+		EGIT_BRANCH="main"
 	else
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	fi
-	ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
-	KEYWORDS="~amd64"
-else
-	ASSETS_EGIT_BRANCH="main"
+
 	# special branches
 	if [[ ${PV} == *99991* ]]; then
 		EGIT_BRANCH="npr-prototype"
@@ -220,9 +241,25 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${ASSETS_EGIT_BRANCH}" "${ASSETS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${ASSETS_EGIT_LOCAL_ID}"
-	git-r3_src_unpack
+	if [ "${HAS_RELEASED}" -eq 1 ]; then
+		default
+
+		if [ "${HAS_ADDONS}" -eq 1 ]; then
+			mv "${WORKDIR}/blender-addons" "${S}/scripts/addons"
+		fi
+	else
+		if [ "${HAS_ASSETS}" -eq 1 ]; then
+			git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+			git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
+		fi
+
+		if [ "${HAS_ADDONS}" -eq 1 ]; then
+			git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+			git-r3_checkout "${ADDONS_EGIT_LOCAL_ID}" "${S}/scripts/addons"
+		fi
+
+		git-r3_src_unpack
+	fi
 }
 
 src_prepare() {
@@ -239,7 +276,9 @@ src_prepare() {
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
 	fi
 
-	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
+	fi
 }
 
 src_configure() {
@@ -392,6 +431,12 @@ src_configure() {
 
 src_install() {
 	cmake_src_install
+
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		blender_get_version
+		insinto "$(python_get_sitedir)/bpy/${BV}/datafiles/assets"
+		doins -r "${WORKDIR}/blender-assets/publish/"*
+	fi
 
 	python_optimize "${D}$(python_get_sitedir)"
 }
