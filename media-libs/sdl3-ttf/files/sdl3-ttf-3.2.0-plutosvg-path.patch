@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0f2bac9..af79727 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -359,6 +359,8 @@ if(SDLTTF_PLUTOSVG)
+         find_package(plutosvg ${find_package_strict_arg})
+         if(plutosvg_FOUND)
+             message(STATUS "${PROJECT_NAME}: Using system plutosvg library")
++            set(plutosvg_compile_definitions ${PC_PLUTOSVG_CFLAGS_OTHER})
++            set(plutosvg_include_directories ${PC_PLUTOSVG_INCLUDE_DIRS})
+             set(plutosvg_link_libraries plutosvg::plutosvg)
+             list(APPEND PC_REQUIRES plutosvg)
+             set(SDLTTF_PLUTOSVG_ENABLED TRUE)
