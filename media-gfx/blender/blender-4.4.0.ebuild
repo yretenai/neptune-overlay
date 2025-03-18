@@ -12,35 +12,54 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..12} )
+PYTHON_COMPAT=( python3_13 )
 LLVM_COMPAT=( {18..19} )
 LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit ffmpeg-compat rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
-EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
-ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
-ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
-ASSETS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-assets"
+HAS_ASSETS=1
+HAS_ADDONS=0
+HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
 
-if [[ ${PV} != *9999* ]]; then
+if [ "${HAS_RELEASED}" -eq 1 ]; then
+	IS_LIVE=0
+	SRC_URI="
+		https://projects.blender.org/blender/blender/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	"
+	S="${WORKDIR}/${PN}"
+
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		SRC_URI+="
+			https://projects.blender.org/blender/blender-assets/archive/v${PV}.tar.gz -> ${P}-assets.tar.gz
+		"
+	fi
+
+	if [ "${HAS_ADDONS}" -eq 1 ]; then
+		SRC_URI+="
+			https://projects.blender.org/blender/blender-addons/archive/v${PV}.tar.gz -> ${P}-addons.tar.gz
+		"
+	fi
+
+	KEYWORDS="~amd64"
+else
+	inherit git-r3
+	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
+	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
+	ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 	if [[ ${PV} != *_beta* ]]; then
-		EGIT_COMMIT="v${PV}"
+		EGIT_BRANCH="main"
 	else
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	fi
-	ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
-	KEYWORDS="~amd64"
-else
-	ASSETS_EGIT_BRANCH="main"
+
 	# special branches
 	if [[ ${PV} == *99991* ]]; then
 		EGIT_BRANCH="npr-prototype"
@@ -51,7 +70,7 @@ fi
 
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
+	debug doc +embree +ffmpeg +fftw +gmp hip hiprt jack jemalloc jpeg2k
 	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
 	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
 	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
@@ -63,6 +82,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles llvm )
+	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -85,7 +105,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/libjpeg-turbo:=
 	media-libs/libpng:=
 	media-libs/libsamplerate
-	>=media-libs/openimageio-2.4.6.0:=
+	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
 	virtual/glu
 	virtual/libintl
@@ -94,9 +114,10 @@ RDEPEND="${PYTHON_DEPS}
 	collada? ( >=media-libs/opencollada-1.6.68 )
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
+	embree? ( media-libs/embree:=[raymask] )
 	ffmpeg? (
-		media-video/ffmpeg-compat:6=[encode(+),lame,jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
 	)
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp[cxx] )
@@ -112,13 +133,13 @@ RDEPEND="${PYTHON_DEPS}
 	openal? ( media-libs/openal )
 	oidn? ( >=media-libs/oidn-2.3.2:= )
 	openexr? (
-		>=dev-libs/imath-3.1.4-r2:=
-		>=media-libs/openexr-3:0=
+		>=dev-libs/imath-3.1.7:=
+		>=media-libs/openexr-3.2.1:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
 	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,openmp?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
+		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( dev-libs/optix )
@@ -160,6 +181,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
+	hiprt? ( dev-libs/hiprt:2.5= )
 "
 
 DEPEND="${RDEPEND}
@@ -194,8 +216,11 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-4.1.1-openvdb-11.patch"
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
+	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
+	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
+	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 )
 
 if [[ ${PV} == *9999* ]]; then
@@ -250,11 +275,25 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_COMMIT}" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${ASSETS_EGIT_BRANCH}" "${ASSETS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${ASSETS_EGIT_LOCAL_ID}"
-	git-r3_src_unpack
+	if [ "${HAS_RELEASED}" -eq 1 ]; then
+		default
+
+		if [ "${HAS_ADDONS}" -eq 1 ]; then
+			mv "${WORKDIR}/blender-addons" "${S}/scripts/addons"
+		fi
+	else
+		if [ "${HAS_ASSETS}" -eq 1 ]; then
+			git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+			git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
+		fi
+
+		if [ "${HAS_ADDONS}" -eq 1 ]; then
+			git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+			git-r3_checkout "${ADDONS_EGIT_LOCAL_ID}" "${S}/scripts/addons"
+		fi
+
+		git-r3_src_unpack
+	fi
 }
 
 src_prepare() {
@@ -302,7 +341,11 @@ src_prepare() {
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
 	fi
 
-	rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
+	fi
+
+	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 }
 
 src_configure() {
@@ -321,6 +364,8 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
+		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
+		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -330,9 +375,11 @@ src_configure() {
 		-DWITH_CLANG=$(usex llvm)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
+		-DWITH_CPU_CHECK=no
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
+		-DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
@@ -404,12 +451,6 @@ src_configure() {
 		-DWITH_PYTHON_SECURITY=on
 		-DWITH_PYTHON_MODULE=off
 	)
-
-	if use ffmpeg; then
-		ffmpeg_compat_setup 6
-		ffmpeg_compat_add_flags
-		mycmakeargs+=( -DFFMPEG_ROOT="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
-	fi
 
 	if has_version ">=dev-python/numpy-2"; then
 		mycmakeargs+=(
@@ -505,8 +546,10 @@ src_install() {
 	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/blender-${BV}-thumbnailer" || die
 	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/blender-${BV}" || die
 
-	insinto "/usr/share/blender/${BV}/datafiles/assets"
-	doins -r "${WORKDIR}/blender-assets/publish/"*
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		insinto "/usr/share/blender/${BV}/datafiles/assets"
+		doins -r "${WORKDIR}/blender-assets/publish/"*
+	fi
 }
 
 pkg_postinst() {
@@ -520,12 +563,12 @@ pkg_postinst() {
 	elog "changing the 'Temporary Files' directory in Blender preferences."
 	elog
 
-	if ! use python_single_target_python3_11; then
+	if ! use python_single_target_python3_13; then
 		ewarn
 		ewarn "You are building Blender with a newer python version than"
 		ewarn "supported by this version upstream."
 		ewarn "If you experience breakages with e.g. plugins, please switch to"
-		ewarn "python_single_target_python3_11 instead."
+		ewarn "python_single_target_python3_13 instead."
 		ewarn "Bug: https://bugs.gentoo.org/737388"
 		ewarn
 	fi
