@@ -5,7 +5,7 @@ EAPI=8
 
 inherit flag-o-matic meson
 
-if [[ ${PV} == 9999 ]]; then
+if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/HansKristian-Work/vkd3d-proton.git"
 	EGIT_SUBMODULES=(
@@ -60,7 +60,7 @@ PATCHES=(
 )
 
 src_prepare() {
-	if [[ ${PV} != 9999 ]]; then
+	if [[ ${PV} != *9999* ]]; then
 		rmdir khronos/{SPIRV,Vulkan}-Headers subprojects/dxil-spirv || die
 		mv ../dxil-spirv-${HASH_DXIL} subprojects/dxil-spirv || die
 		mv ../SPIRV-Headers-${HASH_SPIRV} khronos/SPIRV-Headers || die
@@ -79,7 +79,7 @@ src_prepare() {
 
 	default
 
-	if [[ ${PV} != 9999 ]]; then
+	if [[ ${PV} != *9999* ]]; then
 		# without .git, meson sets vkd3d_build as 0x${PV} leading to failure
 		sed -i "s/@VCS_TAG@/${HASH_VKD3D::15}/" vkd3d_build.h.in || die
 		sed -i "s/@VCS_TAG@/${HASH_VKD3D::7}/" vkd3d_version.h.in || die

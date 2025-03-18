@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{10..13} python3_13t )
 inherit flag-o-matic meson python-any-r1
 
-if [[ ${PV} == 9999 ]]; then
+if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/doitsujin/dxvk.git"
 else
@@ -48,7 +48,7 @@ BDEPEND="
 "
 
 src_prepare() {
-	if [[ ${PV} != 9999 ]]; then
+	if [[ ${PV} != *9999* ]]; then
 		rmdir include/{spirv,vulkan} include/native/directx subprojects/libdisplay-info || die
 		mv ../SPIRV-Headers-${HASH_SPIRV} include/spirv || die
 		mv ../Vulkan-Headers-${HASH_VULKAN} include/vulkan || die

@@ -7,7 +7,7 @@ inherit multilib-minimal
 
 DESCRIPTION="D3D12 to Vulkan translation library"
 HOMEPAGE="https://gitlab.winehq.org/wine/vkd3d/"
-if [[ ${PV} == 9999 ]]; then
+if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.winehq.org/wine/vkd3d.git"
 else
