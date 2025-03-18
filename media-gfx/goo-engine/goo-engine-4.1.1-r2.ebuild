@@ -9,7 +9,7 @@ LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit ffmpeg-compat rocm git-r3 check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit ffmpeg-compat rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
 
 DESCRIPTION="Custom build of blender with some extra NPR features."
 HOMEPAGE="
@@ -19,12 +19,42 @@ HOMEPAGE="
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
-EGIT_REPO_URI="https://github.com/dillongoostudios/goo-engine.git"
-ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
+HAS_ASSETS=1
+HAS_ADDONS=1
+HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
 
-EGIT_BRANCH="goo-engine-v$(ver_cut 1-2)-release"
-ADDONS_EGIT_BRANCH="refs/heads/blender-v$(ver_cut 1-2)-release"
-ADDONS_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-addons"
+if [ "${HAS_RELEASED}" -eq 1 ]; then
+	IS_LIVE=0
+	GOO_COMMIT=6a1210ff3f3f5566c6bb3ad384f8aa64dc94b2e7
+	SRC_URI="
+		https://github.com/dillongoostudios/goo-engine/archive/${GOO_COMMIT}.tar.gz -> ${P}.tar.gz
+	"
+	S="${WORKDIR}/${PN}-${GOO_COMMIT}"
+
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		SRC_URI+="
+			https://projects.blender.org/blender/blender-assets/archive/v${PV}.tar.gz -> ${P}-assets.tar.gz
+		"
+	fi
+
+	if [ "${HAS_ADDONS}" -eq 1 ]; then
+		SRC_URI+="
+			https://projects.blender.org/blender/blender-addons/archive/v${PV}.tar.gz -> ${P}-addons.tar.gz
+		"
+	fi
+
+	KEYWORDS="~amd64"
+else
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/dillongoostudios/goo-engine.git"
+	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
+	ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
+	if [[ ${PV} != *_beta* ]]; then
+		EGIT_BRANCH="goo-engine-main"
+	else
+		EGIT_BRANCH="goo-blender-v$(ver_cut 1-2)-release"
+	fi
+fi
 
 KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
@@ -215,9 +245,25 @@ pkg_setup() {
 }
 
 src_unpack() {
-	git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${ADDONS_EGIT_BRANCH}" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_checkout "${ADDONS_EGIT_REPO_URI}" "${S}/scripts/addons" "${ADDONS_EGIT_LOCAL_ID}"
-	git-r3_src_unpack
+	if [ "${HAS_RELEASED}" -eq 1 ]; then
+		default
+
+		if [ "${HAS_ADDONS}" -eq 1 ]; then
+			mv "${WORKDIR}/blender-addons" "${S}/scripts/addons"
+		fi
+	else
+		if [ "${HAS_ASSETS}" -eq 1 ]; then
+			git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+			git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
+		fi
+
+		if [ "${HAS_ADDONS}" -eq 1 ]; then
+			git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+			git-r3_checkout "${ADDONS_EGIT_LOCAL_ID}" "${S}/scripts/addons"
+		fi
+
+		git-r3_src_unpack
+	fi
 }
 
 src_prepare() {
@@ -232,8 +278,8 @@ src_prepare() {
 
 	# Prepare icons and .desktop files for slotting.
 	sed \
-		-e "s|blender.svg|goo-engine-${BV}.svg|" \
-		-e "s|blender-symbolic.svg|goo-engine-${BV}-symbolic.svg|" \
+		-e "s|blender.svg|goo-engine-${BV}.png|" \
+		-e "s|blender-symbolic.svg|goo-engine-${BV}-symbolic.png|" \
 		-e "s|blender.desktop|goo-engine-${BV}.desktop|" \
 		-e "s|org.blender.Blender.metainfo.xml|goo-engine-${BV}.metainfo.xml|" \
 		-i source/creator/CMakeLists.txt || die
@@ -244,18 +290,22 @@ src_prepare() {
 		-e "s|Icon=blender|Icon=goo-engine-${BV}|" \
 		-i release/freedesktop/blender.desktop || die
 
-	mv \
-		release/freedesktop/icons/scalable/apps/blender.svg \
-		"release/freedesktop/icons/scalable/apps/goo-engine-${BV}.svg" || die
-	mv \
-		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg \
-		"release/freedesktop/icons/symbolic/apps/goo-engine-${BV}-symbolic.svg" || die
+	rm release/freedesktop/icons/scalable/apps/blender.svg \
+		release/freedesktop/icons/symbolic/apps/blender-symbolic.svg || die
+
+	cp "${FILESDIR}/goo-engine-icon.png" "release/freedesktop/icons/scalable/apps/goo-engine-${BV}.png" || die
+	cp "${FILESDIR}/goo-engine-icon.png" "release/freedesktop/icons/symbolic/apps/goo-engine-${BV}-symbolic.png" || die
+
 	mv release/freedesktop/blender.desktop "release/freedesktop/goo-engine-${BV}.desktop" || die
 	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/goo-engine-${BV}.metainfo.xml"
 	mv release/freedesktop/org.blender.Blender.appdata.xml "release/freedesktop/goo-engine-${BV}.appdata.xml"
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
+	fi
+
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 	fi
 }
 
@@ -451,6 +501,11 @@ src_install() {
 
 	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/goo-engine-${BV}-thumbnailer" || die
 	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/goo-engine-${BV}" || die
+
+	if [ "${HAS_ASSETS}" -eq 1 ]; then
+		insinto "/usr/share/goo-engine/${BV}/datafiles/assets"
+		doins -r "${WORKDIR}/blender-assets/publish/"*
+	fi
 }
 
 pkg_postinst() {
