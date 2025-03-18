@@ -61,7 +61,7 @@ else
 	fi
 
 	# special branches
-	if [[ ${PV} == *99991* ]]; then
+	if [[ ${PV} == 99991 ]]; then
 		EGIT_BRANCH="npr-prototype"
 		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
 		SLOT="${EGIT_BRANCH}"
@@ -223,7 +223,7 @@ PATCHES=(
 )
 
 if [[ ${PV} == *9999* ]]; then
-	if [[ ${PV} != *9999 ]]; then
+	if [[ ${PV} != 9999 ]]; then
 		PATCHES+=(
 			"${FILESDIR}/${PN}-9999-branch.patch"
 		)
@@ -254,7 +254,7 @@ blender_get_version() {
 	fi
 
 	if [[ ${PV} == *9999* ]]; then
-		if [[ ${PV} != *9999 ]]; then
+		if [[ ${PV} != 9999 ]]; then
 			BV="${BV}-${SLOT}"
 		fi
 	fi
@@ -299,7 +299,7 @@ src_prepare() {
 	cmake_src_prepare
 
 	if [[ ${PV} == *9999* ]]; then
-		if [[ ${PV} != *9999 ]]; then
+		if [[ ${PV} != 9999 ]]; then
 			sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
 				-i build_files/cmake/macros.cmake \
 				-i source/blender/blenkernel/intern/appdir.cc || die
