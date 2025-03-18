@@ -8,7 +8,7 @@ inherit cmake-multilib multilib
 MY_P="SDL3_ttf-${PV}"
 DESCRIPTION="Library that allows you to use TrueType fonts in SDL applications"
 HOMEPAGE="https://www.libsdl.org/projects/SDL_ttf/"
-SRC_URI="https://github.com/libsdl-org/SDL_ttf/releases/download/release-${PV}/${MY_P}.tar.gz"
+SRC_URI="https://github.com/libsdl-org/SDL_ttf/releases/download/release-${PV}/${MY_P}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}"/${MY_P}
 
 LICENSE="ZLIB"

@@ -12,7 +12,7 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/sammycage/plutovg.git"
 else
-	SRC_URI="https://github.com/sammycage/plutovg/archive/refs/tags/v${PV}.tar.gz"
+	SRC_URI="https://github.com/sammycage/plutovg/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64"
 fi
 
