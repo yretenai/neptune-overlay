@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ADADOTNET_ROOT='/var/db/repos/neptune/neptune-dotnet'
 
@@ -19,11 +19,10 @@ dotnet_apply() {
 	fi
 }
 
-TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-sdk dotnet-cli-bin dotnet-man"
+TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-aspnetcore-nugets dotnet-runtime-nugets dotnet-sdk dotnet-cli-bin dotnet-man"
 for TARGET in $TARGETS; do
 	find "${ADADOTNET_ROOT}/${TARGET}" \( -iname "*8.0*.ebuild" -or -iname "*9.0*.ebuild" -or -iname "*10.0*.ebuild" \) -delete
 done
-
 find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
 
 LATEST_NETSTANDARD_VERSION="2.1.0"
@@ -33,45 +32,61 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 	IFS="^"
 	set -- $RELEASE
 	RELEASE_CHANNEL=$1
-	RELEASE_SDK=$2
+	RELEASE_HEAD_SDK=$2
 	RELEASE_RUNTIME=$3
+	RELEASE_ASP=$3
 	RELEASE_TYPE=$4
 	RELEASE_INDEX=$5
-	unset IFS
-	RELEASE_SDK_SAFE="$(dotnet_strip "${RELEASE_SDK}")"
+	IFS=" "
+	RELEASE_INDEX_DATA=$(curl -s "${RELEASE_INDEX}")
+	RELEASE_ASP="$(echo ${RELEASE_INDEX_DATA} | jq --raw-output '.releases[0]["aspnetcore-runtime"].version')"
+	RELEASE_SDK_SAFE="$(dotnet_strip "${RELEASE_HEAD_SDK}")"
+	dotnet_apply dotnet-sdk "${RELEASE_HEAD_SDK}"
+	sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 
-	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
+	dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}"
+	dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
 
-	if ! ([ "${RELEASE_TYPE}" = "active" ] || [ "${RELEASE_TYPE}" = "eol" ] || [ "${RELEASE_TYPE}" = "maintenance" ]); then
-		RELEASE_ASP="$(curl -s "${RELEASE_INDEX}" | jq --raw-output '.releases[0]["aspnetcore-runtime"].version')"
-
-		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}"
-		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
-		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
-		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
-
-		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
-	else
-		dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_RUNTIME}"
-		dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
-		dotnet_apply dotnet-sdk "${RELEASE_SDK}"
-
-		sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
-
+	IS_PREVIEW=0
+	if ([ "${RELEASE_TYPE}" = "active" ] || [ "${RELEASE_TYPE}" = "eol" ] || [ "${RELEASE_TYPE}" = "maintenance" ]); then
+		# only add head cli
 		if [ "${IS_FIRST}" = "Y" ]; then
 			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
-			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_SDK}" | sed 's/..$/00/')"
-			dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}.${RELEASE_SDK}"
+			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_HEAD_SDK}" | sed 's/..$/00/')"
+			dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}.${RELEASE_HEAD_SDK}"
 
-			sed -i "/__DOTNET_VERSION__/s//${RELEASE_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.${RELEASE_SDK}.ebuild" || exit
+			sed -i "/__DOTNET_VERSION__/s//${RELEASE_HEAD_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.${RELEASE_HEAD_SDK}.ebuild" || exit
 
 			LATEST_VERSION="${RELEASE_RUNTIME}"
-			LATEST_SDK_VERSION="${RELEASE_SDK}"
+			LATEST_SDK_VERSION="${RELEASE_HEAD_SDK}"
 			IS_FIRST=N
 		fi
+	else
+		IS_PREVIEW=1
+		# also add preview cli
+		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
 	fi
 
-	sed -i "/__DOTNET_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
+	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_HEAD_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
+
+	for RELEASE_NUGET in $(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["runtime"].version] | join(" ")'); do
+		if ([[ "${IS_PREVIEW}" == 0 ]] && ( [[ "${RELEASE_NUGET}" == *preview* ]] || [[ "${RELEASE_NUGET}" == *rc* ]])); then
+			break
+		fi
+
+		dotnet_apply dotnet-runtime-nugets "${RELEASE_NUGET}"
+		sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET}/g" "${ADADOTNET_ROOT}/dotnet-runtime-nugets/dotnet-runtime-nugets-$(dotnet_strip "${RELEASE_NUGET}").ebuild" || exit
+	done <<< "${RELEASE_SDKS}"
+
+	for RELEASE_NUGET in $(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["aspnetcore-runtime"].version] | join(" ")'); do
+		if ([[ "${IS_PREVIEW}" == 0 ]] && ( [[ "${RELEASE_NUGET}" == *preview* ]] || [[ "${RELEASE_NUGET}" == *rc* ]])); then
+			break
+		fi
+
+		dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_NUGET}"
+		sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-nugets/dotnet-aspnetcore-nugets-$(dotnet_strip "${RELEASE_NUGET}").ebuild" || exit
+	done <<< "${RELEASE_SDKS}"
 
 	if [ "${RELEASE_CHANNEL}" = "8.0" ]; then
 		break
