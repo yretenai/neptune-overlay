@@ -25,7 +25,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SLOT="${RUNTIME_PV}"
+SLOT="$(ver_cut 1-4)/10.0.0-preview.2.25164.1"
 KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
