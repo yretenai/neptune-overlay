@@ -281,9 +281,9 @@ src_unpack() {
 
 	if use dotnet; then
 		neptune-dotnet_src_unpack
-	else
-		default
 	fi
+
+	nuget_unpack-non-nuget-archives
 }
 
 src_prepare() {

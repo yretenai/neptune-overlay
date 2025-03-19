@@ -3,7 +3,7 @@
 
 # @ECLASS: neptune-dotnet.eclass
 # @SUPPORTED_EAPIS: 8
-# @PROVIDES: dotnet-pkg-base dotnet-pkg
+# @PROVIDES: dotnet-pkg-base dotnet-pkg nuget
 # @BLURB: Eclass for dotnet build processes using dotnet-pkg
 # @MAINTAINER:
 # Ada <ada@chronovore.dev>
