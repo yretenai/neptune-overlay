@@ -60,35 +60,82 @@
 #
 # "DOTNET_PKG_BDEPS" should appear (or conditionally appear) in "BDEPEND".
 
+# @ECLASS_VARIABLE: DOTNET_NEPTUNE_OPTIONAL
+# @PRE_INHERIT
+# @OUTPUT_VARIABLE
+# @DESCRIPTION:
+# When set to 1, will not do anything by default.
+
+# @ECLASS_VARIABLE: DOTNET_NEPTUNE_PROJECT_ROOT
+# @PRE_INHERIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The root path of the dotnet solution
+
+# @ECLASS_VARIABLE: DOTNET_NEPTUNE_SOLUTIONS
+# @PRE_INHERIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The list of solutions to compile
+
+# @ECLASS_VARIABLE: DOTNET_NEPTUNE_TARGETS
+# @PRE_INHERIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The SDKs this project targets
+
+# @ECLASS_VARIABLE: DOTNET_NEPTUNE_NUGET_LEVELS
+# @PRE_INHERIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The Runtime levels this targets, leave unspecified to default to sdk level
+
+# @ECLASS_VARIABLE: DOTNET_NEPTUNE_ASPNETCORE
+# @PRE_INHERIT
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# Target aspnetcore instead of the regular runtime
+
 if [[ -z ${_NEPTUNE_DOTNET_ECLASS} ]]; then
 _NEPTUNE_DOTNET_ECLASS=1
 
 DOTNET_PKG_EXECUTABLE="${EPREFIX}/opt/neptune-dotnet/dotnet"
 DOTNET_ROOT="${EPREFIX}/opt/neptune-dotnet"
-inherit dotnet-pkg-base
+inherit dotnet-pkg-base nuget
 
 # nasty, nasty override for deps.
-if [[ ! -z "${DOTNET_NEPTUNE_TARGETS}" ]]; then
+if [[ -n "${DOTNET_NEPTUNE_TARGETS}" ]]; then
 	DOTNET_PKG_RDEPS="
 		dev-dotnet/csharp-gentoodotnetinfo
 	"
 	DOTNET_PKG_BDEPS=""
-	for DOTNET_NEPTUNE_TARGET in ${DOTNET_NEPTUNE_TARGETS}; do
-		DOTNET_PKG_RDEPS+="
-			virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}
-		"
+	for DOTNET_NEPTUNE_TARGET in "${DOTNET_NEPTUNE_TARGETS[@]}"; do
+		if [[ "${DOTNET_NEPTUNE_ASPNETCORE:-1}" == 0 ]]; then
+			DOTNET_PKG_RDEPS+="
+				virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}
+			"
+		else
+			DOTNET_PKG_RDEPS+="
+				virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[asp]
+			"
+		fi
+
 		DOTNET_PKG_BDEPS+="
 			virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[sdk]
 		"
 	done
+	for DOTNET_NEPTUNE_NUGET_LEVEL in "${DOTNET_NEPTUNE_NUGET_LEVELS[@]}"; do
+		if [[ "${DOTNET_NEPTUNE_ASPNETCORE:-1}" == 1 ]]; then
+			DOTNET_PKG_RDEPS+="
+				neptune-dotnet/dotnet-aspnetcore-nugets:${DOTNET_NEPTUNE_NUGET_LEVEL}
+			"
+		fi
+		DOTNET_PKG_RDEPS+="
+			neptune-dotnet/dotnet-runtime-nugets:${DOTNET_NEPTUNE_NUGET_LEVEL}
+		"
+	done
 else
-	DOTNET_PKG_RDEPS="
-		virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}
-	"
-	DOTNET_PKG_BDEPS="
-		virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[sdk]
-		dev-dotnet/csharp-gentoodotnetinfo
-	"
+	die "Need to set DOTNET_NEPTUNE_TARGETS"
 fi
 
 inherit dotnet-pkg
@@ -137,7 +184,6 @@ neptune-dotnet_dolauncher() {
 
 	# Launcher script for ${executable_path} (${executable_name}),
 	# created from package "${CATEGORY}/${P}",
-	# compatible with dotnet version ${DOTNET_PKG_COMPAT}.
 
 	DOTNET_ROOT="${EPREFIX}/opt/neptune-dotnet"
 	export DOTNET_ROOT
@@ -176,23 +222,58 @@ neptune-dotnet_restore() {
 	edotnet restore "${restore_args[@]}"
 }
 
+# @FUNCTION: neptune-dotnet_foreach-solution
+# @USAGE: <args> ...
+# @DESCRIPTION:
+# Run a specified command for each solution listed inside the "DOTNET_PKG_PROJECTS"
+# variable.
+#
+# Used by "dotnet-pkg_src_configure" and "dotnet-pkg_src_compile".
+neptune-dotnet_foreach-solution() {
+	debug-print-function ${FUNCNAME} "$@"
+
+	DOTNET_LOCAL_PATH="${S}/${DOTNET_NEPTUNE_PROJECT_ROOT}"
+	cd "${DOTNET_LOCAL_PATH}" || die
+
+	if [[ -z "${DOTNET_NEPTUNE_SOLUTIONS}" ]]; then
+		dotnet-pkg-base_foreach-solution "$(pwd)" "$@"
+	else
+		local dotnet_solution
+		for dotnet_solution in "${DOTNET_NEPTUNE_SOLUTIONS[@]}" ; do
+			ebegin "Running \"${*}\" for solution: \"${dotnet_solution##*/}\""
+			"${@}" "${dotnet_solution}"
+			eend $? "${FUNCNAME[0]}: failed for solution: \"${dotnet_solution}\"" || die
+		done
+	fi
+}
+
 # @FUNCTION: neptune-dotnet_src_unpack
 # @DESCRIPTION:
 # Default "src_unpack" for the "neptune-dotnet" eclass.
 # Restores nuget packages.
 neptune-dotnet_src_unpack() {
+	debug-print-function ${FUNCNAME} "$@"
+
 	addpredict "${EPREFIX}/opt/neptune-dotnet/metadata/"
-	if has live ${PROPERTIES}; then
-		cd "${S}"
+	if has live "${PROPERTIES}"; then
+		DOTNET_LOCAL_PATH="${S}/${DOTNET_NEPTUNE_PROJECT_ROOT}"
+		cd "${DOTNET_LOCAL_PATH}" || die
+		echo ${DOTNET_LOCAL_PATH}
 
 		dotnet-pkg-base_info
 
 		dotnet-pkg_foreach-project \
 			neptune-dotnet_restore "${DOTNET_PKG_RESTORE_EXTRA_ARGS[@]}"
 
-		dotnet-pkg-base_foreach-solution \
-			"$(pwd)" \
+		neptune-dotnet_foreach-solution \
 			neptune-dotnet_restore "${DOTNET_PKG_RESTORE_EXTRA_ARGS[@]}"
+	else
+		nuget_link-system-nugets
+		nuget_link-nuget-archives
+	fi
+
+	if [[ "${DOTNET_NEPTUNE_OPTIONAL:-0}" == 0 ]]; then
+		nuget_unpack-non-nuget-archives
 	fi
 }
 
@@ -201,7 +282,11 @@ neptune-dotnet_src_unpack() {
 # Default "src_configure" for the "neptune-dotnet" eclass.
 # Configure the package.
 neptune-dotnet_src_configure() {
-	if ! has live ${PROPERTIES}; then
+	debug-print-function ${FUNCNAME} "$@"
+
+	if ! has live "${PROPERTIES}"; then
+		DOTNET_LOCAL_PATH="${S}/${DOTNET_NEPTUNE_PROJECT_ROOT}"
+		cd "${DOTNET_LOCAL_PATH}" || die
 		dotnet-pkg_src_configure
 	fi
 }
@@ -212,27 +297,40 @@ neptune-dotnet_src_configure() {
 # Also sets up "DOTNET_PKG_CONFIGURATION" and "DOTNET_PKG_OUTPUT"
 # for "neptune-dotnet_src_configure" and "dotnet-pkg_src_compile".
 neptune-dotnet_pkg_setup() {
-	export DOTNET_ROOT
-	export DOTNET_PKG_EXECUTABLE
+	debug-print-function ${FUNCNAME} "$@"
+
+	export DOTNET_PKG_EXECUTABLE="${EPREFIX}/opt/neptune-dotnet/dotnet"
+	export DOTNET_ROOT="${EPREFIX}/opt/neptune-dotnet"
 	export PATH="${DOTNET_ROOT}:${PATH}"
 	export DOTNET_PKG_RUNTIME="$(dotnet-pkg-base_get-runtime)"
 	export DOTNET_PKG_CONFIGURATION="$(dotnet-pkg-base_get-configuration)"
 	export DOTNET_PKG_OUTPUT="$(dotnet-pkg-base_get-output "${P}")"
 }
 
+# @FUNCTION: neptune-dotnet_src_prepare
+# @DESCRIPTION:
+# Sets dotnet up to properly locate and restore nugets
 neptune-dotnet_src_prepare() {
-	dotnet-pkg-base_remove-global-json
-	dotnet-pkg-base_foreach-solution "$(pwd)" dotnet-pkg_remove-bad
+	debug-print-function ${FUNCNAME} "$@"
 
-	if ! has live ${PROPERTIES}; then
-		find "$(pwd)" -maxdepth 1 -iname "nuget.config" -delete ||
+	DOTNET_LOCAL_PATH="${S}/${DOTNET_NEPTUNE_PROJECT_ROOT}"
+
+	dotnet-pkg-base_remove-global-json
+	dotnet-pkg-base_foreach-solution "${DOTNET_LOCAL_PATH}" dotnet-pkg_remove-bad
+
+	if ! has live "${PROPERTIES}"; then
+		find "${DOTNET_LOCAL_PATH}" -maxdepth 1 -iname "nuget.config" -delete ||
 			die "${FUNCNAME[0]}: failed to remove unwanted \"NuGet.config\" config files"
-		nuget_writeconfig "$(pwd)/"
+		nuget_writeconfig "${DOTNET_LOCAL_PATH}/"
 	fi
 
-	default
+	if [[ "${DOTNET_NEPTUNE_OPTIONAL:-0}" == 0 ]]; then
+		default
+	fi
 }
 
+if [[ "${DOTNET_NEPTUNE_OPTIONAL:-0}" == 0 ]]; then
+	EXPORT_FUNCTIONS pkg_setup src_prepare src_configure
 fi
 
-EXPORT_FUNCTIONS src_configure pkg_setup src_prepare
+fi

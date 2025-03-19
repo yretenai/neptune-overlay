@@ -4,7 +4,8 @@
 EAPI=8
 
 DOTNET_PKG_COMPAT=9.0
-DOTNET_NEPTUNE_TARGETS="9.0"
+DOTNET_NEPTUNE_TARGETS=( 9.0 )
+DOTNET_NEPTUNE_NUGET_LEVELS=( 9.0.2 )
 
 NUGETS="
 argon@0.24.2
@@ -599,7 +600,6 @@ PATCHES=(
 )
 
 src_unpack() {
-	dotnet-pkg_src_unpack
 	if [[ "${PV}" == *9999* ]]; then
 		git-r3_src_unpack
 	fi
