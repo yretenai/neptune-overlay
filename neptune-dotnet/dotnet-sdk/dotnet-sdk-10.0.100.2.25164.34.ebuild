@@ -6,8 +6,8 @@ EAPI=8
 MY_PV="${PV/-r*/}"
 DN_PV="10.0.100-preview.2.25164.34"
 
-RUNTIME_PV="10.0.0-preview.2.25163.2"
-ASP_PV="10.0.0-preview.2.25164.1"
+RUNTIME_PV="10.0.0.2.25163.2"
+ASP_PV="10.0.0.2.25164.1"
 
 inherit unpacker
 
@@ -39,8 +39,8 @@ RDEPEND="
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
 	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 	!neptune-dotnet/dotnet-runtime:${SLOT}
-	neptune-dotnet/dotnet-aspnetcore-nugets:${ASP_PV}
-	neptune-dotnet/dotnet-runtime-nugets:${RUNTIME_PV}
+	neptune-dotnet/dotnet-aspnetcore-nugets:$(ver_cut 1-4 ${ASP_PV})
+	neptune-dotnet/dotnet-runtime-nugets:$(ver_cut 1-4 ${RUNTIME_PV})
 "
 
 src_install() {
