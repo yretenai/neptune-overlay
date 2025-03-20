@@ -3,18 +3,22 @@
 
 EAPI=8
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake flag-o-matic
 
 DESCRIPTION=" Fast and lightweight x86/x86-64 disassembler and code generation library"
 HOMEPAGE="https://github.com/zyantific/zydis"
 LICENSE="MIT"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/zyantific/zydis.git"
-EGIT_SUBMODULES=( )
-
-if [[ ${PV} != *9999* ]]; then
-	EGIT_COMMIT="9d298eb8067ff62a237203d1e1470785033e185c"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/zyantific/zydis.git"
+else
+	COMMIT="9d298eb8067ff62a237203d1e1470785033e185c"
+	SRC_URI="
+		https://github.com/zyantific/zydis/archive/${COMMIT}.tar.gz -> ${P}.tar.gz
+	"
+	S="${WORKDIR}/${PN}-${COMMIT}"
 	KEYWORDS="~amd64"
 fi
 
@@ -35,7 +39,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/patch-version-${PV}.patch"
+	"${FILESDIR}/zydis-5.0.0a-patch-version.patch"
 )
 
 src_configure() {
@@ -52,7 +56,6 @@ src_configure() {
 		-D ZYDIS_BUILD_TOOLS=ON
 		-D ZYDIS_BUILD_MAN=$(usex man)
 		-D ZYDIS_BUILD_DOXYGEN=$(usex doc)
-		-D SIRIT_USE_SYSTEM_SPIRV_HEADERS=ON
 		-D ZYAN_SYSTEM_ZYCORE=ON
 	)
 
