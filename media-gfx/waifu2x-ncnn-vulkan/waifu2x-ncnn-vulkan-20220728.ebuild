@@ -16,7 +16,7 @@ if [[ ${PV} == *99999999* ]]; then
 	EGIT_SUBMODULES=( '-*' )
 else
 	SRC_URI="
-		https://github.com/nihui/waifu2x-ncnn-vulkan/archive/${PV}.tar.gz -> ${P}.tar.gz
+		https://github.com/nihui/waifu2x-ncnn-vulkan/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
 	"
 	KEYWORDS="~amd64"
 fi

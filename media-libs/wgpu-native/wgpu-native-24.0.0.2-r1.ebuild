@@ -152,7 +152,7 @@ inherit cargo
 DESCRIPTION="Native WebGPU implementation based on wgpu-core"
 HOMEPAGE="https://github.com/gfx-rs/wgpu-native"
 SRC_URI="
-	https://github.com/gfx-rs/wgpu-native/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/gfx-rs/wgpu-native/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	${CARGO_CRATE_URIS}
 "
 

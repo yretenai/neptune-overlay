@@ -16,7 +16,7 @@ if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/luanti-org/luanti.git"
 else
-	SRC_URI="https://github.com/luanti-org/luanti/archive/${MY_PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/luanti-org/luanti/archive/refs/tags/${MY_PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/${PN}-${MY_PV}"
 	KEYWORDS="~amd64"
 fi

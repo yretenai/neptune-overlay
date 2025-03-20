@@ -27,7 +27,7 @@ if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
 else
 	SRC_URI="
-		https://github.com/RPCS3/rpcs3/archive/v${PV}.tar.gz -> ${P}.tar.gz
+		https://github.com/RPCS3/rpcs3/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 		https://github.com/asmjit/asmjit/archive/${ASMJIT_COMMIT}.tar.gz -> ${PN}-asmjit-${ASMJIT_COMMIT}.tar.gz
 		https://github.com/KhronosGroup/glslang/archive/${GLSLANG_COMMIT}.tar.gz -> ${PN}-glslang-${GLSLANG_COMMIT}.tar.gz
 		https://github.com/miniupnp/miniupnp/archive/${MINIUPNP_COMMIT}.tar.gz -> ${PN}-miniupnp-${MINIUPNP_COMMIT}.tar.gz

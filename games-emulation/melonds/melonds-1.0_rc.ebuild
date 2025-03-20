@@ -15,7 +15,7 @@ if [[ "${PV}" == *9999* ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/melonDS-emu/${PN}.git"
 else
-	SRC_URI="https://github.com/melonDS-emu/${PN}/archive/${MY_PV}.tar.gz -> ${PN}-${MY_PV}.tar.gz"
+	SRC_URI="https://github.com/melonDS-emu/${PN}/archive/refs/tags/${MY_PV}.tar.gz -> ${PN}-${MY_PV}.tar.gz"
 	S="${WORKDIR}/melonDS-${MY_PV}"
 
 	KEYWORDS="~amd64"

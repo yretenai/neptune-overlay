@@ -23,7 +23,7 @@ else
 	WASM_C_API_COMMIT=b6dd1fb658a282c64b029867845bc50ae59e1497
 
 	SRC_URI="
-		https://github.com/WebAssembly/wabt/archive/${PV}.tar.gz -> ${P}.tar.gz
+		https://github.com/WebAssembly/wabt/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
 		https://github.com/nodejs/uvwasi/archive/${UVWASI_COMMIT}.tar.gz -> uvwasi-${UVWASI_COMMIT}.tar.gz
 		https://github.com/okdshin/PicoSHA2/archive/${PICOSHA2_COMMIT}.tar.gz -> PicoSHA2-${PICOSHA2_COMMIT}.tar.gz
 		https://github.com/WebAssembly/wasm-c-api/archive/${WASM_C_API_COMMIT}.tar.gz -> wasm-c-api-${WASM_C_API_COMMIT}.tar.gz

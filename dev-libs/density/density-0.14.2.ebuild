@@ -5,9 +5,8 @@ HOMEPAGE="https://github.com/g1mv/density"
 LICENSE="BSD"
 SLOT="0"
 
-
 SRC_URI="
-	https://github.com/g1mv/density/archive/density-${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/g1mv/density/archive/refs/tags/density-${PV}.tar.gz -> ${P}.tar.gz
 "
 S="${WORKDIR}/${PN}-density-${PV}"
 KEYWORDS="~amd64"

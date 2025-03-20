@@ -12,7 +12,7 @@ if [[ ${PV} == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/univrsal/tuna.git"
 else
-	SRC_URI="https://github.com/univrsal/tuna/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/univrsal/tuna/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~arm64"
 	S="${WORKDIR}/tuna-${PV}"
 fi
