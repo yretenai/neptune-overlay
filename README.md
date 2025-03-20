@@ -37,6 +37,10 @@ In `/etc/portage/package.unmask/neptune`, allow packages from this repository:
 net-im/revolt-desktop::neptune
 ```
 
+### AMDGPU
+
+neptune-overlay lists more GPU targets than gentoo normally supports. to check which are present on your system, emerge `rocminfo` and then run `rocminfo | grep "\sgfx" | sed -r "s/.*gfx/amdgpu_targets_gfx/g"`
+
 ### neptune-dotnet
 
 neptune-dotnet is a special category for my testing on multi-target dotnet deployments on Gentoo for using the dotnet sdk.
