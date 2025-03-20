@@ -41,6 +41,7 @@ else
 		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ext-SDL-${EXT_SDL_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> sirit-${SIRIT_COMMIT}.tar.gz
 	"
+	KEYWORDS="~amd64"
 	S="${WORKDIR}/shadPS4-v.${PV}"
 fi
 
