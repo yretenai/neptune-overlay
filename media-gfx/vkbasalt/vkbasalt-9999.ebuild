@@ -3,17 +3,19 @@
 
 EAPI=8
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="a vulkan post processing layer for linux"
 HOMEPAGE="https://github.com/DadSchoorse/vkBasalt"
 LICENSE="ZLIB"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/DadSchoorse/${PN}.git"
-
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/DadSchoorse/vkBasalt.git"
+else
+	SRC_URI="https://github.com/DadSchoorse/vkBasalt/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/vkBasalt-${PV}"
 	KEYWORDS="~amd64"
 fi
 
