@@ -43,7 +43,7 @@ _neptune_rocm_set_globals() {
 	if ver_test "5.7.1" -ge "${NEPTUNE_ROCM_MIN_VERSION}" && ver_test "5.7.1" -le "${NEPTUNE_ROCM_MAX_VERSION}" ; then
 		amdgpu_targets+=(
 			gfx801 gfx802 gfx803 # Volcanic Islands
-			gfx900 gfx902 gfx904 gfx906 gfx908 gfx909 gfx90a gfx90c gfx940 gfx941 gfx942 # Vega
+			gfx900 gfx902 gfx904 gfx906 gfx908 gfx90a gfx90c gfx940 gfx941 gfx942 # Vega
 			gfx1010 gfx1011 gfx1012 # RDNA 1
 			gfx1030 gfx1031 gfx1032 gfx1033 gfx1034 gfx1035 gfx1036 # RDNA 2
 		)
