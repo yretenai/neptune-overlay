@@ -9,7 +9,7 @@ CMAKE_BUILD_TYPE="Release"
 EGIT_LFS="no" # fetches test data
 ROCM_VERSION="6.3"
 
-inherit rocm cmake python-single-r1 llvm-r1
+inherit neptune-rocm cmake python-single-r1 llvm-r1
 
 DESCRIPTION="HIP RT is a ray tracing library for HIP."
 HOMEPAGE="

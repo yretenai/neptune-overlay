@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{11..12} )
 LLVM_COMPAT=( {18..20} )
 ROCM_VERSION="6.3"
 
-inherit cuda rocm python-single-r1 llvm-r1
+inherit cuda neptune-rocm python-single-r1 llvm-r1
 
 DESCRIPTION="A simple one-file way to run various GGML models with KoboldAI's UI"
 HOMEPAGE="https://github.com/LostRuins/koboldcpp"

@@ -6,6 +6,99 @@
 		rendering, post-production, interactive creation and playback.
 	</longdescription>
 	<use>
+		<flag name="amdgpu_targets_gfx801">
+			AMD GCN GFX801 Volcanic Islands (8500 APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx802">
+			AMD GCN GFX802 Volcanic Islands (R285)
+		</flag>
+		<flag name="amdgpu_targets_gfx803">
+			AMD GCN GFX803 Volcanic Islands (RX 480)
+		</flag>
+		<flag name="amdgpu_targets_gfx900">
+			AMD GCN GFX900 Vega (RX Vega)
+		</flag>
+		<flag name="amdgpu_targets_gfx902">
+			AMD GCN GFX902 Vega (RX Vega APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx904">
+			AMD GCN GFX904 Vega (Pro Vega 16, Pro Vega 20)
+		</flag>
+		<flag name="amdgpu_targets_gfx906">
+			AMD GCN GFX906 Vega (MI60)
+		</flag>
+		<flag name="amdgpu_targets_gfx908">
+			AMD GCN GFX908 Vega (MI100)
+		</flag>
+		<flag name="amdgpu_targets_gfx90a">
+			AMD GCN GFX90a Vega (MI250X)
+		</flag>
+		<flag name="amdgpu_targets_gfx90c">
+			AMD GCN GFX90c Vega (MI200 APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx940">
+			AMD GCN GFX940 Vega (MI300A)
+		</flag>
+		<flag name="amdgpu_targets_gfx941">
+			AMD GCN GFX941 Vega (MI300X)
+		</flag>
+		<flag name="amdgpu_targets_gfx942">
+			AMD GCN GFX942 Vega (MI300A/MI300X Rev 1+)
+		</flag>
+		<flag name="amdgpu_targets_gfx1010">
+			AMD GCN GFX1010 RDNA 1 (RX 5700)
+		</flag>
+		<flag name="amdgpu_targets_gfx1011">
+			AMD GCN GFX1011 RDNA 1 (Pro V520)
+		</flag>
+		<flag name="amdgpu_targets_gfx1012">
+			AMD GCN GFX1012 RDNA 1 (RX 5500)
+		</flag>
+		<flag name="amdgpu_targets_gfx1030">
+			AMD GCN GFX1030 RDNA 2 (RX 6800)
+		</flag>
+		<flag name="amdgpu_targets_gfx1031">
+			AMD GCN GFX1031 RDNA 2 (RX 6700)
+		</flag>
+		<flag name="amdgpu_targets_gfx1032">
+			AMD GCN GFX1032 RDNA 2 (RX 6600)
+		</flag>
+		<flag name="amdgpu_targets_gfx1033">
+			AMD GCN GFX1033 RDNA 2 (Magic Leap)
+		</flag>
+		<flag name="amdgpu_targets_gfx1034">
+			AMD GCN GFX1034 RDNA 2 (RX 6500)
+		</flag>
+		<flag name="amdgpu_targets_gfx1035">
+			AMD GCN GFX1035 RDNA 2 (RX 680M APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx1036">
+			AMD GCN GFX1036 RDNA 2 (RX 690M APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx1100">
+			AMD GCN GFX1100 RDNA 3 (RX 7900)
+		</flag>
+		<flag name="amdgpu_targets_gfx1101">
+			AMD GCN GFX1101 RDNA 3 (RX 7700)
+		</flag>
+		<flag name="amdgpu_targets_gfx1102">
+			AMD GCN GFX1102 RDNA 3 (RX 7600)
+		</flag>
+		<flag name="amdgpu_targets_gfx1103">
+			AMD GCN GFX1103 RDNA 3 (RX 760M APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx1150">
+			AMD GCN GFX1150 RDNA 3.5 (RX 890M APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx1151">
+			AMD GCN GFX1151 RDNA 3.5 (RX 8060S)
+		</flag>
+		<flag name="amdgpu_targets_gfx1152">
+			AMD GCN GFX1152 RDNA 3.5 (RX 860M APU)
+		</flag>
+		<flag name="amdgpu_targets_gfx1201">
+			AMD GCN GFX1201 RDNA 4 (RX 9070)
+		</flag>
 		<flag name="alembic">
 			Add support for Alembic through
 			<pkg>media-gfx/alembic</pkg>.

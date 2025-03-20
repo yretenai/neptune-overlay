@@ -9,7 +9,7 @@ LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit rocm check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
+inherit neptune-rocm check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
