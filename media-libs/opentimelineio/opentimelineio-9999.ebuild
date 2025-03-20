@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{10..13} )
 DISTUTILS_EXT=1
 DISTUTILS_USE_PEP517=setuptools
-inherit cmake distutils-r1 pypi
+inherit cmake distutils-r1
 
 DESCRIPTION="Open Source API and interchange format for editorial timeline information."
 HOMEPAGE="
@@ -21,6 +21,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/AcademySoftwareFoundation/OpenTimelineIO.git"
 	EGIT_SUBMODULES=()
 else
+	inherit pypi
 	KEYWORDS="~amd64"
 fi
 

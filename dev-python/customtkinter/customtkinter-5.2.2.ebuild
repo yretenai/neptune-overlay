@@ -5,7 +5,7 @@ EAPI=8
 
 PYTHON_COMPAT=( python3_{11..12} )
 DISTUTILS_USE_PEP517=setuptools
-inherit distutils-r1 pypi
+inherit distutils-r1
 
 DESCRIPTION="A modern and customizable python UI-library based on Tkinter"
 HOMEPAGE="https://github.com/TomSchimansky/CustomTkinter"
@@ -16,6 +16,7 @@ if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/zyantific/zycore-c.git"
 else
+	inherit pypi
 	KEYWORDS="~amd64"
 fi
 
