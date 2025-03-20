@@ -45,7 +45,7 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	sed -i "s|/path/to/reshade-shaders/|${EPREFIX}/usr/share/reshade-shaders/|g" config/${PN}.conf || die
-	insinto /usr/share/${PN}
-	doins config/${PN}.conf
+	sed -i "s|/path/to/reshade-shaders/|${EPREFIX}/usr/share/reshade-shaders/|g" config/vkBasalt.conf || die
+	insinto /usr/share/vkBasalt.conf
+	doins config/vkBasalt.conf
 }
