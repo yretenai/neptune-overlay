@@ -3,25 +3,27 @@
 
 EAPI=8
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="waifu2x converter using ncnn and vulkan"
 HOMEPAGE="https://github.com/nihui/waifu2x-ncnn-vulkan"
 LICENSE="MIT"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/nihui/waifu2x-ncnn-vulkan.git"
-
-if [[ "${PV}" != *99999999* ]]; then
-	EGIT_COMMIT="${PV}"
+if [[ ${PV} == *99999999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/nihui/waifu2x-ncnn-vulkan.git"
+	EGIT_SUBMODULES=( '-*' )
+else
+	SRC_URI="
+		https://github.com/nihui/waifu2x-ncnn-vulkan/archive/${PV}.tar.gz -> ${P}.tar.gz
+	"
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+system-webp system-ncnn"
-
 RDEPEND="
-	system-ncnn? ( dev-libs/ncnn:=[vulkan] )
-	system-webp? ( media-libs/libwebp:= )
+	dev-libs/ncnn:=[vulkan]
+	media-libs/libwebp:=
 	media-libs/vulkan-loader
 "
 DEPEND="
@@ -29,7 +31,7 @@ DEPEND="
 	dev-util/vulkan-headers
 "
 BDEPEND="
-	system-ncnn? ( dev-util/glslang )
+	dev-util/glslang
 "
 
 PATCHES=(
@@ -48,9 +50,8 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DUSE_SYSTEM_NCNN=$(usex system-ncnn)
-		-DUSE_SYSTEM_WEBP=$(usex system-webp)
-		-DBUILD_SHARED_LIBS=$(usex system-ncnn yes no)
+		-DUSE_SYSTEM_NCNN=YES
+		-DUSE_SYSTEM_WEBP=YES
 	)
 
 	cmake_src_configure
