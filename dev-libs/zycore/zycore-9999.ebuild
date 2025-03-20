@@ -3,18 +3,21 @@
 
 EAPI=8
 
-inherit cmake git-r3 flag-o-matic
+inherit cmake flag-o-matic
 
 DESCRIPTION="Internal Zycore library providing a fallback for environments without LibC."
 HOMEPAGE="https://github.com/zyantific/zycore-c"
 LICENSE="MIT"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/zyantific/zycore-c.git"
-EGIT_SUBMODULES=( )
-
-if [[ ${PV} != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/zyantific/zycore-c.git"
+else
+	SRC_URI="
+		https://github.com/zyantific/zycore-c/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	"
+	S="${WORKDIR}/zycore-c-${PV}"
 	KEYWORDS="~amd64"
 fi
 
