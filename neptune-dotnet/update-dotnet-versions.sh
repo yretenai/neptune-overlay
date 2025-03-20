@@ -42,8 +42,8 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 	RELEASE_ASP="$(echo ${RELEASE_INDEX_DATA} | jq --raw-output '.releases[0]["aspnetcore-runtime"].version')"
 	RELEASE_SDK_SAFE="$(dotnet_strip "${RELEASE_HEAD_SDK}")"
 	dotnet_apply dotnet-sdk "${RELEASE_HEAD_SDK}"
-	sed -i "/__DOTNET_ASP_VERSION__/s//${RELEASE_ASP}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
-	sed -i "/__DOTNET_VERSION__/s//${RELEASE_RUNTIME}/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
+	sed -i "/__DOTNET_ASP_VERSION__/s//$(dotnet_strip "${RELEASE_ASP}")/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
+	sed -i "/__DOTNET_VERSION__/s//$(dotnet_strip "${RELEASE_RUNTIME}")/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 
 	dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}"
 	dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
