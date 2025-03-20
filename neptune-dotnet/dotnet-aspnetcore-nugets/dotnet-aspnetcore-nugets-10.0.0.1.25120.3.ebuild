@@ -17,8 +17,8 @@ NUGETS="
 
 inherit unpacker nuget
 
-DESCRIPTION="dotnet runtime nugets"
-HOMEPAGE="https://github.com/dotnet/runtime"
+DESCRIPTION="dotnet aspnet core runtime nugets"
+HOMEPAGE="https://github.com/dotnet/aspnetcore"
 SRC_URI="
 	${NUGET_URIS}
 "
