@@ -6,9 +6,7 @@
 EAPI=8
 
 CRATES="
-	ahash@0.8.11
 	aho-corasick@1.1.3
-	allocator-api2@0.2.18
 	android_system_properties@0.1.5
 	arrayvec@0.7.6
 	ash@0.38.0+1.3.281
@@ -17,11 +15,11 @@ CRATES="
 	bit-set@0.8.0
 	bit-vec@0.8.0
 	bitflags@1.3.2
-	bitflags@2.8.0
+	bitflags@2.9.0
 	block@0.1.6
-	bumpalo@3.16.0
-	bytemuck@1.21.0
-	bytemuck_derive@1.8.1
+	bumpalo@3.17.0
+	bytemuck@1.22.0
+	bytemuck_derive@1.9.2
 	cexpr@0.6.0
 	cfg-if@1.0.0
 	cfg_aliases@0.2.1
@@ -30,37 +28,37 @@ CRATES="
 	core-foundation-sys@0.8.7
 	core-foundation@0.9.4
 	core-graphics-types@0.1.3
-	document-features@0.2.10
-	either@1.13.0
-	equivalent@1.0.1
+	document-features@0.2.11
+	either@1.15.0
+	equivalent@1.0.2
 	fixedbitset@0.5.7
+	foldhash@0.1.5
 	foreign-types-macros@0.2.3
 	foreign-types-shared@0.3.1
 	foreign-types@0.5.0
 	gl_generator@0.14.0
-	glob@0.3.1
+	glob@0.3.2
 	glow@0.16.0
-	glutin_wgl_sys@0.6.0
+	glutin_wgl_sys@0.6.1
 	gpu-alloc-types@0.3.0
 	gpu-alloc@0.6.0
 	gpu-allocator@0.27.0
 	gpu-descriptor-types@0.2.0
-	gpu-descriptor@0.3.0
-	hashbrown@0.14.5
-	hashbrown@0.15.0
+	gpu-descriptor@0.3.1
+	hashbrown@0.15.2
 	heck@0.5.0
 	hexf-parse@0.2.1
-	indexmap@2.6.0
+	indexmap@2.8.0
 	itertools@0.13.0
 	jni-sys@0.3.0
 	js-sys@0.3.77
 	khronos-egl@6.0.0
 	khronos_api@3.1.0
-	libc@0.2.159
-	libloading@0.8.5
+	libc@0.2.171
+	libloading@0.8.6
 	litrs@0.4.1
 	lock_api@0.4.12
-	log@0.4.22
+	log@0.4.26
 	malloc_buf@0.0.6
 	memchr@2.7.4
 	metal@0.31.0
@@ -69,44 +67,44 @@ CRATES="
 	nom@7.1.3
 	num-traits@0.2.19
 	objc@0.2.7
-	once_cell@1.20.2
+	once_cell@1.21.1
 	ordered-float@4.6.0
 	parking_lot@0.12.3
 	parking_lot_core@0.9.10
 	paste@1.0.15
 	petgraph@0.7.1
-	pkg-config@0.3.31
+	pkg-config@0.3.32
 	pp-rs@0.2.1
 	presser@0.3.1
-	prettyplease@0.2.22
-	proc-macro2@1.0.87
-	profiling@1.0.15
-	quote@1.0.37
-	range-alloc@0.1.3
+	prettyplease@0.2.31
+	proc-macro2@1.0.94
+	profiling@1.0.16
+	quote@1.0.40
+	range-alloc@0.1.4
 	raw-window-handle@0.6.2
-	redox_syscall@0.5.7
-	regex-automata@0.4.8
+	redox_syscall@0.5.10
+	regex-automata@0.4.9
 	regex-syntax@0.8.5
-	regex@1.11.0
+	regex@1.11.1
 	renderdoc-sys@1.1.0
 	rustc-hash@1.1.0
-	rustversion@1.0.19
+	rustversion@1.0.20
 	scopeguard@1.2.0
-	serde@1.0.217
-	serde_derive@1.0.217
+	serde@1.0.219
+	serde_derive@1.0.219
 	shlex@1.3.0
 	slotmap@1.0.7
-	smallvec@1.13.2
+	smallvec@1.14.0
 	spirv@0.3.0+sdk-1.3.268.0
 	strum@0.26.3
 	strum_macros@0.26.4
-	syn@2.0.87
+	syn@2.0.100
 	termcolor@1.4.1
 	thiserror-impl@1.0.69
-	thiserror-impl@2.0.11
+	thiserror-impl@2.0.12
 	thiserror@1.0.69
-	thiserror@2.0.11
-	unicode-ident@1.0.13
+	thiserror@2.0.12
+	unicode-ident@1.0.18
 	unicode-width@0.1.14
 	unicode-xid@0.2.6
 	version_check@0.9.5
@@ -133,14 +131,17 @@ CRATES="
 	windows_x86_64_gnu@0.52.6
 	windows_x86_64_gnullvm@0.52.6
 	windows_x86_64_msvc@0.52.6
-	xml-rs@0.8.22
-	zerocopy-derive@0.7.35
-	zerocopy@0.7.35
-	naga@24.0.0
-	wgpu-core@24.0.2
-	wgpu-hal@24.0.2
-	wgpu-types@24.0.0
+	xml-rs@0.8.25
 "
+
+WGPU_VERSION="$(ver_cut 0-3)"
+
+declare -A GIT_CRATES=(
+	[naga]="https://github.com/gfx-rs/wgpu;v${WGPU_VERSION};wgpu-${WGPU_VERSION}/naga"
+	[wgpu-core]="https://github.com/gfx-rs/wgpu;v${WGPU_VERSION};wgpu-${WGPU_VERSION}/wgpu-core"
+	[wgpu-hal]="https://github.com/gfx-rs/wgpu;v${WGPU_VERSION};wgpu-${WGPU_VERSION}/wgpu-hal"
+	[wgpu-types]="https://github.com/gfx-rs/wgpu;v${WGPU_VERSION};wgpu-${WGPU_VERSION}/wgpu-types"
+)
 
 inherit cargo
 
@@ -161,20 +162,13 @@ LICENSE+=" Apache-2.0 BSD CC0-1.0 ISC MIT Unicode-DFS-2016 ZLIB"
 SLOT="0"
 KEYWORDS="~amd64"
 
-PATCHES=(
-	"${FILESDIR}/wgpu-native-24.0.0-version.patch"
-)
-
 src_prepare() {
 	default
 
-	sed -e "s|git = \"https://github.com/gfx-rs/wgpu\"|#|" -i Cargo.toml
-	sed -e "s|tag = \"v$(ver_cut 0-3)\"|version = \"$(ver_cut 0-3)\"|" -i Cargo.toml
+	sed -e "s|version = \"0.0.0\"|version = \"$(ver_cut 0-3)\"|" -i Cargo.toml
 
 	rmdir ffi/webgpu-headers
 	ln -s "${EPREFIX}/usr/include/webgpu" ffi/webgpu-headers
-
-	cargo_update_crates
 }
 
 src_install() {
