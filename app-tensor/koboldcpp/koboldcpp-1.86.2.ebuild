@@ -41,7 +41,7 @@ RDEPEND="
 		>=dev-python/urllib3-2.0.0[${PYTHON_USEDEP}]
 		>=dev-python/psutil-5.9.4[${PYTHON_USEDEP}]
 		>=sci-ml/transformers-4.34.0[${PYTHON_SINGLE_USEDEP}]
-		>=sci-ml/sentencepiece-0.1.98[python,${PYTHON_USEDEP}]
+		>=sci-ml/pysentencepiece-0.1.98[${PYTHON_USEDEP}]
 	')
 	hip? (
 		sci-libs/rocWMMA:=
