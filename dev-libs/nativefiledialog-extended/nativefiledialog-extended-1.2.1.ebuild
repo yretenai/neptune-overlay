@@ -5,14 +5,22 @@ EAPI=8
 
 CMAKE_BUILD_TYPE="Release"
 
-inherit cmake git-r3
+inherit cmake
 
 DESCRIPTION="File dialog library with C and C++ bindings, based on nativefiledialog"
 HOMEPAGE="https://github.com/btzy/nativefiledialog-extended"
 LICENSE="ZLIB"
 SLOT="0/${PV}"
 
-EGIT_REPO_URI="https://github.com/btzy/nativefiledialog-extended.git"
+if [[ ${PV} == *9999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/btzy/nativefiledialog-extended.git"
+else
+	SRC_URI="
+		https://github.com/btzy/nativefiledialog-extended/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
+	"
+	KEYWORDS="~amd64"
+fi
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
