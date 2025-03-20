@@ -24,12 +24,12 @@ if [[ ${PV} == *9999* ]]; then
 	)
 else
 	VULKANMEMORYALLOCATOR_COMMIT=5a53a198945ba8260fbc58fadb788745ce6aa263
-	EXT_DISCORD_RPC_COMMIT=51b09d426a4a1bcfa6ee6d4894e57d669f4a2e65
+	EXT_DISCORD_RPC_COMMIT=4ec218155d73bcb8022f8f7ca72305d801f84beb
 	EXT_FMT_COMMIT=8ee89546ffcf046309d1f0d38c0393f02fde56c8
 	EXT_IMGUI_COMMIT=636cd4a7d623a2bc9bf59bb3acbb4ca075befba3
 	EXT_LIBATRAC9_COMMIT=9640129dc6f2afbca6ceeca3019856e8653a5fb2
-	EXT_SDL_COMMIT=a336b62d8b0b97b09214e053203e442e2b6e2be5
-	SIRIT_COMMIT=d6f3c0d99862ab2ff8f95e9ac221560f1f97e29a
+	EXT_SDL_COMMIT=3a1d76d298db023f6cf37fb08ee766f20a4e12ab
+	SIRIT_COMMIT=1e74f4ef8d2a0e3221a4de51977663f342b53c35
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
@@ -99,7 +99,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
 	"${FILESDIR}/${PN}-0.4.0-tracy.patch"
-	"${FILESDIR}/${PN}-0.6.1-compat.patch"
+	"${FILESDIR}/${PN}-0.5.0-compat.patch"
+	"${FILESDIR}/${PN}-0.5.0-vulkan-headers.patch"
 )
 
 src_unpack() {
@@ -123,8 +124,6 @@ src_prepare() {
 
 	find src \( -iname "*.cpp" -or -iname "*.h" \) -exec sed -e "s|#include <magic_enum/|#include <|" -i "{}" \; || die
 	sed -e "s|magic_enum .* CONFIG|magic_enum CONFIG|" -i CMakeLists.txt || die
-	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
-	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
 
 	cmake_src_prepare
 }
