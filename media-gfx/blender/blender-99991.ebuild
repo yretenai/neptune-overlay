@@ -181,7 +181,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	hiprt? ( dev-libs/hiprt:2.3= )
+	hiprt? ( dev-libs/hiprt:2.5= )
 "
 
 DEPEND="${RDEPEND}
@@ -217,9 +217,9 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-npr-hiprt-parallel.patch"
+	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
-	"${FILESDIR}/${PN}-4.3.2-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 )
 
@@ -345,7 +345,7 @@ src_prepare() {
 		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 	fi
 
-	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.3\"/" -i extern/hipew/src/hiprtew.cc || die
+	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 }
 
 src_configure() {
@@ -365,7 +365,7 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
 		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
-		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02003/"
+		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
