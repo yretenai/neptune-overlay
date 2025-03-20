@@ -33,11 +33,16 @@ RDEPEND="
 	dev-cpp/tbb:=
 	dev-lang/ispc
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	hip? ( dev-util/hip:= )
+	hip? (
+		dev-util/hip:=
+		sci-libs/composable-kernel
+	)
 	openimageio? ( media-libs/openimageio:= )
 "
 DEPEND="${RDEPEND}"
-BDEPEND="${PYTHON_DEPS}"
+BDEPEND="
+	${PYTHON_DEPS}
+"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.2.2-amdgpu-targets.patch"
