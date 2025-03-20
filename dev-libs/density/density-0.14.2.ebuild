@@ -1,19 +1,16 @@
 EAPI=8
 
-inherit git-r3
-
 DESCRIPTION="A superfast compression library"
 HOMEPAGE="https://github.com/g1mv/density"
 LICENSE="BSD"
 SLOT="0"
 
-EGIT_REPO_URI="https://github.com/g1mv/density.git"
-EGIT_SUBMODULES=()
 
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="density-${PV}"
-	KEYWORDS="~amd64"
-fi
+SRC_URI="
+	https://github.com/g1mv/density/archive/density-${PV}.tar.gz -> ${P}.tar.gz
+"
+S="${WORKDIR}/${PN}-density-${PV}"
+KEYWORDS="~amd64"
 
 PATCHES=(
 	"${FILESDIR}/fixup-makefile.patch"
