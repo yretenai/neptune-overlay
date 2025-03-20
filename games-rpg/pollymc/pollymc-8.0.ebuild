@@ -5,8 +5,8 @@ EAPI=8
 
 inherit cmake java-pkg-2 optfeature xdg
 
-HOMEPAGE="https://github.com/fn2006/PollyMC"
 DESCRIPTION="DRM-free Prism Launcher fork with support for custom auth servers"
+HOMEPAGE="https://github.com/fn2006/PollyMC"
 
 NBTPLUSPLUS_COMMIT=a5e8fd52b8bf4ab5d5bcc042b2a247867589985f
 SRC_URI="
@@ -14,9 +14,9 @@ SRC_URI="
 	https://github.com/PrismLauncher/libnbtplusplus/archive/${NBTPLUSPLUS_COMMIT}.tar.gz -> ${PN}-nbtplusplus-${NBTPLUSPLUS_COMMIT}.tar.gz
 "
 S="${WORKDIR}/PollyMC-${PV}"
-KEYWORDS="~amd64 ~arm64"
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2+ GPL-3 ISC LGPL-2.1+ LGPL-3+ MIT"
 SLOT="0"
+KEYWORDS="~amd64 ~arm64"
 
 IUSE="debug lto qt5 +qt6 test"
 REQUIRED_USE="

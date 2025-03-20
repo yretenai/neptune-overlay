@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit meson-multilib multilib
+inherit meson-multilib
 
 DESCRIPTION="Tiny SVG rendering library in C"
 HOMEPAGE="https://github.com/sammycage/plutosvg"

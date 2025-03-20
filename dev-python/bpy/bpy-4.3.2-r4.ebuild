@@ -431,7 +431,8 @@ src_install() {
 
 	if [ "${HAS_ASSETS}" -eq 1 ]; then
 		blender_get_version
-		insinto "$(python_get_sitedir)/bpy/${BV}/datafiles/assets"
+		local sitedir=$(python_get_sitedir)
+		insinto "${sitedir#${EPREFIX}}/bpy/${BV}/datafiles/assets"
 		doins -r "${WORKDIR}/blender-assets/publish/"*
 	fi
 

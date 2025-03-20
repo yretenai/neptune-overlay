@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake-multilib multilib
+inherit cmake-multilib
 
 MY_P="SDL3_ttf-${PV}"
 DESCRIPTION="Library that allows you to use TrueType fonts in SDL applications"
@@ -14,14 +14,14 @@ S="${WORKDIR}"/${MY_P}
 LICENSE="ZLIB"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+harfbuzz +plutosvg static-libs"
+IUSE="+harfbuzz +svg static-libs"
 RESTRICT="test"
 
 RDEPEND="
 	>=media-libs/libsdl3-3.2.0[${MULTILIB_USEDEP}]
 	media-libs/freetype[harfbuzz?,${MULTILIB_USEDEP}]
 	harfbuzz? ( media-libs/harfbuzz:=[${MULTILIB_USEDEP}] )
-	plutosvg? ( media-libs/plutosvg:=[${MULTILIB_USEDEP}] )
+	svg? ( media-libs/plutosvg:=[${MULTILIB_USEDEP}] )
 "
 DEPEND="${RDEPEND}"
 
@@ -33,7 +33,7 @@ multilib_src_configure() {
 	local mycmakeargs=(
 		-DSDLTTF_VENDORED=OFF
 		-DSDLTTF_HARFBUZZ=$(usex harfbuzz)
-		-DSDLTTF_PLUTOSVG=$(usex plutosvg)
+		-DSDLTTF_PLUTOSVG=$(usex svg)
 	)
 
 	cmake_src_configure

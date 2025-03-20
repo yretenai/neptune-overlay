@@ -56,7 +56,6 @@ else
 	fi
 fi
 
-KEYWORDS="~amd64"
 IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
 	alembic collada +color-management cuda +cycles +cycles-bin-kernels
 	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k

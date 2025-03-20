@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit meson-multilib multilib
+inherit meson-multilib
 
 DESCRIPTION="Tiny 2D vector graphics library in C"
 HOMEPAGE="https://github.com/sammycage/plutovg"

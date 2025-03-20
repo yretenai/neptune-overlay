@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<use>
+		<flag name="harfbuzz">
+			Build with harfbuzz support
+		</flag>
+	</use>
 	<upstream>
-		<remote-id type="github">AcademySoftwareFoundation/OpenTimelineIO</remote-id>
-		<remote-id type="pypi">opentimelineio</remote-id>
+		<remote-id type="github">libsdl-org/SDL_ttf</remote-id>
 	</upstream>
 </pkgmetadata>

@@ -2,13 +2,12 @@ EAPI=8
 
 DESCRIPTION="A superfast compression library"
 HOMEPAGE="https://github.com/g1mv/density"
-LICENSE="BSD"
-SLOT="0"
-
 SRC_URI="
-	https://github.com/g1mv/density/archive/refs/tags/density-${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/g1mv/density/archive/refs/tags/density-${PV}.tar.gz
 "
 S="${WORKDIR}/${PN}-density-${PV}"
+LICENSE="BSD"
+SLOT="0"
 KEYWORDS="~amd64"
 
 PATCHES=(

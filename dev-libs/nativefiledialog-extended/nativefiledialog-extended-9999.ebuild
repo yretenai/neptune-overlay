@@ -22,11 +22,6 @@ else
 	KEYWORDS="~amd64"
 fi
 
-if [[ "${PV}" != *9999* ]]; then
-	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64"
-fi
-
 RDEPEND="
 	x11-libs/gtk+:3
 	dev-libs/glib

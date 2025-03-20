@@ -13,7 +13,6 @@ LICENSE="MIT"
 # Dependent crate licenses
 LICENSE+=" Apache-2.0 ISC MPL-2.0 Unicode-DFS-2016"
 SLOT="0"
-KEYWORDS="~amd64"
 IUSE="+battery +gpu +zfs nvidia"
 
 # Rust packages ignore CFLAGS and LDFLAGS so let's silence the QA warnings

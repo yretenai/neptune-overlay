@@ -19,11 +19,9 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+reshade-shaders"
 RESTRICT="test"
 
 RDEPEND="
-	reshade-shaders? ( media-gfx/reshade-shaders )
 	x11-libs/libX11
 "
 
@@ -47,9 +45,7 @@ src_configure() {
 src_install() {
 	meson_src_install
 
-	if use reshade-shaders; then
-		sed -i "s|/path/to/reshade-shaders/|${EPREFIX}/usr/share/reshade-shaders/|g" config/${PN}.conf || die
-	fi
+	sed -i "s|/path/to/reshade-shaders/|${EPREFIX}/usr/share/reshade-shaders/|g" config/${PN}.conf || die
 	insinto /usr/share/${PN}
 	doins config/${PN}.conf
 }

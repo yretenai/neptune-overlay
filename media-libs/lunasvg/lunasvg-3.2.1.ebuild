@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit meson-multilib multilib
+inherit meson-multilib
 
 DESCRIPTION="SVG rendering and manipulation library in C++"
 HOMEPAGE="https://github.com/sammycage/lunasvg"
@@ -18,7 +18,6 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
 IUSE="static-libs"
 RESTRICT="test"
 

@@ -25,10 +25,9 @@ else
 	KEYWORDS="~amd64"
 fi
 
-
-RDEPEND="
+DEPEND="
 	dev-libs/imath
-	dev-python/pyside2[${PYTHON_USEDEP}]
+	dev-python/pyside[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
