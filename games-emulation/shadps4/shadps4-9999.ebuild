@@ -158,24 +158,3 @@ pkg_setup() {
 		die "GCC version is too old to compile shadps4!"
 	fi
 }
-
-pkg_postinst() {
-	elog
-	elog "shadPS4 currently relies on vulkan extensions which may not be"
-	elog "supported by AMD's open source Radeon drivers."
-	elog "If you encounter graphical glitches, please install:"
-	elog "\tamdgpu-pro-drivers"
-	elog "and run with vk_pro shadps4"
-	elog
-
-	ewarn
-	ewarn "shadPS4 is observed to have buggy behavior when "
-	ewarn "launching a game binary directly."
-	if ! use qt6; then
-		ewarn "if you observe issues, compile with the qt6 USE flag"
-		ewarn "and launching the game via the Qt GUI"
-	else
-		ewarn "if you observe issues, try launching via the QT GUI"
-	fi
-	ewarn
-}
