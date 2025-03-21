@@ -182,7 +182,7 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/godotengine/godot.git"
 else
 	SRC_URI="
-		https://github.com/godotengine/godot/archive/refs/tags/${PV}-stable.tar.gz
+		https://github.com/godotengine/godot/archive/refs/tags/${PV}-stable.tar.gz -> ${P}.tar.gz
 		${NUGET_URIS}
 	"
 	S="${WORKDIR}/${P}-stable"
