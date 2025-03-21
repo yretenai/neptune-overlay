@@ -1,0 +1,48 @@
+diff --git a/Makefile b/Makefile
+index 822b459..3ec8e9b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,20 +8,7 @@ VERSION := 3.6
+ # "alpha", "beta", or "release".
+ RELEASE_CYCLE := release
+ 
+-# _GIT_DESCRIPTION_OR_TAG is either something like '16-123abc' (when we're 16
+-# commits since the last tag) or it's something like `v3.0-beta2` (when exactly
+-# on a tagged version).
+-_GIT_DESCRIPTION_OR_TAG := $(subst v${VERSION}-,,$(shell git describe --tag --dirty --always --abbrev=9))
+-# In the above cases, GITHASH is either `16-123abc` (in the same case above) or
+-# `123abc` (when the tag matches the current commit exactly) or `dirty` (when
+-# the tag matches the current commit exactly, and there are subsequent
+-# uncommitted changes). This is done to prevent repetition of the same tag
+-# in the "extended version" of Flamenco, which combines ${VERSION} and
+-# ${GITHASH}.
+-GITHASH := $(subst v${VERSION},$(shell git rev-parse --short=9 HEAD),${_GIT_DESCRIPTION_OR_TAG})
+-ifeq (${GITHASH},dirty)
+-GITHASH := $(shell git rev-parse --short=9 HEAD)
+-endif
++GITHASH := v${VERSION}
+ 
+ BUILDTOOL := mage
+ ifeq ($(OS),Windows_NT)
+diff --git a/magefiles/version.go b/magefiles/version.go
+index 3562038..15281a0 100644
+--- a/magefiles/version.go
++++ b/magefiles/version.go
+@@ -4,8 +4,6 @@ package main
+ 
+ import (
+ 	"fmt"
+-
+-	"github.com/magefile/mage/sh"
+ )
+ 
+ // To update the version number in all the relevant places, update the VERSION
+@@ -16,7 +14,7 @@ const (
+ )
+ 
+ func gitHash() (string, error) {
+-	return sh.Output("git", "rev-parse", "--short", "HEAD")
++	return "v" + version, nil
+ }
+ 
+ // Show which version information would be embedded in executables
