@@ -239,7 +239,7 @@ inherit cargo
 DESCRIPTION="TUI downloader & update checker for Nexus Mods"
 HOMEPAGE="https://github.com/dandels/dmodman"
 SRC_URI="
-	https://github.com/dandels/dmodman/archive/refs/tags/v${MY_PV}-beta.tar.gz -> ${PV}-${PV}.tar.gz
+	https://github.com/dandels/dmodman/archive/refs/tags/v${MY_PV}-beta.tar.gz -> ${P}.tar.gz
 	${CARGO_CRATE_URIS}
 "
 S="${WORKDIR}/${PN}-${MY_PV}-beta"
