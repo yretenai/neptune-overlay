@@ -28,6 +28,12 @@ RDEPEND="
 	>=media-video/ffmpeg-5.1
 "
 
+BDEPEND="
+	net-libs/nodejs[npm]
+	sys-apps/yarn
+	app-arch/zip
+"
+
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror test"
 
@@ -42,8 +48,6 @@ fi
 src_unpack() {
 	if [[ "${PV}" == *9999* ]]; then
 		git-r3_src_unpack
-		cd "${S}"
-		go mod vendor
 	else
 		default
 	fi
@@ -60,6 +64,9 @@ src_compile() {
 	cd "${S}/web/app"
 	# https://projects.blender.org/studio/flamenco/src/tag/v3.6/magefiles/build.go#L75
 	yarn build --outDir ../static --base=/app/ --logLevel warn || die
+
+	cd "${S}/addon"
+	zip -r ../web/static/flamenco-addon.zip flamenco
 
 	cd "${S}"
 	# strip ldflags because flamenco pulls that variable for some reason
