@@ -1,0 +1,17 @@
+diff --git a/internal/manager/local_storage/local_storage.go b/internal/manager/local_storage/local_storage.go
+index 5ec3c5b5..2e08a97e 100644
+--- a/internal/manager/local_storage/local_storage.go
++++ b/internal/manager/local_storage/local_storage.go
+@@ -106,12 +106,6 @@ func relPathForJob(jobUUID string) string {
+ }
+ 
+ func getSuitableStorageRoot() string {
+-	exename, err := os.Executable()
+-	if err == nil {
+-		return filepath.Dir(exename)
+-	}
+-	log.Error().Err(err).Msg("unable to determine the path of the currently running executable")
+-
+ 	// Fall back to current working directory.
+ 	cwd, err := os.Getwd()
+ 	if err == nil {

@@ -37,7 +37,9 @@ BDEPEND="
 # Requires network access (https) as long as NPM dependencies aren't packaged
 RESTRICT="network-sandbox mirror test"
 
-PATCHES=()
+PATCHES=(
+	"${FILESDIR}/flamenco-3.6-no-exe-dir.patch"
+)
 
 if [[ "${PV}" != *9999* ]]; then
 	PATCHES+=(
