@@ -53,7 +53,7 @@ src_unpack() {
 	else
 		default
 	fi
-	
+
 	yarn config set --home enableTelemetry 0 || die
 	yarn config set cacheFolder "${T}/yarn" || die
 	mkdir "${T}/yarn" || die

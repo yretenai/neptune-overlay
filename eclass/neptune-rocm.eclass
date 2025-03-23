@@ -33,6 +33,7 @@ ROCM_SKIP_GLOBALS=1
 NEPTUNE_ROCM_MIN_VERSION=${NEPTUNE_ROCM_MIN_VERSION:=5.7}
 NEPTUNE_ROCM_MAX_VERSION=${NEPTUNE_ROCM_MAX_VERSION:=9999}
 inherit rocm
+unset ROCM_SKIP_GLOBALS
 
 _neptune_rocm_set_globals() {
 	[[ -n ${NEPTUNE_ROCM_SKIP_GLOBALS} ]] && return
@@ -68,12 +69,6 @@ _neptune_rocm_set_globals() {
 		"${amdgpu_targets[@]/#/amdgpu_targets_}"
 	)
 	IUSE="${iuse_flags[*]}"
-
-	local allflags=( "${amdgpu_targets[@]/#/amdgpu_targets_}" )
-	ROCM_REQUIRED_USE=" || ( ${allflags[*]} )"
-
-	local optflags=${allflags[@]/%/(-)?}
-	ROCM_USEDEP=${optflags// /,}
 }
 _neptune_rocm_set_globals
 unset -f _neptune_rocm_set_globals

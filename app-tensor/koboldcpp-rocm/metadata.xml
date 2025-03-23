@@ -83,18 +83,6 @@
 		<flag name="amdgpu_targets_gfx1103">
 			AMD GCN GFX1103 RDNA 3 (RX 760M APU)
 		</flag>
-		<flag name="amdgpu_targets_gfx1150">
-			AMD GCN GFX1150 RDNA 3.5 (RX 890M APU)
-		</flag>
-		<flag name="amdgpu_targets_gfx1151">
-			AMD GCN GFX1151 RDNA 3.5 (RX 8060S)
-		</flag>
-		<flag name="amdgpu_targets_gfx1152">
-			AMD GCN GFX1152 RDNA 3.5 (RX 860M APU)
-		</flag>
-		<flag name="amdgpu_targets_gfx1201">
-			AMD GCN GFX1201 RDNA 4 (RX 9070)
-		</flag>
 		<flag name="clblast">
 			Compile with OpenCL support via <pkg>sci-libs/clblast</pkg>
 		</flag>
