@@ -1,0 +1,26 @@
+diff --git a/src/Application.cpp b/src/Application.cpp
+index f679699..ed6e980 100644
+--- a/src/Application.cpp
++++ b/src/Application.cpp
+@@ -66,7 +66,7 @@
+ #include "widgets/splits/Split.hpp"
+ #include "widgets/Window.hpp"
+ 
+-#include <miniaudio.h>
++#include <miniaudio/miniaudio.h>
+ #include <QApplication>
+ #include <QDesktopServices>
+ 
+diff --git a/src/controllers/sound/MiniaudioBackend.cpp b/src/controllers/sound/MiniaudioBackend.cpp
+index 69f2306..2e71258 100644
+--- a/src/controllers/sound/MiniaudioBackend.cpp
++++ b/src/controllers/sound/MiniaudioBackend.cpp
+@@ -12,7 +12,7 @@
+ #include <boost/asio/executor_work_guard.hpp>
+ 
+ #define MINIAUDIO_IMPLEMENTATION
+-#include <miniaudio.h>
++#include <miniaudio/miniaudio.h>
+ #include <QFile>
+ #include <QScopeGuard>
+ 
