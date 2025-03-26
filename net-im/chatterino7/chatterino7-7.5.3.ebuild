@@ -108,6 +108,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DUSE_SYSTEM_QTKEYCHAIN=ON
 		-DBUILD_WITH_QT6=ON
+		-DBUILD_SHARED_LIBS=OFF
 	)
 
 	# Chatterino uses NDEBUG extensively to disable debug code paths.
