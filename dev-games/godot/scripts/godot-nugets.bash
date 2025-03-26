@@ -1,12 +1,13 @@
 #!/bin/bash
 
 DOTNET_ROOT="/opt/neptune-dotnet"
-NEPTUNE_LIST="/var/tmp/portage/dev-games/godot-9999/work/nugets.lst"
+PV="$1"
+NEPTUNE_LIST="/var/tmp/portage/dev-games/godot-${PV}/work/nugets.lst"
 HERE="${PWD}"
 TARGET="${PWD}/nugets.lst"
-MONO_ROOT="/var/tmp/portage/dev-games/godot-9999/work/godot-9999/modules/mono"
+MONO_ROOT="/var/tmp/portage/dev-games/godot-${PV}/work/godot-${PV}-stable/modules/mono"
 
-ebuild godot-9999.ebuild clean unpack
+ebuild godot-${PV}.ebuild clean unpack
 
 cd "${MONO_ROOT}/editor/Godot.NET.Sdk"
 gdmt restore -x "${DOTNET_ROOT}/dotnet" > "${NEPTUNE_LIST}"
@@ -17,4 +18,5 @@ gdmt restore -x "${DOTNET_ROOT}/dotnet" >> "${NEPTUNE_LIST}"
 
 cat "${NEPTUNE_LIST}" | grep \@ | sort | uniq > "${TARGET}"
 cd "${HERE}"
-ebuild godot-9999.ebuild clean
+
+ebuild godot-${PV}.ebuild clean
