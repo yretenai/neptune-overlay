@@ -61,7 +61,7 @@ RDEPEND="${DEPEND}"
 PATCHES=(
 	"${FILESDIR}/${PN}-1.0.10-main.patch"
 	"${FILESDIR}/${PN}-1.0.10-zlibng.patch"
-	"${FILESDIR}/${PN}-1.0.10-examples.patch"
+	"${FILESDIR}/${PN}-1.0.11-examples.patch"
 )
 
 src_prepare() {
