@@ -33,6 +33,9 @@ BDEPEND="
 
 src_prepare() {
 	default
+
+	electron-r1_binname
+
 	sed -i -e "s|electronDownload:|electronDist: \"${ELECTRON_PATH}\"\nelectronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
 	sed -i -e "s|electronVersion:.*$|electronVersion: ${ELECTRON_VER_BASE}|" build/electron-builder.base.yml || die
 	sed -i -e "s|version: .*+wvcus|version: ${ELECTRON_VER}|" build/electron-builder.base.yml || die
