@@ -36,7 +36,7 @@ else
 	KIMAGEFORMATS_COMMIT=7d7b295ac2f838a612e2c8892943bf4de1fc5ad4
 
 	SRC_URI="
-		https://github.com/SevenTV/chatterino7/archive/refs/tags/v${PV}.tar.gz
+		https://github.com/SevenTV/chatterino7/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 		https://github.com/arsenm/sanitizers-cmake/archive/${SANITIZERS_CMAKE_COMMIT}.tar.gz -> sanitizers-cmake-${SANITIZERS_CMAKE_COMMIT}.tar.gz
 		https://github.com/Chatterino/certify/archive/${CERTIFY_COMMIT}.tar.gz -> ${PN}-certify-${CERTIFY_COMMIT}.tar.gz
 		https://github.com/Chatterino/crash-handler/archive/${CRASH_HANDLER_COMMIT}.tar.gz -> ${PN}-crash-handler-${CRASH_HANDLER_COMMIT}.tar.gz
@@ -50,10 +50,9 @@ else
 	KEYWORDS="~amd64"
 fi
 
-
-IUSE="debug"
 LICENSE="MIT"
 SLOT="0"
+IUSE="debug"
 
 RDEPEND="
 	${LUA_DEPS}
@@ -71,6 +70,7 @@ DEPEND="
 	dev-libs/boost
 "
 BDEPEND="
+	${PYTHON_DEPS}
 	dev-qt/qttools:6[linguist]
 	dev-cpp/magic_enum
 	dev-libs/rapidjson
