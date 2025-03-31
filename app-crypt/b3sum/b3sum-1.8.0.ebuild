@@ -11,15 +11,15 @@ CRATES="
 	anstyle-query@1.1.2
 	anstyle-wincon@3.0.7
 	anstyle@1.0.10
-	anyhow@1.0.96
+	anyhow@1.0.97
 	arrayref@0.3.9
 	arrayvec@0.7.6
-	bitflags@2.8.0
-	cc@1.2.15
+	bitflags@2.9.0
+	cc@1.2.17
 	cfg-if@1.0.0
-	clap@4.5.31
-	clap_builder@4.5.31
-	clap_derive@4.5.28
+	clap@4.5.34
+	clap_builder@4.5.34
+	clap_derive@4.5.32
 	clap_lex@0.7.4
 	colorchoice@1.0.3
 	constant_time_eq@0.3.1
@@ -29,29 +29,30 @@ CRATES="
 	duct@0.13.7
 	errno@0.3.10
 	fastrand@2.3.0
-	getrandom@0.3.1
+	getrandom@0.3.2
 	glob@0.3.2
 	heck@0.5.0
 	hex@0.4.3
 	is_terminal_polyfill@1.70.1
-	libc@0.2.170
-	linux-raw-sys@0.4.15
+	libc@0.2.171
+	linux-raw-sys@0.9.3
 	memmap2@0.9.5
-	once_cell@1.20.3
+	once_cell@1.21.3
 	os_pipe@1.2.1
-	proc-macro2@1.0.93
-	quote@1.0.38
+	proc-macro2@1.0.94
+	quote@1.0.40
+	r-efi@5.2.0
 	rayon-core@1.12.1
-	rustix@0.38.44
+	rustix@1.0.3
 	shared_child@1.0.1
 	shlex@1.3.0
 	strsim@0.11.1
-	syn@2.0.98
-	tempfile@3.17.1
-	terminal_size@0.4.1
-	unicode-ident@1.0.17
+	syn@2.0.100
+	tempfile@3.19.1
+	terminal_size@0.4.2
+	unicode-ident@1.0.18
 	utf8parse@0.2.2
-	wasi@0.13.3+wasi-0.2.2
+	wasi@0.14.2+wasi-0.2.4
 	wild@2.2.1
 	windows-sys@0.59.0
 	windows-targets@0.52.6
@@ -63,7 +64,7 @@ CRATES="
 	windows_x86_64_gnu@0.52.6
 	windows_x86_64_gnullvm@0.52.6
 	windows_x86_64_msvc@0.52.6
-	wit-bindgen-rt@0.33.0
+	wit-bindgen-rt@0.39.0
 "
 
 inherit cargo
