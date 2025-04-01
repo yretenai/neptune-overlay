@@ -5,27 +5,29 @@ EAPI=8
 
 inherit cmake flag-o-matic xdg
 
-ASMJIT_COMMIT="416f7356967c1f66784dc1580fe157f9406d8bff"
-GLSLANG_COMMIT="36d08c0d940cf307a23928299ef52c7970d8cee6"
-MINIUPNP_COMMIT="7f189988a0decca0ab7da89000051ab91751f70d"
-RTMIDI_COMMIT="1e5b49925aa60065db52de44c366d446a902547b"
-WOLFSSL_COMMIT="239b85c80438bf60d9a5b9e0ebe9ff097a760d0d"
-SOUNDTOUCH_COMMIT="394e1f58b23dc80599214d2e9b6a5e0dfd0bbe07"
-YAMLCPP_COMMIT="456c68f452da09d8ca84b375faa2b1397713eaba"
-
 DESCRIPTION="PS3 emulator/debugger"
 HOMEPAGE="https://rpcs3.net/"
+
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/RPCS3/rpcs3"
 	EGIT_SUBMODULES=(
 		'asmjit' '3rdparty/glslang' '3rdparty/miniupnp/miniupnp' '3rdparty/rtmidi/rtmidi' '3rdparty/wolfssl'
 		'3rdparty/SoundTouch/soundtouch' '3rdparty/zstd/zstd' '3rdparty/stblib/stb' '3rdparty/OpenAL/openal-soft'
-		'3rdparty/fusion/fusion'
+		'3rdparty/fusion/fusion' '3rdparty/GPUOpen/VulkanMemoryAllocator'
 	)
 	# Delete sources when ensuring yaml-cpp compiled with fexceptions
 	EGIT_SUBMODULES+=( '3rdparty/yaml-cpp' )
 	inherit git-r3
 else
+	ASMJIT_COMMIT=
+	GLSLANG_COMMIT=
+	MINIUPNP_COMMIT=
+	RTMIDI_COMMIT=
+	WOLFSSL_COMMIT=
+	SOUNDTOUCH_COMMIT=
+	YAMLCPP_COMMIT=
+	VMA_COMMIT=
+
 	SRC_URI="
 		https://github.com/RPCS3/rpcs3/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 		https://github.com/asmjit/asmjit/archive/${ASMJIT_COMMIT}.tar.gz -> ${PN}-asmjit-${ASMJIT_COMMIT}.tar.gz
@@ -34,7 +36,8 @@ else
 		https://github.com/thestk/rtmidi/archive/${RTMIDI_COMMIT}.tar.gz -> ${PN}-rtmidi-${RTMIDI_COMMIT}.tar.gz
 		https://github.com/wolfSSL/wolfssl/archive/${WOLFSSL_COMMIT}.tar.gz -> ${PN}-wolfssl-${WOLFSSL_COMMIT}.tar.gz
 		https://github.com/RPCS3/soundtouch/archive/${SOUNDTOUCH_COMMIT}.tar.gz -> ${PN}-soundtouch-${SOUNDTOUCH_COMMIT}.tar.gz
-		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${SOUNDTOUCH_COMMIT}-.tar.gz
+		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${SOUNDTOUCH_COMMIT}.tar.gz
+		https://github.com/Megamouse/VulkanMemoryAllocator/archive/${VMA_COMMIT}.tar.gz -> ${PN}-VulkanMemoryAllocator-${VMA_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64"
 fi
@@ -96,7 +99,10 @@ src_prepare() {
 		mv "${WORKDIR}/soundtouch-${SOUNDTOUCH_COMMIT}" "${S}/3rdparty/SoundTouch/soundtouch" || die
 
 		rmdir "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
-		mv "${WORKDIR}/yaml-cpp-${YAMLCPP_COMMIT}" "${S}/3rdparty/SoundTouch/soundtouch" || die
+		mv "${WORKDIR}/yaml-cpp-${YAMLCPP_COMMIT}" "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
+
+		rmdir "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
+		mv "${WORKDIR}/VulkanMemoryAllocator-${VMA_COMMIT}" "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
 
 		#Define RPCS3 Version
 		{ echo "#define RPCS3_GIT_VERSION \"${PV}\""
