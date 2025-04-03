@@ -17,8 +17,8 @@ CRATES="
 	bitflags@2.9.0
 	cc@1.2.17
 	cfg-if@1.0.0
-	clap@4.5.34
-	clap_builder@4.5.34
+	clap@4.5.35
+	clap_builder@4.5.35
 	clap_derive@4.5.32
 	clap_lex@0.7.4
 	colorchoice@1.0.3
@@ -43,7 +43,7 @@ CRATES="
 	quote@1.0.40
 	r-efi@5.2.0
 	rayon-core@1.12.1
-	rustix@1.0.3
+	rustix@1.0.5
 	shared_child@1.0.1
 	shlex@1.3.0
 	strsim@0.11.1
