@@ -82,7 +82,6 @@ src_configure() {
 		-DNO_UNITTEST=ON
 		-DHIPRT_PREFER_HIP_5=OFF
 		-DHIP_PATH="${EPREFIX}/usr"
-		-DCMAKE_BUILD_TYPE="Release"
 		-DCMAKE_INSTALL_DATADIR="${EPREFIX}/usr/share"
 	)
 
