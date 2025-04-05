@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake xdg multibuild 
+inherit cmake xdg multibuild
 
 DESCRIPTION="SVG-based theme engine for Qt5, KDE Plasma and LXQt"
 HOMEPAGE="https://github.com/tsujan/Kvantum"
