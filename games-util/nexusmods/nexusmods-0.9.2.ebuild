@@ -108,10 +108,10 @@ harfbuzzsharp.nativeassets.win32@7.3.0.2
 harfbuzzsharp.nativeassets.win32@7.3.0.3
 harfbuzzsharp@7.3.0.2
 harfbuzzsharp@7.3.0.3
-hotchocolate.language.syntaxtree@14.1.0
-hotchocolate.transport.abstractions@14.1.0
-hotchocolate.transport.http@14.1.0
-hotchocolate.utilities@14.1.0
+hotchocolate.language.syntaxtree@15.0.3
+hotchocolate.transport.abstractions@15.0.3
+hotchocolate.transport.http@15.0.3
+hotchocolate.utilities@15.0.3
 htmlagilitypack@1.11.71
 humanizer.core.af@2.14.1
 humanizer.core.ar@2.14.1
@@ -186,7 +186,6 @@ memorypack.streaming@1.21.3
 memorypack@1.21.3
 microcom.runtime@0.11.0
 microsoft.aspnet.webapi.client@6.0.0
-microsoft.aspnetcore.webutilities@8.0.0
 microsoft.aspnetcore.webutilities@9.0.0
 microsoft.bcl.asyncinterfaces@1.1.0
 microsoft.bcl.asyncinterfaces@1.1.1
@@ -263,7 +262,6 @@ microsoft.extensions.hosting@8.0.0
 microsoft.extensions.hosting@9.0.0
 microsoft.extensions.http.diagnostics@9.0.0
 microsoft.extensions.http.resilience@9.0.0
-microsoft.extensions.http@8.0.0
 microsoft.extensions.http@9.0.0
 microsoft.extensions.logging.abstractions@2.0.0
 microsoft.extensions.logging.abstractions@3.0.3
@@ -284,7 +282,6 @@ microsoft.extensions.logging@2.0.0
 microsoft.extensions.logging@2.1.1
 microsoft.extensions.logging@8.0.0
 microsoft.extensions.logging@9.0.0
-microsoft.extensions.objectpool@8.0.0
 microsoft.extensions.objectpool@9.0.0
 microsoft.extensions.options.configurationextensions@8.0.0
 microsoft.extensions.options.configurationextensions@9.0.0
@@ -325,7 +322,7 @@ newtonsoft.json@12.0.1
 newtonsoft.json@13.0.1
 newtonsoft.json@13.0.3
 nexusmods.archives.nx@0.6.1
-nexusmods.archives.nx@0.6.3
+nexusmods.archives.nx@0.6.4
 nexusmods.hashing.xxhash3.paths@3.0.3
 nexusmods.hashing.xxhash3@3.0.3
 nexusmods.mnemonicdb.abstractions@0.9.114
@@ -410,11 +407,11 @@ splat@14.8.12
 splat@15.1.1
 splat@15.2.22
 steamkit2@3.0.0
-strawberryshake.core@14.1.0
-strawberryshake.resources@14.1.0
-strawberryshake.server@14.1.0
-strawberryshake.transport.http@14.1.0
-strawberryshake.transport.websockets@14.1.0
+strawberryshake.core@15.0.3
+strawberryshake.resources@15.0.3
+strawberryshake.server@15.0.3
+strawberryshake.transport.http@15.0.3
+strawberryshake.transport.websockets@15.0.3
 svg.custom@2.0.0.4
 svg.model@2.0.0.4
 svg.skia@2.0.0.4
