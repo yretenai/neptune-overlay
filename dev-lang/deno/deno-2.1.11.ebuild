@@ -14,7 +14,7 @@ HOMEPAGE="
 	https://github.com/denoland/deno/
 "
 
-RUST_V8_VER="135.0.0"
+RUST_V8_VER="130.0.7"
 SRC_URI="
 	https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/yretenai/neptune-overlay/releases/download/deps/${P}-crates.tar.xz
