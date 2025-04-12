@@ -17,7 +17,7 @@ HOMEPAGE="
 RUST_V8_VER="130.0.7"
 SRC_URI="
 	https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
-	https://github.com/yretenai/neptune-overlay/releases/download/deps/${P}-crates.tar.xz
+	https://github.com/yretenai/neptune-overlay/releases/download/deps/deno-2.1.11-crates.tar.xz
 	amd64? (
 		debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_debug_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-debug.a.gz )
 		!debug? ( https://github.com/denoland/rusty_v8/releases/download/v${RUST_V8_VER}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz -> ${PN}-rustyv8-${RUST_V8_VER}-amd64-release.a.gz )
