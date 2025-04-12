@@ -4,9 +4,7 @@
 EAPI=8
 
 DESCRIPTION="Electron Rebuild Set"
-HOMEPAGE="
-	https://non-existant.local
-"
+HOMEPAGE="https://wiki.gentoo.org/wiki/No_homepage"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="-* ~amd64 ~arm ~arm64"
