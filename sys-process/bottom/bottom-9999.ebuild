@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit bash-completion-r1 cargo git-r3
+inherit shell-completion cargo git-r3
 
 DESCRIPTION="A graphical process/system monitor with a customizable interface"
 HOMEPAGE="https://github.com/ClementTsang/bottom"
@@ -54,12 +54,8 @@ src_install() {
 	local build_dir="$(dirname $(find target -name btm.bash -print -quit || die) || die)"
 
 	newbashcomp "${build_dir}"/btm.bash btm
-
-	insinto /usr/share/fish/vendor_completions.d
-	doins "${build_dir}"/btm.fish
-
-	insinto /usr/share/zsh/site-functions
-	doins "${build_dir}"/_btm
+	dofishcomp "${build_dir}"/btm.fish
+	dozshcomp "${build_dir}"/_btm
 
 	local DOCS=( README.md )
 	einstalldocs

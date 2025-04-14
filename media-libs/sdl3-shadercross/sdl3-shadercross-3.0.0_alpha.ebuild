@@ -20,7 +20,7 @@ IUSE="test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	>=media-libs/libsdl3-3.1.3[static-libs]
+	>=media-libs/libsdl3-3.1.3
 	media-libs/vulkan-loader
 	app-emulation/vkd3d-native[spirv-tools]
 	dev-util/spirv-cross
