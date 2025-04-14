@@ -1,0 +1,14 @@
+diff --git a/src/qt_gui/gui_context_menus.h b/src/qt_gui/gui_context_menus.h
+index 2fd4588d..0bbff7cc 100644
+--- a/src/qt_gui/gui_context_menus.h
++++ b/src/qt_gui/gui_context_menus.h
+@@ -115,9 +115,6 @@ public:
+ 
+         compatibilityMenu->addAction(updateCompatibility);
+         compatibilityMenu->addAction(viewCompatibilityReport);
+-        if (Common::g_is_release) {
+-            compatibilityMenu->addAction(submitCompatibilityReport);
+-        }
+ 
+         menu.addMenu(compatibilityMenu);
+ 
