@@ -72,7 +72,6 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-1.85-makefile.patch"
 	"${FILESDIR}/${PN}-1.85-gguf.patch"
-	"${FILESDIR}/${PN}-1.85-tae-uninitialized.patch"
 )
 
 src_prepare() {
