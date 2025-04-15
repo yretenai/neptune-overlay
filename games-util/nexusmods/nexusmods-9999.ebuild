@@ -37,14 +37,15 @@ fi
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
 SLOT="0"
 
-IUSE="p7zip"
 RESTRICT="${RESTRICT} mirror"
 
 # jemalloc causes a TLS issue?
 RDEPEND="
 	>=dev-libs/rocksdb-8.11.3[-jemalloc]
-	!p7zip? ( app-arch/7zip )
-	p7zip? ( app-arch/p7zip )
+	|| (
+		app-arch/7zip[symlink]
+		app-arch/p7zip
+	)
 	app-arch/brotli
 	dev-libs/elfutils
 	dev-libs/expat
