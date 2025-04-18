@@ -48,7 +48,7 @@ IUSE="discord faudio +llvm opencv vulkan wayland"
 
 DEPEND="
 	|| (
-		app-arch/7zip[symlink]
+		>=app-arch/7zip-24.09[symlink]
 		app-arch/p7zip
 	)
 	dev-libs/flatbuffers:=

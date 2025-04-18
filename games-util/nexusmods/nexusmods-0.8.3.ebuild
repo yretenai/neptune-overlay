@@ -549,7 +549,7 @@ RESTRICT="${RESTRICT} mirror"
 RDEPEND="
 	>=dev-libs/rocksdb-8.11.3[-jemalloc]
 	|| (
-		app-arch/7zip[symlink]
+		>=app-arch/7zip-24.09[symlink]
 		app-arch/p7zip
 	)
 	app-arch/brotli
