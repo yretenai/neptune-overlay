@@ -20,12 +20,12 @@ else
 	SRC_URI="
 		https://github.com/RenderKit/${PN}/releases/download/v${PV}/${P}.src.tar.gz -> ${P}.tar.gz
 	"
-	KEYWORDS="~amd64 -arm ~arm64 -ppc ~ppc64 -x86" # 64-bit-only
+	KEYWORDS="~amd64"
 fi
 
 LICENSE="Apache-2.0"
 SLOT="0"
-IUSE="apps cuda hip openimageio test"
+IUSE="apps cuda hip oneapi openimageio test"
 REQUIRED_USE="
 	test? ( apps )
 "
@@ -38,6 +38,11 @@ RDEPEND="
 	hip? (
 		dev-util/hip:=
 		sci-libs/composable-kernel
+	)
+	oneapi? ( || (
+			dev-libs/intel-compute-runtime:0
+			dev-libs/intel-compute-runtime:legacy
+		)
 	)
 	openimageio? ( media-libs/openimageio:= )
 "
@@ -75,7 +80,7 @@ src_configure() {
 		-DOIDN_DEVICE_CPU="yes"
 		-DOIDN_DEVICE_CUDA="$(usex cuda)"
 		-DOIDN_DEVICE_HIP="$(usex hip)"
-		# -DOIDN_DEVICE_SYCL="$(usex sycl)"
+		-DOIDN_DEVICE_SYCL="$(usex oneapi)"
 	)
 
 	if use apps; then

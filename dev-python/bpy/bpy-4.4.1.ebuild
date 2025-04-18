@@ -3,13 +3,13 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..12} )
+PYTHON_COMPAT=( python3_13 )
 LLVM_COMPAT=( {18..19} )
 LLVM_OPTIONAL=1
 EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
-inherit ffmpeg-compat neptune-rocm check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
+inherit neptune-rocm check-reqs cmake cuda flag-o-matic python-single-r1 toolchain-funcs llvm-r1
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
@@ -52,12 +52,13 @@ else
 	fi
 fi
 
-IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
-	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug +embree +ffmpeg +fftw +gmp hip jack jpeg2k
-	+nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
-	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
-	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
+IUSE="
+alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
+debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
+jpeg2k llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openmp +openpgl
++opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio renderdoc
+sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
+"
 RESTRICT="test"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -66,6 +67,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	cycles? ( openexr tiff tbb )
 	fluid? ( tbb )
 	hip? ( cycles llvm )
+	hiprt? ( hip )
 	nanovdb? ( openvdb )
 	openvdb? ( tbb openexr )
 	optix? ( cuda )
@@ -88,7 +90,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/libjpeg-turbo:=
 	media-libs/libpng:=
 	media-libs/libsamplerate
-	>=media-libs/openimageio-2.4.6.0:=
+	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
 	virtual/glu
 	virtual/libintl
@@ -97,9 +99,10 @@ RDEPEND="${PYTHON_DEPS}
 	collada? ( >=media-libs/opencollada-1.6.68 )
 	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	embree? ( >=media-libs/embree-3.13.0:=[raymask] )
+	embree? ( media-libs/embree:=[raymask] )
 	ffmpeg? (
-		media-video/ffmpeg-compat:6=[encode(+),lame,jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
 	)
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp[cxx] )
@@ -113,14 +116,19 @@ RDEPEND="${PYTHON_DEPS}
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
 	oidn? ( >=media-libs/oidn-2.3.2:= )
+	oneapi? ( || (
+			dev-libs/intel-compute-runtime:0
+			dev-libs/intel-compute-runtime:legacy
+		)
+	)
 	openexr? (
-		>=dev-libs/imath-3.1.4-r2:=
-		>=media-libs/openexr-3:0=
+		>=dev-libs/imath-3.1.7:=
+		>=media-libs/openexr-3.2.1:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
 	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,openmp?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-10.1.0:=[nanovdb?]
+		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( dev-libs/optix )
@@ -162,6 +170,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
+	hiprt? ( dev-libs/hiprt:2.5=[${LLVM_USEDEP}] )
 "
 
 DEPEND="${RDEPEND}
@@ -187,8 +196,11 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-4.1.1-openvdb-11.patch"
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
+	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
+	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
+	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 )
 
 blender_check_requirements() {
@@ -266,6 +278,8 @@ src_prepare() {
 	if [ "${HAS_ASSETS}" -eq 1 ]; then
 		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 	fi
+
+	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 }
 
 src_configure() {
@@ -284,6 +298,8 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
+		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
+		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
@@ -297,10 +313,12 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
-		-DWITH_CYCLES_DEVICE_ONEAPI=no
+		-DWITH_CYCLES_DEVICE_HIPRT=$(usex hiprt)
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
 		-DWITH_CYCLES_HIP_BINARIES=$(usex hip $(usex cycles-bin-kernels))
+		-DWITH_CYCLES_DEVICE_ONEAPI="$(usex oneapi)"
+		-DWITH_CYCLES_ONEAPI_BINARIES="$(usex oneapi $(usex cycles-bin-kernels))"
 		-DCYCLES_HIP_BINARIES_ARCH="$(get_amdgpu_flags)"
 		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
 		-DWITH_CYCLES_ONEAPI_BINARIES=no
@@ -310,7 +328,7 @@ src_configure() {
 		-DWITH_CYCLES_STANDALONE=no
 		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_DOC_MANPAGE=no
-		-DWITH_DRACO=no # TODO: Package Draco
+		-DWITH_DRACO=yes # TODO: Package Draco
 		-DWITH_EXPERIMENTAL_FEATURES=$(usex experimental)
 		-DWITH_FFTW3=$(usex fftw)
 		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"
@@ -369,12 +387,6 @@ src_configure() {
 		-DWITH_PYTHON_MODULE=on
 	)
 
-	if use ffmpeg; then
-		ffmpeg_compat_setup 6
-		ffmpeg_compat_add_flags
-		mycmakeargs+=( -DFFMPEG_ROOT="${SYSROOT}$(ffmpeg_compat_get_prefix 6)" )
-	fi
-
 	if has_version ">=dev-python/numpy-2"; then
 		mycmakeargs+=(
 			-DPYTHON_NUMPY_INCLUDE_DIRS="$(python_get_sitedir)/numpy/_core/include"
@@ -430,12 +442,12 @@ src_install() {
 }
 
 pkg_postinst() {
-	if ! use python_single_target_python3_11; then
+	if ! use python_single_target_python3_13; then
 		ewarn
 		ewarn "You are building Blender with a newer python version than"
 		ewarn "supported by this version upstream."
 		ewarn "If you experience breakages with e.g. plugins, please switch to"
-		ewarn "python_single_target_python3_11 instead."
+		ewarn "python_single_target_python3_13 instead."
 		ewarn "Bug: https://bugs.gentoo.org/737388"
 		ewarn
 	fi

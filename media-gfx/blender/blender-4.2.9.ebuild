@@ -68,12 +68,14 @@ else
 	fi
 fi
 
-IUSE="+bullet +fluid +openexr +tbb vulkan experimental llvm
-	alembic collada +color-management cuda +cycles +cycles-bin-kernels
-	debug doc +embree +ffmpeg +fftw +gmp hip jack jemalloc jpeg2k
-	man +nanovdb ndof nls openal +oidn +openmp +openpgl +opensubdiv
-	+openvdb optix osl +pdf +potrace +pugixml pulseaudio sdl
-	+sndfile +tiff valgrind +wayland +webp X +otf renderdoc"
+IUSE="
+alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
+debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip jack jemalloc
+jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openmp
++openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml
+pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland
++webp X
+"
 RESTRICT="test"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
@@ -130,6 +132,11 @@ RDEPEND="${PYTHON_DEPS}
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
 	oidn? ( >=media-libs/oidn-2.3.2:= )
+	oneapi? ( || (
+			dev-libs/intel-compute-runtime:0
+			dev-libs/intel-compute-runtime:legacy
+		)
+	)
 	openexr? (
 		>=dev-libs/imath-3.1.4-r2:=
 		>=media-libs/openexr-3:0=
@@ -369,10 +376,11 @@ src_configure() {
 		-DWITH_CYCLES_CUDA_BINARIES=$(usex cuda $(usex cycles-bin-kernels))
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_HIP=$(usex hip)
-		-DWITH_CYCLES_DEVICE_ONEAPI=no
 		-DWITH_CYCLES_DEVICE_OPTIX=$(usex optix)
 		-DWITH_CYCLES_EMBREE=$(usex embree)
 		-DWITH_CYCLES_HIP_BINARIES=$(usex hip $(usex cycles-bin-kernels))
+		-DWITH_CYCLES_DEVICE_ONEAPI="$(usex oneapi)"
+		-DWITH_CYCLES_ONEAPI_BINARIES="$(usex oneapi $(usex cycles-bin-kernels))"
 		-DCYCLES_HIP_BINARIES_ARCH="$(get_amdgpu_flags)"
 		-DWITH_CYCLES_HYDRA_RENDER_DELEGATE=no # TODO: package Hydra
 		-DWITH_CYCLES_ONEAPI_BINARIES=no
