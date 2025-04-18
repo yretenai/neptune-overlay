@@ -54,7 +54,7 @@ fi
 
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
-debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip jack jpeg2k
+debug +embree experimental +ffmpeg +fftw +fluid +gmp hip jack jpeg2k
 llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openmp +openpgl
 +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
 renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
