@@ -6,7 +6,6 @@ EAPI=8
 PYTHON_COMPAT=( python3_{11..12} )
 LLVM_COMPAT=( {18..19} )
 LLVM_OPTIONAL=1
-EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
 inherit ffmpeg-compat neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
@@ -19,7 +18,6 @@ HOMEPAGE="
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
-HAS_ASSETS=1
 HAS_ADDONS=1
 HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
 
@@ -31,12 +29,6 @@ if [ "${HAS_RELEASED}" -eq 1 ]; then
 	"
 	S="${WORKDIR}/${PN}-${GOO_COMMIT}"
 
-	if [ "${HAS_ASSETS}" -eq 1 ]; then
-		SRC_URI+="
-			https://projects.blender.org/blender/blender-assets/archive/v${PV}.tar.gz -> ${P}-assets.tar.gz
-		"
-	fi
-
 	if [ "${HAS_ADDONS}" -eq 1 ]; then
 		SRC_URI+="
 			https://projects.blender.org/blender/blender-addons/archive/v${PV}.tar.gz -> ${P}-addons.tar.gz
@@ -45,6 +37,7 @@ if [ "${HAS_RELEASED}" -eq 1 ]; then
 
 	KEYWORDS="~amd64"
 else
+	EGIT_LFS="yes"
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/dillongoostudios/goo-engine.git"
 	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
@@ -251,11 +244,6 @@ src_unpack() {
 			mv "${WORKDIR}/blender-addons" "${S}/scripts/addons"
 		fi
 	else
-		if [ "${HAS_ASSETS}" -eq 1 ]; then
-			git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
-			git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
-		fi
-
 		if [ "${HAS_ADDONS}" -eq 1 ]; then
 			git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
 			git-r3_checkout "${ADDONS_EGIT_LOCAL_ID}" "${S}/scripts/addons"
@@ -301,10 +289,6 @@ src_prepare() {
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-	fi
-
-	if [ "${HAS_ASSETS}" -eq 1 ]; then
-		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 	fi
 }
 

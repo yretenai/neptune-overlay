@@ -15,7 +15,6 @@ EAPI=8
 PYTHON_COMPAT=( python3_13 )
 LLVM_COMPAT=( {18..19} )
 LLVM_OPTIONAL=1
-EGIT_LFS="yes"
 ROCM_VERSION="6.3"
 
 inherit neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
@@ -25,35 +24,21 @@ HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
-HAS_ASSETS=1
-HAS_ADDONS=0
 HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
 
 if [ "${HAS_RELEASED}" -eq 1 ]; then
 	IS_LIVE=0
 	SRC_URI="
-		https://projects.blender.org/blender/blender/archive/v${PV}.tar.gz -> ${P}.tar.gz
+		https://download.blender.org/source/${P}.tar.xz
 	"
 	S="${WORKDIR}/${PN}"
 
-	if [ "${HAS_ASSETS}" -eq 1 ]; then
-		SRC_URI+="
-			https://projects.blender.org/blender/blender-assets/archive/v${PV}.tar.gz -> ${P}-assets.tar.gz
-		"
-	fi
-
-	if [ "${HAS_ADDONS}" -eq 1 ]; then
-		SRC_URI+="
-			https://projects.blender.org/blender/blender-addons/archive/v${PV}.tar.gz -> ${P}-addons.tar.gz
-		"
-	fi
-
 	KEYWORDS="~amd64"
 else
+	EGIT_LFS="yes"
 	inherit git-r3
 	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
 	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
-	ADDONS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-addons.git"
 	if [[ ${PV} != *_beta* ]]; then
 		EGIT_BRANCH="main"
 	else
@@ -284,21 +269,9 @@ pkg_setup() {
 src_unpack() {
 	if [ "${HAS_RELEASED}" -eq 1 ]; then
 		default
-
-		if [ "${HAS_ADDONS}" -eq 1 ]; then
-			mv "${WORKDIR}/blender-addons" "${S}/scripts/addons"
-		fi
 	else
-		if [ "${HAS_ASSETS}" -eq 1 ]; then
-			git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
-			git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
-		fi
-
-		if [ "${HAS_ADDONS}" -eq 1 ]; then
-			git-r3_fetch "${ADDONS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
-			git-r3_checkout "${ADDONS_EGIT_LOCAL_ID}" "${S}/scripts/addons"
-		fi
-
+		git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
+		git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
 		git-r3_src_unpack
 	fi
 }
@@ -346,10 +319,6 @@ src_prepare() {
 
 	if use vulkan; then
 		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-	fi
-
-	if [ "${HAS_ASSETS}" -eq 1 ]; then
-		rm "${WORKDIR}/blender-assets/publish/LICENSE" || die
 	fi
 
 	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
@@ -552,11 +521,6 @@ src_install() {
 
 	mv "${ED}/usr/bin/blender-thumbnailer" "${ED}/usr/bin/blender-${BV}-thumbnailer" || die
 	mv "${ED}/usr/bin/blender" "${ED}/usr/bin/blender-${BV}" || die
-
-	if [ "${HAS_ASSETS}" -eq 1 ]; then
-		insinto "/usr/share/blender/${BV}/datafiles/assets"
-		doins -r "${WORKDIR}/blender-assets/publish/"*
-	fi
 }
 
 pkg_postinst() {
