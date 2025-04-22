@@ -31,7 +31,6 @@ if [ "${HAS_RELEASED}" -eq 1 ]; then
 	SRC_URI="
 		https://download.blender.org/source/${P}.tar.xz
 	"
-	S="${WORKDIR}/${PN}"
 
 	KEYWORDS="~amd64"
 else
