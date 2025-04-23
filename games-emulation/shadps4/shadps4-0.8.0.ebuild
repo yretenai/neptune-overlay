@@ -41,7 +41,6 @@ else
 		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ext-SDL-${EXT_SDL_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> sirit-${SIRIT_COMMIT}.tar.gz
 	"
-	KEYWORDS="~amd64"
 	S="${WORKDIR}/shadPS4-v.${PV}"
 fi
 
@@ -100,7 +99,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
 	"${FILESDIR}/${PN}-0.4.0-tracy.patch"
-	"${FILESDIR}/${PN}-0.5.0-compat.patch"
+	"${FILESDIR}/${PN}-0.7.1-compat.patch"
 )
 
 src_unpack() {
