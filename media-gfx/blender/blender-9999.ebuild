@@ -93,6 +93,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/libsamplerate
 	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
+	>sci-mathematics/manifold-3.0.1
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
