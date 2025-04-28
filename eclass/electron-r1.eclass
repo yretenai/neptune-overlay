@@ -242,8 +242,8 @@ electron-r1_stage() {
 		dosym "../../../${ELECTRON_NORMATIVE_NAME}/locales/${filename}" "${ELECTRON_DESTDIR}/locales/${filename}"
 	done
 
-	# hardlink the actual electron binary so the appid/class and process name are proper
-	ln -v "${ELECTRON_PATH}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
+	# copy the actual electron binary so the appid/class and process name are proper
+	cp "${ELECTRON_PATH}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
 	chmod 0755 "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" # fperms fails?
 }
 
