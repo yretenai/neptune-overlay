@@ -30,6 +30,7 @@ DEPEND="
 	dev-cpp/json_struct
 	dev-libs/libfmt:=
 	dev-libs/miniz
+	sys-fs/fuse:=
 "
 
 RDEPEND="
