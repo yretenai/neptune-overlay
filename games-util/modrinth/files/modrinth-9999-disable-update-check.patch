@@ -1,8 +1,8 @@
 diff --git a/apps/app-frontend/src/App.vue b/apps/app-frontend/src/App.vue
-index 786e1f31..d8e2ed07 100644
+index 85d25274..f0e591bb 100644
 --- a/apps/app-frontend/src/App.vue
 +++ b/apps/app-frontend/src/App.vue
-@@ -162,15 +162,7 @@ async function setupApp() {
+@@ -163,22 +163,6 @@ async function setupApp() {
      }),
    )
  
@@ -10,16 +10,22 @@ index 786e1f31..d8e2ed07 100644
 -    `https://api.modrinth.com/appCriticalAnnouncement.json?version=${version}`,
 -    'criticalAnnouncements',
 -    true,
--  ).then((res) => {
--    if (res && res.header && res.body) {
--      criticalErrorMessage.value = res
--    }
--  })
-+
- 
+-  )
+-    .then((res) => {
+-      if (res && res.header && res.body) {
+-        criticalErrorMessage.value = res
+-      }
+-    })
+-    .catch(() => {
+-      console.log(
+-        `No critical announcement found at https://api.modrinth.com/appCriticalAnnouncement.json?version=${version}`,
+-      )
+-    })
+-
    useFetch(`https://modrinth.com/blog/news.json`, 'news', true).then((res) => {
      if (res && res.articles) {
-@@ -179,7 +171,6 @@ async function setupApp() {
+       news.value = res.articles
+@@ -186,7 +170,6 @@ async function setupApp() {
    })
  
    get_opening_command().then(handleCommand)
@@ -27,7 +33,7 @@ index 786e1f31..d8e2ed07 100644
    fetchCredentials()
  }
  
-@@ -309,15 +300,7 @@ async function handleCommand(e) {
+@@ -316,15 +299,7 @@ async function handleCommand(e) {
  
  const updateAvailable = ref(false)
  async function checkUpdates() {
