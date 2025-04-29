@@ -90,10 +90,6 @@ DOTNET_PKG_TEST_EXTRA_ARGS+=(
 	"--filter \"RequiresNetworking==True\""
 )
 
-PATCHES=(
-	"${FILESDIR}/${PN}-SMAPI.patch"
-)
-
 src_unpack() {
 	if [[ "${PV}" == *9999* ]]; then
 		git-r3_src_unpack
