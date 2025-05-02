@@ -6,7 +6,7 @@ EAPI=8
 inherit electron-version
 
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
-ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
+ELECTRON_BUILDER_VER="25.1.8"
 
 inherit desktop xdg electron-r1
 
