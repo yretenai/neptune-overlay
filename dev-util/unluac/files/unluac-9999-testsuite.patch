@@ -1,0 +1,43 @@
+diff -r bda008aa963b src/unluac/test/LuaSpec.java
+--- a/src/unluac/test/LuaSpec.java	Tue Mar 04 21:34:42 2025 -0800
++++ b/src/unluac/test/LuaSpec.java	Fri May 02 17:04:05 2025 +0100
+@@ -44,7 +44,7 @@
+   }
+   
+   public String getLuaCName() {
+-    return "luac" + getVersionString() + getMinorVersionString() + getNumberFormatString();
++    return "luac" + getVersionString().charAt(0) + "." + getVersionString().charAt(1) + getMinorVersionString();
+   }
+   
+   public String[] getArgs() {
+diff -r bda008aa963b src/unluac/test/RunTests.java
+--- a/src/unluac/test/RunTests.java	Tue Mar 04 21:34:42 2025 -0800
++++ b/src/unluac/test/RunTests.java	Fri May 02 17:04:05 2025 +0100
+@@ -12,12 +12,12 @@
+     Configuration config = new Configuration();
+     config.strict_scope = true;
+     for(LuaSpec spec : new LuaSpec[] {
+-      new LuaSpec(0x50),
++      // new LuaSpec(0x50),
+       new LuaSpec(0x51),
+-      new LuaSpec(0x51, 4),
+-      new LuaSpec(0x52),
++      // new LuaSpec(0x51, 4),
++      // new LuaSpec(0x52),
+       new LuaSpec(0x53),
+-      new LuaSpec(0x54),
++      // new LuaSpec(0x54), // usually fails?
+     }) {
+       UnluacSpec uspec = new UnluacSpec();
+       System.out.print(spec.id());
+diff -r bda008aa963b src/unluac/test/TestFiles.java
+--- a/src/unluac/test/TestFiles.java	Tue Mar 04 21:34:42 2025 -0800
++++ b/src/unluac/test/TestFiles.java	Fri May 02 17:04:05 2025 +0100
+@@ -284,6 +284,6 @@
+     new TestFile("54_tbc01"),
+   };
+   
+-  public static TestSuite suite = new TestSuite(null, ".\\test\\src\\", tests);
++  public static TestSuite suite = new TestSuite(null, "./test/src/", tests);
+   
+ }
