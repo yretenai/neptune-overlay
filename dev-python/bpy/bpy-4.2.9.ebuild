@@ -262,6 +262,7 @@ src_configure() {
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
+		-DWITH_BLENDER_THUMBNAILER=no
 		-DWITH_ALEMBIC=$(usex alembic)
 		-DWITH_BOOST=yes
 		-DWITH_BULLET=$(usex bullet)
