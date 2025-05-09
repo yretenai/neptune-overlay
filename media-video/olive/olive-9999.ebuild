@@ -62,14 +62,15 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/fix-opencolorio-2.3.patch"
+	"${FILESDIR}/9999-fix-opencolorio-2.3.patch"
+	"${FILESDIR}/9999-fix-openimageio-3.0.patch"
 )
 
 src_prepare() {
 	eapply_user
 
 	if use qt6; then
-		eapply "${FILESDIR}/fix-qtstring.patch"
+		eapply "${FILESDIR}/9999-fix-qtstring.patch"
 	fi
 
 	cmake_src_prepare
