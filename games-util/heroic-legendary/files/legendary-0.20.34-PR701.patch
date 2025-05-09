@@ -1,0 +1,30 @@
+From 73c9078a85e579f6efb67824a0abf6416ed1d972 Mon Sep 17 00:00:00 2001
+From: Stelios Tsampas <loathingkernel@gmail.com>
+Date: Mon, 31 Mar 2025 23:08:14 +0300
+Subject: [PATCH] [utils/cli] Accept empty string as a falsey value in
+ strtobool
+
+Some UE asset manifests seem to have `"OwnershipToken": ""` instead
+of something `strtobool` could understand. When trying to import these
+through `egl-sync` an exception is being raised, which blocks importing
+other titles too.
+
+The other use of `strtobool` is in `LGDRY_NO_WINE` environment variable,
+which also causes an exception if set as `LGDRY_NO_WINE=`
+---
+ legendary/utils/cli.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/legendary/utils/cli.py b/legendary/utils/cli.py
+index c0fe14a7..ff8eb6ee 100644
+--- a/legendary/utils/cli.py
++++ b/legendary/utils/cli.py
+@@ -84,7 +84,7 @@ def strtobool(val):
+     val = val.lower()
+     if val in ('y', 'yes', 't', 'true', 'on', '1'):
+         return 1
+-    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
++    elif val in ('n', 'no', 'f', 'false', 'off', '0', ''):
+         return 0
+     else:
+         raise ValueError("invalid truth value %r" % (val,))
