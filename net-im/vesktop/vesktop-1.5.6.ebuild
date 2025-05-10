@@ -60,14 +60,6 @@ src_install() {
 	newicon static/icon.png vencord.png
 
 	cd dist/linux-unpacked/resources
-
-	# todo: build this manually.
-	if [[ "$ARCH" == "amd64" ]]; then
-		rm -rfv "app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/"
-	elif [[ "$ARCH" == "arm64" ]]; then
-		rm -rfv "app.asar.unpacked/node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/"
-	fi
-
 	electron-r1_src_install
 }
 
