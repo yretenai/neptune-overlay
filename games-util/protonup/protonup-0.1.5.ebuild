@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..13} python3_13t )
+PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
 
 DESCRIPTION="Install and Update Proton-GE"
 HOMEPAGE="https://github.com/AUNaseef/protonup"

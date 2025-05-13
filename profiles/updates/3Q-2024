@@ -1,4 +1,3 @@
-move app-misc/koboldcpp app-tensor/koboldcpp
 move app-accessibility/whisper-cpp app-tensor/whispercpp
 move app-tensor/whisper-cpp app-tensor/whispercpp
 move app-accessibility/whisper-cpp-models dev-misc/whispercpp-models

@@ -166,7 +166,7 @@ xunit.runner.visualstudio@2.4.5
 xunit@2.4.2
 "
 
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..13} python3_13t )
 inherit desktop python-any-r1 flag-o-matic scons-utils shell-completion toolchain-funcs xdg neptune-dotnet
 
 DESCRIPTION="Multi-platform 2D and 3D game engine with a feature-rich editor"

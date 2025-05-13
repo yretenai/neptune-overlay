@@ -16,7 +16,7 @@ SRC_URI="
 S="${WORKDIR}/FjordLauncher-${PV}"
 LICENSE="Apache-2.0 BSD BSD-2 GPL-2+ GPL-3 ISC LGPL-2.1+ LGPL-3+ MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64"
 
 IUSE="debug lto qt5 +qt6 test"
 REQUIRED_USE="

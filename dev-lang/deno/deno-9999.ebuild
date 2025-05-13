@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} python3_13t )
+PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
 RUST_MIN_VER="1.82.0"
 
 inherit git-r3 cargo shell-completion python-any-r1
@@ -33,8 +33,8 @@ BDEPEND="
 "
 
 src_unpack() {
-    git-r3_src_unpack
-    cargo_live_src_unpack
+	git-r3_src_unpack
+	cargo_live_src_unpack
 }
 
 pkg_setup() {

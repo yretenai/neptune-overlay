@@ -4,7 +4,8 @@
 EAPI=8
 
 LUA_COMPAT=( lua5-4 )
-PYTHON_COMPAT=( python3_{8..13} )
+PYTHON_COMPAT=( python3_{8..14} python3_{13..14}t )
+
 inherit cmake optfeature lua-single python-any-r1 xdg-utils
 
 DESCRIPTION="Chat client for https://twitch.tv, 7tv soft fork"

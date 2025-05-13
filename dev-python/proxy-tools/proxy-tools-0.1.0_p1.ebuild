@@ -4,16 +4,17 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517="setuptools"
-PYTHON_COMPAT=( python3_{11..13} )
+PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
 
 inherit distutils-r1
 
+MY_PN="proxy_tools"
 MY_COMMIT="db43f1e35d4f90a65c5a4d56d9e9af88212ec6e6"
 
 DESCRIPTION="Simple proxy (as in the GoF design pattern)"
 HOMEPAGE="https://pypi.org/project/proxy_tools/"
 # pypi tarballs are missing test data
-SRC_URI="https://github.com/jtushman/${PN}/archive/${MY_COMMIT}.tar.gz -> ${P}.gh.tar.gz"
+SRC_URI="https://github.com/jtushman/${MY_PN}/archive/${MY_COMMIT}.tar.gz -> ${P}.gh.tar.gz"
 S="${WORKDIR}"/${PN}-${MY_COMMIT}
 
 LICENSE="BSD"

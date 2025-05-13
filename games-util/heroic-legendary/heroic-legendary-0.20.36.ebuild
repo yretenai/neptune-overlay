@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{11..13} python3_13t )
+PYTHON_COMPAT=( python3_{11..14} )
 DISTUTILS_SINGLE_IMPL=1
 inherit distutils-r1
 
@@ -26,7 +26,6 @@ fi
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64"
 
 RDEPEND="
 	$(python_gen_cond_dep '

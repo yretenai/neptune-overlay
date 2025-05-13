@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..13} python3_13t )
+PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
 LLVM_COMPAT=( {18..20} )
 CMAKE_BUILD_TYPE="Release"
 EGIT_LFS="no" # fetches test data
