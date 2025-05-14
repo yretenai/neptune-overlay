@@ -3,3 +3,6 @@ move sys-apps/gum-bin app-misc/gum-bin
 move sci-libs/sentencepiece sci-ml/sentencepiece
 move media-gfx/vkBasalt media-gfx/vkbasalt
 move dev-python/proxy_tools dev-python/proxy-tools
+move app-tensor/koboldcpp sci-ml/koboldcpp
+move app-tensor/sdcpp sci-ml/sdcpp
+move app-tensor/whispercpp sci-ml/whispercpp
