@@ -13,14 +13,7 @@ if [[ ${PV} = *9999* ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/elalish/manifold.git"
 else
-	if [[ ${PV} = *pre* ]] ; then
-		COMMIT="4edd442297e25bb1dc293559efc548bb0a89b053"
-		SRC_URI="https://github.com/elalish/manifold/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
-		S="${WORKDIR}/${PN}-${COMMIT}"
-	else
-		SRC_URI="https://github.com/elalish/manifold/releases/download/v${PV}/${P}.tar.gz"
-	fi
-
+	SRC_URI="https://github.com/elalish/manifold/releases/download/v${PV}/${P}.tar.gz"
 	KEYWORDS="amd64"
 fi
 
