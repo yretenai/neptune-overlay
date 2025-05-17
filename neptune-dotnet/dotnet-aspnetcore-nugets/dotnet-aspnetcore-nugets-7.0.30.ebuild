@@ -6,19 +6,13 @@ EAPI=8
 NUGET_PVS="7.0.20 7.0.19 7.0.18 7.0.17 7.0.16 7.0.15 7.0.14 7.0.13 7.0.12 7.0.11 7.0.10 7.0.9 7.0.8 7.0.7 7.0.5 7.0.4 7.0.3 7.0.2 7.0.1 7.0.0 "
 for NUGET_PV in $NUGET_PVS; do
 	NUGETS+="
-		microsoft.netcore.app.host.linux-arm@${NUGET_PV}
-		microsoft.netcore.app.host.linux-arm64@${NUGET_PV}
-		microsoft.netcore.app.host.linux-musl-arm@${NUGET_PV}
-		microsoft.netcore.app.host.linux-musl-arm64@${NUGET_PV}
-		microsoft.netcore.app.host.linux-musl-x64@${NUGET_PV}
-		microsoft.netcore.app.host.linux-x64@${NUGET_PV}
-		microsoft.netcore.app.ref@${NUGET_PV}
-		microsoft.netcore.app.runtime.linux-arm@${NUGET_PV}
-		microsoft.netcore.app.runtime.linux-arm64@${NUGET_PV}
-		microsoft.netcore.app.runtime.linux-musl-arm@${NUGET_PV}
-		microsoft.netcore.app.runtime.linux-musl-arm64@${NUGET_PV}
-		microsoft.netcore.app.runtime.linux-musl-x64@${NUGET_PV}
-		microsoft.netcore.app.runtime.linux-x64@${NUGET_PV}
+		microsoft.aspnetcore.app.ref@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-arm@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-arm64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-arm@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-arm64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-x64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-x64@${NUGET_PV}
 	"
 done
 
@@ -32,7 +26,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SLOT="${PV}"
+SLOT="$(ver_cut 1-2)"
 KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 

@@ -3,12 +3,15 @@
 
 EAPI=8
 
-NUGET_PVS="5.0.0 "
+NUGET_PVS="10.0.0-preview.4.25258.110 10.0.0-preview.3.25172.1 10.0.0-preview.2.25164.1 10.0.0-preview.1.25120.3 "
 for NUGET_PV in $NUGET_PVS; do
 	NUGETS+="
 		microsoft.aspnetcore.app.ref@${NUGET_PV}
 		microsoft.aspnetcore.app.runtime.linux-arm@${NUGET_PV}
 		microsoft.aspnetcore.app.runtime.linux-arm64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-arm@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-arm64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-x64@${NUGET_PV}
 		microsoft.aspnetcore.app.runtime.linux-x64@${NUGET_PV}
 	"
 done
@@ -23,7 +26,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SLOT="${PV}"
+SLOT="$(ver_cut 1-2)"
 KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
