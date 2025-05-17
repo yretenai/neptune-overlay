@@ -39,7 +39,7 @@ RDEPEND="
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
 	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 	!neptune-dotnet/dotnet-runtime:${SLOT}
-	neptune-dotnet/dotnet-aspnetcore-nugets:$(ver_cut 1-4 ${ASP_PV})
+	neptune-dotnet/dotnet-aspnetcore-nugets:$(ver_cut 1-2 ${ASP_PV})
 	neptune-dotnet/dotnet-runtime-nugets:$(ver_cut 1-2 ${RUNTIME_PV})
 "
 

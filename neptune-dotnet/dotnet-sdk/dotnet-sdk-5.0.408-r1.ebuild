@@ -6,34 +6,27 @@ EAPI=8
 MY_PV="${PV/-r*/}"
 DN_PV="${PV}"
 
-RUNTIME_PV="7.0.20"
+RUNTIME_PV="5.0.17"
 
 NUGETS="
-	microsoft.aspnetcore.app.ref@${RUNTIME_PV}
 	microsoft.aspnetcore.app.runtime.linux-arm@${RUNTIME_PV}
 	microsoft.aspnetcore.app.runtime.linux-arm64@${RUNTIME_PV}
 	microsoft.aspnetcore.app.runtime.linux-musl-arm@${RUNTIME_PV}
 	microsoft.aspnetcore.app.runtime.linux-musl-arm64@${RUNTIME_PV}
 	microsoft.aspnetcore.app.runtime.linux-musl-x64@${RUNTIME_PV}
 	microsoft.aspnetcore.app.runtime.linux-x64@${RUNTIME_PV}
-	microsoft.dotnet.ilcompiler@${RUNTIME_PV}
 	microsoft.netcore.app.host.linux-arm@${RUNTIME_PV}
 	microsoft.netcore.app.host.linux-arm64@${RUNTIME_PV}
 	microsoft.netcore.app.host.linux-musl-arm@${RUNTIME_PV}
 	microsoft.netcore.app.host.linux-musl-arm64@${RUNTIME_PV}
 	microsoft.netcore.app.host.linux-musl-x64@${RUNTIME_PV}
 	microsoft.netcore.app.host.linux-x64@${RUNTIME_PV}
-	microsoft.netcore.app.ref@${RUNTIME_PV}
 	microsoft.netcore.app.runtime.linux-arm@${RUNTIME_PV}
 	microsoft.netcore.app.runtime.linux-arm64@${RUNTIME_PV}
 	microsoft.netcore.app.runtime.linux-musl-arm@${RUNTIME_PV}
 	microsoft.netcore.app.runtime.linux-musl-arm64@${RUNTIME_PV}
 	microsoft.netcore.app.runtime.linux-musl-x64@${RUNTIME_PV}
 	microsoft.netcore.app.runtime.linux-x64@${RUNTIME_PV}
-	runtime.linux-arm64.microsoft.dotnet.ilcompiler@${RUNTIME_PV}
-	runtime.linux-musl-arm64.microsoft.dotnet.ilcompiler@${RUNTIME_PV}
-	runtime.linux-musl-x64.microsoft.dotnet.ilcompiler@${RUNTIME_PV}
-	runtime.linux-x64.microsoft.dotnet.ilcompiler@${RUNTIME_PV}
 "
 
 inherit unpacker nuget
@@ -67,6 +60,8 @@ RDEPEND="
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
 	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
 	!neptune-dotnet/dotnet-runtime:${SLOT}
+	neptune-dotnet/dotnet-aspnetcore-nugets:$(ver_cut 1-2 ${RUNTIME_PV})
+	neptune-dotnet/dotnet-runtime-nugets:$(ver_cut 1-2 ${RUNTIME_PV})
 "
 
 src_unpack() {
@@ -88,9 +83,6 @@ src_install() {
 
 	# remove netstandard
 	rm -rf packs/NETStandard.Library.Ref
-
-	# remove stray manifests
-	find sdk-manifests/ -maxdepth 1 -type d \( -not -iname "${SDK_SLOT}*" -and -not -iname "sdk-manifests" \) -exec rm -rv {} \;
 
 	# install dotnet packs
 	TARGETS="host packs sdk sdk-manifests shared templates metadata"
