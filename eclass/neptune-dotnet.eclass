@@ -113,11 +113,15 @@ if [[ -n "${DOTNET_NEPTUNE_TARGETS}" ]]; then
 		if [[ "${DOTNET_NEPTUNE_ASPNETCORE:-1}" == 0 ]]; then
 			DOTNET_PKG_RDEPS+="
 				virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}
+			"
+			DOTNET_PKG_BDEPS+="
 				neptune-dotnet/dotnet-runtime-nugets:${DOTNET_NEPTUNE_TARGET}
 			"
 		else
 			DOTNET_PKG_RDEPS+="
 				virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[asp]
+			"
+			DOTNET_PKG_BDEPS+="
 				neptune-dotnet/dotnet-runtime-nugets:${DOTNET_NEPTUNE_TARGET}
 				neptune-dotnet/dotnet-aspnetcore-nugets:${DOTNET_NEPTUNE_TARGET}
 			"
@@ -129,11 +133,11 @@ if [[ -n "${DOTNET_NEPTUNE_TARGETS}" ]]; then
 	done
 	for DOTNET_NEPTUNE_NUGET_LEVEL in "${DOTNET_NEPTUNE_NUGET_LEVELS[@]}"; do
 		if [[ "${DOTNET_NEPTUNE_ASPNETCORE:-1}" == 1 ]]; then
-			DOTNET_PKG_RDEPS+="
+			DOTNET_PKG_BDEPS+="
 				neptune-dotnet/dotnet-aspnetcore-nugets:${DOTNET_NEPTUNE_NUGET_LEVEL}
 			"
 		fi
-		DOTNET_PKG_RDEPS+="
+		DOTNET_PKG_BDEPS+="
 			neptune-dotnet/dotnet-runtime-nugets:${DOTNET_NEPTUNE_NUGET_LEVEL}
 		"
 	done

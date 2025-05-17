@@ -1,5 +1,5 @@
-move app-accessibility/whisper-cpp app-tensor/whispercpp
-move app-tensor/whisper-cpp app-tensor/whispercpp
+move app-accessibility/whisper-cpp sci-ml/whispercpp
+move app-tensor/whisper-cpp sci-ml/whispercpp
 move app-accessibility/whisper-cpp-models dev-misc/whispercpp-models
 move dev-misc/whisper-cpp-models dev-misc/whispercpp-models
 move app-editors/imhex-patterns dev-misc/imhex-patterns
