@@ -81,8 +81,8 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 
 		RELEASE_NUGET_VERSIONS+="${RELEASE_NUGET} "
 	done
-	dotnet_apply dotnet-runtime-nugets "${RELEASE_CHANNEL}-r${REVISION}"
-	sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-runtime-nugets/dotnet-runtime-nugets-$(dotnet_strip "${RELEASE_CHANNEL}-r${REVISION}").ebuild" || exit
+	dotnet_apply dotnet-runtime-nugets "${RELEASE_CHANNEL}.${REVISION}"
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-runtime-nugets/dotnet-runtime-nugets-$(dotnet_strip "${RELEASE_CHANNEL}.${REVISION}").ebuild" || exit
 
 	for RELEASE_NUGET in $(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["aspnetcore-runtime"].version] | join(" ")'); do
 		if ([[ "${IS_PREVIEW}" == 0 ]] && ( [[ "${RELEASE_NUGET}" == *preview* ]] || [[ "${RELEASE_NUGET}" == *rc* ]])); then
@@ -91,8 +91,8 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 
 		RELEASE_ASPNET_VERSIONS+="${RELEASE_NUGET} "
 	done
-	dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_CHANNEL}-r${REVISION}"
-	sed -i "/__DOTNET_VERSION__/s//${RELEASE_ASPNET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-nugets/dotnet-aspnetcore-nugets-$(dotnet_strip "${RELEASE_CHANNEL}-r${REVISION}").ebuild" || exit
+	dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_CHANNEL}.${REVISION}"
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_ASPNET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-nugets/dotnet-aspnetcore-nugets-$(dotnet_strip "${RELEASE_CHANNEL}.${REVISION}").ebuild" || exit
 
 	if [ "${RELEASE_CHANNEL}" = "8.0" ]; then
 		break
