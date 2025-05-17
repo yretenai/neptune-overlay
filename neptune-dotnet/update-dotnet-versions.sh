@@ -70,23 +70,29 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 
 	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_HEAD_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
 
+	RELEASE_NUGET_VERSIONS=""
+	RELEASE_ASPNET_VERSIONS=""
+	REVISION=$(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["runtime"].version] | length + 1')
+
 	for RELEASE_NUGET in $(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["runtime"].version] | join(" ")'); do
 		if ([[ "${IS_PREVIEW}" == 0 ]] && ( [[ "${RELEASE_NUGET}" == *preview* ]] || [[ "${RELEASE_NUGET}" == *rc* ]])); then
 			break
 		fi
 
-		dotnet_apply dotnet-runtime-nugets "${RELEASE_NUGET}"
-		sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET}/g" "${ADADOTNET_ROOT}/dotnet-runtime-nugets/dotnet-runtime-nugets-$(dotnet_strip "${RELEASE_NUGET}").ebuild" || exit
+		RELEASE_NUGET_VERSIONS+="${RELEASE_NUGET} "
 	done
+	dotnet_apply dotnet-runtime-nugets "${RELEASE_CHANNEL}-r${REVISION}"
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-runtime-nugets/dotnet-runtime-nugets-$(dotnet_strip "${RELEASE_CHANNEL}-r${REVISION}").ebuild" || exit
 
 	for RELEASE_NUGET in $(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["aspnetcore-runtime"].version] | join(" ")'); do
 		if ([[ "${IS_PREVIEW}" == 0 ]] && ( [[ "${RELEASE_NUGET}" == *preview* ]] || [[ "${RELEASE_NUGET}" == *rc* ]])); then
 			break
 		fi
 
-		dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_NUGET}"
-		sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-nugets/dotnet-aspnetcore-nugets-$(dotnet_strip "${RELEASE_NUGET}").ebuild" || exit
+		RELEASE_ASPNET_VERSIONS+="${RELEASE_NUGET} "
 	done
+	dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_CHANNEL}-r${REVISION}"
+	sed -i "/__DOTNET_VERSION__/s//${RELEASE_ASPNET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-nugets/dotnet-aspnetcore-nugets-$(dotnet_strip "${RELEASE_CHANNEL}-r${REVISION}").ebuild" || exit
 
 	if [ "${RELEASE_CHANNEL}" = "8.0" ]; then
 		break

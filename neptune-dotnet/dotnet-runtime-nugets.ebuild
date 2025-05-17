@@ -3,23 +3,24 @@
 
 EAPI=8
 
-RUNTIME_PV="__DOTNET_VERSION__"
-
-NUGETS="
-	microsoft.netcore.app.host.linux-arm@${RUNTIME_PV}
-	microsoft.netcore.app.host.linux-arm64@${RUNTIME_PV}
-	microsoft.netcore.app.host.linux-musl-arm@${RUNTIME_PV}
-	microsoft.netcore.app.host.linux-musl-arm64@${RUNTIME_PV}
-	microsoft.netcore.app.host.linux-musl-x64@${RUNTIME_PV}
-	microsoft.netcore.app.host.linux-x64@${RUNTIME_PV}
-	microsoft.netcore.app.ref@${RUNTIME_PV}
-	microsoft.netcore.app.runtime.linux-arm@${RUNTIME_PV}
-	microsoft.netcore.app.runtime.linux-arm64@${RUNTIME_PV}
-	microsoft.netcore.app.runtime.linux-musl-arm@${RUNTIME_PV}
-	microsoft.netcore.app.runtime.linux-musl-arm64@${RUNTIME_PV}
-	microsoft.netcore.app.runtime.linux-musl-x64@${RUNTIME_PV}
-	microsoft.netcore.app.runtime.linux-x64@${RUNTIME_PV}
-"
+NUGET_PVS="__DOTNET_VERSION__"
+for NUGET_PV in $NUGET_PVS; do
+	NUGETS+="
+		microsoft.netcore.app.host.linux-arm@${NUGET_PV}
+		microsoft.netcore.app.host.linux-arm64@${NUGET_PV}
+		microsoft.netcore.app.host.linux-musl-arm@${NUGET_PV}
+		microsoft.netcore.app.host.linux-musl-arm64@${NUGET_PV}
+		microsoft.netcore.app.host.linux-musl-x64@${NUGET_PV}
+		microsoft.netcore.app.host.linux-x64@${NUGET_PV}
+		microsoft.netcore.app.ref@${NUGET_PV}
+		microsoft.netcore.app.runtime.linux-arm@${NUGET_PV}
+		microsoft.netcore.app.runtime.linux-arm64@${NUGET_PV}
+		microsoft.netcore.app.runtime.linux-musl-arm@${NUGET_PV}
+		microsoft.netcore.app.runtime.linux-musl-arm64@${NUGET_PV}
+		microsoft.netcore.app.runtime.linux-musl-x64@${NUGET_PV}
+		microsoft.netcore.app.runtime.linux-x64@${NUGET_PV}
+	"
+done
 
 inherit unpacker nuget
 
@@ -31,7 +32,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SLOT="$(ver_cut 1-4)/${PV}"
+SLOT="${PV}"
 KEYWORDS="~amd64 ~arm ~arm64"
 RESTRICT="bindist mirror strip test"
 
