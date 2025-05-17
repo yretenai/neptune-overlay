@@ -113,10 +113,13 @@ if [[ -n "${DOTNET_NEPTUNE_TARGETS}" ]]; then
 		if [[ "${DOTNET_NEPTUNE_ASPNETCORE:-1}" == 0 ]]; then
 			DOTNET_PKG_RDEPS+="
 				virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}
+				neptune-dotnet/dotnet-runtime-nugets:${DOTNET_NEPTUNE_TARGET}
 			"
 		else
 			DOTNET_PKG_RDEPS+="
 				virtual/neptune-dotnet:${DOTNET_NEPTUNE_TARGET}[asp]
+				neptune-dotnet/dotnet-runtime-nugets:${DOTNET_NEPTUNE_TARGET}
+				neptune-dotnet/dotnet-aspnetcore-nugets:${DOTNET_NEPTUNE_TARGET}
 			"
 		fi
 
