@@ -118,7 +118,6 @@ src_install() {
 	neptune-dotnet_dolauncher "/usr/share/${P}/NexusMods.App" "nexusmods"
 
 	doicon -s scalable src/NexusMods.App.UI/Assets/nexus-logo.svg
-	domenu "${FILESDIR}/${PN}-nxm.desktop"
 	domenu "${FILESDIR}/${PN}.desktop"
 }
 
