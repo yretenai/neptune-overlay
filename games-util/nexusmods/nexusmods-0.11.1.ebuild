@@ -557,9 +557,7 @@ SLOT="0"
 
 RESTRICT="${RESTRICT} mirror"
 
-# jemalloc causes a TLS issue?
 RDEPEND="
-	>=dev-libs/rocksdb-8.11.3[-jemalloc]
 	|| (
 		>=app-arch/7zip-24.09[symlink]
 		app-arch/p7zip
@@ -630,9 +628,6 @@ src_prepare() {
 }
 
 src_install() {
-	rm -fv "${DOTNET_PKG_OUTPUT}/librocksdb.so" \
-		"${DOTNET_PKG_OUTPUT}/librocksdb-musl.so" \
-		"${DOTNET_PKG_OUTPUT}/librocksdb-jemalloc.so"
 	dotnet-pkg-base_install
 	neptune-dotnet_dolauncher "/usr/share/${P}/NexusMods.App" "nexusmods"
 
