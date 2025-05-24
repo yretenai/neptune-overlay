@@ -17,6 +17,7 @@ SRC_URI="
 		https://downloads.xiph.org/releases/celt/celt-0.11.0.tar.gz -> celt-0110.tar.gz
 	)
 "
+S="${WORKDIR}/${PN}-r${PV}"
 
 ATRAC9_EGIT_COMMIT="7406e447c05bb5a99b8c8b22ab747c5a220c6ea3"
 G719_EGIT_COMMIT="da90ad8a676876c6c47889bcea6a753f9bbf7a73"

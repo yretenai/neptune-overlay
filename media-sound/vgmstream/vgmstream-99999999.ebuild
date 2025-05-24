@@ -19,7 +19,6 @@ SRC_URI="
 "
 
 ATRAC9_EGIT_COMMIT="7406e447c05bb5a99b8c8b22ab747c5a220c6ea3"
-G719_EGIT_COMMIT="da90ad8a676876c6c47889bcea6a753f9bbf7a73"
 
 if [[ "${PV}" == *99999999* ]]; then
 	inherit git-r3
@@ -27,16 +26,11 @@ if [[ "${PV}" == *99999999* ]]; then
 	EGIT_REPO_URI="https://github.com/vgmstream/vgmstream.git"
 	ATRAC9_EGIT_REPO_URI="https://github.com/Thealexbarney/LibAtrac9.git"
 	ATRAC9_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-atrac9"
-	G719_EGIT_REPO_URI="https://github.com/kode54/libg719_decode.git"
-	G719_EGIT_LOCAL_ID="${CATEGORY}/${PN}/${SLOT%/*}-g719"
 else
 	SRC_URI+="
 		https://github.com/vgmstream/vgmstream/archive/refs/tags/r${PV}.tar.gz -> ${PN}-${PV}.tar.gz
 		atrac9? (
 			https://github.com/Thealexbarney/LibAtrac9/archive/${ATRAC9_EGIT_COMMIT}.tar.gz -> LibAtrac9-${ATRAC9_EGIT_COMMIT}.tar.gz
-		)
-		g719? (
-			https://github.com/kode54/libg719_decode/archive/${G719_EGIT_COMMIT}.tar.gz -> libg719_decode-${G719_EGIT_COMMIT}.tar.gz
 		)
 	"
 	KEYWORDS="~amd64"
@@ -45,11 +39,10 @@ fi
 LICENSE="GPL-2 MIT"
 SLOT="0"
 
-IUSE="+mp3 +vorbis +speex +ffmpeg +g7221 +g719 +atrac9 +celt +json +tools player audacious"
+IUSE="+mp3 +vorbis +speex +ffmpeg +g7221 +atrac9 +celt +tools player audacious"
 RESTRICT="mirror"
 
 DEPEND="
-	json? ( dev-libs/jansson )
 	mp3? ( media-sound/mpg123 )
 	vorbis? ( media-libs/libvorbis )
 	speex? ( media-libs/speex )
@@ -76,11 +69,6 @@ src_unpack() {
 			git-r3_checkout "${ATRAC9_EGIT_REPO_URI}" "${WORKDIR}/LibAtrac9-${ATRAC9_EGIT_COMMIT}" "${ATRAC9_EGIT_LOCAL_ID}"
 		fi
 
-		if use g719; then
-			git-r3_fetch "${G719_EGIT_REPO_URI}" "${G719_EGIT_COMMIT}" "${G719_EGIT_LOCAL_ID}"
-			git-r3_checkout "${G719_EGIT_REPO_URI}" "${WORKDIR}/libg719_decode-${G719_EGIT_COMMIT}" "${G719_EGIT_LOCAL_ID}"
-		fi
-
 		git-r3_src_unpack
 	fi
 }
@@ -91,15 +79,13 @@ src_configure() {
 		-DUSE_VORBIS=$(usex vorbis)
 		-DUSE_FFMPEG=$(usex ffmpeg)
 		-DUSE_G7221=$(usex g7221)
-		-DUSE_G719=$(usex g719)
-		-DG719_PATH="${WORKDIR}/libg719_decode-${G719_EGIT_COMMIT}"
+		-DUSE_G719=NO
 		-DUSE_ATRAC9=$(usex atrac9)
 		-DATRAC9_PATH="${WORKDIR}/LibAtrac9-${ATRAC9_EGIT_COMMIT}"
 		-DUSE_CELT=$(usex celt)
 		-DCELT_0061_PATH="${WORKDIR}/celt-0.6.1"
 		-DCELT_0110_PATH="${WORKDIR}/celt-0.11.0"
 		-DUSE_SPEEX=$(usex speex)
-		-DUSE_JANSSON=$(usex json)
 		-DBUILD_CLI=$(usex tools)
 		-DBUILD_V123=$(usex player)
 		-DBUILD_AUDACIOUS=$(usex audacious)
