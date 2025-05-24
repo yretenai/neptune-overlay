@@ -88,7 +88,7 @@ RDEPEND="
 
 BDEPEND="
 	dev-util/spirv-headers
-	dev-util/vulkan-headers
+	>=dev-util/vulkan-headers-1.4.314.0
 	>=dev-cpp/magic_enum-0.9.6
 	clang? (
 		llvm-core/clang:19
