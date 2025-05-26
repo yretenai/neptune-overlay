@@ -48,7 +48,7 @@ else
 		https://github.com/pajlada/signals/archive/${SIGNALS_COMMIT}.tar.gz -> ${PN}-signals-${SIGNALS_COMMIT}.tar.gz
 		https://github.com/KDE/kimageformats/archive/${KIMAGEFORMATS_COMMIT}.tar.gz -> kimageformats-${KIMAGEFORMATS_COMMIT}.tar.gz
 	"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="MIT"

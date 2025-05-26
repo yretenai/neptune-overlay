@@ -21,7 +21,6 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/Vencord/Vesktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/Vesktop-${PV}"
-	KEYWORDS="~amd64"
 fi
 
 LICENSE="GPL-3"

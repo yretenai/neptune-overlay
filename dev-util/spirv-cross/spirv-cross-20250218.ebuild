@@ -15,7 +15,7 @@ else
 	SHA=2c32b6bf86f3c4a5539aa1f0bacbd59fe61759cf
 	SRC_URI="https://github.com/KhronosGroup/SPIRV-Cross/archive/${SHA}.tar.gz -> ${PN}-${SHA:0:7}.tar.gz"
 	S="${WORKDIR}/SPIRV-Cross-${SHA}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="Apache-2.0"

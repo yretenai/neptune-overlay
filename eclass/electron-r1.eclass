@@ -47,7 +47,7 @@
 # @DESCRIPTION:
 # Set by eclass, the binary name of the selected electron type.
 
-# @ECLASS_VARIABLE: ELECTRON_KEYWORDS
+# @ECLASS_VARIABLE: KEYWORDS
 # @DESCRIPTION:
 # Package Keywords that are at least valid for Electron
 
@@ -103,12 +103,16 @@ ELECTRON_PREBUILT="
 
 if [[ ${ELECTRON_WIDEVINE} ]]; then
 	ELECTRON_RDEPEND="virtual/electron-widevine:${ELECTRON_SLOT}="
-	ELECTRON_KEYWORDS="~amd64"
+	if [[ "${PV}" != *9999* ]]; then
+		KEYWORDS="~amd64"
+	fi
 	ELECTRON_SUFFIX="-wvcus"
 	ELECTRON_NAME="electron-wvcus"
 else
 	ELECTRON_RDEPEND="virtual/electron:${ELECTRON_SLOT}="
-	ELECTRON_KEYWORDS="~amd64 ~arm ~arm64"
+	if [[ "${PV}" != *9999* ]]; then
+		KEYWORDS="~amd64 ~arm64"
+	fi
 	ELECTRON_SUFFIX=""
 	ELECTRON_NAME="electron"
 fi

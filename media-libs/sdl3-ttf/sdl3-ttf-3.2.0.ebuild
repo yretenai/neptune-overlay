@@ -13,7 +13,7 @@ S="${WORKDIR}"/${MY_P}
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+harfbuzz +svg static-libs"
 RESTRICT="test"
 

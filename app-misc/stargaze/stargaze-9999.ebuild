@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://git.vlhl.dev/navi/stargaze.git"
 
 if [[ "${PV}" != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 DEPEND="dev-cpp/notcurses"

@@ -248,4 +248,4 @@ LICENSE="MIT"
 # Dependent crate licenses
 LICENSE+=" Apache-2.0 BSD ISC MIT MPL-2.0 Unicode-DFS-2016 ZLIB"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"

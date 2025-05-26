@@ -18,7 +18,7 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/yretenai/pyswiftebuild.git"
 else
 	SRC_URI="https://github.com/yretenai/pyswiftebuild/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="EUPL-1.2"

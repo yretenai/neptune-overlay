@@ -17,7 +17,7 @@ if [[ ${PV} == *99999999* ]]; then
 else
 	SRC_URI="https://github.com/moonshadow565/rman/archive/refs/tags/2024-04-06-c4e7a9f.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/${PN}-2024-04-06-c4e7a9f"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 RESTRICT="mirror"

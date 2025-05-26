@@ -16,7 +16,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/jorgen/json_struct.git"
 else
 	SRC_URI="https://github.com/jorgen/json_struct/archive/refs/tags/${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 RESTRICT="mirror"

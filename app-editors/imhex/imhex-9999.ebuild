@@ -59,7 +59,7 @@ else
 		${NUGET_URIS}
 	"
 	S="${WORKDIR}/ImHex-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="GPL-2"

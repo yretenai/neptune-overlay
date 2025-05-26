@@ -21,7 +21,6 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
 else
 	SRC_URI="https://github.com/Mastermindzh/tidal-hifi/archive/refs/tags/${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
-	KEYWORDS="~amd64"
 fi
 
 # Requires network access (https) as long as NPM dependencies aren't packaged

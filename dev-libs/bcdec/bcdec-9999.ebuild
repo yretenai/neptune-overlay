@@ -16,7 +16,7 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/yretenai/bcdec/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/${PN}-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 IUSE="+precise-bc3 +precise-bc4bc5"
 RESTRICT="test"

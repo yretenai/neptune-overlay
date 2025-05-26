@@ -20,7 +20,6 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/th-ch/youtube-music.git"
 else
 	SRC_URI="https://github.com/th-ch/youtube-music/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
-	KEYWORDS="~amd64"
 fi
 
 # Requires network access (https) as long as NPM dependencies aren't packaged

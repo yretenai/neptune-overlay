@@ -22,7 +22,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_SUBMODULES=()
 else
 	inherit pypi
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 DEPEND="

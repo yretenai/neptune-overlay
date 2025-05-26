@@ -16,7 +16,7 @@ else
 	# 44th commit
 	SRC_URI="https://github.com/kerukuro/digestpp/archive/873b5bbab87a8a62ea7bf2ea8d26733181a2fe8d.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/${PN}-873b5bbab87a8a62ea7bf2ea8d26733181a2fe8d"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 RESTRICT="mirror test"
 

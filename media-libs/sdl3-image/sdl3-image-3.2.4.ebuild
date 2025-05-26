@@ -13,7 +13,7 @@ S="${WORKDIR}"/${MY_P}
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="avif gif jpeg jpegxl png static-libs test tiff webp"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="test? ( jpeg png )"

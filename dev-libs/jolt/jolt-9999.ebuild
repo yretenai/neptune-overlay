@@ -15,7 +15,7 @@ if [[ ${PV} != *9999* ]]; then
 		https://github.com/jrouwe/JoltPhysics/archive/refs/tags/v${PV}.tar.gz -> jolt-${PV}.tar.gz
 	"
 	S="${WORKDIR}/JoltPhysics-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 else
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/jrouwe/JoltPhysics.git"

@@ -15,7 +15,7 @@ else
 	COMMIT=bac520839ff5ed2e2b648ed540bd9ec45edbccbc
 	SRC_URI="https://github.com/webgpu-native/${PN}/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/${PN}-${COMMIT}"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~arm64 -x86"
 fi
 
 src_prepare() {

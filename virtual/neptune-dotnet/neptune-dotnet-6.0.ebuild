@@ -9,7 +9,7 @@ DESCRIPTION="Virtual for neptune-dotnet"
 
 RUNTIME_SLOT="${PV}.0"
 SLOT="${PV}/${RUNTIME_SLOT}"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="+sdk asp doc"
 
 # sdk includes asp, asp includes runtime

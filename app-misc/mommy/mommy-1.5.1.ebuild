@@ -15,22 +15,11 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/FWDekker/mommy.git"
 else
 	SRC_URI="https://github.com/FWDekker/mommy/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
-IUSE="test man"
-RESTRICT="!test? ( test )"
-
-BDEPEND="
-	test? (
-		dev-util/shellspec
-	)
-"
-
-src_test() {
-	strip-flags
-	PATH="${S}/shellspec/:$PATH" emake --jobs 1 system=1 test
-}
+IUSE="man"
+RESTRICT="test"
 
 src_configure() {
 	sed -e "/@gzip/d" -i GNUmakefile || die

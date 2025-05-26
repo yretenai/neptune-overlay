@@ -31,7 +31,7 @@ else
 			https://github.com/WebAssembly/testsuite/archive/${TESTSUITE_COMMIT}.tar.gz -> testsuite-${TESTSUITE_COMMIT}.tar.gz
 		)
 	"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 IUSE="test"

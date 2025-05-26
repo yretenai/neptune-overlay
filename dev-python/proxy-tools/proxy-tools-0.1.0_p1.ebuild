@@ -19,7 +19,7 @@ S="${WORKDIR}"/${PN}-${MY_COMMIT}
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 # dev-python/nose removed from ::gentoo
 RESTRICT="test"

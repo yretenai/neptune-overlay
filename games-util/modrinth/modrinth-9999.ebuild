@@ -25,7 +25,7 @@ EGIT_REPO_URI="https://github.com/modrinth/code.git"
 
 if [[ ${PV} != *9999* ]]; then
 	EGIT_COMMIT="v${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 # Requires network access (https) as long as NPM dependencies aren't packaged

@@ -8,7 +8,7 @@ SRC_URI="
 S="${WORKDIR}/${PN}-density-${PV}"
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 PATCHES=(
 	"${FILESDIR}/fixup-makefile.patch"

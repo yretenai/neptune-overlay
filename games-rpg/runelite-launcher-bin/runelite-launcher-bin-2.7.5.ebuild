@@ -17,7 +17,7 @@ SRC_URI="https://github.com/runelite/launcher/releases/download/${PV}/RuneLite.j
 S="${WORKDIR}"
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 RESTRICT="bindist mirror"
 
 RDEPEND=">=virtual/jre-17"

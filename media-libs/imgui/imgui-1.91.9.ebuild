@@ -16,7 +16,7 @@ SRC_URI="https://github.com/ocornut/imgui/archive/refs/tags/v${PV}.tar.gz -> img
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
-KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 IUSE="allegro5 glfw sdl2 sdl3 sdl2-renderer sdl3-renderer opengl vulkan webgpu"
 
 # todo: dawn as a backend

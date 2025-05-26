@@ -16,7 +16,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	SRC_URI="https://github.com/DadSchoorse/vkBasalt/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
 	S="${WORKDIR}/vkBasalt-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 RESTRICT="test"

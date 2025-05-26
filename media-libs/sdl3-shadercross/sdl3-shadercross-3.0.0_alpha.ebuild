@@ -15,7 +15,7 @@ S="${WORKDIR}/SDL_shadercross-${COMMIT}"
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 

@@ -12,7 +12,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="http://github.com/selmf/unarr.git"
 else
 	SRC_URI="http://github.com/selmf/unarr/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 	S="${WORKDIR}/${PN}-${PV}"
 fi
 

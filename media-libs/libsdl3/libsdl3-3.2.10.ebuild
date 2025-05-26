@@ -13,7 +13,7 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 CPU_FLAGS_USE="cpu_flags_ppc_altivec cpu_flags_x86_mmx cpu_flags_x86_sse cpu_flags_x86_sse2 cpu_flags_x86_sse3 cpu_flags_x86_avx cpu_flags_x86_avx2 cpu_flags_x86_avx512f cpu_flags_x86_sse4_1 cpu_flags_x86_sse4_2"
 IUSE="alsa aqua ${CPU_FLAGS_USE} custom-cflags dbus doc fcitx gles2 +haptic ibus jack +joystick kms opengl oss pipewire pulseaudio sndio +sound static-libs test udev +video vulkan wayland X xscreensaver"

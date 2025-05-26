@@ -12,7 +12,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://gitlab.winehq.org/wine/vkd3d.git"
 else
 	SRC_URI="https://dl.winehq.org/vkd3d/source/vkd3d-${PV}.tar.xz"
-	KEYWORDS="amd64 x86"
+	KEYWORDS="~amd64 ~arm64 ~x86"
 	S="${WORKDIR}/vkd3d-${PV}"
 fi
 

@@ -24,7 +24,6 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/revoltchat/desktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/desktop-${PV}"
-	KEYWORDS="~amd64"
 fi
 
 BDEPEND="

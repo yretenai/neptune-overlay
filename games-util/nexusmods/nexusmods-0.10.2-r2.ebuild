@@ -532,7 +532,7 @@ else
 		${NUGET_URIS}
 	"
 	S="${WORKDIR}/NexusMods.App-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"

@@ -21,7 +21,7 @@ else
 		https://github.com/yretenai/neptune-overlay/releases/download/deps/${P}-deps.tar.xz
 	"
 	S="${WORKDIR}/${PN}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 RDEPEND="

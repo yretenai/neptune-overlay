@@ -18,7 +18,7 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://git.sr.ht/~chronovore/titania/archive/v${PV}.tar.gz -> ${PN}-v${PV}.tar.gz"
 	S="${WORKDIR}/${PN}-v${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 IUSE="+doc +cli debug"
 RESTRICT="test"

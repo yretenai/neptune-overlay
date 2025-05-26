@@ -17,7 +17,7 @@ if [[ ${PV} == *9999* ]]; then
 else
 	SRC_URI="https://git.vlhl.dev/navi/json.git/snapshot/json-${EGIT_COMMIT}.tar.xz"
 	S="${WORKDIR}/json-${EGIT_COMMIT}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 BDEPEND="

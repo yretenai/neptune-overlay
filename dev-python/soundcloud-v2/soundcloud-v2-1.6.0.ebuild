@@ -18,7 +18,7 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/7x11x13/soundcloud.py/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/soundcloud.py-${PV}"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64"
 fi
 
 IUSE="test"
