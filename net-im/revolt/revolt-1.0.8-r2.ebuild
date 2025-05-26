@@ -54,7 +54,7 @@ src_install() {
 	domenu "${PN}.desktop"
 	newicon -s 256 "assets/icon.png" revolt-desktop.png
 
-	cd dist/linux-unpacked/resources
+	cd dist/"$(electron-r1_target)"/resources
 	electron-r1_src_install
 }
 

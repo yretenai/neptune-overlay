@@ -63,7 +63,7 @@ src_install() {
 
 	make_desktop_entry "/usr/bin/${PN}" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
 
-	cd pack/linux-unpacked/resources
+	cd pack/"$(electron-r1_target)"/resources
 	electron-r1_src_install
 }
 

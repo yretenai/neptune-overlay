@@ -58,7 +58,7 @@ src_install() {
 	domenu "${PN}.desktop"
 	newicon static/icon.png vencord.png
 
-	cd dist/linux-unpacked/resources
+	cd dist/"$(electron-r1_target)"/resources
 	electron-r1_src_install
 }
 

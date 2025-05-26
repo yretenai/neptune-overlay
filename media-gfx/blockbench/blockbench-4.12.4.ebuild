@@ -60,7 +60,7 @@ src_install() {
 	insinto "/usr/share/mime/packages"
 	doins bbmodel.xml
 
-	cd dist/linux-unpacked/resources
+	cd dist/"$(electron-r1_target)"/resources
 	electron-r1_src_install
 }
 

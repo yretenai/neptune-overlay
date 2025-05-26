@@ -337,4 +337,12 @@ electron-r1_src_install() {
 	electron-r1_dobin
 }
 
+electron-r1_target() {
+	if [[ "$ARCH" == "amd64" ]]; then
+		echo -n "linux-unpacked"
+	else
+		echo -n "linux-${ARCH}-unpacked"
+	fi
+}
+
 EXPORT_FUNCTIONS src_prepare
