@@ -337,6 +337,9 @@ electron-r1_src_install() {
 	electron-r1_dobin
 }
 
+# @FUNCTION: electron-r1_target
+# @DESCRIPTION:
+# prints the distribution folder name for the current architecture 
 electron-r1_target() {
 	if [[ "$ARCH" == "amd64" ]]; then
 		echo -n "linux-unpacked"
