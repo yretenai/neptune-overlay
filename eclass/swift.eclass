@@ -52,7 +52,7 @@ DEPEND="
 "
 
 BDEPEND="
-	>=dev-lang/swift-${SWIFT_PV}
+	>=dev-lang/swift-${SWIFT_PV}:=
 	app-portage/pyswiftebuild
 "
 
