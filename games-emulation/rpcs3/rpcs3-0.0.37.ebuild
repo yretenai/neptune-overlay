@@ -13,19 +13,20 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_SUBMODULES=(
 		'asmjit' '3rdparty/glslang' '3rdparty/miniupnp/miniupnp' '3rdparty/rtmidi/rtmidi' '3rdparty/wolfssl'
 		'3rdparty/SoundTouch/soundtouch' '3rdparty/zstd/zstd' '3rdparty/stblib/stb' '3rdparty/OpenAL/openal-soft'
-		'3rdparty/fusion/fusion'
+		'3rdparty/fusion/fusion' '3rdparty/GPUOpen/VulkanMemoryAllocator'
 	)
 	# Delete sources when ensuring yaml-cpp compiled with fexceptions
 	EGIT_SUBMODULES+=( '3rdparty/yaml-cpp' )
 	inherit git-r3
 else
 	ASMJIT_COMMIT=416f7356967c1f66784dc1580fe157f9406d8bff
-	GLSLANG_COMMIT=36d08c0d940cf307a23928299ef52c7970d8cee6
-	MINIUPNP_COMMIT=7f189988a0decca0ab7da89000051ab91751f70d
+	GLSLANG_COMMIT=fc9889c889561c5882e83819dcaffef5ed45529b
+	MINIUPNP_COMMIT=d66872e34d9ff83a07f8b71371b13419b2089953
 	RTMIDI_COMMIT=1e5b49925aa60065db52de44c366d446a902547b
-	WOLFSSL_COMMIT=239b85c80438bf60d9a5b9e0ebe9ff097a760d0d
-	SOUNDTOUCH_COMMIT=394e1f58b23dc80599214d2e9b6a5e0dfd0bbe07
+	WOLFSSL_COMMIT=b077c81eb635392e694ccedbab8b644297ec0285
+	SOUNDTOUCH_COMMIT=3982730833b6daefe77dcfb32b5c282851640c17
 	YAMLCPP_COMMIT=456c68f452da09d8ca84b375faa2b1397713eaba
+	VMA_COMMIT=1d8f600fd424278486eade7ed3e877c99f0846b1
 
 	SRC_URI="
 		https://github.com/RPCS3/rpcs3/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
@@ -36,6 +37,7 @@ else
 		https://github.com/wolfSSL/wolfssl/archive/${WOLFSSL_COMMIT}.tar.gz -> ${PN}-wolfssl-${WOLFSSL_COMMIT}.tar.gz
 		https://github.com/RPCS3/soundtouch/archive/${SOUNDTOUCH_COMMIT}.tar.gz -> ${PN}-soundtouch-${SOUNDTOUCH_COMMIT}.tar.gz
 		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${SOUNDTOUCH_COMMIT}.tar.gz
+		https://github.com/Megamouse/VulkanMemoryAllocator/archive/${VMA_COMMIT}.tar.gz -> ${PN}-VulkanMemoryAllocator-${VMA_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64"
 fi
@@ -101,6 +103,9 @@ src_prepare() {
 
 		rmdir "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
 		mv "${WORKDIR}/yaml-cpp-${YAMLCPP_COMMIT}" "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
+
+		rmdir "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
+		mv "${WORKDIR}/VulkanMemoryAllocator-${VMA_COMMIT}" "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
 
 		#Define RPCS3 Version
 		{ echo "#define RPCS3_GIT_VERSION \"${PV}\""
