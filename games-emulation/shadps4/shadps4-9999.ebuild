@@ -98,8 +98,8 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
-	"${FILESDIR}/${PN}-0.4.0-tracy.patch"
 	"${FILESDIR}/${PN}-0.7.1-compat.patch"
+	"${FILESDIR}/${PN}-0.8.0-tracy.patch"
 )
 
 src_unpack() {

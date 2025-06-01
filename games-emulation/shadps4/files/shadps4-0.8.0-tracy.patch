@@ -28,3 +28,29 @@ index 4350948b..54773181 100644
  
  # pugixml
  if (NOT TARGET pugixml::pugixml)
+diff --git a/src/common/debug.h b/src/common/debug.h
+index 92bf7255..8562bfbe 100644
+--- a/src/common/debug.h
++++ b/src/common/debug.h
+@@ -11,7 +11,7 @@
+ #error What the fuck is this compiler
+ #endif
+ 
+-#include <tracy/Tracy.hpp>
++#include <tracy/tracy/Tracy.hpp>
+ 
+ static inline bool IsProfilerConnected() {
+ #if TRACY_ENABLE
+diff --git a/src/video_core/renderer_vulkan/vk_instance.h b/src/video_core/renderer_vulkan/vk_instance.h
+index 30848e8b..e9238ce7 100644
+--- a/src/video_core/renderer_vulkan/vk_instance.h
++++ b/src/video_core/renderer_vulkan/vk_instance.h
+@@ -9,7 +9,7 @@
+ #include "video_core/renderer_vulkan/vk_platform.h"
+ 
+ #define TRACY_VK_USE_SYMBOL_TABLE
+-#include <tracy/TracyVulkan.hpp>
++#include <tracy/tracy/TracyVulkan.hpp>
+ 
+ namespace Frontend {
+ class WindowSDL;
