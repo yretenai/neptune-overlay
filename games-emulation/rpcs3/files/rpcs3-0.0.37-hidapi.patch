@@ -1,0 +1,17 @@
+diff --git a/rpcs3/Input/hid_pad_handler.h b/rpcs3/Input/hid_pad_handler.h
+index d6f93ce..aa15b9c 100644
+--- a/rpcs3/Input/hid_pad_handler.h
++++ b/rpcs3/Input/hid_pad_handler.h
+@@ -4,10 +4,10 @@
+ #include "Utilities/CRC.h"
+ #include "Utilities/Thread.h"
+ 
+-#include <hidapi.h>
++#include <hidapi/hidapi.h>
+ 
+ #ifdef ANDROID
+-#include "hidapi_libusb.h"
++#include "hidapi/hidapi_libusb.h"
+ #endif
+ 
+ #include <mutex>

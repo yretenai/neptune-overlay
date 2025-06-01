@@ -12,8 +12,7 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/RPCS3/rpcs3"
 	EGIT_SUBMODULES=(
 		'asmjit' '3rdparty/glslang' '3rdparty/miniupnp/miniupnp' '3rdparty/rtmidi/rtmidi' '3rdparty/wolfssl'
-		'3rdparty/SoundTouch/soundtouch' '3rdparty/zstd/zstd' '3rdparty/stblib/stb' '3rdparty/OpenAL/openal-soft'
-		'3rdparty/fusion/fusion' '3rdparty/GPUOpen/VulkanMemoryAllocator'
+		'3rdparty/SoundTouch/soundtouch' '3rdparty/fusion/fusion' '3rdparty/GPUOpen/VulkanMemoryAllocator'
 	)
 	# Delete sources when ensuring yaml-cpp compiled with fexceptions
 	EGIT_SUBMODULES+=( '3rdparty/yaml-cpp' )
@@ -26,6 +25,7 @@ else
 	WOLFSSL_COMMIT=
 	SOUNDTOUCH_COMMIT=
 	YAMLCPP_COMMIT=
+	FUSION_COMMIT=
 	VMA_COMMIT=
 
 	SRC_URI="
@@ -36,7 +36,8 @@ else
 		https://github.com/thestk/rtmidi/archive/${RTMIDI_COMMIT}.tar.gz -> ${PN}-rtmidi-${RTMIDI_COMMIT}.tar.gz
 		https://github.com/wolfSSL/wolfssl/archive/${WOLFSSL_COMMIT}.tar.gz -> ${PN}-wolfssl-${WOLFSSL_COMMIT}.tar.gz
 		https://github.com/RPCS3/soundtouch/archive/${SOUNDTOUCH_COMMIT}.tar.gz -> ${PN}-soundtouch-${SOUNDTOUCH_COMMIT}.tar.gz
-		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${SOUNDTOUCH_COMMIT}.tar.gz
+		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${YAMLCPP_COMMIT}.tar.gz
+		https://github.com/xioTechnologies/Fusion/archive/${FUSION_COMMIT}.tar.gz -> ${PN}-fusion-${FUSION_COMMIT}.tar.gz
 		https://github.com/Megamouse/VulkanMemoryAllocator/archive/${VMA_COMMIT}.tar.gz -> ${PN}-VulkanMemoryAllocator-${VMA_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64"
@@ -71,6 +72,9 @@ DEPEND="
 	sys-libs/zlib
 	virtual/libusb:1
 	x11-libs/libX11
+	media-libs/openal
+	dev-libs/stb
+	app-arch/zstd
 	faudio? ( app-emulation/faudio )
 	opencv? ( media-libs/opencv )
 	vulkan? ( media-libs/vulkan-loader[wayland?] )
@@ -80,6 +84,13 @@ RDEPEND="${DEPEND}"
 
 QA_PREBUILT="usr/share/rpcs3/test/.*"
 QA_WX_LOAD="usr/share/rpcs3/test/*"
+
+PATCHES=(
+	"${FILESDIR}/${PN}-0.0.37-system-openal.patch"
+	"${FILESDIR}/${PN}-0.0.34-system-stb.patch"
+	"${FILESDIR}/${PN}-0.0.34-system-zstd.patch"
+	"${FILESDIR}/${PN}-0.0.37-hidapi.patch"
+)
 
 src_prepare() {
 	if [[ ${PV} != "9999" ]]; then
@@ -103,6 +114,9 @@ src_prepare() {
 
 		rmdir "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
 		mv "${WORKDIR}/yaml-cpp-${YAMLCPP_COMMIT}" "${S}/3rdparty/yaml-cpp/yaml-cpp" || die
+
+		rmdir "${S}/3rdparty/fusion/fusion" || die
+		mv "${WORKDIR}/Fusion-${FUSION_COMMIT}" "${S}/3rdparty/fusion/fusion" || die
 
 		rmdir "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
 		mv "${WORKDIR}/VulkanMemoryAllocator-${VMA_COMMIT}" "${S}/3rdparty/GPUOpen/VulkanMemoryAllocator" || die
