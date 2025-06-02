@@ -25,9 +25,12 @@ DEPEND="
 	x11-misc/xcb
 	x11-libs/libXtst
 	x11-libs/xcb-util-image
+	!!kde-plasma/plasma-workspace
 "
 RDEPEND="${DEPEND}"
-BDEPEND=">=kde-frameworks/extra-cmake-modules-${KFMIN}:0"
+BDEPEND="
+	>=kde-frameworks/extra-cmake-modules-${KFMIN}:0
+"
 
 PATCHES=( "${FILESDIR}/${PN}-6.3.5-standalone.patch" )
 
