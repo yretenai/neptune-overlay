@@ -14,7 +14,7 @@ CMAKE_USE_DIR="${S}/${PN}"
 
 LICENSE="GPL-2"
 SLOT="6/${PV}"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="~amd64"
 
 DEPEND="
 	>=dev-qt/qtbase-${QTMIN}:6[dbus]
