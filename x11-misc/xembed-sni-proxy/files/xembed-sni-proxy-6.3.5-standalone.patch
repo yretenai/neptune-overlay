@@ -1,0 +1,57 @@
+diff --git a/xembed-sni-proxy/CMakeLists.txt b/xembed-sni-proxy/CMakeLists.txt
+index 678a471907..b84283d574 100644
+--- a/xembed-sni-proxy/CMakeLists.txt
++++ b/xembed-sni-proxy/CMakeLists.txt
+@@ -1,3 +1,29 @@
++cmake_minimum_required(VERSION 3.16)
++
++project(xembed-sni-proxy)
++set(PROJECT_VERSION "GENTOO_PV")
++set(PROJECT_VERSION_MAJOR 6)
++
++set(QT_MIN_VERSION "6.8.0")
++set(KF_MIN_VERSION "6.13.0")
++find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core DBus)
++find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
++set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
++
++include(KDEInstallDirs)
++include(KDECMakeSettings)
++include(KDECompilerSettings NO_POLICY_SCOPE)
++include(FeatureSummary)
++include(ECMQtDeclareLoggingCategory)
++include(ECMConfiguredInstall)
++
++find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
++    CoreAddons
++    DBusAddons
++    WindowSystem
++    Crash
++)
++find_package(X11 REQUIRED)
+ find_package(XCB
+     REQUIRED COMPONENTS
+         XCB
+@@ -8,8 +34,13 @@ find_package(XCB
+         SHM
+         UTIL
+         IMAGE
++        RENDER
++        SHAPE
+ )
+ 
++configure_file(../config-workspace.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-workspace.h)
++configure_file(../config-X11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-X11.h)
++
+ set(XCB_LIBS
+     XCB::XCB
+     XCB::XFIXES
+@@ -19,6 +50,8 @@ set(XCB_LIBS
+     XCB::SHM
+     XCB::UTIL
+     XCB::IMAGE
++    XCB::RENDER
++    XCB::SHAPE
+ )
+ 
+ set(XEMBED_SNI_PROXY_SOURCES
