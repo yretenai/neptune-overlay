@@ -1,0 +1,33 @@
+diff --git a/src/reshade_effect_manager.cpp b/src/reshade_effect_manager.cpp
+index 18a9417..9340679 100644
+--- a/src/reshade_effect_manager.cpp
++++ b/src/reshade_effect_manager.cpp
+@@ -17,7 +17,7 @@
+ 
+ #include <stb_image.h>
+ #define STB_IMAGE_RESIZE_IMPLEMENTATION
+-#include <stb_image_resize.h>
++#include <deprecated/stb_image_resize.h>
+ 
+ #include <mutex>
+ #include <unistd.h>
+@@ -1993,4 +1993,4 @@ void reshade_effect_manager_enable_effect()
+ void reshade_effect_manager_disable_effect() 
+ {
+     gamescope_clear_reshade_effect();
+-}
+\ No newline at end of file
++}
+diff --git a/src/steamcompmgr.cpp b/src/steamcompmgr.cpp
+index 9112444..808114d 100644
+--- a/src/steamcompmgr.cpp
++++ b/src/steamcompmgr.cpp
+@@ -114,7 +114,7 @@ static const int g_nBaseCursorScale = 36;
+ #define STB_IMAGE_WRITE_IMPLEMENTATION
+ #include <stb_image.h>
+ #include <stb_image_write.h>
+-#include <stb_image_resize.h>
++#include <deprecated/stb_image_resize.h>
+ 
+ #define GPUVIS_TRACE_IMPLEMENTATION
+ #include "gpuvis_trace_utils.h"
