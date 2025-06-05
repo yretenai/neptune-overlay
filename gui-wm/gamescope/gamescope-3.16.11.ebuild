@@ -93,6 +93,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-3.16.11-deprecated-stb.patch"
 	"${FILESDIR}/${PN}-3.16.11-system-libs.patch"
+	"${FILESDIR}/${PN}-3.16.11-PR1826.patch"
 )
 
 FILECAPS=(
