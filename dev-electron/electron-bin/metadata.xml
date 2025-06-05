@@ -4,4 +4,8 @@
 	<upstream>
 		<remote-id type="github">electron/electron</remote-id>
 	</upstream>
+	<use>
+		<flag name="system-vulkan">Use system vulkan libraries instead of binary distributions.</flag>
+		<flag name="system-ffmpeg">Use system ffmpeg libraries instead of binary distributions.</flag>
+	</use>
 </pkgmetadata>
