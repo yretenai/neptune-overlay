@@ -18,39 +18,25 @@ LICENSE="Apache-2.0 BSD BSD-2 GPL-2+ GPL-3 ISC LGPL-2.1+ LGPL-3+ MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
-IUSE="debug lto qt5 +qt6 test"
+IUSE="debug lto test"
 REQUIRED_USE="
 	lto? ( !debug )
-	^^ ( qt5 qt6 )
 "
 
 RESTRICT="!test? ( test )"
 
 DEPEND="
-	qt5? (
-		dev-qt/qtconcurrent:5
-		dev-qt/qtcore:5
-		dev-qt/qtgui:5
-		dev-qt/qtnetwork:5
-		dev-qt/qtnetworkauth:5
-		dev-qt/qttest:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtxml:5
-	)
-	qt6? (
-		dev-qt/qtbase:6[concurrent,gui,network,widgets,xml(+)]
-		dev-qt/qt5compat:6
-		dev-qt/qtnetworkauth:6
-	)
-	dev-libs/quazip:=[qt5?,qt6?]
+	dev-qt/qtbase:6[concurrent,gui,network,widgets,xml(+)]
+	dev-qt/qt5compat:6
+	dev-qt/qtnetworkauth:6
+	dev-libs/quazip:=[qt6]
 	app-text/cmark
 	sys-libs/zlib
 "
 
 RDEPEND="
 	${DEPEND}
-	qt5? ( dev-qt/qtsvg:5 )
-	qt6? ( dev-qt/qtsvg:6 )
+	dev-qt/qtsvg:6
 	>=virtual/jre-1.8.0:*
 	virtual/opengl
 "
@@ -90,7 +76,7 @@ src_configure(){
 	local mycmakeargs=(
 		-DLauncher_APP_BINARY_NAME="${PN}"
 		-DLauncher_BUILD_PLATFORM="Gentoo"
-		-DLauncher_QT_VERSION_MAJOR=$(usex qt6 6 5)
+		-DLauncher_QT_VERSION_MAJOR=6
 		-DENABLE_LTO=$(usex lto)
 		-DBUILD_TESTING=$(usex test)
 	)
