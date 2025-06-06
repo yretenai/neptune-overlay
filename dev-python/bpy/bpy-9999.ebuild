@@ -35,6 +35,7 @@ else
 	else
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
 	fi
+	ASSETS_EGIT_BRANCH="main"
 fi
 
 IUSE="
@@ -229,8 +230,8 @@ src_unpack() {
 	if [ "${HAS_RELEASED}" -eq 1 ]; then
 		default
 	else
-		git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
-		git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
+		git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "refs/heads/${ASSETS_EGIT_BRANCH}" "${CATEGORY}/${PN}/${SLOT%/*}/${ASSETS_EGIT_BRANCH}"
+		git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${CATEGORY}/${PN}/${SLOT%/*}/${ASSETS_EGIT_BRANCH}"
 		git-r3_src_unpack
 	fi
 }

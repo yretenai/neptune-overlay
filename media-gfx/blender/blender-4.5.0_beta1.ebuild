@@ -40,8 +40,10 @@ else
 	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
 	if [[ ${PV} != *_beta* ]]; then
 		EGIT_BRANCH="main"
+		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
 	else
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
+		ASSETS_EGIT_BRANCH="main"
 	fi
 
 	# special branches
@@ -270,8 +272,8 @@ src_unpack() {
 	if [ "${HAS_RELEASED}" -eq 1 ]; then
 		default
 	else
-		git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "${EGIT_BRANCH}"
-		git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets"
+		git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "refs/heads/${ASSETS_EGIT_BRANCH}" "${CATEGORY}/${PN}/${SLOT%/*}/${ASSETS_EGIT_BRANCH}"
+		git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${CATEGORY}/${PN}/${SLOT%/*}/${ASSETS_EGIT_BRANCH}"
 		git-r3_src_unpack
 	fi
 }
