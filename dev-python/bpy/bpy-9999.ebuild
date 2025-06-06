@@ -41,8 +41,8 @@ fi
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack jpeg2k
-llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openmp +openpgl
-+opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio renderdoc
+llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl +opensubdiv
++openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio renderdoc
 sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
 "
 RESTRICT="test"
@@ -113,7 +113,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3.2.1:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,openmp?,tbb?] )
+	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
 		dev-libs/c-blosc:=
@@ -191,8 +191,6 @@ PATCHES=(
 )
 
 blender_check_requirements() {
-	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
-
 	REQ_TOT=2
 
 	use debug && ((REQ_TOT += 1))
@@ -268,8 +266,6 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
-		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
 		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
@@ -312,7 +308,7 @@ src_configure() {
 		-DWITH_GTESTS=no
 		-DWITH_HARFBUZZ=$(usex otf)
 		-DWITH_HARU=$(usex pdf)
-		-DWITH_HEADLESS=$($(use X || use wayland) && echo OFF || echo ON)
+		-DWITH_HEADLESS="$(usex !X "$(usex !wayland)")"
 		-DWITH_HYDRA=no # TODO: Package Hydra
 		-DWITH_IMAGE_OPENEXR=$(usex openexr)
 		-DWITH_IMAGE_OPENJPEG=$(usex jpeg2k)
@@ -333,7 +329,6 @@ src_configure() {
 		-DWITH_OPENCOLLADA=$(usex collada)
 		-DWITH_OPENCOLORIO=$(usex color-management)
 		-DWITH_OPENIMAGEDENOISE=$(usex oidn)
-		-DWITH_OPENMP=$(usex openmp)
 		-DWITH_OPENSUBDIV=$(usex opensubdiv)
 		-DWITH_OPENVDB_BLOSC=$(usex openvdb)
 		-DWITH_OPENVDB=$(usex openvdb)

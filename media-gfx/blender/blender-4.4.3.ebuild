@@ -57,7 +57,7 @@ fi
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
-jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
++jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
 +openmp +openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace
 +pugixml pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan
 +wayland +webp X
@@ -341,8 +341,6 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
-		-DHIP_HIPCC_FLAGS="-fcf-protection=none"
-		-DHIP_LINKER_EXECUTABLE="$(get_llvm_prefix)/bin/clang++"
 		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
@@ -384,7 +382,7 @@ src_configure() {
 		-DWITH_GTESTS=no
 		-DWITH_HARFBUZZ=$(usex otf)
 		-DWITH_HARU=$(usex pdf)
-		-DWITH_HEADLESS=$($(use X || use wayland) && echo OFF || echo ON)
+		-DWITH_HEADLESS="$(usex !X "$(usex !wayland)")"
 		-DWITH_HYDRA=no # TODO: Package Hydra
 		-DWITH_IMAGE_OPENEXR=$(usex openexr)
 		-DWITH_IMAGE_OPENJPEG=$(usex jpeg2k)
