@@ -25,7 +25,6 @@ LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
 HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
-IS_BRANCH=0
 
 if [ "${HAS_RELEASED}" -eq 1 ]; then
 	IS_LIVE=0
@@ -289,6 +288,8 @@ src_prepare() {
 	fi
 
 	blender_get_version
+
+	echo "Blender Version: ${BV}"
 
 	# Disable MS Windows help generation. The variable doesn't do what it
 	# it sounds like.
