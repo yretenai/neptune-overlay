@@ -25,6 +25,7 @@ LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
 HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
+IS_BRANCH=0
 
 if [ "${HAS_RELEASED}" -eq 1 ]; then
 	IS_LIVE=0
@@ -47,8 +48,12 @@ else
 	fi
 
 	# special branches
-	if [[ ${PV} == 99991 ]]; then
-		EGIT_BRANCH="npr-prototype"
+	if [[ "${PR}" != "r0" ]]; then
+		case $PR in
+			r100) EGIT_BRANCH="npr-prototype" ;;
+		esac
+
+		IS_BRANCH=1
 		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
 		SLOT="${EGIT_BRANCH}"
 	fi
@@ -217,12 +222,10 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-python-3.14.patch"
 )
 
-if [[ ${PV} == *9999* ]]; then
-	if [[ ${PV} != 9999 ]]; then
-		PATCHES+=(
-			"${FILESDIR}/${PN}-9999-branch.patch"
-		)
-	fi
+if [[ -z "${IS_BRANCH}" ]]; then
+	PATCHES+=(
+		"${FILESDIR}/${PN}-9999-branch.patch"
+	)
 fi
 
 blender_check_requirements() {
@@ -246,10 +249,8 @@ blender_get_version() {
 		BV=${BV:0:1}.${BV:2}
 	fi
 
-	if [[ ${PV} == *9999* ]]; then
-		if [[ ${PV} != 9999 ]]; then
-			BV="${BV}-${SLOT}"
-		fi
+	if [[ -z "${IS_BRANCH}" ]]; then
+		BV="${BV}-${SLOT}"
 	fi
 }
 
@@ -279,12 +280,10 @@ src_unpack() {
 src_prepare() {
 	cmake_src_prepare
 
-	if [[ ${PV} == *9999* ]]; then
-		if [[ ${PV} != 9999 ]]; then
-			sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
-				-i build_files/cmake/macros.cmake \
-				-i source/blender/blenkernel/intern/appdir.cc || die
-		fi
+	if [[ -z "${IS_BRANCH}" ]]; then
+		sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
+			-i build_files/cmake/macros.cmake \
+			-i source/blender/blenkernel/intern/appdir.cc || die
 	fi
 
 	blender_get_version
