@@ -222,7 +222,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-python-3.14.patch"
 )
 
-if [[ ! -z "${IS_BRANCH}" ]]; then
+if [ "${IS_BRANCH}" ]; then
 	PATCHES+=(
 		"${FILESDIR}/${PN}-9999-branch.patch"
 	)
@@ -251,7 +251,7 @@ blender_get_version() {
 		BV=${BV:0:1}.${BV:2}
 	fi
 
-	if [[ ! -z "${IS_BRANCH}" ]]; then
+	if [ "${IS_BRANCH}" ]; then
 		BV="${BV}-${SLOT}"
 	fi
 }
@@ -282,7 +282,7 @@ src_unpack() {
 src_prepare() {
 	cmake_src_prepare
 
-	if [[ ! -z "${IS_BRANCH}" ]]; then
+	if [ "${IS_BRANCH}" ]; then
 		sed -e "s|__BLENDER_BRANCH__|${SLOT}|" \
 			-i build_files/cmake/macros.cmake \
 			-i source/blender/blenkernel/intern/appdir.cc || die
