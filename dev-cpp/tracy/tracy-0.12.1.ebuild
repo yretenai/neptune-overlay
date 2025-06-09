@@ -30,8 +30,7 @@ RDEPEND="
 RESTRICT="mirror"
 
 PATCHES="
-	${FILESDIR}/${PN}-0.11.1-header-location.patch
-	${FILESDIR}/${PN}-0.11.1-missing-includes.patch
+	${FILESDIR}/${PN}-0.12.0-missing-includes.patch
 "
 
 src_configure() {
