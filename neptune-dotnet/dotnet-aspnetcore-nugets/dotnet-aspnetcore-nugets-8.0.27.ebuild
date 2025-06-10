@@ -3,7 +3,7 @@
 
 EAPI=8
 
-NUGET_PVS="10.0.0-preview.4.25258.110 10.0.0-preview.3.25172.1 10.0.0-preview.2.25164.1 10.0.0-preview.1.25120.3 "
+NUGET_PVS="8.0.17 8.0.16 8.0.15 8.0.14 8.0.13 8.0.12 8.0.11 8.0.10 8.0.8 8.0.7 8.0.6 8.0.5 8.0.4 8.0.3 8.0.2 8.0.1 8.0.0 "
 for NUGET_PV in $NUGET_PVS; do
 	NUGETS+="
 		microsoft.aspnetcore.app.ref@${NUGET_PV}
