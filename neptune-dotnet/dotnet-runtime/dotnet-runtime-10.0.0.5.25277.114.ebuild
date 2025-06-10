@@ -4,7 +4,7 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DOTNET_PV="10.0.0-preview.4.25258.110"
+DOTNET_PV="10.0.0-preview.5.25277.114"
 
 inherit unpacker
 
