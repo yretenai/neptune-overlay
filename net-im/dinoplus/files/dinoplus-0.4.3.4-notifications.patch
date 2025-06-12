@@ -1,0 +1,12 @@
+diff --git a/main/src/ui/notifier_freedesktop.vala b/main/src/ui/notifier_freedesktop.vala
+index 9942831..4edead1 100644
+--- a/main/src/ui/notifier_freedesktop.vala
++++ b/main/src/ui/notifier_freedesktop.vala
+@@ -95,6 +95,7 @@ public class Dino.Ui.FreeDesktopNotifier : NotificationProvider, Object {
+         hash_table["image-data"] = yield get_conversation_icon(conversation);
+         hash_table["desktop-entry"] = new Variant.string(Dino.Application.get_default().get_application_id());
+         hash_table["category"] = new Variant.string("im.received");
++        hash_table["sound-name"] = new Variant.string("message-new-instant");
+         string[] actions = new string[] {"default", "Open conversation"};
+         try {
+             uint32 notification_id = yield dbus_notifications.notify("Dino", replace_id, "", conversation_display_name, body, actions, hash_table, -1);
