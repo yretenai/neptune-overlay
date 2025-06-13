@@ -54,6 +54,7 @@ DEPEND="
 BDEPEND="
 	>=dev-lang/swift-${SWIFT_PV}:=
 	app-portage/pyswiftebuild
+	dev-util/patchelf
 "
 
 SWIFT_URIS=""
@@ -72,14 +73,25 @@ if [[ -z "${SWIFT_BUILD_TARGET}" ]]; then
 	SWIFT_BUILD_TARGET="release"
 fi
 
+# @FUNCTION: swift_version
+# @USAGE: swift_version
+# @DESCRIPTION:
+# gets the swift version and path
+swift_version() {
+	export SWIFTVERSION_CAT="$(best_version ">=dev-lang/swift-${SWIFT_PV}")"
+	export SWIFTVERSION="${SWIFTVERSION_CAT#*/*-}"
+	export SWIFTVERSION_SHORT="$(ver_cut 1-2 ${SWIFTVERSION})"
+	export SWIFTPATH_FULL="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION}"
+	export SWIFTPATH="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION_SHORT}"
+}
+
 # @FUNCTION: eswift
 # @USAGE: eswift args
 # @DESCRIPTION:
 # Calls the Swift driver with the arguments
 eswift() {
-	local version="$(best_version ">=dev-lang/swift-${SWIFT_PV}")"
-	local swiftpath=$(which "swift-${version#*/*-}")
-	local SWIFTC="${EPREFIX}/usr/$(get_libdir)/swift-${version#*/*-}/usr/bin/swift"
+	swift_version
+	local SWIFTC="${SWIFTPATH}/usr/bin/swift"
 	${SWIFTC} $@ || die "could not build"
 }
 
@@ -117,17 +129,24 @@ swift_src_compile() {
 # @DESCRIPTION:
 # Installs swift artifacts
 _swift_src_install_direct() {
+	swift_version
+
 	for SWIFT_ARTIFACT in "${SWIFT_ARTIFACTS[@]}"; do
 		local artifact=($SWIFT_ARTIFACT)
+		local artifact_path=".build/${SWIFT_BUILD_TARGET}/${artifact[1]}"
 		case "${artifact[0]}" in
 			"exe")
-				doexe ".build/${SWIFT_BUILD_TARGET}/${artifact[1]}"
+				local swift_rpath="$(patchelf --print-rpath "${artifact_path}" | sed -e "s|${SWIFTPATH_FULL}|${SWIFTPATH}|")"
+				echo "Original rpath: $(patchelf --print-rpath "${artifact_path}")"
+				echo "Replacing '${SWIFTPATH_FULL}' with '${SWIFTPATH}'"
+				patchelf --set-rpath "${swift_rpath}" "${artifact_path}" || die "could not correct RPATH"
+				doexe "${artifact_path}"
 				;;
 			"so")
-				dolib.so ".build/${SWIFT_BUILD_TARGET}/${artifact[1]}"
+				dolib.so "${artifact_path}"
 				;;
 			"a")
-				dolib.a ".build/${SWIFT_BUILD_TARGET}/${artifact[1]}"
+				dolib.a "${artifact_path}"
 				;;
 			*);;
 		esac
