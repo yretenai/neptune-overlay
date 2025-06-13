@@ -137,11 +137,11 @@ _swift_src_install_direct() {
 # @FUNCTION: _swift_src_install_bundle
 # @USAGE: _swift_src_install_bundle
 # @DESCRIPTION:
-# Installs swift artifacts to /usr/share/swift/${PN}
+# Installs swift artifacts to /usr/share/swift/${P}
 # This is technically bad, as the resources will need to be copied over for library users
 _swift_src_install_bundle() {
-	exeinto "/usr/share/swift/${PN}"
-	insinto "/usr/share/swift/${PN}"
+	exeinto "/usr/share/swift/${P}"
+	insinto "/usr/share/swift/${P}"
 
 	_swift_src_install_direct
 
@@ -149,7 +149,7 @@ _swift_src_install_bundle() {
 		local artifact=($SWIFT_ARTIFACT)
 		case "${artifact[0]}" in
 			"exe")
-				dosym "../share/swift/${PN}/${artifact[1]}" "/usr/bin/${artifact[1]}"
+				dosym "../share/swift/${P}/${artifact[1]}" "/usr/bin/${artifact[1]}"
 				;;
 			*);;
 		esac
