@@ -24,9 +24,8 @@ HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
-HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
-
-if [ "${HAS_RELEASED}" -eq 1 ]; then
+if [[ ${PV} != *9999* && ${PV} != *_beta* ]]; then
+	HAS_RELEASED=1
 	IS_LIVE=0
 	SRC_URI="
 		https://download.blender.org/source/${P}.tar.xz
@@ -34,6 +33,7 @@ if [ "${HAS_RELEASED}" -eq 1 ]; then
 
 	KEYWORDS="~amd64"
 else
+	HAS_RELEASED=0
 	EGIT_LFS="yes"
 	inherit git-r3
 	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
