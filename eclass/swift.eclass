@@ -79,7 +79,8 @@ fi
 # gets the swift version and path
 swift_version() {
 	export SWIFTVERSION_CAT="$(best_version ">=dev-lang/swift-${SWIFT_PV}")"
-	export SWIFTVERSION="${SWIFTVERSION_CAT#*/*-}"
+	export SWIFTVERSION_REV="${SWIFTVERSION_CAT#*/*-}"
+	export SWIFTVERSION="${SWIFTVERSION_REV%%[-_]*}"
 	export SWIFTVERSION_SHORT="$(ver_cut 1-2 ${SWIFTVERSION})"
 	export SWIFTPATH_FULL="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION}"
 	export SWIFTPATH="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION_SHORT}"
