@@ -89,7 +89,7 @@ RDEPEND="
 BDEPEND="
 	dev-util/spirv-headers
 	>=dev-util/vulkan-headers-1.4.314.0
-	>=dev-cpp/magic_enum-0.9.6
+	>=dev-cpp/magic_enum-0.9.7
 	clang? (
 		llvm-core/clang:19
 	)
@@ -121,8 +121,6 @@ src_unpack() {
 src_prepare() {
 	eapply_user
 
-	find src \( -iname "*.cpp" -or -iname "*.h" \) -exec sed -e "s|#include <magic_enum/|#include <|" -i "{}" \; || die
-	sed -e "s|magic_enum .* CONFIG|magic_enum CONFIG|" -i CMakeLists.txt || die
 	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
 	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
 
