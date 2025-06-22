@@ -20,7 +20,7 @@ else
 fi
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/legacy"
 IUSE="+zenity"
 
 DEPEND="
