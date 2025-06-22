@@ -18,7 +18,6 @@ LICENSE+="
 	Unicode-3.0
 "
 SLOT="0"
-KEYWORDS="~amd64"
 
 src_unpack() {
     git-r3_src_unpack
