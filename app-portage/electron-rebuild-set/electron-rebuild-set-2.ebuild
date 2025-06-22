@@ -16,5 +16,5 @@ src_unpack() {
 
 src_install() {
 	insinto /usr/share/portage/config/sets
-	newins "${FILESDIR}"/electron-sets.conf electron.conf
+	newins "${FILESDIR}"/${PN}.conf electron-rebuild.conf
 }
