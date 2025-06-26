@@ -18,7 +18,7 @@ SLOT="0/${PV}"
 KEYWORDS="~amd64"
 
 RDEPEND="
-	>=media-libs/imgui-1.92.0:=
+	media-libs/imgui:=
 "
 
 BDEPEND="
