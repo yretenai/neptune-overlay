@@ -15,7 +15,6 @@ EGIT_REPO_URI="https://github.com/epezent/implot.git"
 
 LICENSE="MIT"
 SLOT="0/${PV}"
-KEYWORDS="~amd64"
 
 RDEPEND="
 	media-libs/imgui:=
