@@ -10,7 +10,7 @@ KEYWORDS="-* ~amd64 ~arm ~arm64"
 
 # TODO: source-build electron
 RDEPEND="
-	dev-electron/electron-sets
+	app-portage/electron-rebuild-set
 	|| (
 		=dev-electron/electron-bin-${PV}*
 	)
