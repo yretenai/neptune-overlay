@@ -1,0 +1,77 @@
+diff --git a/src/gl/gl_renderer.cpp b/src/gl/gl_renderer.cpp
+index ee1d943..1e6448d 100644
+--- a/src/gl/gl_renderer.cpp
++++ b/src/gl/gl_renderer.cpp
+@@ -670,7 +670,7 @@ void    ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
+                         glScissor((int)clip_rect.x, (int)clip_rect.y, (int)clip_rect.z, (int)clip_rect.w);
+ 
+                     // Bind texture, Draw
+-                    glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
++                    glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->GetTexID());
+                     //#if IMGUI_IMPL_OPENGL_MAY_HAVE_VTX_OFFSET
+                     if (g_GlVersion >= 320) // OGL and OGL ES
+                         glDrawElementsBaseVertex(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, (void*)(intptr_t)(pcmd->IdxOffset * sizeof(ImDrawIdx)), (GLint)pcmd->VtxOffset);
+diff --git a/src/gl/inject_glx.cpp b/src/gl/inject_glx.cpp
+index 5798f30..138bc74 100644
+--- a/src/gl/inject_glx.cpp
++++ b/src/gl/inject_glx.cpp
+@@ -1,4 +1,4 @@
+-#include <X11/Xlib.h>
++
+ #include <iostream>
+ #include <array>
+ #include <thread>
+@@ -8,6 +8,8 @@
+ #include <cstring>
+ #include <spdlog/spdlog.h>
+ #include "real_dlsym.h"
++#include "gl_hud.h"
++#include <X11/Xlib.h>
+ #include "loaders/loader_glx.h"
+ #include "loaders/loader_x11.h"
+ #include "mesa/util/macros.h"
+@@ -18,7 +20,6 @@
+ #include <iomanip>
+ 
+ #include <glad/glad.h>
+-#include "gl_hud.h"
+ #include "../config.h"
+ 
+ using namespace MangoHud::GL;
+diff --git a/src/shared_x11.cpp b/src/shared_x11.cpp
+index ef6a005..d7584b1 100644
+--- a/src/shared_x11.cpp
++++ b/src/shared_x11.cpp
+@@ -3,9 +3,9 @@
+ #include <memory>
+ #include <functional>
+ #include <spdlog/spdlog.h>
++#include "hud_elements.h"
+ #include "shared_x11.h"
+ #include "loaders/loader_x11.h"
+-#include "hud_elements.h"
+ 
+ static std::unique_ptr<Display, std::function<void(Display*)>> display;
+ 
+diff --git a/src/vulkan.cpp b/src/vulkan.cpp
+index 12c1f1a..5f4ecef 100644
+--- a/src/vulkan.cpp
++++ b/src/vulkan.cpp
+@@ -718,7 +718,7 @@ static void check_fonts(struct swapchain_data* data)
+    if (params.font_params_hash != data->sw_stats.font_params_hash)
+    {
+       SPDLOG_DEBUG("Recreating font image");
+-      VkDescriptorSet desc_set = (VkDescriptorSet)data->font_atlas->TexID;
++      VkDescriptorSet desc_set = (VkDescriptorSet)data->font_atlas->TexID.GetTexID();
+       create_fonts(data->font_atlas, instance_data->params, data->sw_stats.font_small, data->sw_stats.font_text, data->sw_stats.font_secondary);
+       unsigned char* pixels;
+       int width, height;
+@@ -904,7 +904,7 @@ static struct overlay_draw *render_swapchain_display(struct swapchain_data *data
+ #if 1 // disable if using >1 font textures
+    VkDescriptorSet desc_set[1] = {
+       //data->descriptor_set
+-      reinterpret_cast<VkDescriptorSet>(data->font_atlas->TexID)
++      reinterpret_cast<VkDescriptorSet>(data->font_atlas->TexID.GetTexID())
+    };
+    device_data->vtable.CmdBindDescriptorSets(draw->command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                              data->pipeline_layout, 0, 1, desc_set, 0, NULL);
