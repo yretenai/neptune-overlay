@@ -82,7 +82,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-7.5.3-magic-enum.patch"
 	"${FILESDIR}/${PN}-7.5.3-miniaudio.patch"
 	"${FILESDIR}/${PN}-7.5.3-name.patch"
 )
