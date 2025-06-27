@@ -1,0 +1,16 @@
+diff --git a/packages/app-lib/build.rs b/packages/app-lib/build.rs
+index 251c4e84..03dc18d4 100644
+--- a/packages/app-lib/build.rs
++++ b/packages/app-lib/build.rs
+@@ -33,7 +33,10 @@ fn main() {
+         .arg(build_dir_str)
+         .arg("build")
+         .arg("--no-daemon")
+-        .arg("--console=rich")
++        .arg("--project-cache-dir")
++        .arg("__TEMP__/rgadle_project_cache")
++        .arg("--gradle-user-home")
++        .arg("__TEMP__/gradle_user_home")
+         .current_dir(dunce::canonicalize("java").unwrap())
+         .status()
+         .expect("Failed to wait on Gradle build");
