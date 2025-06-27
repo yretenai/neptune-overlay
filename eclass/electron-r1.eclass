@@ -235,7 +235,7 @@ electron-r1_stage() {
 		dosym "../../${ELECTRON_NORMATIVE_NAME}/electron.debug" "${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}.debug"
 	fi
 
-	mkdir -p "${ELECTRON_DESTDIR}/locales"
+	mkdir "${ELECTRON_DESTDIR}/locales"
 
 	for x in "${ELECTRON_PATH}/locales"/*; do
 		local filename="${x##*/}"
