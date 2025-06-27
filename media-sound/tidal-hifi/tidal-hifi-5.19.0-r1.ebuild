@@ -21,19 +21,33 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
 else
 	SRC_URI="https://github.com/Mastermindzh/tidal-hifi/archive/refs/tags/${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	# Requires network access (https) as long as NPM dependencies aren't packaged
+	RESTRICT="network-sandbox"
 fi
 
-# Requires network access (https) as long as NPM dependencies aren't packaged
-RESTRICT="network-sandbox mirror strip test"
+RESTRICT="mirror test ${RESTRICT}"
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
 "
 
+src_unpack() {
+	if [[ "${PV}" == *9999* ]]; then
+		git-r3_src_unpack
+	else
+		default
+	fi
+
+	cd "${S}"
+	electron-r1_prep_npm
+
+	export COREPACK_ENABLE_STRICT=0
+	npm set progress false
+	npm i --loglevel verbose || die
+}
+
 src_prepare() {
 	default
-
-	electron-r1_binname
 
 	sed -i -e "s|electronDownload:|electronDist: \"${ELECTRON_PATH}\"\nelectronDownload:\n  cache: \"${DISTDIR}\"|" build/electron-builder.base.yml || die
 	sed -i -e "s|electronVersion:.*$|electronVersion: ${ELECTRON_VER_BASE}|" build/electron-builder.base.yml || die
@@ -41,10 +55,6 @@ src_prepare() {
 }
 
 src_configure() {
-	export COREPACK_ENABLE_STRICT=0
-	npm set progress false
-	npm i --loglevel verbose || die
-
 	electron-r1_patch_electron_builder
 }
 

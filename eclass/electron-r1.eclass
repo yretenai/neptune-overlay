@@ -304,9 +304,11 @@ electron-r1_patch_electron_builder() {
 	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' {} \; || die "can't prevent electron from renaming files"
 }
 
-electron-r1_src_prepare() {
-	default
-
+# @FUNCTION: electorn-r1_prep_npm
+# @USAGE: electron-r1_prep_npm
+# @DESCRIPTION:
+# Prepares package.json
+electron-r1_prep_npm() {
 	electron-r1_binname
 
 	echo "$(jq ".build.electronDist = \"${ELECTRON_PATH}\"" package.json)" > package.json
@@ -347,5 +349,3 @@ electron-r1_target() {
 		echo -n "linux-${ARCH}-unpacked"
 	fi
 }
-
-EXPORT_FUNCTIONS src_prepare

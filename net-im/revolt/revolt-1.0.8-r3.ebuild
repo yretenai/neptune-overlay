@@ -24,6 +24,8 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/revoltchat/desktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/desktop-${PV}"
+	# Requires network access (https) as long as NPM dependencies aren't packaged
+	RESTRICT="network-sandbox"
 fi
 
 BDEPEND="
@@ -31,14 +33,26 @@ BDEPEND="
 	sys-apps/yarn
 "
 
-RESTRICT="network-sandbox mirror strip test"
+RESTRICT="mirror test ${RESTRICT}"
 
-src_configure() {
+src_unpack() {
+	if [[ "${PV}" == *9999* ]]; then
+		git-r3_src_unpack
+	else
+		default
+	fi
+
+	cd "${S}"
+	electron-r1_prep_npm
+
+	export COREPACK_ENABLE_STRICT=0
 	yarn config set --home enableTelemetry 0 || die
 	yarn config set cacheFolder "${T}/yarn" || die
 	mkdir "${T}/yarn" || die
 	yarn install || die
+}
 
+src_configure() {
 	electron-r1_patch_electron_builder
 }
 

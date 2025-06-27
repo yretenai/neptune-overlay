@@ -20,10 +20,11 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/th-ch/youtube-music.git"
 else
 	SRC_URI="https://github.com/th-ch/youtube-music/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	# Requires network access (https) as long as NPM dependencies aren't packaged
+	RESTRICT="network-sandbox"
 fi
 
-# Requires network access (https) as long as NPM dependencies aren't packaged
-RESTRICT="network-sandbox mirror strip test"
+RESTRICT="mirror test ${RESTRICT}"
 
 RDEPEND="
 	media-video/pipewire
@@ -40,16 +41,23 @@ PATCHES="
 	${FILESDIR}/${PN}-3.7.2-disable-devtools.patch
 "
 
-src_prepare() {
-	default
-	echo "$(jq '.pnpm.overrides.nan = "2.22.0"' package.json)" > package.json
-}
+src_unpack() {
+	if [[ "${PV}" == *9999* ]]; then
+		git-r3_src_unpack
+	else
+		default
+	fi
 
-src_configure() {
+	cd "${S}"
+	electron-r1_prep_npm
+	echo "$(jq '.pnpm.overrides.nan = "2.22.0"' package.json)" > package.json
+
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i --loglevel verbose --reporter append-only || die
+}
 
+src_configure() {
 	electron-r1_patch_electron_builder
 }
 

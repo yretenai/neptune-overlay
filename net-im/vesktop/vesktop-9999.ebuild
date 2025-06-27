@@ -21,13 +21,14 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/Vencord/Vesktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/Vesktop-${PV}"
+	# Requires network access (https) as long as NPM dependencies aren't packaged
+	RESTRICT="network-sandbox"
 fi
 
 LICENSE="GPL-3"
 SLOT="0"
 
-# Requires network access (https) as long as NPM dependencies aren't packaged
-RESTRICT="network-sandbox mirror strip test"
+RESTRICT="mirror test ${RESTRICT}"
 
 RDEPEND="
 	x11-libs/libnotify
@@ -41,11 +42,22 @@ BDEPEND="
 	>=sys-apps/pnpm-bin-9.5.0
 "
 
-src_configure() {
+src_unpack() {
+	if [[ ${PV} == *9999* ]]; then
+		git-r3_src_unpack
+	else
+		default
+	fi
+
+	cd "${S}"
+	electron-r1_prep_npm
+
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i --loglevel verbose --reporter append-only || die
+}
 
+src_configure() {
 	electron-r1_patch_electron_builder
 }
 
