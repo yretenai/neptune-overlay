@@ -139,9 +139,9 @@ electron-r1_fullver() {
 		TARGET="dev-electron/electron"
 	fi
 
-	export ELECTRON_VER="$(best_version ${TARGET})"
+	export ELECTRON_VER="$(best_version ${TARGET}:${ELECTRON_SLOT})"
 	if [[ -z "${ELECTRON_VER}" ]]; then
-		export ELECTRON_VER="$(best_version ${TARGET}-bin)"
+		export ELECTRON_VER="$(best_version ${TARGET}-bin:${ELECTRON_SLOT})"
 	fi
 }
 
@@ -235,7 +235,7 @@ electron-r1_stage() {
 		dosym "../../${ELECTRON_NORMATIVE_NAME}/electron.debug" "${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}.debug"
 	fi
 
-	mkdir "${ELECTRON_DESTDIR}/locales"
+	mkdir -p "${ELECTRON_DESTDIR}/locales"
 
 	for x in "${ELECTRON_PATH}/locales"/*; do
 		local filename="${x##*/}"
