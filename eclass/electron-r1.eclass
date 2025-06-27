@@ -315,7 +315,7 @@ electron-r1_prep_npm() {
 	echo "$(jq 'del(.dependencies.electron)' package.json)" > package.json
 	ELECTRON_NPM_VER="${ELECTRON_VER}"
 	if [[ ${ELECTRON_WIDEVINE} ]]; then
-		ELECTRON_NPM_VER="git+https://github.com/castlabs/electron-releases#v${ELECTRON_VER}"
+		ELECTRON_NPM_VER="git+https://github.com/castlabs/electron-releases#v${ELECTRON_VER}+wvcus"
 	fi
 	echo "$(jq --arg version "${ELECTRON_NPM_VER}" '.devDependencies.electron = $version' package.json)" > package.json
 
