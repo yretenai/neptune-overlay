@@ -1,0 +1,47 @@
+diff --git a/viteconfig/main.ts b/viteconfig/main.ts
+index ba6e2b6..4e9bfc9 100644
+--- a/viteconfig/main.ts
++++ b/viteconfig/main.ts
+@@ -5,17 +5,7 @@ let gitBranch: string = "";
+ try {
+   gitBranch = execSync("git rev-parse --abbrev-ref HEAD").toString();
+ } catch (e) {
+-  // User has likely downloaded from the YTM Desktop via the "Download ZIP".
+-  // We don't plan to support this, but at least provide users with a bit of improved UX
+-  // by providing them with what to do rather than just leaving them in the dust.
+-  e.message =
+-    " ======= Failed to get Git Info. ======= \n" +
+-    "Please make sure that when building this application you are cloning the repository from GitHub rather than using the Download ZIP option.\n" +
+-    "Follow the instructions in the README.md file to clone the repository and build the application from there.\n" +
+-    " ======= Failed to get Git Info. ======= \n\n" +
+-    e.message;
+-  // Re-throw the error so that the build fails with the updated message.
+-  throw e;
++  gitBranch = "v__PV__"
+ }
+ 
+ // HEAD is used for production builds as they check out version tags in a detached HEAD state
+diff --git a/viteconfig/renderer.ts b/viteconfig/renderer.ts
+index b6531f6..abe898e 100644
+--- a/viteconfig/renderer.ts
++++ b/viteconfig/renderer.ts
+@@ -9,17 +9,8 @@ try {
+   gitBranch = execSync("git rev-parse --abbrev-ref HEAD").toString();
+   gitCommitHash = execSync("git rev-parse HEAD").toString();
+ } catch (e) {
+-  // User has likely downloaded from the YTM Desktop via the "Download ZIP".
+-  // We don't plan to support this, but at least provide users with a bit of improved UX
+-  // by providing them with what to do rather than just leaving them in the dust.
+-  e.message =
+-    " ======= Failed to get Git Info. ======= \n" +
+-    "Please make sure that when building this application you are cloning the repository from GitHub rather than using the Download ZIP option.\n" +
+-    "Follow the instructions in the README.md file to clone the repository and build the application from there.\n" +
+-    " ======= Failed to get Git Info. ======= \n\n" +
+-    e.message;
+-  // Re-throw the error so that the build fails with the updated message.
+-  throw e;
++  gitBranch = "v__PV__"
++  gitCommitHash = "__PV__"
+ }
+ 
+ // https://vitejs.dev/config
