@@ -56,7 +56,7 @@ BDEPEND="
 
 DEPEND="
 	${PYTHON_DEPS}
-	<media-libs/imgui:=[opengl,vulkan,${MULTILIB_USEDEP}]
+	<media-libs/imgui-1.92.0:=[opengl,vulkan,${MULTILIB_USEDEP}]
 	media-libs/implot:=[${MULTILIB_USEDEP}]
 	dev-libs/spdlog:=[${MULTILIB_USEDEP}]
 	dev-libs/libfmt:=[${MULTILIB_USEDEP}]

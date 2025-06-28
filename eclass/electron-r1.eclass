@@ -304,7 +304,7 @@ electron-r1_patch_electron_builder() {
 	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' {} \; || die "can't prevent electron from renaming files"
 }
 
-# @FUNCTION: electorn-r1_prep_npm
+# @FUNCTION: electron-r1_prep_npm
 # @USAGE: electron-r1_prep_npm
 # @DESCRIPTION:
 # Prepares package.json
@@ -341,7 +341,7 @@ electron-r1_src_install() {
 
 # @FUNCTION: electron-r1_target
 # @DESCRIPTION:
-# prints the distribution folder name for the current architecture 
+# prints the distribution folder name for the current architecture
 electron-r1_target() {
 	if [[ "$ARCH" == "amd64" ]]; then
 		echo -n "linux-unpacked"
