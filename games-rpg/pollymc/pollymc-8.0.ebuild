@@ -32,6 +32,7 @@ DEPEND="
 	dev-libs/quazip:=[qt6]
 	app-text/cmark
 	sys-libs/zlib
+	x11-apps/xrandr
 "
 
 RDEPEND="
