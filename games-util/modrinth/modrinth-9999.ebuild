@@ -49,7 +49,6 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/modrinth-${PV}-disable-update-check.patch"
 	"${FILESDIR}/modrinth-${PV}-gradlew.patch"
 )
 
