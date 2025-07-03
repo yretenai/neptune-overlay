@@ -14,7 +14,7 @@ HOMEPAGE="https://gajim.org/"
 SRC_URI="https://gajim.org/downloads/$(ver_cut 1-2)/${P/_p/-}.tar.gz"
 
 LICENSE="GPL-3"
-SLOT="0"
+SLOT="0/2"
 
 KEYWORDS="amd64 ~arm64 ~loong ~riscv x86"
 IUSE="voice"
