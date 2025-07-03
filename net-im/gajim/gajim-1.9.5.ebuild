@@ -16,11 +16,7 @@ SRC_URI="https://gajim.org/downloads/$(ver_cut 1-2)/${P/_p/-}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0/1"
-# KEYWORDS="~amd64 ~arm64 ~loong ~riscv ~x86"
-# Gajim depends now on omemo-dr. Add KEYWORDS again,
-# when https://bugs.gentoo.org/912285 is fixed.
-
-KEYWORDS="amd64 ~arm64 ~loong ~riscv x86"
+KEYWORDS="~amd64 ~arm64 ~loong ~riscv ~x86"
 IUSE="+crypt geolocation jingle remote rst +spell +webp"
 
 COMMON_DEPEND="
