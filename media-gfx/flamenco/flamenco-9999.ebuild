@@ -22,8 +22,6 @@ else
 	"
 	S="${WORKDIR}/${PN}"
 	KEYWORDS="~amd64 ~arm64"
-	# Requires network access (https) as long as NPM dependencies aren't packaged
-	RESTRICT="network-sandbox"
 fi
 
 RDEPEND="
@@ -37,7 +35,9 @@ BDEPEND="
 	>=dev-lang/go-1.24.4
 "
 
-RESTRICT="mirror test ${RESTRICT}"
+# Requires network access (https) as long as NPM dependencies aren't packaged
+# also go.
+RESTRICT="mirror test network-sandbox"
 
 PATCHES=(
 	"${FILESDIR}/flamenco-3.6-no-exe-dir.patch"
