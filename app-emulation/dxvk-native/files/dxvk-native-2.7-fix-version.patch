@@ -1,0 +1,14 @@
+diff --git a/meson.build b/meson.build
+index 9b26cc0..9efaf26 100644
+--- a/meson.build
++++ b/meson.build
+@@ -127,7 +127,8 @@ if platform == 'windows'
+   compiler_args += ['-DDXVK_WSI_WIN32']
+ else
+   dxvk_abi_version = '0'
+-  dxvk_version_raw = meson.project_version().strip('v').split('.')
++  dxvk_version_combi = meson.project_version()+'.0.0'
++  dxvk_version_raw = dxvk_version_combi.strip('v').split('.')
+   dxvk_version = [ dxvk_version_raw[0] ]
+   foreach i : [ 1, 2 ]
+     padded = dxvk_version_raw[i]

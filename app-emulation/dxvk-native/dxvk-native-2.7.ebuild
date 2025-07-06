@@ -47,6 +47,10 @@ BDEPEND="
 	dev-util/glslang
 "
 
+PATCHES=(
+	"${FILESDIR}/${PN}-2.7-fix-version.patch"
+)
+
 src_prepare() {
 	if [[ ${PV} != *9999* ]]; then
 		rmdir include/{spirv,vulkan} include/native/directx subprojects/libdisplay-info || die
