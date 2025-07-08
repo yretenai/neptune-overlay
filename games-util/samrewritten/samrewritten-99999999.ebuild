@@ -23,3 +23,10 @@ src_unpack() {
 	git-r3_src_unpack
 	cargo_live_src_unpack
 }
+
+src_install() {
+	cargo_install
+	domenu package/samrewritten.desktop
+	newicon assets/icon_64.png samrewritten.png
+	newicon assets/icon_256.png samrewritten.png
+}
