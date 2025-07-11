@@ -102,7 +102,12 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.31-lld.patch
 
 	"${FILESDIR}"/${PN}-1.36-gcc15-fix.patch
+
+	# add -DINSTALL_SHARED_FILES
 	"${FILESDIR}"/${PN}-1.39-multilib-install.patch
+
+	# modify ICD layer name with ABI 
+	"${FILESDIR}"/${PN}-1.39-icd.patch
 )
 
 DOCS=( util/LINUX_DIST_README )
@@ -170,7 +175,6 @@ multilib_src_configure() {
 
 		# renderdoc_capture.json is installed here
 		-DVULKAN_LAYER_FOLDER="${EPREFIX}"/etc/vulkan/implicit_layer.d
-		-DVULKAN_JSON_SUFFIX="${MULTILIB_ABI_FLAG}"
 	)
 
 	if multilib_is_native_abi; then
@@ -189,6 +193,11 @@ multilib_src_configure() {
 
 			# Bug #926549
 			-DQRENDERDOC_ENABLE_PYSIDE2=OFF
+		)
+	else
+		mycmakeargs+=(
+			-DVULKAN_JSON_SUFFIX="_${MULTILIB_ABI_FLAG}"
+			-DVULKAN_LAYER_NAME="VK_LAYER_RENDERDOC_Capture_${MULTILIB_ABI_FLAG}"
 		)
 	fi
 
