@@ -5,7 +5,7 @@ EAPI=8
 
 inherit electron-version
 
-ELECTRON_SLOT="36"
+ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="24.13.3"
 
 inherit desktop optfeature xdg electron-r1

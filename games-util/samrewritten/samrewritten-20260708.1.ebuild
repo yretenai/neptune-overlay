@@ -226,7 +226,7 @@ CRATES="
 	zerovec@0.10.4
 "
 
-inherit cargo
+inherit cargo desktop
 
 DESCRIPTION="Steam Achievement Manager Rewritten"
 HOMEPAGE="https://github.com/PaulCombal/SamRewritten/"

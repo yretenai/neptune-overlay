@@ -5,7 +5,7 @@
 
 EAPI=8
 
-inherit cargo git-r3
+inherit cargo git-r3 desktop
 
 DESCRIPTION="Steam Achievement Manager Rewritten"
 HOMEPAGE="https://github.com/PaulCombal/SamRewritten/"

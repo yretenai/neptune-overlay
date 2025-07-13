@@ -12,7 +12,7 @@ MY_SWIG=swig-${PN}-${MY_SWIG_VER}
 AUTOTOOLS_AUTO_DEPEND="no"
 DOCS_BUILDER="sphinx"
 DOCS_DIR="docs"
-PYTHON_COMPAT=( python3_{9..14} python3_{13..14}t )
+PYTHON_COMPAT=( python3_{9..14} )
 inherit autotools cmake-multilib flag-o-matic optfeature python-single-r1 docs qmake-utils verify-sig xdg
 
 DESCRIPTION="A stand-alone graphics debugging tool"
@@ -40,7 +40,7 @@ SRC_URI="
 # swig: GPL-3+ BSD BSD-2
 LICENSE="BSD BSD-2 CC-BY-3.0 GPL-3+ MIT OFL-1.1 public-domain ZLIB"
 SLOT="0"
-KEYWORDS="~arm64 ~amd64 ~x86"
+KEYWORDS="~amd64 ~arm64 ~x86"
 IUSE="qt5"
 REQUIRED_USE="doc? ( qt5 ) qt5? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -106,7 +106,7 @@ PATCHES=(
 	# add -DINSTALL_SHARED_FILES
 	"${FILESDIR}"/${PN}-1.39-multilib-install.patch
 
-	# modify ICD layer name with ABI 
+	# modify ICD layer name with ABI
 	"${FILESDIR}"/${PN}-1.39-icd.patch
 )
 
