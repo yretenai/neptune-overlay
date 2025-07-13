@@ -86,6 +86,12 @@
 # @DESCRIPTION:
 # Comma separated (no spaces) list of features to disable
 
+# @ECLASS_VARIABLE: ELECTRON_UNSTABLE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# When set, disables the system installation of Electron for this package.
+# Note: installation has to be handled manually.
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-arch/unzip
@@ -101,20 +107,24 @@ ELECTRON_PREBUILT="
 	usr/share/electorn/apps/${P}/${ELECTRON_APPNAME}
 "
 
-if [[ ${ELECTRON_WIDEVINE} ]]; then
-	ELECTRON_RDEPEND="virtual/electron-widevine:${ELECTRON_SLOT}="
-	if [[ "${PV}" != *9999* ]]; then
-		KEYWORDS="~amd64"
+if [[ "${PV}" != *9999* ]]; then
+	KEYWORDS="~amd64 ~arm64"
+fi
+ELECTRON_SUFFIX=""
+ELECTRON_NAME="electron"
+if [[ -z ${ELECTRON_UNSTABLE} ]]; then
+	if [[ ${ELECTRON_WIDEVINE} ]]; then
+		ELECTRON_RDEPEND="virtual/electron-widevine:${ELECTRON_SLOT}="
+		if [[ "${PV}" != *9999* ]]; then
+			KEYWORDS="~amd64"
+		fi
+		ELECTRON_SUFFIX="-wvcus"
+		ELECTRON_NAME="electron-wvcus"
+	else
+		ELECTRON_RDEPEND="virtual/electron:${ELECTRON_SLOT}="
 	fi
-	ELECTRON_SUFFIX="-wvcus"
-	ELECTRON_NAME="electron-wvcus"
 else
-	ELECTRON_RDEPEND="virtual/electron:${ELECTRON_SLOT}="
-	if [[ "${PV}" != *9999* ]]; then
-		KEYWORDS="~amd64 ~arm64"
-	fi
-	ELECTRON_SUFFIX=""
-	ELECTRON_NAME="electron"
+	ELECTRON_RDEPEND=""
 fi
 
 BDEPEND="${ELECTRON_BDEPEND}"
@@ -220,6 +230,10 @@ electron-r1_stage() {
 	[[ ${EBUILD_PHASE} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
 
+	if [[ ! -z ${ELECTRON_UNSTABLE} ]]; then
+		return
+	fi
+
 	electron-r1_binname
 
 	for x in "${ELECTRON_PATH}"/*; do
@@ -259,6 +273,10 @@ electron-r1_doasar() {
 	[[ ${EBUILD_PHASE} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
 
+	if [[ ! -z ${ELECTRON_UNSTABLE} ]]; then
+		return
+	fi
+
 	insinto "${ELECTRON_DESTDIR}/resources"
 	doins app.asar
 	if [ -d "app.asar.unpacked" ]; then
@@ -273,8 +291,6 @@ electron-r1_doasar() {
 electron-r1_dobin() {
 	[[ ${EBUILD_PHASE} != install ]] &&
 		die "${FUNCNAME} can only be used in src_install"
-
-	electron-r1_binname
 
 	appName="${ELECTRON_APPNAME}"
 
@@ -300,6 +316,10 @@ EOF
 # @DESCRIPTION:
 # Patches electron-builder to not attempt to copy or rename electron files
 electron-r1_patch_electron_builder() {
+	if [[ ! -z ${ELECTRON_UNSTABLE} ]]; then
+		return
+	fi
+
 	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|await unpack|return; await unpack|' {} \; || die "can't prevent electron from unpacking"
 	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' {} \; || die "can't prevent electron from renaming files"
 }
@@ -309,6 +329,10 @@ electron-r1_patch_electron_builder() {
 # @DESCRIPTION:
 # Prepares package.json
 electron-r1_prep_npm() {
+	if [[ ! -z ${ELECTRON_UNSTABLE} ]]; then
+		return
+	fi
+
 	electron-r1_binname
 
 	echo "$(jq ".build.electronDist = \"${ELECTRON_PATH}\"" package.json)" > package.json

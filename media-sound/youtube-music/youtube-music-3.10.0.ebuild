@@ -7,6 +7,7 @@ inherit electron-version
 
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
+ELECTRON_UNSTABLE=1 # uses electron beta
 
 inherit desktop xdg electron-r1
 
@@ -25,6 +26,7 @@ else
 fi
 
 RESTRICT="mirror test ${RESTRICT}"
+RESTRICT+="network-sandbox"
 
 RDEPEND="
 	media-video/pipewire
@@ -50,7 +52,6 @@ src_unpack() {
 
 	cd "${S}"
 	electron-r1_prep_npm
-	echo "$(jq '.pnpm.overrides.nan = "2.22.0"' package.json)" > package.json
 
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
@@ -71,7 +72,12 @@ src_install() {
 
 	make_desktop_entry "/usr/bin/${PN}" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
 
-	cd pack/"$(electron-r1_target)"/resources
+	cd pack/"$(electron-r1_target)"
+	insinto "${ELECTRON_DESTDIR}"
+	doins -r .
+	chmod 0755 "${ED}${ELECTRON_DESTDIR}/youtube-music"
+
+	cd resources
 	electron-r1_src_install
 }
 
