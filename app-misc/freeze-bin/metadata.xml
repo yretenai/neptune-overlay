@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-	<upstream>
-		<changelog>https://github.com/charmbracelet/freeze/releases</changelog>
-		<remote-id type="github">charmbracelet/freeze</remote-id>
-	</upstream>
-</pkgmetadata>
