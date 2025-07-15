@@ -1,4 +1,3 @@
-move sys-apps/glow-bin app-misc/glow-bin
 move sys-apps/gum-bin app-misc/gum-bin
 move sci-libs/sentencepiece sci-ml/sentencepiece
 move media-gfx/vkBasalt media-gfx/vkbasalt
