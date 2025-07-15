@@ -321,6 +321,11 @@ src_prepare() {
 	fi
 
 	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
+
+	if use experimental; then
+		ewarn "USE experimental is specified, forcing version cycle to be 'alpha' to prevent features from being disabled"
+		sed -e "s/#define BLENDER_VERSION_CYCLE .*/#define BLENDER_VERSION_CYCLE alpha/" -i source/blender/blenkernel/BKE_blender_version.h
+	fi
 }
 
 src_configure() {
