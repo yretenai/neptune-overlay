@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="Internal Zycore library providing a fallback for environments without LibC."
 HOMEPAGE="https://github.com/zyantific/zycore-c"
@@ -21,20 +21,7 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="clang"
-
-BDEPEND="
-	clang? ( llvm-core/clang )
-"
-
 src_configure() {
-	if use clang; then
-		CC="${CHOST}-clang"
-		CXX="${CHOST}-clang++"
-		AR=llvm-ar
-		append-ldflags "-fuse-ld=lld"
-	fi
-
 	local mycmakeargs=(
 		-D ZYCORE_BUILD_SHARED_LIB=ON
 		-D ZYCORE_BUILD_EXAMPLES=ON

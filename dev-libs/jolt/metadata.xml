@@ -2,9 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<use>
-		<flag name="clang">
-			Enforce usage of Clang for build
-		</flag>
 		<flag name="custom-allocator">
 			Enables the ability to override the memory allocator
 		</flag>

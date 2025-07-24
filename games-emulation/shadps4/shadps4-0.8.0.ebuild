@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic toolchain-funcs
+inherit cmake toolchain-funcs
 
 DESCRIPTION="shadPS4 is an early PlayStation 4 emulator"
 HOMEPAGE="https://github.com/shadps4-emu/shadPS4"
@@ -44,7 +44,7 @@ else
 	S="${WORKDIR}/shadPS4-v.${PV}"
 fi
 
-IUSE="+qt6 clang tracing"
+IUSE="+qt6 tracing"
 
 # missing dependencies:
 # fmt 10.2.0 or newer is required
@@ -64,7 +64,7 @@ DEPEND="
 	media-gfx/renderdoc
 	>=dev-util/glslang-1.3.296
 	>=dev-cpp/robin-map-1.3.0
-	>=dev-libs/xbyak-7.07.1[clang?]
+	>=dev-libs/xbyak-7.07.1
 	dev-cpp/toml11
 	>=dev-libs/xxhash-0.8.2
 	>=dev-libs/pugixml-1.14
@@ -73,7 +73,7 @@ DEPEND="
 	virtual/jack
 	media-libs/openal
 	dev-libs/half
-	>=dev-libs/zydis-5.0.0_alpha[clang?]
+	>=dev-libs/zydis-5.0.0_alpha
 	dev-cpp/tracy:=
 	qt6? (
 		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
@@ -90,9 +90,6 @@ BDEPEND="
 	dev-util/spirv-headers
 	dev-util/vulkan-headers
 	>=dev-cpp/magic_enum-0.9.7
-	clang? (
-		llvm-core/clang:19
-	)
 "
 
 PATCHES=(
@@ -128,13 +125,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use clang; then
-		CC="${CHOST}-clang"
-		CXX="${CHOST}-clang++"
-		AR=llvm-ar
-		append-ldflags "-fuse-ld=lld"
-	fi
-
 	local mycmakeargs=(
 		-D ENABLE_QT_GUI=$(usex qt6)
 		-D ENABLE_UPDATER=OFF

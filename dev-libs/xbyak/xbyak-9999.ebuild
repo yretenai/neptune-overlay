@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="JIT assembler for x86(IA-32)/x64(AMD64, x86-64)"
 HOMEPAGE="https://github.com/herumi/xbyak"
@@ -19,20 +19,3 @@ else
 	"
 	KEYWORDS="~amd64"
 fi
-
-IUSE="clang"
-
-BDEPEND="
-	clang? ( llvm-core/clang )
-"
-
-src_configure() {
-	if use clang; then
-		CC="${CHOST}-clang"
-		CXX="${CHOST}-clang++"
-		AR=llvm-ar
-		append-ldflags "-fuse-ld=lld"
-	fi
-
-	cmake_src_configure
-}

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake flag-o-matic
+inherit cmake
 
 DESCRIPTION="A multi core friendly rigid body physics and collision detection library"
 HOMEPAGE="https://github.com/jrouwe/JoltPhysics"
@@ -25,25 +25,14 @@ CMAKE_USE_DIR="${S}/Build"
 
 CPU_FLAGS_X86=(sse4_1 sse4_2 f16c popcnt fma3 avx avx2 avx512f avx512vl)
 IUSE="
-	test debug clang lto
+	test debug lto
 	profiler +renderer +custom-allocator deterministic +double-precision std rtti
 	${CPU_FLAGS_X86[@]/#/cpu_flags_x86_}
-"
-
-BDEPEND="
-	clang? ( llvm-core/clang )
 "
 
 RESTRICT="!test? ( test )"
 
 src_configure() {
-	if use clang; then
-		CC="${CHOST}-clang"
-		CXX="${CHOST}-clang++"
-		AR=llvm-ar
-		append-ldflags "-fuse-ld=lld"
-	fi
-
 	local mycmakeargs=(
 		-D BUILD_SHARED_LIBS=ON
 		-D CPP_EXCEPTIONS_ENABLED=$(usex debug)

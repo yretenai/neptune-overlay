@@ -5,9 +5,6 @@
 		<remote-id type="github">shadps4-emu/shadPS4</remote-id>
 	</upstream>
 	<use>
-		<flag name="clang">
-			Enforce usage of Clang for build
-		</flag>
 		<flag name="tracing">
 			Enable Tracing support via Tracy
 		</flag>

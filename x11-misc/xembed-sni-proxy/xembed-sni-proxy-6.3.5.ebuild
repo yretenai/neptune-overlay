@@ -6,10 +6,13 @@ EAPI=8
 KDE_ORG_NAME="plasma-workspace"
 KFMIN=6.13.0
 QTMIN=6.8.0
-inherit cmake plasma.kde.org
+
+inherit cmake kde.org
+KDE_ORG_SCHEDULE_URI+="/Plasma_6"
 
 DESCRIPTION="Legacy xembed tray icons support for SNI-only system trays"
 HOMEPAGE="https://invent.kde.org/plasma/plasma-workspace/-/blob/master/xembed-sni-proxy/Readme.md"
+SRC_URI="mirror://kde/stable/plasma/${PV}/plasma-workspace-${PV}.tar.xz"
 CMAKE_USE_DIR="${S}/${PN}"
 
 LICENSE="GPL-2"
