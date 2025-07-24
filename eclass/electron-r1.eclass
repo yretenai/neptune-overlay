@@ -127,14 +127,16 @@ else
 	ELECTRON_RDEPEND=""
 fi
 
-BDEPEND="${ELECTRON_BDEPEND}"
-RDEPEND="${ELECTRON_RDEPEND}"
-QA_PREBUILT+="${ELECTRON_PREBUILT}"
+BDEPEND="${RDEPEND} ${ELECTRON_BDEPEND}"
+RDEPEND="${RDEPEND} ${ELECTRON_RDEPEND}"
+QA_PREBUILT+="${QA_PREBUILT} ${ELECTRON_PREBUILT}"
 if [[ -z "${DESTDIR}" ]]; then
 	DESTDIR="${ELECTRON_DESTDIR}"
 fi
-IUSE="wayland X +seccomp vulkan"
+IUSE="${IUSE} wayland X +seccomp vulkan debug"
+RESTRICT="${RESTRICT} dedupdebug splitdebug"
 REQUIRED_USE="
+	${REQUIRED_USE}
 	^^ ( wayland X )
 "
 
@@ -245,7 +247,7 @@ electron-r1_stage() {
 		dosym "../../${ELECTRON_NORMATIVE_NAME}/${filename}" "${ELECTRON_DESTDIR}/${filename}"
 	done
 
-	if [[ -f "${ELECTRON_PATH}/electron.debug" ]]; then
+	if [[ -f "${ELECTRON_PATH}/electron.debug" ]] && use debug; then
 		dosym "../../${ELECTRON_NORMATIVE_NAME}/electron.debug" "${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}.debug"
 	fi
 
