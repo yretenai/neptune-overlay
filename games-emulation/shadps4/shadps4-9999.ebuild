@@ -21,25 +21,28 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/sirit"
 		"externals/discord-rpc"
 		"externals/LibAtrac9"
+		"externals/ext-libusb"
 	)
 else
-	VULKANMEMORYALLOCATOR_COMMIT=5a53a198945ba8260fbc58fadb788745ce6aa263
-	EXT_DISCORD_RPC_COMMIT=51b09d426a4a1bcfa6ee6d4894e57d669f4a2e65
-	EXT_FMT_COMMIT=8ee89546ffcf046309d1f0d38c0393f02fde56c8
-	EXT_IMGUI_COMMIT=636cd4a7d623a2bc9bf59bb3acbb4ca075befba3
-	EXT_LIBATRAC9_COMMIT=9640129dc6f2afbca6ceeca3019856e8653a5fb2
-	EXT_SDL_COMMIT=a336b62d8b0b97b09214e053203e442e2b6e2be5
-	SIRIT_COMMIT=d6f3c0d99862ab2ff8f95e9ac221560f1f97e29a
+	VULKANMEMORYALLOCATOR_COMMIT=
+	EXT_DISCORD_RPC_COMMIT=
+	EXT_FMT_COMMIT=
+	EXT_IMGUI_COMMIT=
+	EXT_LIBATRAC9_COMMIT=
+	EXT_SDL_COMMIT=
+	EXT_LIBUSB_COMMIT=
+	SIRIT_COMMIT=
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
-		https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/archive/${VULKANMEMORYALLOCATOR_COMMIT}.tar.gz -> VulkanMemoryAllocator-${VULKANMEMORYALLOCATOR_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-discord-rpc/archive/${EXT_DISCORD_RPC_COMMIT}.tar.gz -> ext-discord-rpc-${EXT_DISCORD_RPC_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-fmt/archive/${EXT_FMT_COMMIT}.tar.gz -> ext-fmt-${EXT_FMT_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-imgui/archive/${EXT_IMGUI_COMMIT}.tar.gz -> ext-imgui-${EXT_IMGUI_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-LibAtrac9/archive/${EXT_LIBATRAC9_COMMIT}.tar.gz -> ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ext-SDL-${EXT_SDL_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> sirit-${SIRIT_COMMIT}.tar.gz
+		https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/archive/${VULKANMEMORYALLOCATOR_COMMIT}.tar.gz -> ${PN}-VulkanMemoryAllocator-${VULKANMEMORYALLOCATOR_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-discord-rpc/archive/${EXT_DISCORD_RPC_COMMIT}.tar.gz -> ${PN}-ext-discord-rpc-${EXT_DISCORD_RPC_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-fmt/archive/${EXT_FMT_COMMIT}.tar.gz -> ${PN}-ext-fmt-${EXT_FMT_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-imgui/archive/${EXT_IMGUI_COMMIT}.tar.gz -> ${PN}-ext-imgui-${EXT_IMGUI_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-LibAtrac9/archive/${EXT_LIBATRAC9_COMMIT}.tar.gz -> ${PN}-ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ${PN}-ext-SDL-${EXT_SDL_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-ext-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/shadPS4-v.${PV}"
 fi
@@ -112,6 +115,7 @@ src_unpack() {
 		rmdir "${S}/externals/fmt"; mv "${WORKDIR}/ext-fmt-${EXT_FMT_COMMIT}" "${S}/externals/fmt" || die "Cannot move ext-fmt"
 		rmdir "${S}/externals/LibAtrac9"; mv "${WORKDIR}/ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}" "${S}/externals/LibAtrac9" || die "Cannot move ext-LibAtrac9"
 		rmdir "${S}/externals/sdl3"; mv "${WORKDIR}/ext-SDL-${EXT_SDL_COMMIT}" "${S}/externals/sdl3" || die "Cannot move ext-SDL"
+		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
 		rmdir "${S}/externals/vma"; mv "${WORKDIR}/VulkanMemoryAllocator-${VULKANMEMORYALLOCATOR_COMMIT}" "${S}/externals/vma" || die "Cannot move VulkanMemoryAllocator"
 	fi
