@@ -62,8 +62,6 @@ src_unpack() {
 	fi
 
 	export COREPACK_ENABLE_STRICT=0
-	export BASE_URL="https://api.modrinth.com/v2/"
-	export BROWSER_BASE_URL="https://api.modrinth.com/v2/"
 	export GRADLE_USER_HOME="${T}/gradle_user_home"
 	export GRADLE_HOME="${T}/gradle_home"
 
@@ -74,7 +72,6 @@ src_unpack() {
 
 src_prepare() {
 	default
-	sed -e "s|staging-api.modrinth.com|api.modrinth.com|" -i "packages/app-lib/src/config.rs" || die "can't patch api endpoint to be prod"
 	sed -e "s|__TEMP__|${T}|" -i "packages/app-lib/build.rs" || die "can't update temp dir"
 }
 
@@ -84,8 +81,6 @@ src_configure() {
 }
 
 src_compile() {
-	export BASE_URL="https://api.modrinth.com/v2/"
-	export BROWSER_BASE_URL="https://api.modrinth.com/v2/"
 	export GRADLE_USER_HOME="${T}/gradle_user_home"
 	export GRADLE_HOME="${T}/gradle_home"
 
