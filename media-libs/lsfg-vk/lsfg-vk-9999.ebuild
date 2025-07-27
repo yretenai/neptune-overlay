@@ -33,6 +33,7 @@ else
 			${CARGO_CRATE_URIS}
 		)
 	"
+	KEYWORDS="~amd64"
 fi
 
 VULKAN_PV="1.4.313"

@@ -45,6 +45,7 @@ else
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/shadPS4-v.${PV}"
+	KEYWORDS="~amd64"
 fi
 
 IUSE="+qt6 tracing"
