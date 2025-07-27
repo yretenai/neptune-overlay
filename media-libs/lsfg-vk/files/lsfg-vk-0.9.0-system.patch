@@ -1,0 +1,71 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b9ad34f..16f6ec0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,8 +9,7 @@ add_compile_options(-fPIC
+ 
+ add_subdirectory(thirdparty/dxbc EXCLUDE_FROM_ALL)
+ add_subdirectory(thirdparty/pe-parse/pe-parser-library EXCLUDE_FROM_ALL)
+-add_subdirectory(thirdparty/toml11 EXCLUDE_FROM_ALL)
+-add_subdirectory(thirdparty/volk EXCLUDE_FROM_ALL)
++find_package(volk CONFIG)
+ add_subdirectory(framegen)
+ 
+ # main project
+@@ -36,12 +35,9 @@ set_target_properties(lsfg-vk PROPERTIES
+ target_include_directories(lsfg-vk
+     PRIVATE include)
+ target_link_libraries(lsfg-vk PRIVATE
+-    pe-parse dxbc toml11
++    pe-parse dxbc
+     lsfg-vk-framegen)
+ 
+-get_target_property(TOML11_INCLUDE_DIRS toml11 INTERFACE_INCLUDE_DIRECTORIES)
+-target_include_directories(lsfg-vk SYSTEM PRIVATE ${TOML11_INCLUDE_DIRS})
+-
+ # diagnostics
+ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+     set_target_properties(lsfg-vk PROPERTIES
+diff --git a/VkLayer_LS_frame_generation.json b/VkLayer_LS_frame_generation.json
+index 8e8be3c..3a044a6 100644
+--- a/VkLayer_LS_frame_generation.json
++++ b/VkLayer_LS_frame_generation.json
+@@ -11,6 +11,9 @@
+       "vkGetInstanceProcAddr": "layer_vkGetInstanceProcAddr",
+       "vkGetDeviceProcAddr": "layer_vkGetDeviceProcAddr"
+     },
++    "enable_environment": {
++      "ENABLE_LSFG": "1"
++    },
+     "disable_environment": {
+       "DISABLE_LSFG": "1"
+     }
+Submodule thirdparty/pe-parse contains modified content
+diff --git a/thirdparty/pe-parse/CMakeLists.txt b/thirdparty/pe-parse/CMakeLists.txt
+index cb6600c..b434435 100755
+--- a/thirdparty/pe-parse/CMakeLists.txt
++++ b/thirdparty/pe-parse/CMakeLists.txt
+@@ -18,8 +18,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+ find_package(Filesystem COMPONENTS Experimental Final REQUIRED)
+ list(APPEND GLOBAL_CXXFLAGS ${DEFAULT_CXX_FLAGS})
+ 
+-option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+-option(BUILD_COMMAND_LINE_TOOLS "Build Command Line Tools" ON)
++option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
++option(BUILD_COMMAND_LINE_TOOLS "Build Command Line Tools" OFF)
+ option(PEPARSE_LIBRARY_WARNINGS "Log pe-parse library warnings to stderr" OFF)
+ 
+ 
+diff --git a/thirdparty/pe-parse/pe-parser-library/CMakeLists.txt b/thirdparty/pe-parse/pe-parser-library/CMakeLists.txt
+index cfa0c0c..9a1f15b 100644
+--- a/thirdparty/pe-parse/pe-parser-library/CMakeLists.txt
++++ b/thirdparty/pe-parse/pe-parser-library/CMakeLists.txt
+@@ -24,7 +24,7 @@ else()
+   list(APPEND PEPARSERLIB_SOURCEFILES src/unicode_codecvt.cpp)
+ endif()
+ 
+-add_library(${PROJECT_NAME} ${PEPARSERLIB_SOURCEFILES})
++add_library(${PROJECT_NAME} STATIC ${PEPARSERLIB_SOURCEFILES})
+ add_library(pe-parse::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+ 
+ if(PEPARSE_LIBRARY_WARNINGS)
