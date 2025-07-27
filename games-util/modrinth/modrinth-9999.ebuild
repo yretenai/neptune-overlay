@@ -65,6 +65,9 @@ src_unpack() {
 	export GRADLE_USER_HOME="${T}/gradle_user_home"
 	export GRADLE_HOME="${T}/gradle_home"
 
+	cd "${S}"
+	cp packages/app-lib/.env.prod packages/app-lib/.env
+
 	cd "${S_FRONTEND}"
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i --loglevel verbose --reporter append-only || die
