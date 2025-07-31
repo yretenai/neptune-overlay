@@ -27,7 +27,7 @@ else
 	PEPARSE_COMMIT=
 	SRC_URI="
 		https://github.com/PancakeTAS/lsfg-vk/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
-		https://github.com/PancakeTAS/dxbc/archive/${DXBC_COMMIT}.tar.gz -> dxvc-${DXBC_COMMIT}.tar.gz
+		https://github.com/PancakeTAS/dxbc/archive/${DXBC_COMMIT}.tar.gz -> dxbc-${DXBC_COMMIT}.tar.gz
 		https://github.com/trailofbits/pe-parse/archive/${PEPARSE_COMMIT}.tar.gz -> preparse-${DXBC_COMMIT}.tar.gz
 		gui? (
 			${CARGO_CRATE_URIS}
