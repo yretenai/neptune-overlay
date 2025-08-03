@@ -9,7 +9,7 @@ if [[ ${PV} == *_beta* ]]; then
 	MY_PV="$(ver_cut 1-3)-0"
 else
 	KEYWORDS="-* ~amd64 ~arm64"
-fi 
+fi
 
 DESCRIPTION="Fast, disk space efficient package manager, alternative to npm and yarn"
 HOMEPAGE="https://pnpm.io"
