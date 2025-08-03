@@ -109,6 +109,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-4.4-scons.patch"
 	"${FILESDIR}/${PN}-4.3-mono-path.patch"
+	"${FILESDIR}/${PN}-9999-udev.patch"
 )
 
 godot_get_version() {

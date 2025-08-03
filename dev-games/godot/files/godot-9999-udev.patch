@@ -1,0 +1,14 @@
+diff --git a/thirdparty/sdl/core/linux/SDL_udev.h b/thirdparty/sdl/core/linux/SDL_udev.h
+index 50bed36248..738f4bafe3 100644
+--- a/thirdparty/sdl/core/linux/SDL_udev.h
++++ b/thirdparty/sdl/core/linux/SDL_udev.h
+@@ -30,8 +30,7 @@
+ #define SDL_USE_LIBUDEV 1
+ #endif
+ 
+-//#include <libudev.h>
+-#include "thirdparty/linuxbsd_headers/udev/libudev.h"
++#include <libudev.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
+ 
