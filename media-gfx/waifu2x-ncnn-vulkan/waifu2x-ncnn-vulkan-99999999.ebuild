@@ -24,7 +24,10 @@ fi
 RDEPEND="
 	media-libs/libwebp:=
 	media-libs/vulkan-loader
-	>=dev-libs/ncnn-20250428:=
+	sys-libs/zlib-ng
+	media-libs/libjpeg-turbo:=
+	media-libs/libpng:=
+	>=dev-libs/ncnn-20250503:=
 "
 DEPEND="
 	${RDEPEND}
@@ -56,6 +59,9 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=NO
 		-DUSE_SYSTEM_NCNN=YES
 		-DUSE_SYSTEM_WEBP=YES
+		-DUSE_SYSTEM_PNG=YES
+		-DUSE_SYSTEM_JPEG=YES
+		-DUSE_SYSTEM_ZLIB=YES
 	)
 
 	cmake_src_configure

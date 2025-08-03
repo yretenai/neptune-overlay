@@ -13,14 +13,10 @@ SLOT="0"
 if [[ ${PV} == *99999999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/nihui/waifu2x-ncnn-vulkan.git"
-	EGIT_SUBMODULES=( '-*' 'src/ncnn' )
+	EGIT_SUBMODULES=( '-*' )
 else
-	NCNN_COMMIT=b4ba207c18d3103d6df890c0e3a97b469b196b26
-	GLSLANG_COMMIT=86ff4bca1ddc7e2262f119c16e7228d0efb67610
 	SRC_URI="
 		https://github.com/nihui/waifu2x-ncnn-vulkan/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
-		https://github.com/Tencent/ncnn/archive/${NCNN_COMMIT}.tar.gz -> ${PN}-ncnn-${NCNN_COMMIT}.tar.gz
-		https://github.com/KhronosGroup/glslang/archive/${GLSLANG_COMMIT}.tar.gz -> ${PN}-glslang-${GLSLANG_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64"
 fi
@@ -28,6 +24,10 @@ fi
 RDEPEND="
 	media-libs/libwebp:=
 	media-libs/vulkan-loader
+	sys-libs/zlib-ng
+	media-libs/libjpeg-turbo:=
+	media-libs/libpng:=
+	>=dev-libs/ncnn-20250503:=
 "
 DEPEND="
 	${RDEPEND}
@@ -43,14 +43,6 @@ PATCHES=(
 
 src_unpack() {
 	default
-
-	if [[ ${PV} != *99999999* ]]; then
-		rmdir "${S}/src/ncnn" || die
-		mv "${WORKDIR}/ncnn-${NCNN_COMMIT}" "${S}/src/ncnn" || die
-
-		rmdir "${S}/src/ncnn/glslang" || die
-		mv "${WORKDIR}/glslang-${GLSLANG_COMMIT}" "${S}/src/ncnn/glslang" || die
-	fi
 }
 
 src_prepare() {
@@ -65,8 +57,11 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=NO
-		-DUSE_SYSTEM_NCNN=NO
+		-DUSE_SYSTEM_NCNN=YES
 		-DUSE_SYSTEM_WEBP=YES
+		-DUSE_SYSTEM_PNG=YES
+		-DUSE_SYSTEM_JPEG=YES
+		-DUSE_SYSTEM_ZLIB=YES
 	)
 
 	cmake_src_configure
