@@ -187,6 +187,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-9999-strncpy.patch"
 )
 
 blender_check_requirements() {

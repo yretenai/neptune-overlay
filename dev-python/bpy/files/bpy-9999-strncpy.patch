@@ -1,0 +1,13 @@
+diff --git a/source/blender/python/intern/bpy_interface.cc b/source/blender/python/intern/bpy_interface.cc
+index b03cf349bf2..6b6e7eb88d8 100644
+--- a/source/blender/python/intern/bpy_interface.cc
++++ b/source/blender/python/intern/bpy_interface.cc
+@@ -887,7 +887,7 @@ static void bpy_module_delay_init(PyObject *bpy_proxy)
+   const char *filepath_rel = PyUnicode_AsUTF8(filepath_obj);
+   char filepath_abs[1024];
+ 
+-  STRNCPY(filepath_abs, filepath_rel);
++  STRNCPY_UTF8(filepath_abs, filepath_rel);
+   BLI_path_abs_from_cwd(filepath_abs, sizeof(filepath_abs));
+   Py_DECREF(filepath_obj);
+ 
