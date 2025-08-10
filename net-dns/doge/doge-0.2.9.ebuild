@@ -152,7 +152,7 @@ SRC_URI="
 	https://github.com/Dj-Codeman/dog_community/archive/refs/tags/v${PV}.tar.gz -> ${CATEGORY}-${PN}-${PV}.tar.gz
 	${CARGO_CRATE_URIS}
 "
-S="${WORK_DIR}/dog_community-${PV}"
+S="${WORKDIR}/dog_community-${PV}"
 
 LICENSE="MIT"
 # Dependent crate licenses
