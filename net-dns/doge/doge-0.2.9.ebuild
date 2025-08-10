@@ -5,6 +5,7 @@
 
 EAPI=8
 
+
 CRATES="
 	aho-corasick@1.1.3
 	ansi_term@0.12.1
@@ -15,7 +16,7 @@ CRATES="
 	bindgen@0.69.4
 	bitflags@2.5.0
 	byteorder@1.5.0
-	cc@1.0.97
+	cc@1.2.16
 	cexpr@0.6.0
 	cfg-if@1.0.0
 	clang-sys@1.7.0
@@ -35,6 +36,7 @@ CRATES="
 	fs_extra@1.3.0
 	getopts@0.2.21
 	getrandom@0.2.15
+	getrandom@0.3.0
 	glob@0.3.1
 	hermit-abi@0.1.19
 	home@0.5.9
@@ -45,10 +47,10 @@ CRATES="
 	json@0.12.4
 	lazy_static@1.4.0
 	lazycell@1.3.0
-	libc@0.2.154
+	libc@0.2.170
 	libloading@0.8.3
 	linux-raw-sys@0.4.13
-	log@0.4.22
+	log@0.4.27
 	matches@0.1.10
 	memchr@2.7.2
 	minimal-lexical@0.2.1
@@ -59,8 +61,8 @@ CRATES="
 	openssl-macros@0.1.1
 	openssl-probe@0.1.5
 	openssl-src@300.2.3+3.2.1
-	openssl-sys@0.9.103
-	openssl@0.10.66
+	openssl-sys@0.9.107
+	openssl@0.10.72
 	paste@1.0.14
 	pkg-config@0.3.30
 	ppv-lite86@0.2.17
@@ -68,14 +70,14 @@ CRATES="
 	prettyplease@0.2.19
 	proc-macro2@1.0.81
 	quote@1.0.36
-	rand@0.8.5
-	rand_chacha@0.3.1
-	rand_core@0.6.4
+	rand@0.9.1
+	rand_chacha@0.9.0
+	rand_core@0.9.0
 	redox_syscall@0.1.57
 	regex-automata@0.4.6
 	regex-syntax@0.8.3
 	regex@1.10.4
-	ring@0.17.8
+	ring@0.17.13
 	rustc-hash@1.1.0
 	rustix@0.38.34
 	rustls-pki-types@1.5.0
@@ -86,7 +88,6 @@ CRATES="
 	security-framework@2.11.0
 	shlex@1.3.0
 	socket2@0.5.7
-	spin@0.9.8
 	subtle@2.5.0
 	syn@2.0.60
 	tempfile@3.10.1
@@ -106,6 +107,7 @@ CRATES="
 	untrusted@0.9.0
 	vcpkg@0.2.15
 	wasi@0.11.0+wasi-snapshot-preview1
+	wasi@0.13.3+wasi-0.2.2
 	webpki-roots@0.26.1
 	webpki@0.22.4
 	which@4.4.2
@@ -133,7 +135,10 @@ CRATES="
 	windows_x86_64_msvc@0.48.5
 	windows_x86_64_msvc@0.52.5
 	winreg@0.50.0
+	wit-bindgen-rt@0.33.0
 	yansi@1.0.1
+	zerocopy-derive@0.8.14
+	zerocopy@0.8.14
 	zeroize@1.7.0
 "
 
