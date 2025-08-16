@@ -3,7 +3,7 @@
 
 EAPI=8
 
-NUGET_PVS="10.0.0-preview.6.25358.103 10.0.0-preview.5.25277.114 10.0.0-preview.4.25258.110 10.0.0-preview.3.25171.5 10.0.0-preview.2.25163.2 10.0.0-preview.1.25080.5 "
+NUGET_PVS="10.0.0-preview.7.25380.108 10.0.0-preview.6.25358.103 10.0.0-preview.5.25277.114 10.0.0-preview.4.25258.110 10.0.0-preview.3.25171.5 10.0.0-preview.2.25163.2 10.0.0-preview.1.25080.5 "
 for NUGET_PV in $NUGET_PVS; do
 	NUGETS+="
 		microsoft.netcore.app.host.linux-arm@${NUGET_PV}
