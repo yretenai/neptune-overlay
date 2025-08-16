@@ -79,28 +79,17 @@ fomodinstaller.interface@1.2.0
 fomodinstaller.scripting.xmlscript@1.0.0
 fomodinstaller.scripting@1.0.0
 fomodinstaller.utils@1.0.0
-gamefinder.common@4.7.3
-gamefinder.common@4.8.0
-gamefinder.launcher.heroic@4.7.3
-gamefinder.launcher.heroic@4.8.0
-gamefinder.registryutils@4.7.3
-gamefinder.registryutils@4.8.0
-gamefinder.storehandlers.eadesktop@4.7.3
-gamefinder.storehandlers.eadesktop@4.8.0
-gamefinder.storehandlers.egs@4.7.3
-gamefinder.storehandlers.egs@4.8.0
-gamefinder.storehandlers.gog@4.7.3
-gamefinder.storehandlers.gog@4.8.0
-gamefinder.storehandlers.origin@4.7.3
-gamefinder.storehandlers.origin@4.8.0
-gamefinder.storehandlers.steam@4.7.3
-gamefinder.storehandlers.steam@4.8.0
-gamefinder.storehandlers.xbox@4.7.3
-gamefinder.storehandlers.xbox@4.8.0
-gamefinder.wine@4.7.3
-gamefinder.wine@4.8.0
-gamefinder@4.7.3
-gamefinder@4.8.0
+gamefinder.common@4.9.0
+gamefinder.launcher.heroic@4.9.0
+gamefinder.registryutils@4.9.0
+gamefinder.storehandlers.eadesktop@4.9.0
+gamefinder.storehandlers.egs@4.9.0
+gamefinder.storehandlers.gog@4.9.0
+gamefinder.storehandlers.origin@4.9.0
+gamefinder.storehandlers.steam@4.9.0
+gamefinder.storehandlers.xbox@4.9.0
+gamefinder.wine@4.9.0
+gamefinder@4.9.0
 gee.external.capstone@2.3.0
 githubactionstestlogger@2.4.1
 google.protobuf@3.22.5
@@ -200,7 +189,6 @@ microsoft.bcl.asyncinterfaces@1.1.0
 microsoft.bcl.asyncinterfaces@1.1.1
 microsoft.bcl.asyncinterfaces@6.0.0
 microsoft.bcl.asyncinterfaces@7.0.0
-microsoft.bcl.asyncinterfaces@8.0.0
 microsoft.build.tasks.git@8.0.0
 microsoft.codeanalysis.analyzer.testing@1.1.2
 microsoft.codeanalysis.analyzers@3.3.3
@@ -640,9 +628,7 @@ src_prepare() {
 		mv "${WORKDIR}/NexusMods.MkDocsMaterial.Themes.Next-${NEXUSDOCS_PV}" "${S}/docs/Nexus"
 	fi
 
-	rm src/src.sln
-
-	dos2unix src/Games/NexusMods.Games.StardewValley.SMAPI/NexusMods.Games.StardewValley.SMAPI.csproj
+	dos2unix src/NexusMods.Games.StardewValley.SMAPI/NexusMods.Games.StardewValley.SMAPI.csproj
 	neptune-dotnet_src_prepare
 }
 
