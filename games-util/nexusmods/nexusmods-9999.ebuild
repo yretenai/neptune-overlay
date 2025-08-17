@@ -36,7 +36,8 @@ fi
 LICENSE="GPL-3 Apache-2.0 BSD-2 BSD MIT"
 SLOT="0"
 
-RESTRICT="${RESTRICT} mirror"
+# network-sandbox: downloads some crazy json file
+RESTRICT="${RESTRICT} mirror network-sandbox"
 RDEPEND="
 	|| (
 		>=app-arch/7zip-24.09[symlink]
@@ -79,10 +80,6 @@ DOTNET_PKG_PROJECTS=(
 DOTNET_PKG_BUILD_EXTRA_ARGS+=(
 	"-p:TieredCompilation=true"
 	"-p:DefineConstants=INSTALLATION_METHOD_PACKAGE_MANAGER;NEXUSMODS_APP_USE_SYSTEM_EXTRACTOR"
-)
-
-DOTNET_PKG_TEST_EXTRA_ARGS+=(
-	"--filter \"RequiresNetworking==True\""
 )
 
 src_unpack() {
