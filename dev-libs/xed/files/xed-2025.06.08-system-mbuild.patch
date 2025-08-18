@@ -1,0 +1,16 @@
+diff --git a/pysrc/genutil.py b/pysrc/genutil.py
+index ba1f098..7f6276f 100755
+--- a/pysrc/genutil.py
++++ b/pysrc/genutil.py
+@@ -104,6 +104,11 @@ def add_mbuild_to_path():
+ 
+     This will do nothing if `mbuild` already exists in the python path.
+     """
++    try:
++        import mbuild
++        return
++    except:
++        pass
+     try:
+         if any('mbuild' in x for x in sys.path):
+             return
