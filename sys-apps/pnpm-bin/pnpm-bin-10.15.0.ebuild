@@ -3,18 +3,25 @@
 
 EAPI=8
 
+MY_PV="${PV}"
+IS_BETA=0
+if [[ ${PV} == *_beta* ]]; then
+	MY_PV="$(ver_cut 1-3)-0"
+else
+	KEYWORDS="-* ~amd64 ~arm64"
+fi
+
 DESCRIPTION="Fast, disk space efficient package manager, alternative to npm and yarn"
 HOMEPAGE="https://pnpm.io"
 SRC_URI="
-	amd64? ( https://github.com/pnpm/pnpm/releases/download/v${PV}/pnpm-linux-x64 -> ${P}-amd64 )
-	arm64? ( https://github.com/pnpm/pnpm/releases/download/v${PV}/pnpm-linux-arm64 -> ${P}-arm64 )
+	amd64? ( https://github.com/pnpm/pnpm/releases/download/v${MY_PV}/pnpm-linux-x64 -> ${P}-amd64 )
+	arm64? ( https://github.com/pnpm/pnpm/releases/download/v${MY_PV}/pnpm-linux-arm64 -> ${P}-arm64 )
 "
 
 S="${WORKDIR}"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="-* ~amd64 ~arm64"
 
 RESTRICT="strip"
 
