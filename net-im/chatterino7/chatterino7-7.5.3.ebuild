@@ -59,7 +59,7 @@ RDEPEND="
 	${LUA_DEPS}
 	>media-libs/libavif-1.0.0:=
 	dev-libs/openssl:=
-	dev-libs/qtkeychain:=[qt6]
+	dev-libs/qtkeychain:=
 	dev-qt/qtbase:6[concurrent,dbus,gui,network,widgets]
 	dev-qt/qt5compat:6[icu]
 	dev-qt/qtmultimedia:6
