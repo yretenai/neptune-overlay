@@ -22,6 +22,7 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/discord-rpc"
 		"externals/LibAtrac9"
 		"externals/ext-libusb"
+		"externals/hwinfo"
 	)
 else
 	VULKANMEMORYALLOCATOR_COMMIT=
@@ -31,6 +32,7 @@ else
 	EXT_LIBATRAC9_COMMIT=
 	EXT_SDL_COMMIT=
 	EXT_LIBUSB_COMMIT=
+	EXT_HWINFO_COMMIT=
 	SIRIT_COMMIT=
 
 	SRC_URI="
@@ -42,6 +44,7 @@ else
 		https://github.com/shadps4-emu/ext-LibAtrac9/archive/${EXT_LIBATRAC9_COMMIT}.tar.gz -> ${PN}-ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ${PN}-ext-SDL-${EXT_SDL_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-ext-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
+		https://github.com/shadps4-emu/ext-hwinfo/archive/${EXT_HWINFO_COMMIT}.tar.gz -> ${PN}-ext-hwinfo-${EXT_HWINFO_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/shadPS4-v.${PV}"
@@ -117,6 +120,7 @@ src_unpack() {
 		rmdir "${S}/externals/LibAtrac9"; mv "${WORKDIR}/ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}" "${S}/externals/LibAtrac9" || die "Cannot move ext-LibAtrac9"
 		rmdir "${S}/externals/sdl3"; mv "${WORKDIR}/ext-SDL-${EXT_SDL_COMMIT}" "${S}/externals/sdl3" || die "Cannot move ext-SDL"
 		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
+		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_LIBUSB_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
 		rmdir "${S}/externals/vma"; mv "${WORKDIR}/VulkanMemoryAllocator-${VULKANMEMORYALLOCATOR_COMMIT}" "${S}/externals/vma" || die "Cannot move VulkanMemoryAllocator"
 	fi
