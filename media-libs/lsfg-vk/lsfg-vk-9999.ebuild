@@ -62,7 +62,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.9.0-system.patch"
+	"${FILESDIR}/${PN}-9999-system.patch"
 )
 
 src_unpack() {
