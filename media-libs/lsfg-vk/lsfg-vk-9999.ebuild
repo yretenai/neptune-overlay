@@ -18,10 +18,7 @@ IUSE="+gui"
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/PancakeTAS/lsfg-vk"
-	EGIT_SUBMODULES=(
-		thirdparty/dxbc
-		thirdparty/pe-parse
-	)
+	EGIT_SUBMODULES=( '-*' )
 else
 	DXBC_COMMIT=
 	PEPARSE_COMMIT=
