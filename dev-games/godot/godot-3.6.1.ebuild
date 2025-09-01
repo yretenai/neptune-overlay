@@ -55,9 +55,9 @@ RDEPEND="
 	)
 	pulseaudio? ( media-libs/libpulse )
 	theora? (
-		media-libs/libogg
-		media-libs/libtheora
-		media-libs/libvorbis
+		media-libs/libogg:=
+		media-libs/libtheora:=
+		media-libs/libvorbis:=
 	)
 	udev? ( virtual/udev )
 	webm? (

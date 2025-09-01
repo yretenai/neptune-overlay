@@ -78,7 +78,7 @@ RDEPEND="
 	)
 	pulseaudio? ( media-libs/libpulse )
 	speech? ( app-accessibility/speech-dispatcher )
-	theora? ( media-libs/libtheora )
+	theora? ( media-libs/libtheora:= )
 	udev? ( virtual/udev )
 	wayland? (
 		dev-libs/wayland
