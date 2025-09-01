@@ -2,10 +2,11 @@
 
 DOTNET_ROOT="/opt/neptune-dotnet"
 PV="$1"
+PVR="$2"
 NEPTUNE_LIST="/var/tmp/portage/dev-games/godot-${PV}/work/nugets.lst"
 HERE="${PWD}"
 TARGET="${PWD}/nugets.lst"
-MONO_ROOT="/var/tmp/portage/dev-games/godot-${PV}/work/godot-${PV}-stable/modules/mono"
+MONO_ROOT="/var/tmp/portage/dev-games/godot-${PV}/work/godot-${PVR}-stable/modules/mono"
 
 ebuild godot-${PV}.ebuild clean unpack
 
