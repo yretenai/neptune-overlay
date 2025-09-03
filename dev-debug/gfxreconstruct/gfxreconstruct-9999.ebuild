@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{11..14} )
-inherit cmake
+inherit cmake python-any-r1
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/LunarG/gfxreconstruct.git"
@@ -32,7 +32,10 @@ RDEPEND="
 	sys-libs/zlib:=
 
 	media-libs/vulkan-loader[wayland?,X?]
-	wayland? ( dev-libs/wayland )
+	wayland? (
+		dev-libs/wayland
+		dev-libs/wayland-protocols
+	)
 	X? (
 		x11-libs/libX11
 		x11-libs/libxcb
@@ -57,6 +60,19 @@ src_unpack() {
 		rmdir "${S}"/external/SPIRV-Reflect || die
 		mv "${WORKDIR}"/SPIRV-Reflect-vulkan-sdk-${PV} "${S}"/external/SPIRV-Reflect || die
 	fi
+}
+
+src_prepare() {
+	eapply "${FILESDIR}/${PN}-9999-generate.patch"
+	sed -e "s|%EPREFIX%|${ESYSROOT}|" \
+		-i framework/generated/generate_vulkan.py \
+		-i framework/generated/generate_wayland.py || die "cannot patch generators"
+	python_setup "python3*"
+	${EPYTHON} framework/generated/generate_vulkan.py || die "cannot run vulkan generator"
+	if use wayland; then
+		${EPYTHON} framework/generated/generate_wayland.py || die "cannot run wayland generator"
+	fi
+	cmake_src_prepare
 }
 
 src_configure() {

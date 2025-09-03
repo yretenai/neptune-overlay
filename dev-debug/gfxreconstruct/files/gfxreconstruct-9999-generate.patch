@@ -1,0 +1,56 @@
+diff --git a/framework/generated/generate_vulkan.py b/framework/generated/generate_vulkan.py
+index ba8cd178..8fc0e502 100644
+--- a/framework/generated/generate_vulkan.py
++++ b/framework/generated/generate_vulkan.py
+@@ -29,16 +29,11 @@ import sys
+ import subprocess
+ 
+ SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
+-KHRONOS_REGISTRY_DIR = os.path.normpath(
+-    os.path.join(
+-        SCRIPT_DIR, '..', '..', 'external', 'Vulkan-Headers', 'registry'
+-    )
+-)
++VK_HEADERS_DIR = "%EPREFIX%/usr/include/vulkan"
++KHRONOS_SHARE_DIR = "%EPREFIX%/usr/share/vulkan"
++KHRONOS_REGISTRY_DIR = os.path.join(KHRONOS_SHARE_DIR, "registry/")
+ KHRONOS_GENERATOR_DIR = os.path.join(SCRIPT_DIR, 'khronos_generators')
+ GENERATOR_DIR = os.path.join(SCRIPT_DIR, 'khronos_generators', 'vulkan_generators')
+-VK_HEADERS_DIR = os.path.join(
+-    SCRIPT_DIR, '..', '..', 'external', 'Vulkan-Headers'
+-)
+ 
+ # File names to provide to the Vulkan XML Registry generator script.
+ generate_targets = [
+@@ -140,6 +135,7 @@ if __name__ == '__main__':
+         env['PYTHONPATH'] = ''
+     env['PYTHONPATH'] = os.pathsep.join(
+         [
++            KHRONOS_SHARE_DIR,
+             KHRONOS_REGISTRY_DIR,
+             KHRONOS_GENERATOR_DIR,
+             GENERATOR_DIR,
+diff --git a/framework/generated/generate_wayland.py b/framework/generated/generate_wayland.py
+index 2a78977e..60754c36 100644
+--- a/framework/generated/generate_wayland.py
++++ b/framework/generated/generate_wayland.py
+@@ -30,9 +30,7 @@ import xml.etree.ElementTree as ET
+ 
+ 
+ SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
+-PROTOCOLS_DIR = os.path.normpath(
+-    os.path.join(SCRIPT_DIR, '..', '..', 'external', 'wayland-protocols')
+-)
++PROTOCOLS_DIR = "%EPREFIX%/usr/share/wayland-protocols"
+ 
+ 
+ COPYRIGHT = '''/*
+@@ -406,7 +404,7 @@ def clone_wayland_protocols():
+ 
+ 
+ def main():
+-    clone_wayland_protocols()
++    # clone_wayland_protocols()
+     generate(os.path.join(PROTOCOLS_DIR, 'stable', 'xdg-shell', 'xdg-shell.xml'))
+ 
+ 

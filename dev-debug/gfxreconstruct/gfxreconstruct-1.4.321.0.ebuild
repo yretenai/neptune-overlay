@@ -3,7 +3,6 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} )
 inherit cmake
 
 if [[ ${PV} == 9999* ]]; then
