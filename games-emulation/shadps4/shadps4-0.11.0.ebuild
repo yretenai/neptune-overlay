@@ -121,6 +121,8 @@ src_unpack() {
 src_prepare() {
 	eapply_user
 
+	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt
+	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt
 	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
 	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
 
