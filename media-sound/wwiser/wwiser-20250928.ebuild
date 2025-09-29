@@ -1,0 +1,31 @@
+# Copyright 2023-2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+PYTHON_REQ_USE="tk"
+PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
+inherit python-single-r1
+
+DESCRIPTION="Wwise .bnk explorer and audio simulator"
+HOMEPAGE="https://github.com/bnnm/wwiser"
+LICENSE="GPL-2"
+SLOT="0"
+
+if [[ "${PV}" == *99999999* ]]; then
+	inherit git-r3
+	EGIT_REPO_URI="https://github.com/bnnm/${PN}.git"
+else
+	SRC_URI="https://github.com/bnnm/wwiser/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	KEYWORDS="~amd64"
+fi
+
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+RDEPEND="${PYTHON_DEPS}"
+DEPEND="${RDEPEND}"
+
+src_install() {
+	python_domodule wwiser
+	python_newscript wwiser.py wwiser
+	dodoc -r doc
+}
