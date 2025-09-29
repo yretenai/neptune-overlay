@@ -6,8 +6,8 @@ EAPI=8
 MY_PV="${PV/-r*/}"
 DN_PV="${PV}"
 
-RUNTIME_PV="9.0.8"
-ASP_PV="9.0.8"
+RUNTIME_PV="9.0.9"
+ASP_PV="9.0.9"
 
 inherit unpacker
 
