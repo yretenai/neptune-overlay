@@ -19,7 +19,7 @@ if [[ ${PV} != *9999* && ${PV} != *_beta* ]]; then
 	HAS_RELEASED=1
 	IS_LIVE=0
 	SRC_URI="
-		https://download.blender.org/source/blender-${PV}.tar.xz -> ${P}.tar.xz
+		https://download.blender.org/source/blender-${PV}.tar.xz
 	"
 	S="${WORKDIR}/blender-${PV}"
 
