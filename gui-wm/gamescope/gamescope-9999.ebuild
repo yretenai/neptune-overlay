@@ -10,7 +10,7 @@ MY_PV="${MY_PV//_/-}"
 
 DESCRIPTION="Efficient micro-compositor for running games"
 HOMEPAGE="https://github.com/ValveSoftware/gamescope"
-EGIT_SUBMODULES=( src/reshade subprojects/{libliftoff,vkroots,wlroots} )
+EGIT_SUBMODULES=( src/reshade subprojects/{libliftoff,vkroots,wlroots,openvr} )
 
 if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
