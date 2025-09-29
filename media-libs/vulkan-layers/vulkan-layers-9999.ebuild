@@ -42,10 +42,6 @@ DEPEND="${RDEPEND}
 
 QA_SONAME="/usr/lib[^/]*/libVkLayer_khronos_validation.so"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-9999-tests-no-static.patch
-)
-
 multilib_src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_C_FLAGS="${CFLAGS} -DNDEBUG"
