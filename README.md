@@ -4,8 +4,6 @@ Please [create an issue](https://github.com/yretenai/neptune-overlay/issues/new)
 
 Primarily to package applications that I haven't seen on many overlays, or was incomplete/outdated.
 
-# Overlay will be on hiatus starting on the 4th of September 2025 until at least the 26th of September 2025.
-
 ## Installation
 
 ```shell
