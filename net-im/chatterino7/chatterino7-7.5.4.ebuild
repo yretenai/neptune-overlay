@@ -83,7 +83,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-7.5.3-miniaudio.patch"
-	"${FILESDIR}/${PN}-7.5.3-name.patch"
+	"${FILESDIR}/${PN}-7.5.4-name.patch"
 )
 
 src_unpack() {

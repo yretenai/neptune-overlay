@@ -1,0 +1,211 @@
+diff --git a/.CI/CreateAppImage.sh b/.CI/CreateAppImage.sh
+index 1f69f07..45262b3 100755
+--- a/.CI/CreateAppImage.sh
++++ b/.CI/CreateAppImage.sh
+@@ -72,7 +72,7 @@ cp /usr/share/doc/libc6/copyright appdir/usr/share/doc/libc6/
+ echo "Run LinuxDeployQT"
+ ./"$linuxdeployqt_path" \
+     --appimage-extract-and-run \
+-    appdir/usr/share/applications/com.chatterino.chatterino.desktop \
++    appdir/usr/share/applications/com.SevenTV.chatterino7.desktop \
+     -no-translations \
+     -bundle-non-qt-libs \
+     -unsupported-allow-new-glibc
+diff --git a/.CI/chatterino-nightly.flatpakref b/.CI/chatterino-nightly.flatpakref
+index 61cf409..1c5cb95 100644
+--- a/.CI/chatterino-nightly.flatpakref
++++ b/.CI/chatterino-nightly.flatpakref
+@@ -1,7 +1,7 @@
+ [Flatpak Ref]
+-Name=com.chatterino.chatterino
++Name=com.SevenTV.chatterino7
+ Branch=beta
+-Title=com.chatterino.chatterino from flathub
++Title=com.SevenTV.chatterino7 from flathub
+ IsRuntime=false
+ Url=https://dl.flathub.org/beta-repo/
+ SuggestRemoteName=flathub-beta
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dce58b3..807ab19 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,7 +47,7 @@ if(BUILD_BENCHMARKS)
+     list(APPEND VCPKG_MANIFEST_FEATURES "benchmarks")
+ endif()
+ 
+-project(chatterino
++project(chatterino7
+     VERSION 7.5.4
+     DESCRIPTION "Chat client for twitch.tv"
+     HOMEPAGE_URL "https://chatterino.com/"
+diff --git a/resources/com.chatterino.chatterino.appdata.xml b/resources/com.chatterino.chatterino.appdata.xml
+index d3e6d96..fa40bb6 100644
+--- a/resources/com.chatterino.chatterino.appdata.xml
++++ b/resources/com.chatterino.chatterino.appdata.xml
+@@ -1,8 +1,8 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <!-- 2019 Artem Polishchuk <ego.cordatus@gmail.com> -->
+ <component type="desktop-application">
+-    <id>com.chatterino.chatterino.desktop</id>
+-    <launchable type="desktop-id">com.chatterino.chatterino.desktop</launchable>
++    <id>com.SevenTV.chatterino7.desktop</id>
++    <launchable type="desktop-id">com.SevenTV.chatterino7.desktop</launchable>
+     <metadata_license>CC0-1.0</metadata_license>
+     <project_license>MIT</project_license>
+     <content_rating type="oars-1.0">
+@@ -31,7 +31,7 @@
+     <url type="bugtracker">https://chatterino.com/link/issues</url>
+     <url type="donation">https://chatterino.com/link/tips</url>
+     <provides>
+-        <binary>chatterino</binary>
++        <binary>chatterino7</binary>
+     </provides>
+     <releases>
+         <release version="7.5.4" date="2025-09-21">
+diff --git a/resources/com.chatterino.chatterino.desktop b/resources/com.chatterino.chatterino.desktop
+index ece81f5..210abb7 100644
+--- a/resources/com.chatterino.chatterino.desktop
++++ b/resources/com.chatterino.chatterino.desktop
+@@ -1,10 +1,10 @@
+ [Desktop Entry]
+ Type=Application
+ Version=1.0
+-Name=Chatterino
++Name=Chatterino7
+ Comment=Chat client for Twitch
+-Exec=chatterino
+-Icon=com.chatterino.chatterino
++Exec=chatterino7
++Icon=com.SevenTV.chatterino7
+ Terminal=false
+ Categories=Network;InstantMessaging;
+-StartupWMClass=chatterino
++StartupWMClass=chatterino7
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d221eeb..8518cd4 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1039,11 +1039,12 @@ if (BUILD_APP)
+                 )
+ 
+         install(FILES ${CMAKE_SOURCE_DIR}/resources/com.chatterino.chatterino.desktop
++        		RENAME com.SevenTV.chatterino7.desktop
+                 DESTINATION share/applications
+                 )
+ 
+         install(FILES ${CMAKE_SOURCE_DIR}/resources/icon.png
+-                RENAME com.chatterino.chatterino.png
++                RENAME com.SevenTV.chatterino7.png
+                 DESTINATION share/icons/hicolor/256x256/apps
+                 )
+     endif ()
+diff --git a/src/common/Credentials.cpp b/src/common/Credentials.cpp
+index 7e5e565..3d7bce3 100644
+--- a/src/common/Credentials.cpp
++++ b/src/common/Credentials.cpp
+@@ -130,7 +130,7 @@ void runNextJob()
+         std::visit(
+             variant::Overloaded{
+                 [](const SetJob &set) {
+-                    auto *job = new QKeychain::WritePasswordJob("chatterino");
++                    auto *job = new QKeychain::WritePasswordJob("chatterino7");
+                     job->setAutoDelete(true);
+                     job->setKey(set.name);
+                     job->setTextData(set.credential);
+@@ -141,7 +141,7 @@ void runNextJob()
+                     job->start();
+                 },
+                 [](const EraseJob &erase) {
+-                    auto *job = new QKeychain::DeletePasswordJob("chatterino");
++                    auto *job = new QKeychain::DeletePasswordJob("chatterino7");
+                     job->setAutoDelete(true);
+                     job->setKey(erase.name);
+                     QObject::connect(job, &QKeychain::Job::finished,
+@@ -192,7 +192,7 @@ void Credentials::get(const QString &provider, const QString &name_,
+     {
+ #ifndef NO_QTKEYCHAIN
+         // if NO_QTKEYCHAIN is set, then this code is never used either way
+-        auto *job = new QKeychain::ReadPasswordJob("chatterino");
++        auto *job = new QKeychain::ReadPasswordJob("chatterino7");
+         job->setAutoDelete(true);
+         job->setKey(name);
+         QObject::connect(
+diff --git a/src/main.cpp b/src/main.cpp
+index 558e28f..a224118 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -41,7 +41,7 @@ int main(int argc, char **argv)
+ {
+     QApplication a(argc, argv);
+ 
+-    QCoreApplication::setApplicationName("chatterino");
++    QCoreApplication::setApplicationName("chatterino7");
+     QCoreApplication::setApplicationVersion(CHATTERINO_VERSION);
+     QCoreApplication::setOrganizationDomain("chatterino.com");
+ #ifdef Q_OS_WIN
+diff --git a/src/singletons/NativeMessaging.cpp b/src/singletons/NativeMessaging.cpp
+index 24a2baf..dc9cb24 100644
+--- a/src/singletons/NativeMessaging.cpp
++++ b/src/singletons/NativeMessaging.cpp
+@@ -48,7 +48,7 @@ const Config FIREFOX{
+ #ifdef Q_OS_WIN
+     .fileName = u"native-messaging-manifest-firefox.json"_s,
+     .registryKey =
+-        u"HKCU\\Software\\Mozilla\\NativeMessagingHosts\\com.chatterino.chatterino"_s,
++        u"HKCU\\Software\\Mozilla\\NativeMessagingHosts\\com.SevenTV.chatterino7"_s,
+ #elif defined(Q_OS_MACOS)
+     .browserDirectory = u"~/Library/Application Support/Mozilla"_s,
+     .nmDirectory = u"NativeMessagingHosts"_s,
+@@ -62,7 +62,7 @@ const Config CHROME{
+ #ifdef Q_OS_WIN
+     .fileName = u"native-messaging-manifest-chrome.json"_s,
+     .registryKey =
+-        u"HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.chatterino.chatterino"_s,
++        u"HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.SevenTV.chatterino7"_s,
+ #elif defined(Q_OS_MACOS)
+     .browserDirectory = u"~/Library/Application Support/Google/Chrome/"_s,
+     .nmDirectory = u"NativeMessagingHosts"_s,
+@@ -83,7 +83,7 @@ void registerNmManifest([[maybe_unused]] const Paths &paths,
+                       QString(paths.miscDirectory % u'/' % config.fileName));
+ #else
+     writeManifestTo(config.browserDirectory, config.nmDirectory,
+-                    u"com.chatterino.chatterino.json"_s, document);
++                    u"com.chatterino.chatterino7.json"_s, document);
+ #endif
+ }
+ 
+@@ -137,7 +137,7 @@ void registerNmHost(const Paths &paths)
+ 
+     auto getBaseDocument = [] {
+         return QJsonObject{
+-            {u"name"_s, "com.chatterino.chatterino"_L1},
++            {u"name"_s, "com.SevenTV.chatterino7"_L1},
+             {u"description"_s, "Browser interaction with chatterino."_L1},
+             {u"path"_s, QCoreApplication::applicationFilePath()},
+             {u"type"_s, "stdio"_L1},
+diff --git a/src/singletons/Paths.cpp b/src/singletons/Paths.cpp
+index 9185e3d..778df33 100644
+--- a/src/singletons/Paths.cpp
++++ b/src/singletons/Paths.cpp
+@@ -110,7 +110,7 @@ void Paths::initRootDirectory()
+ #ifdef Q_OS_WIN
+         path.replace("chatterino", "Chatterino");
+ 
+-        path += "2";
++        path += "7";
+ #endif
+         return path;
+     }();
+diff --git a/src/widgets/splits/Split.cpp b/src/widgets/splits/Split.cpp
+index 8123d0a..7542edf 100644
+--- a/src/widgets/splits/Split.cpp
++++ b/src/widgets/splits/Split.cpp
+@@ -270,7 +270,7 @@ Split::Split(QWidget *parent)
+             if (getSettings()->askOnImageUpload.getValue())
+             {
+                 QMessageBox msgBox(this->window());
+-                msgBox.setWindowTitle("Chatterino");
++                msgBox.setWindowTitle("Chatterino7");
+                 msgBox.setText("Image upload");
+                 msgBox.setInformativeText(
+                     "You are uploading an image to a 3rd party service not in "
