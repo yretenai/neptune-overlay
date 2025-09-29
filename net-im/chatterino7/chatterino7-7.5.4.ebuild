@@ -20,21 +20,12 @@ else
 	CRASH_HANDLER_COMMIT=c8cf62b64906f794ac84cb0c22ceb401f4ea1e8d
 	LIBCOMMUNI_COMMIT=2979eb96262756047a8dca47f2e509168138c0d0
 	WEBSOCKETPP_COMMIT=f1736a8e72b910810ff6869fe20f647a62f3bc35
-	QTKEYCHAIN_COMMIT=ad7344c45a86a4f66cbafc4b081b5f7b876cb0b7
-	GOOGLETEST_COMMIT=6910c9d9165801d8827d628cb72eb7ea9dd538c5
-	DATE_COMMIT=d18e8b1653e0ab1f583dcea22f007e12f69e497b
-	KIMAGEFORMATS_COMMIT=7d7b295ac2f838a612e2c8892943bf4de1fc5ad4
+	KIMAGEFORMATS_COMMIT=7420f47c17454de49dd617e35626704d09dbc757
 	LUA_COMMIT=1ab3208a1fceb12fca8f24ba57d6e13c5bff15e3
-	MINIAUDIO_COMMIT=350784a9467a79d0fa65802132668e5afbcf3777
-	EXPECTED_LITE_COMMIT=54ca18bcea8e39c41650d82268077d559c695aa5
-	WINTOAST_COMMIT=1c841d3e0ffbaf41651ce8ae7417e6dfe3f6822b
-	MAGIC_ENUM_COMMIT=e55b9b54d5cf61f8e117cafb17846d7d742dd3b4
 	SERIALIZE_COMMIT=17946d65a41a72b447da37df6e314cded9650c32
-	SETTINGS_COMMIT=c141a40d2d493646cd8f0b1e06251a828dfdfdd2
+	SETTINGS_COMMIT=9b5c05ee2129e9eaa641d08a49096682105c2588
 	SIGNALS_COMMIT=d06770649a7e83db780865d09c313a876bf0f4eb
-	RAPIDJSON_COMMIT=d87b698d0fcc10a5f632ecbc80a9cb2a8fa094a5
 	SOL2_COMMIT=2b0d2fe8ba0074e16b499940c4f3126b9c7d3471
-	KIMAGEFORMATS_COMMIT=7d7b295ac2f838a612e2c8892943bf4de1fc5ad4
 
 	SRC_URI="
 		https://github.com/SevenTV/chatterino7/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
@@ -47,6 +38,8 @@ else
 		https://github.com/pajlada/settings/archive/${SETTINGS_COMMIT}.tar.gz -> ${PN}-settings-${SETTINGS_COMMIT}.tar.gz
 		https://github.com/pajlada/signals/archive/${SIGNALS_COMMIT}.tar.gz -> ${PN}-signals-${SIGNALS_COMMIT}.tar.gz
 		https://github.com/KDE/kimageformats/archive/${KIMAGEFORMATS_COMMIT}.tar.gz -> kimageformats-${KIMAGEFORMATS_COMMIT}.tar.gz
+		https://github.com/lua/lua/archive/${LUA_COMMIT}.tar.gz -> lua-${LUA_COMMIT}.tar.gz
+		https://github.com/ThePhD/sol2/archive/${SOL2_COMMIT}.tar.gz -> sol2-${SOL2_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64 ~arm64"
 fi
@@ -101,6 +94,8 @@ src_unpack() {
 		rmdir "${S}/lib/settings"; mv "${WORKDIR}/settings-${SETTINGS_COMMIT}" "${S}/lib/settings" || die "Cannot move settings"
 		rmdir "${S}/lib/signals"; mv "${WORKDIR}/signals-${SIGNALS_COMMIT}" "${S}/lib/signals" || die "Cannot move signals"
 		rmdir "${S}/lib/kimageformats"; mv "${WORKDIR}/kimageformats-${KIMAGEFORMATS_COMMIT}" "${S}/lib/kimageformats" || die "Cannot move kimageformats"
+		rmdir "${S}/lib/lua/src"; mv "${WORKDIR}/lua-${LUA_COMMIT}" "${S}/lib/lua/src" || die "Cannot move lua"
+		rmdir "${S}/lib/sol2"; mv "${WORKDIR}/sol2-${SOL2_COMMIT}" "${S}/lib/sol2" || die "Cannot move sol2"
 	fi
 }
 
