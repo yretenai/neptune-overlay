@@ -68,7 +68,7 @@ src_compile() {
 }
 
 src_install() {
-	newicon "assets/youtube-music.svg" ${PN}.svg
+	newicon "web/youtube-music.svg" ${PN}.svg
 
 	make_desktop_entry "/usr/bin/${PN}" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
 
