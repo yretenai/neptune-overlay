@@ -41,8 +41,8 @@ fi
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack jpeg2k
-llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openmp +openpgl
-+opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio renderdoc
+llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl +opensubdiv
++openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio renderdoc
 sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
 "
 RESTRICT="test"
@@ -78,6 +78,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/libsamplerate
 	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
+	>sci-mathematics/manifold-3.0.1:=
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
@@ -112,7 +113,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=media-libs/openexr-3.2.1:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,openmp?,tbb?] )
+	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,tbb?] )
 	openvdb? (
 		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
 		dev-libs/c-blosc:=
@@ -128,7 +129,7 @@ RDEPEND="${PYTHON_DEPS}
 	pulseaudio? ( media-libs/libpulse )
 	sdl? ( media-libs/libsdl2[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
-	tbb? ( dev-cpp/tbb:= )
+	tbb? ( >=dev-cpp/tbb-2021.13.0:= )
 	tiff? ( media-libs/tiff:= )
 	valgrind? ( dev-debug/valgrind )
 	wayland? (
@@ -186,13 +187,9 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
-	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
-	"${FILESDIR}/${PN}-4.4.0-715a8268.patch"
 )
 
 blender_check_requirements() {
-	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
-
 	REQ_TOT=2
 
 	use debug && ((REQ_TOT += 1))
@@ -245,10 +242,6 @@ src_prepare() {
 	# it sounds like.
 	sed -e "s|GENERATE_HTMLHELP      = YES|GENERATE_HTMLHELP      = NO|" \
 		-i doc/doxygen/Doxyfile || die
-
-	if use vulkan; then
-		sed -e "s/extern_vulkan_memory_allocator/extern_vulkan_memory_allocator\nSPIRV-Tools-opt\nSPIRV-Tools\nSPIRV-Tools-link\nglslang\nSPIRV\nSPVRemapper/" -i source/blender/gpu/CMakeLists.txt || die
-	fi
 
 	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 }
@@ -331,7 +324,6 @@ src_configure() {
 		-DWITH_OPENCOLLADA=$(usex collada)
 		-DWITH_OPENCOLORIO=$(usex color-management)
 		-DWITH_OPENIMAGEDENOISE=$(usex oidn)
-		-DWITH_OPENMP=$(usex openmp)
 		-DWITH_OPENSUBDIV=$(usex opensubdiv)
 		-DWITH_OPENVDB_BLOSC=$(usex openvdb)
 		-DWITH_OPENVDB=$(usex openvdb)
