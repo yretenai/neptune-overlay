@@ -10,7 +10,7 @@ MY_PV="${MY_PV//_/-}"
 
 DESCRIPTION="Efficient micro-compositor for running games"
 HOMEPAGE="https://github.com/ValveSoftware/gamescope"
-EGIT_SUBMODULES=( src/reshade subprojects/{libliftoff,vkroots,wlroots} )
+EGIT_SUBMODULES=( src/reshade subprojects/{libliftoff,vkroots,wlroots,openvr} )
 
 if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
@@ -20,12 +20,14 @@ else
 	LIBLIFTOFF_COMMIT="0.5.0"
 	VKROOTS_COMMIT=5106d8a0df95de66cc58dc1ea37e69c99afc9540
 	WLROOTS_COMMIT=54e844748029d4874e14d0c086d50092c04c8899
+	OPENVR_COMMIT=ff87f683f41fe26cc9353dd9d9d7028357fd8e1a
 	SRC_URI="
 		https://github.com/ValveSoftware/${PN}/archive/refs/tags/${MY_PV}.tar.gz -> ${P}.tar.gz
 		https://gitlab.freedesktop.org/emersion/libliftoff/-/releases/v${LIBLIFTOFF_COMMIT}/downloads/libliftoff-${LIBLIFTOFF_COMMIT}.tar.gz
 		https://github.com/Joshua-Ashton/reshade/archive/${RESHADE_COMMIT}.tar.gz -> reshade-${RESHADE_COMMIT}.tar.gz
 		https://github.com/Joshua-Ashton/vkroots/archive/${VKROOTS_COMMIT}.tar.gz -> vkroots-${VKROOTS_COMMIT}.tar.gz
 		https://github.com/Joshua-Ashton/wlroots/archive/${WLROOTS_COMMIT}.tar.gz -> wlroots-${WLROOTS_COMMIT}.tar.gz
+		https://github.com/ValveSoftware/openvr/archive/${OPENVR_COMMIT}.tar.gz -> openvr-${OPENVR_COMMIT}.tar.gz
 	"
 	KEYWORDS="~amd64"
 fi
