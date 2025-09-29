@@ -14,5 +14,3 @@ SLOT="0/${PV}"
 KEYWORDS="~amd64 ~arm64 ~x86"
 
 DOCS=( ChangeLog.md readme.md )
-
-PATCHES=( "${FILESDIR}/${P}-cmake4.patch" ) # bug 951684

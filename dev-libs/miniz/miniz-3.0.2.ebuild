@@ -15,4 +15,4 @@ KEYWORDS="~amd64 ~arm64 ~x86"
 
 DOCS=( ChangeLog.md readme.md )
 
-PATCHES=( "${FILESDIR}/${P}-cmake4.patch" ) # bug 951684
+PATCHES=( "${FILESDIR}/${PN}-3.0.2-cmake4.patch" ) # bug 951684
