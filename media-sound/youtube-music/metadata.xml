@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<remote-id type="github">th-ch/youtube-music</remote-id>
+		<remote-id type="github">ytmd-devs/ytmd</remote-id>
 	</upstream>
 </pkgmetadata>

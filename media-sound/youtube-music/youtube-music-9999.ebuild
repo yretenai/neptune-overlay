@@ -12,15 +12,15 @@ ELECTRON_UNSTABLE=1 # uses electron beta
 inherit desktop xdg electron-r1
 
 DESCRIPTION="YouTube Music Desktop App bundled with custom plugins"
-HOMEPAGE="https://github.com/th-ch/youtube-music"
+HOMEPAGE="https://github.com/ytmd-devs/ytmd"
 LICENSE="MIT"
 SLOT="0"
 
 if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/th-ch/youtube-music.git"
+	EGIT_REPO_URI="https://github.com/ytmd-devs/ytmd.git"
 else
-	SRC_URI="https://github.com/th-ch/youtube-music/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	SRC_URI="https://github.com/ytmd-devs/ytmd/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	# Requires network access (https) as long as NPM dependencies aren't packaged
 	RESTRICT="network-sandbox"
 fi
