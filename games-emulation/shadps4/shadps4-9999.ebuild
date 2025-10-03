@@ -97,7 +97,7 @@ RDEPEND="
 
 BDEPEND="
 	dev-util/spirv-headers
-	>=dev-util/vulkan-headers-1.4.314.0
+	>=dev-util/vulkan-headers-1.4.324
 	>=dev-cpp/magic_enum-0.9.7
 "
 
