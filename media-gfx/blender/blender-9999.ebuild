@@ -97,6 +97,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/libjpeg-turbo:=
 	media-libs/libpng:=
 	media-libs/libsamplerate
+	media-libs/rubberband
 	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
 	>sci-mathematics/manifold-3.0.1:=
