@@ -69,6 +69,7 @@ src_prepare() {
 	cp "${FILESDIR}/${PN}-1.0.10-meson.options" "${S}/meson.options" || die
 	cp "${WORKDIR}/tinydng-${TINYDNG_PV}/tiny_dng_writer.h" "examples/exr2fptiff/tiny_dng_writer.h" || die
 	sed -s "s/__PV__/${PV}/" -i "${S}/meson.build" || die
+	sed -s "s/register int/int/" -i "${S}/examples/deepview/trackball.cc" || die
 
 	default
 }

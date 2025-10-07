@@ -3,8 +3,8 @@ project('tinyexr', ['cpp', 'c'],
 	meson_version : '>=1.2.0',
 	version : '__PV__',
 	default_options : [
-		'cpp_std=c++11',
-		'c_std=c11',
+		'cpp_std=c++17',
+		'c_std=c17',
 		'warning_level=3',
 		'default_library=both'
 	])
