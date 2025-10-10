@@ -51,16 +51,6 @@ src_unpack() {
 	git-r3_src_unpack
 }
 
-src_prepare() {
-	default
-
-	dos2unix src/platform/qt/src/config.hpp src/platform/qt/src/config.cpp
-
-	eapply "${FILESDIR}/${PN}-${PV}-toml11.patch"
-
-	cmake_src_prepare
-}
-
 src_configure() {
 	sed -e "s|find_package(Python |find_package(Python ${EPYTHON:6} EXACT |" -i "${WORKDIR}/glad-${GLAD_PV}/cmake/GladConfig.cmake" || die
 
