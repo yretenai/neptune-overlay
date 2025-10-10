@@ -2,6 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<upstream>
-		<remote-id type="github">ytmd-devs/ytmd</remote-id>
+		<remote-id type="github">pear-devs/pear-desktop</remote-id>
 	</upstream>
 </pkgmetadata>

@@ -11,16 +11,16 @@ ELECTRON_UNSTABLE=1 # uses electron beta
 
 inherit desktop xdg electron-r1
 
-DESCRIPTION="YouTube Music Desktop App bundled with custom plugins"
-HOMEPAGE="https://github.com/ytmd-devs/ytmd"
+DESCRIPTION="Pear 🍐 is extension for music player"
+HOMEPAGE="https://github.com/pear-devs/pear-desktop"
 LICENSE="MIT"
 SLOT="0"
 
 if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/ytmd-devs/ytmd.git"
+	EGIT_REPO_URI="https://github.com/pear-devs/pear-desktop.git"
 else
-	SRC_URI="https://github.com/ytmd-devs/ytmd/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	SRC_URI="https://github.com/pear-devs/pear-desktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	# Requires network access (https) as long as NPM dependencies aren't packaged
 	RESTRICT="network-sandbox"
 fi
@@ -68,9 +68,9 @@ src_compile() {
 }
 
 src_install() {
-	newicon "assets/youtube-music.svg" ${PN}.svg
+	# newicon "docs/favicon/favicon_144.png" ${PN}.png
 
-	make_desktop_entry "/usr/bin/${PN}" "YouTube Music" "${PN}" "Network;AudioVideo;Audio;Video"
+	make_desktop_entry "/usr/bin/${PN}" "Pear Desktop" "${PN}" "Network;AudioVideo;Audio;Video"
 
 	cd pack/"$(electron-r1_target)"
 	insinto "${ELECTRON_DESTDIR}"
