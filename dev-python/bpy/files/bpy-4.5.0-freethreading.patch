@@ -1,0 +1,22 @@
+diff --git a/source/blender/python/generic/py_capi_utils.cc b/source/blender/python/generic/py_capi_utils.cc
+index 2f9a0ec..46fbd26 100644
+--- a/source/blender/python/generic/py_capi_utils.cc
++++ b/source/blender/python/generic/py_capi_utils.cc
+@@ -580,7 +580,7 @@ void PyC_ObSpit(const char *name, PyObject *var)
+     const PyTypeObject *type = Py_TYPE(var);
+     fprintf(stderr,
+             " ref:%d, ptr:%p, type: %s\n",
+-            int(var->ob_refcnt),
++            int(Py_REFCNT(var)),
+             (void *)var,
+             type ? type->tp_name : null_str);
+   }
+@@ -604,7 +604,7 @@ void PyC_ObSpitStr(char *result, size_t result_maxncpy, PyObject *var)
+     BLI_snprintf(result,
+                  result_maxncpy,
+                  " ref=%d, ptr=%p, type=%s, value=%.200s",
+-                 int(var->ob_refcnt),
++                 int(Py_REFCNT(var)),
+                  (void *)var,
+                  type ? type->tp_name : null_str,
+                  var_str ? PyUnicode_AsUTF8(var_str) : "<error>");

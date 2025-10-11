@@ -221,6 +221,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 	"${FILESDIR}/${PN}-4.4.0-715a8268.patch"
+	"${FILESDIR}/${PN}-4.5.0-freethreading.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then

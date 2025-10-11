@@ -220,6 +220,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.5.0-freethreading.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
