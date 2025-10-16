@@ -13,6 +13,7 @@ HOMEPAGE="
 "
 
 SRC_URI="https://github.com/ocornut/imgui/archive/refs/tags/v${PV}.tar.gz -> imgui-${PV}.tar.gz"
+S="${WORKDIR}/${P}"
 
 LICENSE="MIT"
 SLOT="0/$(ver_cut 1-2)"
