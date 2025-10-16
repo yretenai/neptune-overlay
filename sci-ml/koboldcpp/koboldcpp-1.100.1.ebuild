@@ -70,7 +70,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-1.85-makefile.patch"
+	"${FILESDIR}/${PN}-1.99-makefile.patch"
 	"${FILESDIR}/${PN}-1.85-gguf.patch"
 )
 

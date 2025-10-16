@@ -8,7 +8,7 @@ HERE="${PWD}"
 TARGET="${PWD}/nugets.lst"
 MONO_ROOT="/var/tmp/portage/dev-games/godot-${PV}/work/godot-${PVR}-stable/modules/mono"
 
-ebuild godot-${PV}.ebuild clean unpack
+ebuild godot-${PV}.ebuild manifest clean unpack
 
 cd "${MONO_ROOT}/editor/Godot.NET.Sdk"
 gdmt restore -x "${DOTNET_ROOT}/dotnet" > "${NEPTUNE_LIST}"

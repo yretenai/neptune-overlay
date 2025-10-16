@@ -4,20 +4,20 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DOTNET_PV="10.0.0-rc.1.25451.107"
+DOTNET_PV="10.0.0-rc.2.25502.107"
 
 inherit unpacker
 
-DESCRIPTION="dotnet runtime"
-HOMEPAGE="https://github.com/dotnet/runtime"
+DESCRIPTION="dotnet aspnet core runtime"
+HOMEPAGE="https://github.com/dotnet/aspnetcore"
 SRC_URI="
 	amd64? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-x64.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-x64.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${DOTNET_PV}/aspnetcore-runtime-${DOTNET_PV}-linux-x64.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${DOTNET_PV}/aspnetcore-runtime-${DOTNET_PV}-linux-musl-x64.tar.gz )
 	)
 	arm64? (
-		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-arm64.tar.gz )
-		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_PV}/dotnet-runtime-${DOTNET_PV}-linux-musl-arm64.tar.gz )
+		elibc_glibc? ( https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${DOTNET_PV}/aspnetcore-runtime-${DOTNET_PV}-linux-arm64.tar.gz )
+		elibc_musl? ( https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${DOTNET_PV}/aspnetcore-runtime-${DOTNET_PV}-linux-musl-arm64.tar.gz )
 	)
 "
 
@@ -34,13 +34,14 @@ QA_PREBUILT="*"
 RDEPEND="
 	>=neptune-dotnet/dotnet-cli-bin-${SDK_SLOT}
 	!neptune-dotnet/dotnet-sdk:${SLOT}
-	!neptune-dotnet/dotnet-aspnetcore-runtime:${SLOT}
+	!neptune-dotnet/dotnet-runtime:${SLOT}
 "
 
 src_install() {
 	# install into existing dotnet env
 	local dest="opt/neptune-dotnet"
 	dodir "${dest%/*}"
+
 	insinto "${dest}"
 
 	# install dotnet packs
