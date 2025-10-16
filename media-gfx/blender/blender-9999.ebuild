@@ -12,7 +12,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{13..14} )
+PYTHON_COMPAT=( python3_{13..14} python3_14t )
 LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
 ROCM_VERSION="6.3"
@@ -219,6 +219,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.5.0-freethreading.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
