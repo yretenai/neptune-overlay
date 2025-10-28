@@ -221,7 +221,6 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 	"${FILESDIR}/${PN}-4.4.0-715a8268.patch"
-	"${FILESDIR}/${PN}-4.5.0-freethreading.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
@@ -321,6 +320,8 @@ src_prepare() {
 	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml"
 
 	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
+
+	sed -e "s|var->ob_refcnf|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
 
 	if use experimental; then
 		ewarn "USE experimental is specified, forcing version cycle to be 'alpha' to prevent features from being disabled"
