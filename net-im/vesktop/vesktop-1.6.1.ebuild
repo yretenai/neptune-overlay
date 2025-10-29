@@ -68,7 +68,7 @@ src_compile() {
 
 src_install() {
 	domenu "${PN}.desktop"
-	newicon static/icon.png vencord.png
+	newicon static/tray/tray.png vencord.png
 
 	cd dist/"$(electron-r1_target)"/resources
 	electron-r1_src_install
