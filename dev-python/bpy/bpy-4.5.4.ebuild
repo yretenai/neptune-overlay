@@ -183,6 +183,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
 	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-4.5.4-audaspace.patch"
+	"${FILESDIR}/${PN}-4.5.4-ffmpeg8.patch"
 )
 
 blender_check_requirements() {
