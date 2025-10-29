@@ -121,13 +121,20 @@ src_install() {
 		ggml/include/ggml-alloc.h \
 		ggml/include/ggml-backend.h \
 		ggml/include/ggml-blas.h \
+		ggml/include/ggml-cann.h \
+		ggml/include/ggml-cpp.h \
+		ggml/include/ggml-cpu.h \
 		ggml/include/ggml-cuda.h \
-		ggml/include/ggml-kompute.h \
 		ggml/include/ggml-metal.h \
+		ggml/include/ggml-opencl.h \
+		ggml/include/ggml-opt.h \
 		ggml/include/ggml-rpc.h \
 		ggml/include/ggml-sycl.h \
 		ggml/include/ggml-vulkan.h \
-		ggml/include/ggml.h
+		ggml/include/ggml-webgpu.h \
+		ggml/include/ggml-zdnn.h \
+		ggml/include/ggml.h \
+		ggml/include/gguf.h
 
 	if use torch; then
 		docinto tools
@@ -136,6 +143,7 @@ src_install() {
 		dodoc models/convert-h5-to-coreml.py
 		dodoc models/convert-whisper-to-coreml.py
 		dodoc models/convert-whisper-to-openvino.py
+		dodoc models/convert-silero-vad-to-ggml.py
 		dodoc models/ggml_to_pt.py
 	fi
 
