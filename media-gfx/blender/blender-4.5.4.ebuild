@@ -302,7 +302,7 @@ src_prepare() {
 
 	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 
-	sed -e "s|var->ob_refcnf|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
+	sed -e "s|var->ob_refcnt|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
 
 	if use experimental; then
 		ewarn "USE experimental is specified, forcing version cycle to be 'alpha' to prevent features from being disabled"
