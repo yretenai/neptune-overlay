@@ -45,6 +45,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.3-datadir.patch"
 	"${FILESDIR}/${PN}-2.3-output.patch"
 	"${FILESDIR}/${PN}-2.3-output2.patch"
+	"${FILESDIR}/${PN}-2.5.4-hip7.patch"
 )
 
 RESTRICT="test"
