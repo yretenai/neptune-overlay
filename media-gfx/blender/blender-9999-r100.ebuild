@@ -24,8 +24,6 @@ HOMEPAGE="https://www.blender.org"
 LICENSE="GPL-3+ cycles? ( Apache-2.0 )"
 SLOT="$(ver_cut 1-2)"
 
-HAS_RELEASED=$([[ ${PV} != *9999* && ${PV} != *_beta* ]] && echo 1 || echo 0)
-
 if [[ ${PV} != *9999* && ${PV} != *_beta* ]]; then
 	HAS_RELEASED=1
 	IS_LIVE=0
@@ -39,13 +37,8 @@ else
 	EGIT_LFS="yes"
 	inherit git-r3
 	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-	ASSETS_EGIT_REPO_URI="https://projects.blender.org/blender/blender-assets.git"
-	if [[ ${PV} != *_beta* ]]; then
-		EGIT_BRANCH="main"
-		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
-	else
+	if [[ ${PV} == *_beta* ]]; then
 		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-		ASSETS_EGIT_BRANCH="main"
 	fi
 
 	# special branches
@@ -55,7 +48,6 @@ else
 		esac
 
 		IS_BRANCH=1
-		ASSETS_EGIT_BRANCH="${EGIT_BRANCH}"
 		SLOT="${EGIT_BRANCH}"
 	fi
 fi
@@ -265,16 +257,6 @@ pkg_setup() {
 
 	if use llvm; then
 		llvm-r1_pkg_setup
-	fi
-}
-
-src_unpack() {
-	if [ "${HAS_RELEASED}" -eq 1 ]; then
-		default
-	else
-		git-r3_fetch "${ASSETS_EGIT_REPO_URI}" "refs/heads/${ASSETS_EGIT_BRANCH}" "${CATEGORY}/${PN}/${SLOT%/*}/${ASSETS_EGIT_BRANCH}"
-		git-r3_checkout "${ASSETS_EGIT_REPO_URI}" "${WORKDIR}/blender-assets" "${CATEGORY}/${PN}/${SLOT%/*}/${ASSETS_EGIT_BRANCH}"
-		git-r3_src_unpack
 	fi
 }
 
