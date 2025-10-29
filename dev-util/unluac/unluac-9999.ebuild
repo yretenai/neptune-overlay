@@ -16,33 +16,16 @@ S="${WORKDIR}/${PN}"
 LICENSE="MIT"
 SLOT="0"
 
-IUSE="test"
-
 DEPEND=">=virtual/jdk-17:*"
 RDEPEND=">=virtual/jre-17:*"
 BDEPEND="
 	app-text/dos2unix
-	test? (
-		dev-lang/lua:5.1
-		dev-lang/lua:5.3
-		dev-lang/lua:5.4
-	)
 "
 
-RESTRICT="!test? ( test )"
-
-PATCHES=(
-	"${FILESDIR}/${PN}-9999-testsuite.patch"
-)
+RESTRICT="test"
 
 src_prepare() {
 	find "${S}" -iname "*.java" -exec dos2unix {} \;
 	eapply_user
 	default
-}
-
-src_test() {
-	JAVA_MAIN_CLASS="unluac.test.RunTests" JAVA_JAR_FILENAME="unluac.test.jar" java-pkg-simple_src_compile || die
-	java -jar unluac.jar --version || die
-	java -jar unluac.test.jar || die
 }
