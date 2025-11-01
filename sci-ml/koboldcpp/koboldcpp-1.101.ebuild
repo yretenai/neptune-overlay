@@ -70,7 +70,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-1.85-makefile.patch"
+	"${FILESDIR}/${PN}-1.99-makefile.patch"
 	"${FILESDIR}/${PN}-1.85-gguf.patch"
 )
 
@@ -124,6 +124,9 @@ src_install() {
 	sed -e "s|EPREFIX|${EPREFIX}|" -i koboldcpp
 	dobin koboldcpp
 
+	insinto /opt/koboldcpp/embd_res
+	doins -r embd_res
+
 	insinto /opt/koboldcpp
 	exeinto /opt/koboldcpp
 	sed -e "s|/usr/bin/env python3|/usr/bin/env ${EPYTHON}|" \
@@ -136,14 +139,7 @@ src_install() {
 	doins -r \
 		kcpp_adapters \
 		niko.ico \
-		nikogreen.ico \
-		kcpp_docs.embd \
-		kcpp_sdui.embd \
-		klite.embd \
-		rwkv_vocab.embd \
-		rwkv_world_vocab.embd \
-		taesd.embd \
-		taesd_xl.embd
+		nikogreen.ico
 
 	doexe koboldcpp.py \
 		koboldcpp_default.so
