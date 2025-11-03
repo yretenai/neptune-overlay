@@ -14,7 +14,7 @@ SLOT="0"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/zyantific/zycore-c.git"
+	EGIT_REPO_URI="https://github.com/TomSchimansky/CustomTkinter.git"
 else
 	inherit pypi
 	KEYWORDS="~amd64 ~arm64"

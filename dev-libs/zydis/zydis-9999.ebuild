@@ -23,7 +23,7 @@ fi
 IUSE="man doc"
 
 DEPEND="
-	>=dev-libs/zycore-1.5.0
+	>=dev-libs/zycore-c-1.5.0
 "
 
 RDEPEND="

@@ -1,1 +1,2 @@
 move media-sound/youtube-music media-sound/pear-desktop
+move dev-libs/zycore dev-libs/zycore-c
