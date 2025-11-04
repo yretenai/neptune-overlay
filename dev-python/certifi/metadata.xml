@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-  <upstream>
-    <remote-id type="github">projg2/certifi-system-store</remote-id>
-    <remote-id type="github">tiran/certifi-system-store</remote-id>
-    <remote-id type="pypi">certifi-system-store</remote-id>
-  </upstream>
-</pkgmetadata>
