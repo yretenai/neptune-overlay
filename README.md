@@ -17,6 +17,7 @@ emerge --sync
 All Packages have been tested on clang and confirmed to be working, with the execption of:
 
 - games-emulation/rpcs3
+- games-emulation/eden
 - media-libs/sdl3-shadercross
 
 With the exception of those packages, one can safely enjoy clang while using packages from this overlay.
