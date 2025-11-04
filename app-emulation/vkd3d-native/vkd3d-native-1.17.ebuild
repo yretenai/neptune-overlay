@@ -40,6 +40,7 @@ DEPEND="
 BDEPEND="
 	sys-devel/flex
 	sys-devel/bison
+	dev-perl/JSON
 	virtual/pkgconfig
 "
 
