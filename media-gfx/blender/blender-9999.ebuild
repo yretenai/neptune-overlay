@@ -12,7 +12,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{13..14} python3_14t )
+PYTHON_COMPAT=( python3_{13..14} )
 LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
 ROCM_VERSION="6.3"

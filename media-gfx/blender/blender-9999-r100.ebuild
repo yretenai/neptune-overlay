@@ -12,7 +12,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{13..14} python3_14t )
+PYTHON_COMPAT=( python3_{13..14} )
 LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
 ROCM_VERSION="6.3"
@@ -213,6 +213,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
 	"${FILESDIR}/${PN}-4.4.0-functional-header.patch"
 	"${FILESDIR}/${PN}-4.4.0-715a8268.patch"
+	"${FILESDIR}/${PN}-4.5.4-ffmpeg8.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
