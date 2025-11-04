@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e3e276e..6ed8e49 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -162,7 +162,7 @@ if ("x86_64" IN_LIST ARCHITECTURE)
+     target_compile_options(xbyak INTERFACE "-fno-operator-names")
+     target_compile_definitions(xbyak INTERFACE XBYAK_STRICT_CHECK_MEM_REG_SIZE=0)
+ 
+-    find_package(Zydis 4 CONFIG)
++    find_package(Zydis CONFIG)
+ endif()
+ 
+ if (DYNARMIC_USE_LLVM)
