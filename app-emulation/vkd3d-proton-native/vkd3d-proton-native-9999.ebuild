@@ -34,7 +34,7 @@ else
 			-> vulkan-headers-${HASH_VULKAN}.tar.gz
 	"
 	S="${WORKDIR}/vkd3d-proton-${PV}"
-	KEYWORDS="-* amd64 x86"
+	KEYWORDS="-* ~amd64 ~x86"
 fi
 
 DESCRIPTION="Fork of VKD3D, development branches for Proton's Direct3D 12 implementation"

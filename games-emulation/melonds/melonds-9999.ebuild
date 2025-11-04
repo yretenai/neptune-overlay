@@ -23,26 +23,15 @@ fi
 
 LICENSE="BSD-2 GPL-2 GPL-3 Unlicense"
 SLOT="0"
-IUSE="+jit +gui +qt6 qt5 lto gdb +opengl wayland"
+IUSE="+jit +gui lto gdb +opengl wayland"
 
 RDEPEND="
 	app-arch/libarchive
 	gui? (
 		media-libs/libsdl2[sound,video]
-	)
-	qt6? (
 		dev-qt/qtbase:6[gui,network,opengl,widgets]
 		dev-qt/qtmultimedia:6
 		dev-qt/qtsvg:6
-	)
-	qt5? (
-		dev-qt/qtcore:5
-		dev-qt/qtgui:5
-		dev-qt/qtnetwork:5
-		dev-qt/qtopengl:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtmultimedia:5
-		dev-qt/qtsvg:5
 	)
 	net-libs/enet:=
 	net-libs/libpcap
@@ -64,9 +53,6 @@ BDEPEND="
 "
 
 REQUIRED_USE="
-	gui? ( ^^ ( qt5 qt6 ) )
-	qt5? ( gui !qt6 )
-	qt6? ( gui !qt5 )
 	wayland? ( gui )
 "
 
@@ -83,7 +69,7 @@ src_configure() {
 		-DENABLE_WAYLAND="$(usex wayland)"
 		-DENABLE_GDBSTUB="$(usex gdb)"
 		-DBUILD_QT_SDL="$(usex gui)"
-		-DUSE_QT6="$(usex qt6)"
+		-DUSE_QT6="ON"
 		-DUSE_SYSTEM_LIBSLIRP=ON
 	)
 

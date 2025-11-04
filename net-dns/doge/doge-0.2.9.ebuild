@@ -5,7 +5,6 @@
 
 EAPI=8
 
-
 CRATES="
 	aho-corasick@1.1.3
 	ansi_term@0.12.1

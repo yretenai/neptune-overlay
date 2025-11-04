@@ -26,7 +26,7 @@ else
 		https://gitlab.freedesktop.org/frog/libdisplay-info/-/archive/${HASH_DISPLAYINFO}/libdisplay-info-${HASH_DISPLAYINFO}.tar.bz2
 	"
 	S="${WORKDIR}/dxvk-${PV}"
-	KEYWORDS="-* amd64 x86"
+	KEYWORDS="-* ~amd64 ~x86"
 fi
 
 DESCRIPTION="Vulkan-based implementation of D3D9, D3D10 and D3D11 for Linux"

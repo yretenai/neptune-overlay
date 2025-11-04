@@ -16,8 +16,8 @@ SRC_URI="https://github.com/Dav1dde/glad/archive/refs/tags/v${GLAD_PV}.tar.gz ->
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="qt6 +qt5 +gui"
-REQUIRED_USE="^^ ( qt6 qt5 ) ${PYTHON_REQUIRED_USE}"
+IUSE="+gui"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 DEPEND="
 	>=media-libs/libsdl2-2.0.10
@@ -25,16 +25,8 @@ DEPEND="
 	media-libs/glew
 	app-arch/unarr
 	>=dev-libs/libfmt-8.0.1:=
-	qt5? (
-		dev-qt/qtcore:5
-		dev-qt/qtgui:5
-		dev-qt/qtwidgets:5
-		dev-qt/qtopengl:5
-	)
-	qt6? (
-		dev-qt/qtbase:6[gui,opengl,widgets]
-		dev-qt/qt5compat:6
-	)
+	dev-qt/qtbase:6[gui,opengl,widgets]
+	dev-qt/qt5compat:6
 	${PYTHON_DEPS}
 "
 RDEPEND="${DEPEND}"
@@ -57,7 +49,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DPORTABLE_MODE=OFF
 		-DBUILD_SHARED_LIBS=OFF
-		-DUSE_QT6=$(usex qt6)
+		-DUSE_QT6=ON
 		-DPLATFORM_QT=$(usex gui)
 		-DUSE_SYSTEM_TOML11=ON
 		-DUSE_SYSTEM_UNARR=ON

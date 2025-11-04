@@ -9,7 +9,7 @@ DOTNET_NEPTUNE_PROJECT_ROOT=modules/mono
 DOTNET_NEPTUNE_SOLUTIONS=( editor/Godot.NET.Sdk/Godot.NET.Sdk.sln editor/GodotTools/GodotTools.sln glue/GodotSharp/GodotSharp.sln )
 DOTNET_NEPTUNE_OPTIONAL=1
 
-PYTHON_COMPAT=( python3_{11..13} python3_13t )
+PYTHON_COMPAT=( python3_{11..14} python3_13t )
 inherit desktop python-any-r1 flag-o-matic scons-utils shell-completion toolchain-funcs xdg neptune-dotnet
 
 DESCRIPTION="Multi-platform 2D and 3D game engine with a feature-rich editor"

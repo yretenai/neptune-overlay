@@ -94,7 +94,7 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/rubberband
 	>=media-libs/openimageio-2.5.6.0:=
 	sys-libs/zlib:=
-	>sci-mathematics/manifold-3.0.1:=
+	>sci-mathematics/manifold-3.0.1-r0:=
 	virtual/glu
 	virtual/libintl
 	virtual/opengl

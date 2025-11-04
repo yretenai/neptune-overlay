@@ -6,7 +6,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{9..14} python3_{13..14}t )
 inherit toolchain-funcs python-single-r1
 
-DESCRIPTION="The X86 Encoder Decoder (XED), is a software library for encoding and decoding X86 (IA32 and Intel64) instructions"
+DESCRIPTION="A software library for encoding and decoding X86 instructions"
 HOMEPAGE="https://github.com/intelxed/xed"
 SRC_URI="https://github.com/intelxed/xed/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
@@ -20,6 +20,8 @@ BDEPEND="
 		dev-build/mbuild[${PYTHON_USEDEP}]
 	')
 "
+
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2025.06.08-system-mbuild.patch"

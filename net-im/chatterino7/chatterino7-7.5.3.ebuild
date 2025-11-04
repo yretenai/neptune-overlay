@@ -57,7 +57,7 @@ IUSE="debug"
 
 RDEPEND="
 	${LUA_DEPS}
-	>media-libs/libavif-1.0.0:=
+	>media-libs/libavif-1.0.0-r0:=
 	dev-libs/openssl:=
 	dev-libs/qtkeychain:=
 	dev-qt/qtbase:6[concurrent,dbus,gui,network,widgets]

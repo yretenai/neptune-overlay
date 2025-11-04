@@ -20,28 +20,15 @@ if [[ "${PV}" != *9999* ]]; then
 	KEYWORDS="~amd64 ~arm64"
 fi
 
-IUSE="test qt5 qt6 doc"
+IUSE="test doc"
 RESTRICT="
 	!test? ( test )
-"
-REQUIRED_USE="
-	|| ( qt5 qt6 )
 "
 
 DEPEND="
 	media-libs/olivecore:=
-	qt5? (
-		dev-qt/qtconcurrent:5
-		dev-qt/qtcore:5
-		dev-qt/qtgui:5
-		dev-qt/qtopengl:5
-		dev-qt/qtsvg:5
-		dev-qt/qtwidgets:5
-	)
-	qt6? (
-		dev-qt/qtbase:6[concurrent,gui,opengl,widgets,-gles2-only]
-		dev-qt/qtsvg:6
-	)
+	dev-qt/qtbase:6[concurrent,gui,opengl,widgets,-gles2-only]
+	dev-qt/qtsvg:6
 	media-libs/opencolorio:=
 	media-libs/openexr:=
 	media-libs/openimageio:=
@@ -52,33 +39,25 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 BDEPEND="
-	qt5? (
-		dev-qt/linguist-tools:5
-	)
-	qt6? (
-		dev-qt/qttools:6[linguist]
-	)
+	dev-qt/qttools:6[linguist]
 	doc? ( app-text/doxygen[dot] )
 "
 
 PATCHES=(
 	"${FILESDIR}/9999-fix-opencolorio-2.3.patch"
 	"${FILESDIR}/9999-fix-openimageio-3.0.patch"
+	"${FILESDIR}/9999-fix-qtstring.patch"
 )
 
 src_prepare() {
 	eapply_user
-
-	if use qt6; then
-		eapply "${FILESDIR}/9999-fix-qtstring.patch"
-	fi
 
 	cmake_src_prepare
 }
 
 src_configure() {
 	local mycmakeargs=(
-		-DBUILD_QT6="$(usex qt6)"
+		-DBUILD_QT6="ON"
 		-DBUILD_DOXYGEN="$(usex doc)"
 		-DBUILD_TESTS="$(usex test)"
 	)
