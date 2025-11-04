@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-	<upstream>
-		<remote-id type="github">mesonbuild/meson-python</remote-id>
-		<remote-id type="pypi">meson-python</remote-id>
-	</upstream>
-</pkgmetadata>
