@@ -6,8 +6,8 @@ EAPI=8
 inherit toolchain-funcs
 
 DESCRIPTION="Grep-like tool to search for binary strings"
-HOMEPAGE="https://github.com/yretenai/bgrep/"
-SRC_URI="https://github.com/yretenai/bgrep/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+HOMEPAGE="https://github.com/neptuwunium/bgrep/"
+SRC_URI="https://github.com/neptuwunium/bgrep/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/bgrep-${PV}"
 

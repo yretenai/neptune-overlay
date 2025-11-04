@@ -18,7 +18,7 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="
 		https://projects.blender.org/studio/flamenco/archive/v${PV}.tar.gz -> ${P}.tar.gz
-		https://github.com/yretenai/neptune-overlay/releases/download/deps/${P}-deps.tar.xz
+		https://github.com/neptuwunium/neptune-overlay/releases/download/deps/${P}-deps.tar.xz
 	"
 	S="${WORKDIR}/${PN}"
 	KEYWORDS="~amd64 ~arm64"

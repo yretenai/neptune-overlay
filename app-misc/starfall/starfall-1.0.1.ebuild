@@ -19,9 +19,9 @@ SWIFT_HAS_RESOURCES=1
 inherit swift
 
 DESCRIPTION="pretty view of star constellations"
-HOMEPAGE="https://github.com/yretenai/starfall"
+HOMEPAGE="https://github.com/neptuwunium/starfall"
 SRC_URI="
-	https://github.com/yretenai/starfall/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz
+	https://github.com/neptuwunium/starfall/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz
 	${SWIFT_URIS}
 "
 LICENSE="GPL-3"

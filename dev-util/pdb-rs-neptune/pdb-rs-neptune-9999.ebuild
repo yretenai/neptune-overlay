@@ -9,7 +9,7 @@ inherit cargo git-r3
 
 DESCRIPTION="A parser for Microsoft PDB (Program Database) debugging information"
 HOMEPAGE="https://github.com/Vector35/pdb-rs"
-EGIT_REPO_URI="https://github.com/yretenai/pdb-rs.git"
+EGIT_REPO_URI="https://github.com/neptuwunium/pdb-rs.git"
 
 LICENSE="|| ( Apache-2.0 MIT )"
 # Dependent crate licenses

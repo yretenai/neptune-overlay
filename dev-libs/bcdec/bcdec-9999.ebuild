@@ -6,15 +6,15 @@ EAPI=8
 inherit meson
 
 DESCRIPTION="small header-only C library to decompress BC codecs"
-HOMEPAGE="https://github.com/yretenai/bcdec"
+HOMEPAGE="https://github.com/neptuwunium/bcdec"
 LICENSE="Unlicense MIT"
 SLOT="0"
 
 if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/yretenai/bcdec"
+	EGIT_REPO_URI="https://github.com/neptuwunium/bcdec"
 else
-	SRC_URI="https://github.com/yretenai/bcdec/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	SRC_URI="https://github.com/neptuwunium/bcdec/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/${PN}-${PV}"
 	KEYWORDS="~amd64 ~arm64"
 fi

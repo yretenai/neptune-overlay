@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<use>
-		<flag name="cli">
-			Build command line tools
-		</flag>
-	</use>
 	<upstream>
-		<remote-id type="github">neptuwunium/titania</remote-id>
+		<remote-id type="github">intelxed/xed</remote-id>
 	</upstream>
 </pkgmetadata>
