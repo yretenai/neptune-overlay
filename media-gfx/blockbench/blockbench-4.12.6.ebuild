@@ -52,7 +52,7 @@ src_unpack() {
 
 	export COREPACK_ENABLE_STRICT=0
 	npm set progress false
-	npm i --force --loglevel verbose || die
+	npm i --loglevel verbose || die
 
 }
 

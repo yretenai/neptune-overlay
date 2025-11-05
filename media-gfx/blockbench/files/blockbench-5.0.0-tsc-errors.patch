@@ -1,0 +1,26 @@
+diff --git a/js/file_system.ts b/js/file_system.ts
+index 91fb1be0..a0dbe0d1 100644
+--- a/js/file_system.ts
++++ b/js/file_system.ts
+@@ -505,7 +505,7 @@ export namespace Filesystem {
+ 
+ 		} else {
+ 			//text or binary
+-			let content = options.content;
++			let content: any = options.content;
+ 			if (content instanceof ArrayBuffer) {
+ 				content = Buffer.from(content);
+ 			}
+diff --git a/js/io/formats/fbx.ts b/js/io/formats/fbx.ts
+index 4432abd4..8d0a526e 100644
+--- a/js/io/formats/fbx.ts
++++ b/js/io/formats/fbx.ts
+@@ -1456,7 +1456,7 @@ BARS.defineActions(function() {
+ 
+ class BinaryWriter {
+ 	array: Uint8Array;
+-	buffer: ArrayBuffer;
++	buffer: ArrayBuffer | SharedArrayBuffer;
+ 	view: DataView
+ 	cursor: number
+ 	little_endian: boolean

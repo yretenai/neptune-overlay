@@ -48,11 +48,13 @@ src_unpack() {
 	fi
 
 	cd "${S}"
+	eapply "${FILESDIR}/${PN}-5.0.0-tsc-errors.patch"
+
 	electron-r1_prep_npm
 
 	export COREPACK_ENABLE_STRICT=0
 	npm set progress false
-	npm i --force --loglevel verbose || die
+	npm i --loglevel verbose || die
 
 }
 
@@ -73,7 +75,7 @@ src_install() {
 	insinto "/usr/share/mime/packages"
 	doins bbmodel.xml
 
-	cd dist/"$(electron-r1_target)"/resources
+	cd dist-electron/"$(electron-r1_target)"/resources
 	electron-r1_src_install
 }
 
