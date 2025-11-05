@@ -52,6 +52,7 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-20251102-compat.patch"
 	"${FILESDIR}/${PN}-20251102-deps.patch"
+	"${FILESDIR}/${PN}-20251102-system-install.patch"
 )
 
 src_unpack() {

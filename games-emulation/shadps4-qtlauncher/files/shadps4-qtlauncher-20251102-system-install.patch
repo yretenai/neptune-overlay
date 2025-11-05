@@ -1,0 +1,36 @@
+diff --git a/src/common/versions.cpp b/src/common/versions.cpp
+index adaccd6..ffa73d8 100644
+--- a/src/common/versions.cpp
++++ b/src/common/versions.cpp
+@@ -47,6 +47,7 @@ std::vector<Version> GetVersionList(std::filesystem::path const& path) {
+ 
+     std::vector<Version> versions;
+     int id = 0;
++    bool has_system = false;
+ 
+     for (const auto& entry : data) {
+         if (!entry.is_object()) {
+@@ -64,6 +65,23 @@ std::vector<Version> GetVersionList(std::filesystem::path const& path) {
+             .id = id++,
+         };
+ 
++        if (v.name == "system") {
++            has_system = true;
++        }
++
++        versions.push_back(std::move(v));
++    }
++
++    if (!has_system && std::filesystem::exists("/usr/bin/shadps4")) {
++        Version v{
++            .name = "system",
++            .path = "/usr/bin/shadps4",
++            .date = "never",
++            .codename = "",
++            .type = VersionType::Custom,
++            .id = id++,
++        };
++
+         versions.push_back(std::move(v));
+     }
+ 
