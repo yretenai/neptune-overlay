@@ -26,8 +26,6 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="tracing"
-
 # missing dependencies:
 # fmt 10.2.0 or newer is required
 # sdl3
