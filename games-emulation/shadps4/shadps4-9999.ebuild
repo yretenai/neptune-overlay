@@ -15,8 +15,6 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/shadps4-emu/shadPS4.git"
 	EGIT_SUBMODULES=(
 		"externals/dear_imgui"
-		"externals/vma"
-		"externals/sdl3"
 		"externals/fmt"
 		"externals/sirit"
 		"externals/discord-rpc"
@@ -30,10 +28,18 @@ else
 	EXT_FMT_COMMIT=
 	EXT_IMGUI_COMMIT=
 	EXT_LIBATRAC9_COMMIT=
-	EXT_SDL_COMMIT=
 	EXT_LIBUSB_COMMIT=
 	EXT_HWINFO_COMMIT=
 	SIRIT_COMMIT=
+	VULKANMEMORYALLOCATOR_COMMIT=f378e7b3f18f6e2b06b957f6ba7b1c7207d2a536
+	EXT_DISCORD_RPC_COMMIT=19f66e6dcabb2268965f453db9e5774ede43238f
+	EXT_FMT_COMMIT=64db979e38ec644b1798e41610b28c8d2c8a2739
+	EXT_IMGUI_COMMIT=f4d9359095eff3eb03f685921edc1cf0e37b1687
+	EXT_LIBATRAC9_COMMIT=ec8899dadf393f655f2871a94e0fe4b3d6220c9a
+	EXT_SDL_COMMIT=e9c2e9bfc3a6e1e70596f743fa9e1fc5fadabef7
+	EXT_LIBUSB_COMMIT=c4d237a5803900b78dcc2961d057fcc8a678d3fd
+	EXT_HWINFO_COMMIT=351c59828a79958f74f3ccab5e7773ffd724f6f7
+	SIRIT_COMMIT=282083a595dcca86814dedab2f2b0363ef38f1ec
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
@@ -42,7 +48,6 @@ else
 		https://github.com/shadps4-emu/ext-fmt/archive/${EXT_FMT_COMMIT}.tar.gz -> ${PN}-ext-fmt-${EXT_FMT_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-imgui/archive/${EXT_IMGUI_COMMIT}.tar.gz -> ${PN}-ext-imgui-${EXT_IMGUI_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-LibAtrac9/archive/${EXT_LIBATRAC9_COMMIT}.tar.gz -> ${PN}-ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ${PN}-ext-SDL-${EXT_SDL_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-ext-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-hwinfo/archive/${EXT_HWINFO_COMMIT}.tar.gz -> ${PN}-ext-hwinfo-${EXT_HWINFO_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
@@ -53,16 +58,14 @@ fi
 
 IUSE="tracing"
 
-# missing dependencies:
-# fmt 10.2.0 or newer is required
-# sdl3 -- wait on gentoo
-# vma
-
 # mandatory bundled:
+# fmt
 # sirit
 # imgui
 
 DEPEND="
+	media-libs/libsdl3
+	media-libs/VulkanMemoryAllocator
 	dev-libs/boost
 	dev-libs/crypto++
 	>=media-video/ffmpeg-5.1.2
@@ -91,6 +94,7 @@ RDEPEND="
 "
 
 BDEPEND="
+	dev-cpp/nlohmann_json
 	dev-util/spirv-headers
 	>=dev-util/vulkan-headers-1.4.324
 	>=dev-cpp/magic_enum-0.9.7
@@ -100,6 +104,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
 	"${FILESDIR}/${PN}-0.8.0-tracy.patch"
+	"${FILESDIR}/${PN}-0.13.0-deps.patch"
 )
 
 src_unpack() {
@@ -112,21 +117,17 @@ src_unpack() {
 		rmdir "${S}/externals/discord-rpc"; mv "${WORKDIR}/ext-discord-rpc-${EXT_DISCORD_RPC_COMMIT}" "${S}/externals/discord-rpc" || die "Cannot move ext-discord-rpc"
 		rmdir "${S}/externals/fmt"; mv "${WORKDIR}/ext-fmt-${EXT_FMT_COMMIT}" "${S}/externals/fmt" || die "Cannot move ext-fmt"
 		rmdir "${S}/externals/LibAtrac9"; mv "${WORKDIR}/ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}" "${S}/externals/LibAtrac9" || die "Cannot move ext-LibAtrac9"
-		rmdir "${S}/externals/sdl3"; mv "${WORKDIR}/ext-SDL-${EXT_SDL_COMMIT}" "${S}/externals/sdl3" || die "Cannot move ext-SDL"
 		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
 		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_LIBUSB_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
-		rmdir "${S}/externals/vma"; mv "${WORKDIR}/VulkanMemoryAllocator-${VULKANMEMORYALLOCATOR_COMMIT}" "${S}/externals/vma" || die "Cannot move VulkanMemoryAllocator"
 	fi
 }
 
 src_prepare() {
 	eapply_user
 
-	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt
-	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt
-	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
-	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
+	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt || die
+	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt || die
 
 	cmake_src_prepare
 }

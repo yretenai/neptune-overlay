@@ -15,8 +15,6 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/shadps4-emu/shadPS4.git"
 	EGIT_SUBMODULES=(
 		"externals/dear_imgui"
-		"externals/vma"
-		"externals/sdl3"
 		"externals/fmt"
 		"externals/sirit"
 		"externals/discord-rpc"
@@ -42,7 +40,6 @@ else
 		https://github.com/shadps4-emu/ext-fmt/archive/${EXT_FMT_COMMIT}.tar.gz -> ${PN}-ext-fmt-${EXT_FMT_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-imgui/archive/${EXT_IMGUI_COMMIT}.tar.gz -> ${PN}-ext-imgui-${EXT_IMGUI_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-LibAtrac9/archive/${EXT_LIBATRAC9_COMMIT}.tar.gz -> ${PN}-ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-SDL/archive/${EXT_SDL_COMMIT}.tar.gz -> ${PN}-ext-SDL-${EXT_SDL_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-ext-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-hwinfo/archive/${EXT_HWINFO_COMMIT}.tar.gz -> ${PN}-ext-hwinfo-${EXT_HWINFO_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
@@ -53,16 +50,14 @@ fi
 
 IUSE="tracing"
 
-# missing dependencies:
-# fmt 10.2.0 or newer is required
-# sdl3 -- wait on gentoo
-# vma
-
 # mandatory bundled:
+# fmt
 # sirit
 # imgui
 
 DEPEND="
+	media-libs/libsdl3
+	media-libs/VulkanMemoryAllocator
 	dev-libs/boost
 	dev-libs/crypto++
 	>=media-video/ffmpeg-5.1.2
@@ -91,6 +86,7 @@ RDEPEND="
 "
 
 BDEPEND="
+	dev-cpp/nlohmann_json
 	dev-util/spirv-headers
 	>=dev-util/vulkan-headers-1.4.324
 	>=dev-cpp/magic_enum-0.9.7
@@ -99,7 +95,6 @@ BDEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
-	"${FILESDIR}/${PN}-0.7.1-compat.patch"
 	"${FILESDIR}/${PN}-0.8.0-tracy.patch"
 )
 
@@ -113,21 +108,17 @@ src_unpack() {
 		rmdir "${S}/externals/discord-rpc"; mv "${WORKDIR}/ext-discord-rpc-${EXT_DISCORD_RPC_COMMIT}" "${S}/externals/discord-rpc" || die "Cannot move ext-discord-rpc"
 		rmdir "${S}/externals/fmt"; mv "${WORKDIR}/ext-fmt-${EXT_FMT_COMMIT}" "${S}/externals/fmt" || die "Cannot move ext-fmt"
 		rmdir "${S}/externals/LibAtrac9"; mv "${WORKDIR}/ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}" "${S}/externals/LibAtrac9" || die "Cannot move ext-LibAtrac9"
-		rmdir "${S}/externals/sdl3"; mv "${WORKDIR}/ext-SDL-${EXT_SDL_COMMIT}" "${S}/externals/sdl3" || die "Cannot move ext-SDL"
 		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
-		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_LIBUSB_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
+		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_HWINFO_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
-		rmdir "${S}/externals/vma"; mv "${WORKDIR}/VulkanMemoryAllocator-${VULKANMEMORYALLOCATOR_COMMIT}" "${S}/externals/vma" || die "Cannot move VulkanMemoryAllocator"
 	fi
 }
 
 src_prepare() {
 	eapply_user
 
-	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt
-	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt
-	sed -e "s|g_signal_connect_data|g_signal_connect_data_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
-	sed -e "s|g_object_unref|g_object_unref_tmp|" -i externals/sdl3/src/tray/unix/SDL_tray.c || die
+	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt || die
+	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt || die
 
 	cmake_src_prepare
 }
