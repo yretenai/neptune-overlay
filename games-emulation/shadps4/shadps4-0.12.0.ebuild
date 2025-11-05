@@ -51,7 +51,7 @@ else
 	KEYWORDS="~amd64"
 fi
 
-IUSE="+qt6 tracing"
+IUSE="tracing"
 
 # missing dependencies:
 # fmt 10.2.0 or newer is required
@@ -84,11 +84,6 @@ DEPEND="
 	dev-cpp/tracy:=
 	dev-libs/libusb
 	dev-libs/cereal
-	qt6? (
-		dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
-		dev-qt/qtmultimedia:6[ffmpeg,vulkan]
-		dev-qt/qttools:6[linguist]
-	)
 "
 
 RDEPEND="
@@ -139,7 +134,6 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-D ENABLE_QT_GUI=$(usex qt6)
 		-D ENABLE_UPDATER=OFF
 		-D SIRIT_USE_SYSTEM_SPIRV_HEADERS=ON
 		-D TRACY_ENABLE=$(usex tracing)
