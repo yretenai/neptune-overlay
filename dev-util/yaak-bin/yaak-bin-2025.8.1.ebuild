@@ -27,7 +27,7 @@ RDEPEND="
 QA_PREBUILT="*"
 
 src_unpack() {
-	unpack_deb "yaak_${MY_PV}_amd64.deb"
+	unpack_deb "yaak_${MY_PV}_amd64_linux.deb"
 }
 
 src_install() {
