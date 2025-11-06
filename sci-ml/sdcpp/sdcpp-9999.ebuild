@@ -73,15 +73,11 @@ src_configure() {
 		addwrite /dev/nvidiactl
 	fi
 
-	if use hip; then
-		addwrite /dev/kfd
-		addwrite /dev/dri
-	fi
-
 	cmake_src_configure
 }
 
 src_install() {
+	doheader stable-diffusion.h
 	cd "${BUILD_DIR}"
 	dobin bin/sd
 	dolib.so bin/libstable-diffusion.so
