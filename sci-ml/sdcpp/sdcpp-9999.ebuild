@@ -16,7 +16,7 @@ EGIT_REPO_URI="https://github.com/leejet/stable-diffusion.cpp.git"
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="flash-attenuation softmax cuda hip vulkan"
+IUSE="softmax cuda hip vulkan"
 RESTRICT="test"
 
 REQUIRED_USE="
@@ -63,7 +63,6 @@ src_configure() {
 		-D SD_HIPBLAS=$(usex hip)
 		-D SD_VULKAN=$(usex vulkan)
 		-D SD_SYCL=OFF # todo figure out sycl support / $(usex sycl)
-		-D SD_FLASH_ATTN=$(usex flash-attenuation)
 		-D SD_FAST_SOFTMAX=$(usex softmax)
 		-D SD_BUILD_SHARED_LIBS=ON
 		-D CMAKE_HIP_COMPILER_ROCM_ROOT="${EPREFIX}/usr"
