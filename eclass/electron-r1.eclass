@@ -92,8 +92,14 @@
 # When set, disables the system installation of Electron for this package.
 # Note: installation has to be handled manually.
 
+# @ECLASS_VARIABLE: ELECTRON_SKIP_DIST
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# When set, disables patching electron distribution path in packages.json
+
 ELECTRON_BDEPEND="
 	app-misc/jq
+	app-misc/yq
 	app-arch/unzip
 "
 
@@ -251,7 +257,7 @@ electron-r1_stage() {
 		dosym "../../${ELECTRON_NORMATIVE_NAME}/electron.debug" "${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}.debug"
 	fi
 
-	mkdir "${ELECTRON_DESTDIR}/locales"
+	mkdir "${ED}${ELECTRON_DESTDIR}/locales"
 
 	for x in "${ELECTRON_PATH}/locales"/*; do
 		local filename="${x##*/}"
@@ -337,7 +343,14 @@ electron-r1_prep_npm() {
 
 	electron-r1_binname
 
-	echo "$(jq ".build.electronDist = \"${ELECTRON_PATH}\"" package.json)" > package.json
+	if [[ -z ${ELECTRON_SKIP_DIST} ]]; then
+		if [[ -f electron-builder.yml ]]; then
+			echo "$(yq -y ".electronDist = \"${ELECTRON_PATH}\"" electron-builder.yml)" > electron-builder.yml
+		else
+			echo "$(jq ".build.electronDist = \"${ELECTRON_PATH}\"" package.json)" > package.json
+		fi
+	fi
+
 	echo "$(jq 'del(.dependencies.electron)' package.json)" > package.json
 	ELECTRON_NPM_VER="${ELECTRON_VER}"
 	if [[ ${ELECTRON_WIDEVINE} ]]; then
