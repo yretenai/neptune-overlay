@@ -109,8 +109,8 @@ fi
 
 ELECTRON_DESTDIR="/usr/share/electron/apps/${P}"
 ELECTRON_PREBUILT="
-	usr/share/electron/apps/${P}/resources/app.asar.unpacked/*
-	usr/share/electorn/apps/${P}/${ELECTRON_APPNAME}
+	${ELECTRON_DESTDIR}/resources/app.asar.unpacked/*
+	${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}
 "
 
 if [[ "${PV}" != *9999* ]]; then
