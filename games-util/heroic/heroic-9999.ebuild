@@ -19,14 +19,13 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/HeroicGamesLauncher-${PV}"
-	# Requires network access (https) as long as NPM dependencies aren't packaged
-	RESTRICT="network-sandbox"
 fi
 
 LICENSE="GPL-3"
 SLOT="0"
 
-RESTRICT="mirror test ${RESTRICT}"
+# Requires network access (https) since node-gyp downloads headers?
+RESTRICT="mirror test network-sandbox ${RESTRICT}"
 
 RDEPEND="
 	x11-libs/libnotify
