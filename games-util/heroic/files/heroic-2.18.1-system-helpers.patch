@@ -1,0 +1,48 @@
+diff --git a/src/backend/utils.ts b/src/backend/utils.ts
+index 302cf9bb..f01b3cf2 100644
+--- a/src/backend/utils.ts
++++ b/src/backend/utils.ts
+@@ -440,6 +440,10 @@ function getLegendaryBin(): { dir: string; bin: string } {
+     return splitPathAndName(settings.altLegendaryBin)
+   }
+ 
++  if (existsSync("/usr/bin/legendary")) {
++    return splitPathAndName("/usr/bin/legendary")
++  }
++
+   if (!defaultLegendaryPath)
+     defaultLegendaryPath = archSpecificBinary('legendary')
+ 
+@@ -453,6 +457,10 @@ function getGOGdlBin(): { dir: string; bin: string } {
+     return splitPathAndName(settings.altGogdlBin)
+   }
+ 
++  if (existsSync("/usr/bin/gogdl")) {
++    return splitPathAndName("/usr/bin/gogdl")
++  }
++
+   if (!defaultGogdlPath) defaultGogdlPath = archSpecificBinary('gogdl')
+ 
+   return splitPathAndName(fixAsarPath(defaultGogdlPath))
+@@ -465,6 +473,10 @@ function getCometBin(): { dir: string; bin: string } {
+     return splitPathAndName(settings.altCometBin)
+   }
+ 
++  if (existsSync("/usr/bin/comet")) {
++    return splitPathAndName("/usr/bin/comet")
++  }
++
+   if (!defaultCometPath) defaultCometPath = archSpecificBinary('comet')
+ 
+   return splitPathAndName(fixAsarPath(defaultCometPath))
+@@ -477,6 +489,10 @@ function getNileBin(): { dir: string; bin: string } {
+     return splitPathAndName(settings.altNileBin)
+   }
+ 
++  if (existsSync("/usr/bin/nile")) {
++    return splitPathAndName("/usr/bin/nile")
++  }
++
+   if (!defaultNilePath) defaultNilePath = archSpecificBinary('nile')
+ 
+   return splitPathAndName(fixAsarPath(defaultNilePath))
