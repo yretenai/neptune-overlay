@@ -74,6 +74,7 @@ src_install() {
 
 	cd dist/"$(electron-r1_target)"/resources
 	electron-r1_src_install
+	find "${ED}${ELECTRON_DESTDIR}resources/app.asar.unpacked/build/bin" -type f -exec chmod +x {} \; || die
 }
 
 pkg_postinst() {
