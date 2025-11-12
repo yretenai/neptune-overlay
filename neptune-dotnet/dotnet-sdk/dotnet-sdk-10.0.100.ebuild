@@ -4,10 +4,10 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DN_PV="10.0.100-rc.2.25502.107"
+DN_PV="${PV}"
 
-RUNTIME_PV="10.0.0.2.25502.107"
-ASP_PV="10.0.0.2.25502.107"
+RUNTIME_PV="10.0.0"
+ASP_PV="10.0.0"
 
 inherit unpacker
 
