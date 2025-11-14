@@ -83,7 +83,12 @@ swift_version() {
 	export SWIFTVERSION="${SWIFTVERSION_REV%%[-_]*}"
 	export SWIFTVERSION_SHORT="$(ver_cut 1-2 ${SWIFTVERSION})"
 	export SWIFTPATH_FULL="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION}"
-	export SWIFTPATH="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION_SHORT}"
+	# can't we just copy how swift.ebuild does it?
+	if ver_test "${SWIFTVERSION}" -eq "${SWIFTVERSION_SHORT}.0"; then
+		export SWIFTPATH="${EPREFIX}/usr/$(get_libdir)/swift-${SWIFTVERSION_SHORT}"
+	else
+		export SWIFTPATH="${SWIFTPATH_FULL}"
+	fi
 }
 
 # @FUNCTION: eswift
