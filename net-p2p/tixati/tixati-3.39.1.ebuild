@@ -12,7 +12,7 @@ HOMEPAGE="https://www.tixati.com/"
 SRC_URI="https://download.tixati.com/${PN}-${T_PV}.x86_64.manualinstall.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${T_PV}.x86_64.manualinstall/"
 
-LICENSE="all-rights-reserved"
+LICENSE="tixati"
 SLOT="0"
 KEYWORDS="~amd64"
 
