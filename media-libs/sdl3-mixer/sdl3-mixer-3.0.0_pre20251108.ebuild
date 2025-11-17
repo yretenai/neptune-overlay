@@ -29,7 +29,7 @@ REQUIRED_USE="
 "
 
 RDEPEND="
-	media-libs/libsdl3[${MULTILIB_USEDEP}]
+	>=media-libs/libsdl3-3.3.0[${MULTILIB_USEDEP}]
 	!drlibs? (
 		flac? ( media-libs/flac:=[${MULTILIB_USEDEP}] )
 		mp3? ( media-sound/mpg123-base[${MULTILIB_USEDEP}] )
