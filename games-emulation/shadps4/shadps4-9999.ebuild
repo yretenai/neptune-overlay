@@ -56,7 +56,7 @@ IUSE="tracing"
 
 DEPEND="
 	media-libs/libsdl3
-	media-libs/sdl3-mixer
+	media-libs/sdl3-mixer[vorbis]
 	media-libs/VulkanMemoryAllocator
 	dev-libs/boost
 	dev-libs/crypto++
