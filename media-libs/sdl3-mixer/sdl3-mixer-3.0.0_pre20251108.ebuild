@@ -94,7 +94,6 @@ multilib_src_configure() {
 }
 
 multilib_src_install_all() {
-	dodoc {CHANGES,README}.txt
 	rm -r "${ED}"/usr/share/licenses || die
 }
 
