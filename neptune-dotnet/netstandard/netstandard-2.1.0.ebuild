@@ -23,7 +23,7 @@ SRC_URI="
 
 S="${WORKDIR}"
 LICENSE="MIT"
-SLOT="$(ver_cut 0-3)/$(ver_cut 4-)"
+SLOT="$(ver_cut 0-3)"
 KEYWORDS="~amd64 ~arm64"
 RESTRICT="bindist mirror strip test"
 
