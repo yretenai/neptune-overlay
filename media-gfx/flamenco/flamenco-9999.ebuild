@@ -32,7 +32,7 @@ BDEPEND="
 	net-libs/nodejs[npm]
 	sys-apps/yarn
 	app-arch/zip
-	>=dev-lang/go-1.24.4
+	>=dev-lang/go-1.25.4
 "
 
 # Requires network access (https) as long as NPM dependencies aren't packaged
