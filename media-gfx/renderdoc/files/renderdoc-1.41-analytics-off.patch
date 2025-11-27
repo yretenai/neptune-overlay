@@ -1,0 +1,65 @@
+diff --git a/qrenderdoc/Code/Interface/PersistantConfig.h b/qrenderdoc/Code/Interface/PersistantConfig.h
+index 54d52a2..16ca172 100644
+--- a/qrenderdoc/Code/Interface/PersistantConfig.h
++++ b/qrenderdoc/Code/Interface/PersistantConfig.h
+@@ -597,10 +597,10 @@ DECLARE_REFLECTION_STRUCT(BugReport);
+       "``True`` if the user has selected to completely opt-out from and disable all analytics "    \
+       "collection and reporting.\n"                                                                \
+       "\n"                                                                                         \
+-      "Defaults to ``False``."                                                                     \
++      "Defaults to ``true``."                                                                     \
+       ""                                                                                           \
+       ":type: bool");                                                                              \
+-  CONFIG_SETTING_VAL(public, bool, bool, Analytics_TotalOptOut, false)                             \
++  CONFIG_SETTING_VAL(public, bool, bool, Analytics_TotalOptOut, true)                             \
+                                                                                                    \
+   DOCUMENT(                                                                                        \
+       "``True`` if the user has remained with analytics turned on, but has chosen to manually "    \
+diff --git a/qrenderdoc/Windows/Dialogs/AnalyticsPromptDialog.ui b/qrenderdoc/Windows/Dialogs/AnalyticsPromptDialog.ui
+index 5ec5581..e435741 100644
+--- a/qrenderdoc/Windows/Dialogs/AnalyticsPromptDialog.ui
++++ b/qrenderdoc/Windows/Dialogs/AnalyticsPromptDialog.ui
+@@ -38,9 +38,6 @@
+         <property name="text">
+          <string>Gather anonymous low-detail statistics and submit automatically.</string>
+         </property>
+-        <property name="checked">
+-         <bool>true</bool>
+-        </property>
+        </widget>
+       </item>
+       <item>
+@@ -55,6 +52,9 @@
+         <property name="text">
+          <string>Do not gather or submit any statistics.</string>
+         </property>
++        <property name="checked">
++         <bool>true</bool>
++        </property>
+        </widget>
+       </item>
+      </layout>
+diff --git a/qrenderdoc/Windows/Dialogs/SettingsDialog.ui b/qrenderdoc/Windows/Dialogs/SettingsDialog.ui
+index ff89d06..101baa7 100644
+--- a/qrenderdoc/Windows/Dialogs/SettingsDialog.ui
++++ b/qrenderdoc/Windows/Dialogs/SettingsDialog.ui
+@@ -507,9 +507,6 @@ This option overrides that and will always replay locally if the local context i
+             <property name="text">
+              <string>Gather anonymous low-detail statistics and submit automatically.</string>
+             </property>
+-            <property name="checked">
+-             <bool>true</bool>
+-            </property>
+            </widget>
+           </item>
+           <item>
+@@ -524,6 +521,9 @@ This option overrides that and will always replay locally if the local context i
+             <property name="text">
+              <string>Do not gather or submit any statistics.</string>
+             </property>
++            <property name="checked">
++             <bool>true</bool>
++            </property>
+            </widget>
+           </item>
+          </layout>
