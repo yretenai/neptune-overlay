@@ -1,2 +1,3 @@
 move media-sound/youtube-music media-sound/pear-desktop
 move dev-libs/zycore dev-libs/zycore-c
+move app-misc/mommy app-shells/mommy

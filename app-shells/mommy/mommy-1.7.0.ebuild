@@ -21,13 +21,9 @@ fi
 IUSE="man"
 RESTRICT="test"
 
-src_configure() {
-	sed -e "/@gzip/d" -i GNUmakefile || die
-}
-
 src_compile() {
 	strip-flags
-	emake --jobs 1 build
+	emake --jobs 1 build/gentoo
 }
 
 src_install() {
