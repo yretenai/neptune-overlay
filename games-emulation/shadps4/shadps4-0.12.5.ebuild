@@ -23,14 +23,15 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/hwinfo"
 	)
 else
-	VULKANMEMORYALLOCATOR_COMMIT=
-	EXT_DISCORD_RPC_COMMIT=
-	EXT_FMT_COMMIT=
-	EXT_IMGUI_COMMIT=
-	EXT_LIBATRAC9_COMMIT=
-	EXT_LIBUSB_COMMIT=
-	EXT_HWINFO_COMMIT=
-	SIRIT_COMMIT=
+	VULKANMEMORYALLOCATOR_COMMIT=f378e7b3f18f6e2b06b957f6ba7b1c7207d2a536
+	EXT_DISCORD_RPC_COMMIT=19f66e6dcabb2268965f453db9e5774ede43238f
+	EXT_FMT_COMMIT=64db979e38ec644b1798e41610b28c8d2c8a2739
+	EXT_IMGUI_COMMIT=f4d9359095eff3eb03f685921edc1cf0e37b1687
+	EXT_LIBATRAC9_COMMIT=ec8899dadf393f655f2871a94e0fe4b3d6220c9a
+	EXT_SDL_COMMIT=e9c2e9bfc3a6e1e70596f743fa9e1fc5fadabef7
+	EXT_LIBUSB_COMMIT=c4d237a5803900b78dcc2961d057fcc8a678d3fd
+	EXT_HWINFO_COMMIT=351c59828a79958f74f3ccab5e7773ffd724f6f7
+	SIRIT_COMMIT=282083a595dcca86814dedab2f2b0363ef38f1ec
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
@@ -56,7 +57,6 @@ IUSE="tracing"
 
 DEPEND="
 	media-libs/libsdl3
-	media-libs/sdl3-mixer[vorbis]
 	media-libs/VulkanMemoryAllocator
 	dev-libs/boost
 	dev-libs/crypto++
@@ -110,7 +110,7 @@ src_unpack() {
 		rmdir "${S}/externals/fmt"; mv "${WORKDIR}/ext-fmt-${EXT_FMT_COMMIT}" "${S}/externals/fmt" || die "Cannot move ext-fmt"
 		rmdir "${S}/externals/LibAtrac9"; mv "${WORKDIR}/ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}" "${S}/externals/LibAtrac9" || die "Cannot move ext-LibAtrac9"
 		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
-		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_LIBUSB_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
+		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_HWINFO_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
 	fi
 }

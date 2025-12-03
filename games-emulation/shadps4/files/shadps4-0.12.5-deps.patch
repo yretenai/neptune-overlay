@@ -1,0 +1,12 @@
+diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
+index a45a03bf..abf12c05 100644
+--- a/externals/CMakeLists.txt
++++ b/externals/CMakeLists.txt
+@@ -259,5 +259,5 @@ add_subdirectory(ext-wepoll)
+ endif()
+ 
+ #nlohmann json 
+-set(JSON_BuildTests OFF CACHE INTERNAL "")
+-add_subdirectory(json)
++# set(JSON_BuildTests OFF CACHE INTERNAL "")
++# add_subdirectory(json)
