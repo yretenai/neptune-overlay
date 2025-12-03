@@ -27,7 +27,7 @@ RESTRICT="
 
 DEPEND="
 	dev-libs/imath
-	media-libs/opentimelineio
+	media-libs/opentimelineio:=
 	media-video/ffmpeg-compat:6=
 	virtual/opengl
 "
