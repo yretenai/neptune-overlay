@@ -10,7 +10,7 @@ inherit desktop unpacker xdg
 
 DESCRIPTION="Organize and execute REST requests in a simple and intuitive app"
 HOMEPAGE="https://yaak.app"
-SRC_URI="https://github.com/mountain-loop/yaak/releases/download/v${MY_PV}/yaak_${MY_PV}_amd64_linux.deb"
+SRC_URI="https://github.com/mountain-loop/yaak/releases/download/v${MY_PV}/yaak_${MY_PV}_amd64.deb"
 
 S="${WORKDIR}/usr"
 LICENSE="MIT"
@@ -27,7 +27,7 @@ RDEPEND="
 QA_PREBUILT="*"
 
 src_unpack() {
-	unpack_deb "yaak_${MY_PV}_amd64_linux.deb"
+	unpack_deb "yaak_${MY_PV}_amd64.deb"
 }
 
 src_install() {
