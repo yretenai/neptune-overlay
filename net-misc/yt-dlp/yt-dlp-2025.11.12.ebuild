@@ -11,7 +11,10 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/yt-dlp/yt-dlp.git"
 else
-	SRC_URI="https://dev.gentoo.org/~ionen/distfiles/${P}.tar.xz"
+	SRC_URI="
+		https://github.com/yt-dlp/yt-dlp/releases/download/${PV}/${PN}.tar.gz
+			-> ${P}.tar.gz
+	"
 	S=${WORKDIR}/${PN}
 fi
 
@@ -32,7 +35,7 @@ IUSE="+deno"
 # sync as there is no plans for a yt-dlp-ejs live ebuild at the moment
 RDEPEND="
 	dev-python/pycryptodome[${PYTHON_USEDEP}]
-	~dev-python/yt-dlp-ejs-0.3.0[${PYTHON_USEDEP}]
+	~dev-python/yt-dlp-ejs-0.3.1[${PYTHON_USEDEP}]
 	deno? ( || (
 		dev-lang/deno
 		dev-lang/deno-bin
