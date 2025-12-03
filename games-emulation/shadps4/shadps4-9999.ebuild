@@ -79,6 +79,7 @@ DEPEND="
 	dev-cpp/tracy:=
 	dev-libs/libusb
 	dev-libs/cereal
+	dev-libs/miniz
 "
 
 RDEPEND="
@@ -96,7 +97,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
 	"${FILESDIR}/${PN}-0.8.0-tracy.patch"
-	"${FILESDIR}/${PN}-0.12.5-deps.patch"
+	"${FILESDIR}/${PN}-9999-deps.patch"
 )
 
 src_unpack() {
@@ -121,6 +122,7 @@ src_prepare() {
 	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt || die
 	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt || die
 	sed -e "s|nlohmann_json::nlohmann_json||" -i CMakeLists.txt || die
+	sed -e "s|<miniz.h>|<miniz/miniz.h>|" -i src/video_core/cache_storage.cpp || die
 
 	cmake_src_prepare
 }
