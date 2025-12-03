@@ -1,0 +1,20 @@
+diff --git a/meson.build b/meson.build
+index e3ba71b..b68d18a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -148,6 +148,7 @@ client_includes = [
+     'public/client/TracyArmCpuTable.hpp',
+     'public/client/TracyCallstack.h',
+     'public/client/TracyCallstack.hpp',
++    'public/client/TracyCpuid.hpp',
+     'public/client/TracyDebug.hpp',
+     'public/client/TracyDxt1.hpp',
+     'public/client/TracyFastVector.hpp',
+@@ -177,6 +178,7 @@ common_includes = [
+     'public/common/TracySocket.hpp',
+     'public/common/TracyStackFrames.hpp',
+     'public/common/TracySystem.hpp',
++    'public/common/TracyVersion.hpp',
+     'public/common/TracyWinFamily.hpp',
+     'public/common/TracyYield.hpp'
+ ]
