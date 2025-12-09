@@ -27,7 +27,10 @@ SLOT="0/9999"
 # network access requried for rusty_v8
 RESTRICT="test network-sandbox" # tests require /etc/hosts to be modified.
 
-RDEPEND="dev-libs/glib"
+RDEPEND="
+	dev-libs/glib
+	!!dev-lang/deno-bin
+"
 DEPEND="${RDEPEND}"
 BDEPEND="
 	${PYTHON_DEPS}

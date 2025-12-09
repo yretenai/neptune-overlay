@@ -41,6 +41,12 @@ SLOT="0/$(ver_cut 0-2)"
 KEYWORDS="~amd64 ~arm64"
 RESTRICT="test" # requires network access, and /etc/hosts to be modified.
 
+RDEPEND="
+	${RDEPEND}
+	dev-libs/glib
+	!!dev-lang/deno-bin
+"
+DEPEND="${RDEPEND}"
 BDEPEND="
 	${PYTHON_DEPS}
 "
