@@ -78,6 +78,6 @@ src_configure() {
 src_install() {
 	doheader stable-diffusion.h
 	cd "${BUILD_DIR}"
-	dobin bin/sd
+	dobin bin/sd-cli bin/sd-server
 	dolib.so bin/libstable-diffusion.so
 }
