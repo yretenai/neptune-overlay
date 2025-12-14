@@ -69,4 +69,12 @@ src_install() {
 			doins -r "${DIRECTORY}"
 		fi
 	done
+
+	BINCORE="VBCSCompiler csc"
+	exeinto "${dest}/sdk/${DN_PV}/Roslyn/bincore/"
+	for BIN in $BINCORE; do
+		if [ -f "sdk/${DN_PV}/Roslyn/bincore/${BIN}" ]; then
+			doexe "sdk/${DN_PV}/Roslyn/bincore/${BIN}"
+		fi
+	done
 }
