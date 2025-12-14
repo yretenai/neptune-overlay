@@ -1,0 +1,25 @@
+From d79b6d040efaef3010c1e38bda616483bba10561 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20M=C3=ADchal?= <harrymichal@seznam.cz>
+Date: Mon, 8 Dec 2025 15:06:06 +0200
+Subject: [PATCH] public/client: Correctly initialize atomic thread reference
+
+Atomic variables need to be initialize with direct-initialization
+instead of copy-initialization lest the compilation fails complaining
+about missing constructor for the atomic type.
+---
+ public/client/TracyProfiler.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/public/client/TracyProfiler.cpp b/public/client/TracyProfiler.cpp
+index 0691f78ec..39022aa0d 100644
+--- a/public/client/TracyProfiler.cpp
++++ b/public/client/TracyProfiler.cpp
+@@ -933,7 +933,7 @@ static Thread* s_symbolThread;
+ std::atomic<bool> s_symbolThreadGone { false };
+ #endif
+ #ifdef TRACY_HAS_SYSTEM_TRACING
+-static std::atomic<Thread*> s_sysTraceThread = nullptr;
++static std::atomic<Thread*> s_sysTraceThread(nullptr);
+ #endif
+ 
+ #if defined __linux__ && !defined TRACY_NO_CRASH_HANDLER

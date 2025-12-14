@@ -31,6 +31,7 @@ RESTRICT="mirror"
 
 PATCHES="
 	${FILESDIR}/${PN}-0.13.0-missing-includes.patch
+	${FILESDIR}/${PN}-0.13.1-atomic.patch
 "
 
 src_configure() {
