@@ -45,6 +45,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=dev-python/pygobject-3.52.0:3[cairo,${PYTHON_USEDEP}]
 	>=dev-python/qrcode-7.3.1[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-2.0.0[${PYTHON_USEDEP}]
+	>=dev-python/httpx[${PYTHON_USEDEP}]
 
 	>=dev-libs/glib-2.80.0:2[introspection(+)]
 	>=gui-libs/gtk-4.17.5:4[introspection]
