@@ -189,5 +189,7 @@ src_prepare() {
 src_install() {
 	dolib.a "$(cargo_target_dir)/libwgpu_native.a"
 	dolib.so "$(cargo_target_dir)/libwgpu_native.so"
-	doheader ffi/wgpu.h
+	mkdir webgpu
+	mv ffi/wgpu.h webgpu
+	doheader -r webgpu
 }
