@@ -97,6 +97,11 @@
 # @DESCRIPTION:
 # When set, disables patching electron distribution path in packages.json
 
+# @ECLASS_VARIABLE: ELECTRON_FUSES
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# When set, copies the electron binary
+
 ELECTRON_BDEPEND="
 	app-misc/jq
 	app-misc/yq
@@ -230,6 +235,15 @@ electron-r1_execflags() {
 	export ELECTRON_EXEC="${ELECTRON_EXEC}"
 }
 
+# @FUNCTION: electron-r1_prep
+# @USAGE: electron-r1_prep
+# @DESCRIPTION:
+# copies electron to cwd
+electron-r1_prep() {
+	cp "${ELECTRON_PATH}/electron" "${ELECTRON_APPNAME}" || die
+	chmod 0755 "${ELECTRON_APPNAME}"
+}
+
 # @FUNCTION: electron-r1_stage
 # @USAGE: electron-r1_stage
 # @DESCRIPTION:
@@ -268,9 +282,16 @@ electron-r1_stage() {
 		dosym "../../../${ELECTRON_NORMATIVE_NAME}/locales/${filename}" "${ELECTRON_DESTDIR}/locales/${filename}"
 	done
 
-	# copy the actual electron binary so the appid/class and process name are proper
-	cp "${ELECTRON_PATH}/electron" "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" || die
-	chmod 0755 "${ED}${ELECTRON_DESTDIR}/${ELECTRON_APPNAME}" # fperms fails?
+	exeinto "${ELECTRON_DESTDIR}"
+	if [[ -z ${ELECTRON_SKIP_DIST} && -z ${ELECTRON_FUSES} ]]; then
+		# copy the actual electron binary so the appid/class and process name are proper
+		cp "${ELECTRON_PATH}/electron" "${ELECTRON_APPNAME}" || die
+		chmod +x "${ELECTRON_APPNAME}"
+		doexe "${ELECTRON_APPNAME}"
+	else
+		# assumes we are in "resources"
+		doexe "../${ELECTRON_APPNAME}"
+	fi
 }
 
 # @FUNCTION: electron-r1_doasar
@@ -325,6 +346,10 @@ EOF
 # Patches electron-builder to not attempt to copy or rename electron files
 electron-r1_patch_electron_builder() {
 	if [[ ! -z ${ELECTRON_UNSTABLE} ]]; then
+		return
+	fi
+
+	if [[ ! -z ${ELECTRON_SKIP_DIST} ]]; then
 		return
 	fi
 
