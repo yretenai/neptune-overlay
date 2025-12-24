@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_REQ_USE="tk"
-PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
+PYTHON_COMPAT=( python3_{12..14} python3_{13..14}t )
 inherit python-single-r1
 
 DESCRIPTION="Wwise .bnk explorer and audio simulator"

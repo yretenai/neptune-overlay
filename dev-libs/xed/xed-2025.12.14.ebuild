@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{9..14} python3_{13..14}t )
+PYTHON_COMPAT=( python3_{12..14} python3_{13..14}t )
 inherit toolchain-funcs python-single-r1
 
 DESCRIPTION="A software library for encoding and decoding X86 instructions"

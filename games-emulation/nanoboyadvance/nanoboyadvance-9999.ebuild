@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
+PYTHON_COMPAT=( python3_{12..14} python3_{13..14}t )
 GLAD_PV="2.0.6"
 
 inherit cmake git-r3 python-single-r1 xdg
