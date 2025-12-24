@@ -35,7 +35,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=dev-python/emoji-2.6.0[${PYTHON_USEDEP}]
 	dev-python/keyring[${PYTHON_USEDEP}]
 	<dev-python/nbxmpp-8.0.0[${PYTHON_USEDEP}]
-	>=dev-python/nbxmpp-6.3.0[${PYTHON_USEDEP}]
+	>=dev-python/nbxmpp-7.0.0[${PYTHON_USEDEP}]
 	<dev-python/omemo-dr-2.0.0[${PYTHON_USEDEP}]
 	>=dev-python/omemo-dr-1.0.0[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
