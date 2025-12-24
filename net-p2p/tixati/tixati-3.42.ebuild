@@ -22,7 +22,7 @@ DEPEND="
 	app-arch/bzip2
 	dev-libs/glib[dbus]
 	media-gfx/graphite2
-	sys-libs/zlib
+	virtual/zlib
 	x11-libs/gtk+:2[xinerama,introspection]
 	x11-libs/libX11
 	x11-libs/libxcb

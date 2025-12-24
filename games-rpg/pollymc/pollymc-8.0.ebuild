@@ -31,7 +31,7 @@ DEPEND="
 	dev-qt/qtnetworkauth:6
 	dev-libs/quazip:=[qt6]
 	app-text/cmark
-	sys-libs/zlib
+	virtual/zlib
 	x11-apps/xrandr
 "
 

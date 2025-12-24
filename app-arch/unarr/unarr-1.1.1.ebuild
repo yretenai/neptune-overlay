@@ -17,7 +17,7 @@ else
 fi
 
 DEPEND="
-	sys-libs/zlib
+	virtual/zlib
 	app-arch/bzip2
 	app-arch/xz-utils
 "

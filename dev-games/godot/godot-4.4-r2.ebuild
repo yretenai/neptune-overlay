@@ -243,7 +243,7 @@ RDEPEND="
 	media-libs/libvorbis
 	net-libs/mbedtls:3=
 	net-libs/wslay
-	sys-libs/zlib:=
+	virtual/zlib:=
 	app-misc/ca-certificates
 	alsa? ( media-libs/alsa-lib )
 	dbus? ( sys-apps/dbus )

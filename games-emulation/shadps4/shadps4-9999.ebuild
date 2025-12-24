@@ -61,8 +61,8 @@ DEPEND="
 	dev-libs/boost
 	dev-libs/crypto++
 	>=media-video/ffmpeg-5.1.2
-	sys-libs/zlib-ng
-	sys-libs/zlib
+	virtual/zlib
+	virtual/zlib
 	media-gfx/renderdoc
 	>=dev-util/glslang-1.3.296
 	>=dev-cpp/robin-map-1.3.0

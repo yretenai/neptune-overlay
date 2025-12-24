@@ -32,7 +32,7 @@ RDEPEND="
 	app-crypt/mit-krb5:0/0
 	dev-libs/icu
 	dev-util/lttng-ust:0/2.12
-	sys-libs/zlib:0/1
+	virtual/zlib:0/1
 "
 
 QA_PREBUILT="*"

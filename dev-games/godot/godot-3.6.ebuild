@@ -39,7 +39,7 @@ RDEPEND="
 	media-libs/libpng:=
 	<net-libs/mbedtls-3:=
 	net-libs/wslay
-	sys-libs/zlib:=
+	virtual/zlib:=
 	app-misc/ca-certificates
 	bullet? ( sci-physics/bullet:= )
 	gui? (

@@ -18,10 +18,10 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
 
-IUSE="+miniz zlib zlib-ng nanozlib stb examples gl gtk exrview openmp threads zfp +piz cpu_flags_x86_f16c"
+IUSE="+miniz zlib nanozlib stb examples gl gtk exrview openmp threads zfp +piz cpu_flags_x86_f16c"
 
 REQUIRED_USE="
-	^^ ( miniz zlib zlib-ng nanozlib stb )
+	^^ ( miniz zlib nanozlib stb )
 	exrview? ( gl )
 	gl? ( examples )
 	gtk? ( exrview )
@@ -29,8 +29,7 @@ REQUIRED_USE="
 
 DEPEND="
 	miniz? ( dev-libs/miniz )
-	zlib? ( sys-libs/zlib )
-	zlib-ng? ( sys-libs/zlib-ng )
+	zlib? ( virtual/zlib )
 	stb? ( dev-libs/stb:= )
 	zfp? (
 		dev-libs/zfp:=
@@ -82,8 +81,6 @@ src_configure() {
 		zlib_flavor="nanozlib"
 	elif use stb; then
 		zlib_flavor="stb"
-	elif use zlib-ng; then
-		zlib_flavor="zlib-ng"
 	elif use zlib; then
 		zlib_flavor="zlib"
 	fi

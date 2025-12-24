@@ -24,7 +24,7 @@ fi
 RDEPEND="
 	media-libs/libwebp:=
 	media-libs/vulkan-loader
-	sys-libs/zlib-ng
+	virtual/zlib
 	media-libs/libjpeg-turbo:=
 	media-libs/libpng:=
 	>=dev-libs/ncnn-20250503:=

@@ -40,7 +40,7 @@ RDEPEND="
 	media-video/ffmpeg
 	net-libs/enet
 	net-libs/mbedtls:3
-	sys-libs/zlib
+	virtual/zlib
 
 	amd64? (
 		dev-libs/zycore-c
