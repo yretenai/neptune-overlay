@@ -10,8 +10,6 @@ HOMEPAGE="https://eden-emu.dev"
 SRC_URI="
 	https://git.eden-emu.dev/eden-emu/eden/archive/v${PV/_/-}.tar.gz -> ${P}.tar.gz
 	https://git.crueter.xyz/misc/tzdb_to_nx/releases/download/250725/250725.zip -> nx-tzdb-250725.zip
-	https://git.eden-emu.dev/eden-emu/eden/commit/6b01c13975439784cd40cf1810b67350111a41d3.patch ->
-		${PN}-0.0.4_rc1-revert-the-latest-Dynarmic-changes.patch
 "
 
 S="${WORKDIR}/${PN}"
@@ -94,9 +92,7 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${DISTDIR}/${PN}-0.0.4_rc1-revert-the-latest-Dynarmic-changes.patch"
-	"${FILESDIR}/${PN}-0.0.4_rc1-add-a-formatter-for-Dynarmic-IR-Opcode.patch"
-	"${FILESDIR}/${PN}-0.0.4_rc1-xbyak.patch"
+	"${FILESDIR}/${PN}-0.0.4-xbyak.patch"
 )
 
 # [directory]=license
