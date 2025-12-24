@@ -15,10 +15,13 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 IUSE="debug"
 
+RDEPEND="${PYTHON_DEPS}"
+
 BDEPEND="
 	$(python_gen_cond_dep '
 		dev-build/mbuild[${PYTHON_USEDEP}]
 	')
+	${PYTHON_DEPS}
 "
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"

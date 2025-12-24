@@ -42,6 +42,7 @@ DEPEND="${RDEPEND}
 	X? ( x11-libs/libXrandr )
 	~dev-util/spirv-headers-${PV}
 	~dev-util/vulkan-headers-${PV}
+	${PYTHON_DEPS}
 "
 
 PATCHES=(

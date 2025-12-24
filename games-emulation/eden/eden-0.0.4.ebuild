@@ -54,7 +54,7 @@ RDEPEND="
 		dev-libs/discord-rpc
 	)
 	gui? (
-		dev-libs/quazip[qt6]
+		>=dev-libs/quazip-1.5
 		dev-qt/qtbase:6[concurrent,dbus,gui,widgets]
 	)
 	sdl? ( media-libs/libsdl2[haptic,joystick,sound,video] )

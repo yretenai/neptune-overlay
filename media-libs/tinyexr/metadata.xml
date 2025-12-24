@@ -11,9 +11,6 @@
 		<flag name="zlib">
 			Use zlib as the zlib implementation provider
 		</flag>
-		<flag name="zlib-ng">
-			Use zlib-ng as the zlib implementation provider
-		</flag>
 		<flag name="stb">
 			Use stb as the zlib implementation provider
 		</flag>

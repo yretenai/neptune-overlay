@@ -3,7 +3,7 @@
 
 EAPI=8
 
-inherit cmake toolchain-funcs
+inherit cmake
 
 DESCRIPTION="Qt based launcher for shadPS4"
 HOMEPAGE="https://github.com/shadps4-emu/shadps4-qtlauncher"
