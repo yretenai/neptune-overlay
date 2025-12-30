@@ -51,7 +51,7 @@ src_unpack() {
 
 	cd "${S}"
 	cp "${FILESDIR}/arrpc.patch" "patches/arrpc@3.5.0.patch"
-	sed -e "s|4313fe844324a52ef0453078a86f5d1ee2d4f406331201211020d9fa243323c4|d9b5466906b875ce67562c31965edaf377322a91d96ff5852e5d16fd9d7b75e6|" -i pnpm-lock.yaml || die
+	sed -e "s|4313fe844324a52ef0453078a86f5d1ee2d4f406331201211020d9fa243323c4|$(sha256sum "patches/arrpc@3.5.0.patch")|" -i pnpm-lock.yaml || die
 
 	electron-r1_prep_npm
 

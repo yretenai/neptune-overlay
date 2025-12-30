@@ -1,17 +1,14 @@
 diff --git a/src/process/index.js b/src/process/index.js
-index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef1e483469 100644
+index f445024f14ecfe5ee0eb70fe42535591c76838dc..84bb531b29baed9cda459d6a4006c17214272f6e 100644
 --- a/src/process/index.js
 +++ b/src/process/index.js
-@@ -1,21 +1,53 @@
+@@ -1,21 +1,60 @@
  const rgb = (r, g, b, msg) => `\x1b[38;2;${r};${g};${b}m${msg}\x1b[0m`;
  const log = (...args) => console.log(`[${rgb(88, 101, 242, 'arRPC')} > ${rgb(237, 66, 69, 'process')}]`, ...args);
  
 -import fs from 'node:fs';
 -import { dirname, join } from 'path';
 -import { fileURLToPath } from 'url';
--
--const __dirname = dirname(fileURLToPath(import.meta.url));
--const DetectableDB = JSON.parse(fs.readFileSync(join(__dirname, 'detectable.json'), 'utf8'));
 +const DetectableDB = require('./detectable.json');
 +DetectableDB.push(
 +  {
@@ -26,6 +23,15 @@ index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef
 +    name: "OBS"
 +  }
 +);
+ 
+-const __dirname = dirname(fileURLToPath(import.meta.url));
+-const DetectableDB = JSON.parse(fs.readFileSync(join(__dirname, 'detectable.json'), 'utf8'));
++for(var entry of DetectableDB) {
++  if(entry.id == "356943187589201930") {
++    entry.executables.push({ is_launcher: false, name: "dolphin-emu", os: "linux" })
++    break;
++  }
++}
  
  import * as Natives from './native/index.js';
  const Native = Natives[process.platform];
@@ -63,7 +69,7 @@ index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef
  
      this.handlers = handlers;
  
-@@ -28,34 +60,78 @@ export default class ProcessServer {
+@@ -28,34 +67,78 @@ export default class ProcessServer {
    }
  
    async scan() {
@@ -85,7 +91,7 @@ index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef
 +      if (path.startsWith('c:/windows')) continue // system processes (wine)
 +      if (_path.includes('webhelper')) continue; // CEF Processes
 +      // TODO: add 'dolphin-emu' to database for linux executable
-+      if (_path.endsWith('/bin/dolphin')) continue; // KDE file manager, not Dolphin Emulator
++      if (path.endsWith('/dolphin') || path == "dolphin") continue; // KDE file manager, not Dolphin Emulator
        const toCompare = [];
 -      const splitPath = path.split('/');
 -      for (let i = 1; i < splitPath.length; i++) {
@@ -160,7 +166,7 @@ index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef
            names[id] = name;
            pids[id] = pid;
  
-@@ -65,7 +141,6 @@ export default class ProcessServer {
+@@ -65,7 +148,6 @@ export default class ProcessServer {
              timestamps[id] = Date.now();
            }
  
@@ -168,7 +174,7 @@ index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef
            this.handlers.message({
              socketId: id
            }, {
-@@ -101,8 +176,5 @@ export default class ProcessServer {
+@@ -101,8 +183,5 @@ export default class ProcessServer {
          });
        }
      }
@@ -178,7 +184,7 @@ index f445024f14ecfe5ee0eb70fe42535591c76838dc..881880bbb89c65f22020a2961bb459ef
    }
  }
 diff --git a/src/process/native/linux.js b/src/process/native/linux.js
-index ed456812e0a03429bccd588aa3489506c708324c..8e1a3cfd4c099ff3745f976bb5a7f7bde0fa5adb 100644
+index ed456812e0a03429bccd588aa3489506c708324c..0dc7f4d1697ad1e0acfb0885ba0549e3de4b1679 100644
 --- a/src/process/native/linux.js
 +++ b/src/process/native/linux.js
 @@ -1,8 +1,14 @@
