@@ -39,10 +39,7 @@ BDEPEND="
 "
 RDEPEND="
 	app-arch/cabextract
-	|| (
-		>=app-arch/7zip-24.09[symlink]
-		app-arch/p7zip
-	)
+	virtual/7zip
 	app-arch/unzip
 	net-misc/wget
 	virtual/wine

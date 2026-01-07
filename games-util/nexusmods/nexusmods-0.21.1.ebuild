@@ -1033,10 +1033,7 @@ SLOT="0"
 # network-sandbox: downloads some crazy json file
 RESTRICT="${RESTRICT} mirror network-sandbox"
 RDEPEND="
-	|| (
-		>=app-arch/7zip-24.09[symlink]
-		app-arch/p7zip
-	)
+	virtual/7zip
 	app-arch/brotli
 	dev-libs/elfutils
 	dev-libs/expat
