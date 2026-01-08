@@ -54,6 +54,7 @@ DEPEND="
 	openmp? (
 		llvm-runtimes/openmp
 	)
+	dev-libs/icu:=
 "
 RDEPEND="${DEPEND}"
 
