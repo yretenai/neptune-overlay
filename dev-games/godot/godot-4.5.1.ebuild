@@ -424,6 +424,13 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.5-udev.patch"
 )
 
+addpredicthid() {
+	for file in $(ls /dev/hidraw*); do
+		addpredict $file
+	done
+	addpredict /dev/input
+}
+
 godot_get_version() {
 	export GODOT_VERSION=$(
 		${PYTHON} -c 'from version import major, minor, patch, status; print(f"{major}.{minor}{f".{patch}" if patch > 0 else ""}{f"-{status}" if status != "stable" else ""}")'
@@ -582,8 +589,9 @@ src_compile() {
 	escons extra_suffix=main "${esconsargs[@]}" || die
 
 	if use dotnet; then
-		addpredict /dev/input
+		addpredicthid
 		addpredict /opt/neptune-dotnet
+
 		export DOTNET_CLI_TELEMETRY_OPTOUT=1
 		export DOTNET_ROOT="${EPREFIX}/opt/neptune-dotnet"
 		bin/godot* --headless --generate-mono-glue ./modules/mono/glue || die
