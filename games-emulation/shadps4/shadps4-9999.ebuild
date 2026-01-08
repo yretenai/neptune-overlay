@@ -21,6 +21,7 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/LibAtrac9"
 		"externals/ext-libusb"
 		"externals/hwinfo"
+		"externals/aacdec/fdk-aac"
 	)
 else
 	VULKANMEMORYALLOCATOR_COMMIT=
@@ -28,9 +29,10 @@ else
 	EXT_FMT_COMMIT=
 	EXT_IMGUI_COMMIT=
 	EXT_LIBATRAC9_COMMIT=
-	EXT_LIBUSB_COMMIT=
-	EXT_HWINFO_COMMIT=
+	EXT_LIBUSB_COMMIT= # todo: this exists as a package
+	EXT_HWINFO_COMMIT= # todo: this exists as a package
 	SIRIT_COMMIT=
+	FDK_AAC_COMMIT= # todo: this exists as a package
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
@@ -42,6 +44,7 @@ else
 		https://github.com/shadps4-emu/ext-libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-ext-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-hwinfo/archive/${EXT_HWINFO_COMMIT}.tar.gz -> ${PN}-ext-hwinfo-${EXT_HWINFO_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
+		https://android.googlesource.com/platform/external/aac/+archive/${FDK_AAC_COMMIT}.tar.gz -> ${PN}-aacedc-{$FDK_AAC_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/shadPS4-v.${PV}"
 	KEYWORDS="~amd64"
@@ -113,6 +116,7 @@ src_unpack() {
 		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
 		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_LIBUSB_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
+		rmdir "${S}/externals/aacdec/fdk-aac"; mv "${WORKDIR}/sirit-${FDK_AAC_COMMIT}" "${S}/externals/aacdec/fdk-aac" || die "Cannot move fdk-aac"
 	fi
 }
 
