@@ -1,0 +1,38 @@
+diff --git a/intern/cycles/kernel/CMakeLists.txt b/intern/cycles/kernel/CMakeLists.txt
+index 1ce94d3f561..908c792ffdb 100644
+--- a/intern/cycles/kernel/CMakeLists.txt
++++ b/intern/cycles/kernel/CMakeLists.txt
+@@ -328,20 +328,7 @@ if(DEFINED PTHREADS_LIBRARIES)
+   target_link_libraries(zstd_compress ${PTHREADS_LIBRARIES})
+ endif()
+ 
+-if(NOT WITH_BLENDER)
+-  # For the Cycles standalone put libraries next to the Cycles application.
+-  set(cycles_kernel_runtime_lib_target_path ${CYCLES_INSTALL_PATH})
+-else()
+-  # For Blender put the libraries next to the Blender executable.
+-  #
+-  # Note that the installation path in the delayed_install is relative to the versioned folder,
+-  # which means we need to go one level up.
+-  set(cycles_kernel_runtime_lib_target_path "../")
+-endif()
+-
+-if(UNIX AND NOT APPLE)
+-  set(cycles_kernel_runtime_lib_target_path ${cycles_kernel_runtime_lib_target_path}/lib)
+-endif()
++set(cycles_kernel_runtime_lib_target_path ${CYCLES_INSTALL_PATH})
+ 
+ if(WITH_COMPILER_ASAN)
+   if(CMAKE_COMPILER_IS_GNUCC AND (NOT WITH_CYCLES_KERNEL_ASAN))
+diff --git a/intern/cycles/kernel/device/hiprt/CMakeLists.txt b/intern/cycles/kernel/device/hiprt/CMakeLists.txt
+index de2756954f2..2e5effcd22a 100644
+--- a/intern/cycles/kernel/device/hiprt/CMakeLists.txt
++++ b/intern/cycles/kernel/device/hiprt/CMakeLists.txt
+@@ -71,7 +71,6 @@ if(WITH_CYCLES_HIP_BINARIES AND WITH_CYCLES_DEVICE_HIPRT)
+     -amdgpu-early-inline-all=false
+     -mllvm
+     -amdgpu-function-calls=true
+-    -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+     --genco
+     -I ${CMAKE_CURRENT_SOURCE_DIR}/../../..
+     -I ${HIPRT_INCLUDE_DIR}

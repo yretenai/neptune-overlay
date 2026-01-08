@@ -20,3 +20,15 @@ index 81c7e499b33..993594d8c1d 100644
  
  if(UNIX AND NOT APPLE)
    set(cycles_kernel_runtime_lib_target_path ${cycles_kernel_runtime_lib_target_path}/lib)
+diff --git a/intern/cycles/kernel/CMakeLists.txt b/intern/cycles/kernel/CMakeLists.txt
+index 81c7e499b33..6f70a054485 100644
+--- a/intern/cycles/kernel/CMakeLists.txt
++++ b/intern/cycles/kernel/CMakeLists.txt
+@@ -782,7 +782,6 @@ if(WITH_CYCLES_HIP_BINARIES AND WITH_CYCLES_DEVICE_HIPRT)
+     -amdgpu-early-inline-all=false
+     -mllvm
+     -amdgpu-function-calls=true
+-    -parallel-jobs=${HIPRT_COMPILER_PARALLEL_JOBS}
+     --genco
+     -I ${CMAKE_CURRENT_SOURCE_DIR}/..
+     -I ${CMAKE_CURRENT_SOURCE_DIR}/device/hiprt

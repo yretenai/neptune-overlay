@@ -1,0 +1,22 @@
+From 137b58a980b68885f22274b2873544c313a2b2e7 Mon Sep 17 00:00:00 2001
+From: Sebastian Parborg <sebastian@blender.org>
+Date: Sat, 13 Dec 2025 21:13:24 +0100
+Subject: [PATCH] CMake: Update the last remaining <3.10 cmake min version
+
+This was missed in an earlier update
+
+Pull Request: https://projects.blender.org/blender/blender/pulls/151585
+---
+ extern/quadriflow/3rd/lemon-1.3.1/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/extern/quadriflow/3rd/lemon-1.3.1/CMakeLists.txt b/extern/quadriflow/3rd/lemon-1.3.1/CMakeLists.txt
+index b20b163a16a3..8792e80b2e25 100644
+--- a/extern/quadriflow/3rd/lemon-1.3.1/CMakeLists.txt
++++ b/extern/quadriflow/3rd/lemon-1.3.1/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+ 
+ SET(PROJECT_NAME "LEMON")
+ PROJECT(${PROJECT_NAME})

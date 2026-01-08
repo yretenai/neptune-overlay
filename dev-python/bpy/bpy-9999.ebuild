@@ -154,7 +154,7 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXi
 		x11-libs/libXxf86vm
 	)
-	hiprt? ( dev-libs/hiprt:2.5=[${LLVM_USEDEP}] )
+	hiprt? ( dev-libs/hiprt:2.5= )
 "
 
 DEPEND="${RDEPEND}
@@ -180,11 +180,9 @@ BDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
-	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
-	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
-	"${FILESDIR}/${PN}-9999-strncpy.patch"
+	"${FILESDIR}/blender-4.1.1-clang.patch"
+	"${FILESDIR}/blender-9999-cycles.patch"
+	"${FILESDIR}/blender-9999-pycore.patch"
 )
 
 blender_check_requirements() {
@@ -226,6 +224,8 @@ src_prepare() {
 
 	blender_get_version
 
+	echo "Blender Version: ${BV}"
+
 	# Disable MS Windows help generation. The variable doesn't do what it
 	# it sounds like.
 	sed -e "s|GENERATE_HTMLHELP      = YES|GENERATE_HTMLHELP      = NO|" \
@@ -233,6 +233,11 @@ src_prepare() {
 
 	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 	sed -e "s|var->ob_refcnt|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
+
+	if use experimental; then
+		ewarn "USE experimental is specified, forcing version cycle to be 'alpha' to prevent features from being disabled"
+		sed -e "s/#define BLENDER_VERSION_CYCLE .*/#define BLENDER_VERSION_CYCLE alpha/" -i source/blender/blenkernel/BKE_blender_version.h
+	fi
 }
 
 src_configure() {

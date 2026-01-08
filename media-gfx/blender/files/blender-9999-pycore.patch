@@ -1,0 +1,15 @@
+diff --git a/source/blender/python/intern/bpy_driver.cc b/source/blender/python/intern/bpy_driver.cc
+index 0b10020f40b..386af391372 100644
+--- a/source/blender/python/intern/bpy_driver.cc
++++ b/source/blender/python/intern/bpy_driver.cc
+@@ -10,6 +10,10 @@
+  * to deal with the name-space used for driver execution.
+  */
+ 
++#include <thread>
++#include <iostream>
++#include <functional>
++
+ #include <Python.h>
+ 
+ #include "DNA_anim_types.h"

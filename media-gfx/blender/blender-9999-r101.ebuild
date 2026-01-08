@@ -45,6 +45,7 @@ else
 	if [[ "${PR}" != "r0" ]]; then
 		case $PR in
 			r100) EGIT_BRANCH="npr-prototype" ;;
+			r101) EGIT_BRANCH="cycles-tx" ;;
 		esac
 
 		IS_BRANCH=1
@@ -210,9 +211,8 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-4.4.0-hiprt-parallel.patch"
-	"${FILESDIR}/${PN}-4.3.2-hipcc-path.patch"
-	"${FILESDIR}/${PN}-4.4.0-cycles-runtime-path.patch"
+	"${FILESDIR}/${PN}-9999-cycles.patch"
+	"${FILESDIR}/${PN}-9999-pycore.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
