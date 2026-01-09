@@ -53,7 +53,7 @@ else
 fi
 
 IUSE="
-alembic +bullet bpy collada +color-management cuda +cycles-bin-kernels +cycles
+alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
 +jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
 +openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml
