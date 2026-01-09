@@ -7,16 +7,17 @@ inherit xdg
 
 DESCRIPTION="Steam Achievement Manager For Linux"
 HOMEPAGE="https://github.com/PaulCombal/SamRewritten-legacy/"
+MY_PV=$(ver_cut 2-)
 
-if [[ ${PV} = *99999999* ]]; then
+if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/PaulCombal/SamRewritten-legacy.git"
 else
 	SRC_URI="
-		https://github.com/PaulCombal/SamRewritten-legacy/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
+		https://github.com/PaulCombal/SamRewritten-legacy/archive/refs/tags/${MY_PV}.tar.gz -> ${PN}-${MY_PV}.tar.gz
 	"
 	KEYWORDS="~amd64"
-	S="${WORKDIR}/SamRewritten-legacy-${PV}"
+	S="${WORKDIR}/SamRewritten-legacy-${MY_PV}"
 fi
 
 LICENSE="GPL-3"

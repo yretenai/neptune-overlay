@@ -8,7 +8,7 @@ inherit xdg
 DESCRIPTION="Steam Achievement Manager For Linux"
 HOMEPAGE="https://github.com/PaulCombal/SamRewritten-legacy/"
 
-if [[ ${PV} = *99999999* ]]; then
+if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/PaulCombal/SamRewritten-legacy.git"
 else

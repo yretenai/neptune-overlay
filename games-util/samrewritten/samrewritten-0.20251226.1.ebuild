@@ -8,6 +8,11 @@ EAPI=8
 CRATES="
 	addr2line@0.24.2
 	adler2@2.0.0
+	anstream@0.6.21
+	anstyle-parse@0.2.7
+	anstyle-query@1.1.5
+	anstyle-wincon@3.0.11
+	anstyle@1.0.13
 	atomic-waker@1.1.2
 	autocfg@1.4.0
 	backtrace@0.3.74
@@ -20,6 +25,11 @@ CRATES="
 	cc@1.2.19
 	cfg-expr@0.17.2
 	cfg-if@1.0.0
+	clap@4.5.53
+	clap_builder@4.5.53
+	clap_derive@4.5.49
+	clap_lex@0.7.6
+	colorchoice@1.0.4
 	core-foundation-sys@0.8.7
 	core-foundation@0.9.4
 	displaydoc@0.2.5
@@ -87,12 +97,13 @@ CRATES="
 	indexmap@2.8.0
 	interprocess@2.2.3
 	ipnet@2.11.0
+	is_terminal_polyfill@1.70.2
 	itoa@1.0.15
 	js-sys@0.3.77
 	libadwaita-sys@0.7.2
 	libadwaita@0.7.2
 	libc@0.2.171
-	libloading@0.8.6
+	libloading@0.9.0
 	linux-raw-sys@0.9.4
 	litemap@0.7.5
 	log@0.4.27
@@ -104,6 +115,7 @@ CRATES="
 	native-tls@0.2.14
 	object@0.36.7
 	once_cell@1.21.3
+	once_cell_polyfill@1.70.2
 	openssl-macros@0.1.1
 	openssl-probe@0.1.6
 	openssl-sys@0.9.107
@@ -145,6 +157,7 @@ CRATES="
 	smallvec@1.14.0
 	socket2@0.5.9
 	stable_deref_trait@1.2.0
+	strsim@0.11.1
 	subtle@2.6.1
 	syn@2.0.100
 	sync_wrapper@1.0.2
@@ -174,6 +187,7 @@ CRATES="
 	url@2.5.4
 	utf16_iter@1.0.5
 	utf8_iter@1.0.4
+	utf8parse@0.2.2
 	vcpkg@0.2.15
 	version-compare@0.2.0
 	want@0.3.1
@@ -188,11 +202,13 @@ CRATES="
 	web-sys@0.3.77
 	widestring@1.2.0
 	windows-link@0.1.1
+	windows-link@0.2.1
 	windows-registry@0.4.0
 	windows-result@0.3.2
 	windows-strings@0.3.1
 	windows-sys@0.52.0
 	windows-sys@0.59.0
+	windows-sys@0.61.2
 	windows-targets@0.52.6
 	windows-targets@0.53.0
 	windows_aarch64_gnullvm@0.52.6
@@ -228,13 +244,14 @@ CRATES="
 
 inherit cargo desktop
 
+MY_PV=$(ver_cut 2-)
 DESCRIPTION="Steam Achievement Manager Rewritten"
 HOMEPAGE="https://github.com/PaulCombal/SamRewritten/"
 SRC_URI="
-	https://github.com/PaulCombal/SamRewritten/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/PaulCombal/SamRewritten/archive/refs/tags/${MY_PV}.tar.gz -> ${PN}_${MY_PV}.tar.gz
 	${CARGO_CRATE_URIS}
 "
-S="${WORKDIR}/SamRewritten-${PV}"
+S="${WORKDIR}/SamRewritten-${MY_PV}"
 
 LICENSE="GPL-3"
 # Dependent crate licenses

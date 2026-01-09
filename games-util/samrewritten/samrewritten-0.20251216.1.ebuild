@@ -244,13 +244,14 @@ CRATES="
 
 inherit cargo desktop
 
+MY_PV=$(ver_cut 2-)
 DESCRIPTION="Steam Achievement Manager Rewritten"
 HOMEPAGE="https://github.com/PaulCombal/SamRewritten/"
 SRC_URI="
-	https://github.com/PaulCombal/SamRewritten/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/PaulCombal/SamRewritten/archive/refs/tags/${MY_PV}.tar.gz -> ${PN}_${MY_PV}.tar.gz
 	${CARGO_CRATE_URIS}
 "
-S="${WORKDIR}/SamRewritten-${PV}"
+S="${WORKDIR}/SamRewritten-${MY_PV}"
 
 LICENSE="GPL-3"
 # Dependent crate licenses
