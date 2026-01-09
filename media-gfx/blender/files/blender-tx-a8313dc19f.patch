@@ -1,5 +1,18 @@
+From a8313dc19f6f40d0529b67262cba05683ac0c25d Mon Sep 17 00:00:00 2001
+From: Campbell Barton <campbell@blender.org>
+Date: Wed, 7 Jan 2026 10:49:18 +1100
+Subject: [PATCH] Build: resolve build errors with Python 3.13 caused by recent
+ refactors
+
+---
+ source/blender/python/generic/py_capi_utils.cc | 2 +-
+ source/blender/python/generic/python_compat.hh | 2 ++
+ source/blender/python/intern/bpy_props.cc      | 4 ++--
+ source/blender/python/intern/bpy_rna.cc        | 8 ++++----
+ 4 files changed, 9 insertions(+), 7 deletions(-)
+
 diff --git a/source/blender/python/generic/py_capi_utils.cc b/source/blender/python/generic/py_capi_utils.cc
-index f1831e88c04..666143a5268 100644
+index 62dad3fc38a..c6aa115db9a 100644
 --- a/source/blender/python/generic/py_capi_utils.cc
 +++ b/source/blender/python/generic/py_capi_utils.cc
 @@ -835,7 +835,7 @@ PyObject *PyC_Err_SetString_Prefix(PyObject *exception_type_prefix, const char *
@@ -11,24 +24,19 @@ index f1831e88c04..666143a5268 100644
    PyErr_Print();
  
    /* use py style error */
-diff --git a/source/blender/python/generic/python_compat.cc b/source/blender/python/generic/python_compat.cc
-index ba9d5c661c1..70f6abcdee9 100644
---- a/source/blender/python/generic/python_compat.cc
-+++ b/source/blender/python/generic/python_compat.cc
-@@ -13,6 +13,8 @@
- #include "BLI_utildefines.h" /* IWYU pragma: keep. */
- #include "python_compat.hh"  /* IWYU pragma: keep. */
+diff --git a/source/blender/python/generic/python_compat.hh b/source/blender/python/generic/python_compat.hh
+index 4ea97d62c9d..017f60c2fe5 100644
+--- a/source/blender/python/generic/python_compat.hh
++++ b/source/blender/python/generic/python_compat.hh
+@@ -55,6 +55,8 @@ namespace blender {
  
-+namespace blender {
-+
- #if PY_VERSION_HEX >= 0x030d0000 /* >=3.14 */
- 
- /* Removed in Python 3.13. */
-@@ -73,3 +75,4 @@ int _PyArg_CheckPositional(const char *name, Py_ssize_t nargs, Py_ssize_t min, P
- }
- 
+ #if PY_VERSION_HEX >= 0x030d0000 /* >= 3.13 */
+ int _PyArg_CheckPositional(const char *name, Py_ssize_t nargs, Py_ssize_t min, Py_ssize_t max);
++/* NOTE: this is needed so we can swap between the Python C/API and Blender's implementation. */
++#  define _PyArg_CheckPositional blender::_PyArg_CheckPositional
  #endif
-+}
+ 
+ }  // namespace blender
 diff --git a/source/blender/python/intern/bpy_props.cc b/source/blender/python/intern/bpy_props.cc
 index 617b33370f4..a9342d9f667 100644
 --- a/source/blender/python/intern/bpy_props.cc
@@ -52,7 +60,7 @@ index 617b33370f4..a9342d9f667 100644
        PyErr_Format(PyExc_ValueError,
                     "EnumProperty(...): expected 'items' function to take 2 arguments, not %d",
 diff --git a/source/blender/python/intern/bpy_rna.cc b/source/blender/python/intern/bpy_rna.cc
-index 9ae12981ff5..8746dfa9def 100644
+index 9ae12981ff5..e069231e29a 100644
 --- a/source/blender/python/intern/bpy_rna.cc
 +++ b/source/blender/python/intern/bpy_rna.cc
 @@ -9505,7 +9505,7 @@ static int bpy_class_validate_recursive(PointerRNA *dummy_ptr,
@@ -60,7 +68,7 @@ index 9ae12981ff5..8746dfa9def 100644
  
      if (func_arg_count >= 0) { /* -1 if we don't care. */
 -      arg_count = (reinterpret_cast<PyCodeObject *> PyFunction_GET_CODE(item))->co_argcount;
-+      arg_count = (reinterpret_cast<PyCodeObject *>(PyFunction_GET_CODE(item)))->co_argcount;
++      arg_count = (reinterpret_cast<PyCodeObject *>(PyFunction_GET_CODE(item))->co_argcount);
  
        /* NOTE: the number of args we check for and the number of args we give to
         * `@staticmethods` are different (quirk of Python),
@@ -70,8 +78,8 @@ index 9ae12981ff5..8746dfa9def 100644
        if (is_staticmethod) {
 -        arg_count = (reinterpret_cast<PyCodeObject *> PyFunction_GET_CODE(
 -                         ((PyMethodObject *)item)->im_func))
-+        arg_count = (reinterpret_cast<PyCodeObject *>(PyFunction_GET_CODE(
-+                         ((PyMethodObject *)item)->im_func)))
++        arg_count = (reinterpret_cast<PyCodeObject *>(
++                         PyFunction_GET_CODE(((PyMethodObject *)item)->im_func)))
                          ->co_argcount -
                      1;
        }

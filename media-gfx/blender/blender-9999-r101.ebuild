@@ -213,7 +213,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
 	"${FILESDIR}/${PN}-9999-cycles.patch"
 	"${FILESDIR}/${PN}-9999-pycore.patch"
-	"${FILESDIR}/${PN}-tx-python314.patch"
+	"${FILESDIR}/${PN}-tx-a8313dc19f.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
