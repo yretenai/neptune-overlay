@@ -309,7 +309,7 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_JEMALLOC=off
+		-DWITH_MEM_TBB=$(usex tbb)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)

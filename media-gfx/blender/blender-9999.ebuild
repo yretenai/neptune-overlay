@@ -7,8 +7,12 @@
 # 	https://github.com/Ray-Tracing-Systems/HydraAPI
 # - Package USD
 # 	https://github.com/PixarAnimationStudios/OpenUSD
+# - Package MaterialX
+# 	https://github.com/AcademySoftwareFoundation/MaterialX
 # - Package Draco
 # 	https://github.com/google/draco
+# - Package Audaspace
+# 	https://github.com/neXyon/audaspace
 
 EAPI=8
 
@@ -56,10 +60,9 @@ fi
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
-+jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
-+openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml
-pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan
-+wayland +webp X
+jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
++opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
+renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
 "
 RESTRICT="test"
 
@@ -112,7 +115,6 @@ RDEPEND="${PYTHON_DEPS}
 	gmp? ( dev-libs/gmp[cxx] )
 	hip? ( dev-util/hip:= )
 	jack? ( virtual/jack )
-	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
 		app-misc/spacenavd
@@ -379,7 +381,7 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
+		-DWITH_MEM_TBB=$(usex tbb)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)
