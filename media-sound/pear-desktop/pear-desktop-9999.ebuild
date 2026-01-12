@@ -39,8 +39,7 @@ BDEPEND="
 "
 
 PATCHES="
-	${FILESDIR}/${PN}-3.7.2-disable-updates.patch
-	${FILESDIR}/${PN}-3.7.2-disable-devtools.patch
+	${FILESDIR}/${PN}-9999-fixup.patch
 "
 
 src_unpack() {

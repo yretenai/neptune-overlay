@@ -1,0 +1,54 @@
+diff --git a/src/config/defaults.ts b/src/config/defaults.ts
+index 62907086..d33f38ce 100644
+--- a/src/config/defaults.ts
++++ b/src/config/defaults.ts
+@@ -54,7 +54,7 @@ export const defaultConfig: DefaultConfig = {
+   'options': {
+     tray: false,
+     appVisible: true,
+-    autoUpdates: true,
++    autoUpdates: false,
+     alwaysOnTop: false,
+     hideMenu: false,
+     hideMenuWarned: false,
+diff --git a/src/index.ts b/src/index.ts
+index 80fae3db..3f08ea21 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -311,7 +311,7 @@ function initTheme(win: BrowserWindow) {
+   }
+ 
+   win.webContents.once('did-finish-load', () => {
+-    if (is.dev()) {
++    if (false && is.dev()) {
+       console.debug(LoggerPrefix, t('main.console.did-finish-load.dev-tools'));
+       win.webContents.openDevTools();
+     }
+@@ -799,7 +799,7 @@ app.whenReady().then(async () => {
+     openAtLogin: config.get('options.startAtLogin'),
+   });
+ 
+-  if (!is.dev() && config.get('options.autoUpdates')) {
++  if (false && !is.dev() && config.get('options.autoUpdates')) {
+     const updateTimeout = setTimeout(() => {
+       autoUpdater.checkForUpdatesAndNotify();
+       clearTimeout(updateTimeout);
+diff --git a/src/menu.ts b/src/menu.ts
+index 233ce47b..eb40ca4f 100644
+--- a/src/menu.ts
++++ b/src/menu.ts
+@@ -161,14 +161,6 @@ export const mainMenuTemplate = async (
+     {
+       label: t('main.menu.options.label'),
+       submenu: [
+-        {
+-          label: t('main.menu.options.submenu.auto-update'),
+-          type: 'checkbox',
+-          checked: config.get('options.autoUpdates'),
+-          click(item: MenuItem) {
+-            config.setMenuOption('options.autoUpdates', item.checked);
+-          },
+-        },
+         {
+           label: t('main.menu.options.submenu.resume-on-start'),
+           type: 'checkbox',
