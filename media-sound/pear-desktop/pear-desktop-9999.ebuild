@@ -11,7 +11,7 @@ ELECTRON_UNSTABLE=1 # uses electron beta
 
 inherit desktop xdg electron-r1
 
-DESCRIPTION="Pear 🍐 is extension for music player"
+DESCRIPTION="Pear Desktop is extension for music player"
 HOMEPAGE="https://github.com/pear-devs/pear-desktop"
 LICENSE="MIT"
 SLOT="0"
@@ -73,8 +73,9 @@ src_install() {
 
 	cd pack/"$(electron-r1_target)"
 	insinto "${ELECTRON_DESTDIR}"
+	mv "youtube-music" "pear-desktop"
 	doins -r .
-	chmod 0755 "${ED}${ELECTRON_DESTDIR}/youtube-music"
+	chmod 0755 "${ED}${ELECTRON_DESTDIR}/pear-desktop"
 
 	cd resources
 	electron-r1_src_install
