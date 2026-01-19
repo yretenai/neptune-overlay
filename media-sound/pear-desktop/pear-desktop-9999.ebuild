@@ -69,7 +69,7 @@ src_compile() {
 src_install() {
 	# newicon "docs/favicon/favicon_144.png" ${PN}.png
 
-	make_desktop_entry "/usr/bin/${PN}" "Pear Desktop" "${PN}" "Network;AudioVideo;Audio;Video"
+	make_desktop_entry "/usr/bin/${PN}" "Pear Desktop" "youtube-music" "Network;AudioVideo;Audio;Video"
 
 	cd pack/"$(electron-r1_target)"
 	insinto "${ELECTRON_DESTDIR}"
