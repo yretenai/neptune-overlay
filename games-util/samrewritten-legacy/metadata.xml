@@ -6,6 +6,6 @@
     <flag name="zenity">Support for dialog display messages</flag>
   </use>
   <upstream>
-    <remote-id type="github">PaulCombal/SamRewritten</remote-id>
+    <remote-id type="github">PaulCombal/SamRewritten-Legacy</remote-id>
   </upstream>
 </pkgmetadata>
