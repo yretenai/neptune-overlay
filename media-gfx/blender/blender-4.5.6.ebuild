@@ -212,6 +212,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4.0-cycles.patch"
 	"${FILESDIR}/${PN}-4.5.5-lemon.patch"
 	"${FILESDIR}/${PN}-4.5.5-ffmpeg8.patch"
+	"${FILESDIR}/${PN}-4.5.6-unbreak-py314.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
