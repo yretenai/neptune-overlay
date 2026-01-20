@@ -38,7 +38,7 @@ src_install() {
 	doins -r lib/yaak/*
 
 	cd bin
-	dobin yaak-app yaaknode yaakprotoc
+	dobin yaak-app
 }
 
 pkg_postinst() {
