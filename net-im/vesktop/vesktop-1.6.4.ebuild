@@ -7,6 +7,7 @@ inherit electron-version
 
 ELECTRON_SLOT="${LATEST_ELECTRON_VER}"
 ELECTRON_BUILDER_VER="${LATEST_ELECTRON_BUILDER_VER}"
+ELECTRON_FUSES="1"
 
 inherit desktop xdg electron-r1
 
@@ -21,14 +22,13 @@ if [[ "${PV}" == *9999* ]]; then
 else
 	SRC_URI="https://github.com/Vencord/Vesktop/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/Vesktop-${PV}"
-	# Requires network access (https) as long as NPM dependencies aren't packaged
-	RESTRICT="network-sandbox"
 fi
 
 LICENSE="GPL-3"
 SLOT="0"
 
-RESTRICT="mirror test ${RESTRICT}"
+# Requires network access (https) as long as NPM dependencies aren't packaged
+RESTRICT="network-sandbox mirror test ${RESTRICT}"
 
 RDEPEND="
 	x11-libs/libnotify
@@ -59,16 +59,20 @@ src_unpack() {
 
 src_configure() {
 	electron-r1_patch_electron_builder
+	mkdir -p dist/"$(electron-r1_target)"
+	cd dist/"$(electron-r1_target)"
+	electron-r1_prep
 }
 
 src_compile() {
+	pnpm buildLibVesktop || die
 	pnpm package:dir || die
 	cp "${FILESDIR}/vesktop.desktop" "${PN}.desktop"
 }
 
 src_install() {
 	domenu "${PN}.desktop"
-	newicon static/icon.png vencord.png
+	newicon static/tray/tray.png vencord.png
 
 	cd dist/"$(electron-r1_target)"/resources
 	electron-r1_src_install
