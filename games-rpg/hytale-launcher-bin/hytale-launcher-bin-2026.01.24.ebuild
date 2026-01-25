@@ -8,7 +8,7 @@ HYTALE_VERSION="2026.01.24-997c2cb"
 inherit desktop xdg
 DESCRIPTION="A sandbox block game"
 HOMEPAGE="https://hytale.com/"
-SRC_URI="https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-${HYTALE_VERSION}.zip -> ${P}.zip"
+SRC_URI="https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-${HYTALE_VERSION}.zip -> ${P}_${HYTALE_VERSION}.zip"
 
 S="${WORKDIR}"
 LICENSE="Hytale"
