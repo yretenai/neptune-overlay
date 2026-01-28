@@ -29,7 +29,10 @@ DEPEND="
 	dev-qt/qtbase:6[concurrent,gui,network,widgets,xml(+)]
 	dev-qt/qt5compat:6
 	dev-qt/qtnetworkauth:6
-	>=dev-libs/quazip-1.5
+	|| (
+		<dev-libs/quazip-1.5[qt6]
+		>=dev-libs/quazip-1.5
+	)
 	app-text/cmark
 	virtual/zlib
 	x11-apps/xrandr
