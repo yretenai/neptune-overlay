@@ -74,7 +74,10 @@ RDEPEND="
 		x11-libs/libXrender
 		x11-libs/libxkbcommon
 		raycast? ( media-libs/embree:4 )
-		vulkan? ( media-libs/vulkan-loader[X,wayland?] )
+	)
+	vulkan? (
+		media-libs/vulkan-loader[X,wayland?]
+		dev-util/volk
 	)
 	pulseaudio? ( media-libs/libpulse )
 	speech? ( app-accessibility/speech-dispatcher )
@@ -110,6 +113,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.4-scons.patch"
 	"${FILESDIR}/${PN}-4.3-mono-path.patch"
 	"${FILESDIR}/${PN}-4.5-udev.patch"
+	"${FILESDIR}/${PN}-9999-volk.patch"
 )
 
 addpredicthid() {
@@ -212,8 +216,8 @@ src_compile() {
 		pulseaudio=$(usex pulseaudio)
 		speechd=$(usex speech)
 		udev=$(usex udev)
-		use_volk=no # unnecessary when linking directly to libvulkan
-		vulkan=$(usex gui $(usex vulkan))
+		use_volk=no
+		vulkan=$(usex vulkan)
 		wayland=$(usex wayland)
 		# TODO: retry to add optional USE=X, wayland support is new
 		# and gui build is not well wired to handle USE="-X wayland" yet
