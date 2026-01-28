@@ -10,7 +10,7 @@ IUSE="rar"
 
 RDEPEND="
 	|| (
-		app-arch/7zip[symlink, rar?]
+		app-arch/7zip[symlink,rar?]
 		app-arch/p7zip[rar?]
 	)
 "
