@@ -14,6 +14,7 @@
     <flag name="wifi">Enable Wi-Fi scanning</flag>
   </use>
   <upstream>
+		<remote-id type="github">eden-emulator/Releases</remote-id>
     <bugs-to>https://git.eden-emu.dev/eden-emu/eden/issues</bugs-to>
   </upstream>
 </pkgmetadata>
