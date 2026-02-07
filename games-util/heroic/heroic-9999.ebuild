@@ -46,15 +46,14 @@ src_unpack() {
 
 	cd "${S}"
 	electron-r1_prep_npm
-	eapply "${FILESDIR}/heroic-2.18.1-remove-patches.patch"
+
 	echo "$(jq --arg version "^4.17.0" '.pnpm.overrides["node-abi"] = $version' package.json)" > package.json
 	echo "$(jq --arg version "^8.5.0" '.pnpm.overrides["node-addon-api"] = $version' package.json)" > package.json
-
-	rm pnpm-lock.yaml
 
 	export COREPACK_ENABLE_STRICT=0
 	pnpm config set store-dir "${T}/pnpm" || die
 	pnpm i --loglevel verbose --reporter append-only || die
+	pnpm update node-abi node-addon-api
 	pnpm download-helper-binaries
 }
 
