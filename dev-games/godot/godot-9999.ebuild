@@ -114,6 +114,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.3-mono-path.patch"
 	"${FILESDIR}/${PN}-4.5-udev.patch"
 	"${FILESDIR}/${PN}-9999-volk.patch"
+	"${FILESDIR}/${PN}-9999-wayland-x11-conflict.patch"
 )
 
 addpredicthid() {
