@@ -24,5 +24,5 @@
 # NOTE: when updating these, bump the revision of every ebuild that depends on this
 
 LATEST_ELECTRON_VER="40"
-LATEST_ELECTRON_WIDEVINE_VER="39"
+LATEST_ELECTRON_WIDEVINE_VER="40"
 LATEST_ELECTRON_BUILDER_VER="26.0.12"
