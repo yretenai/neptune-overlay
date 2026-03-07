@@ -1,0 +1,12 @@
+diff --git a/include/mcl/macro/anonymous_variable.hpp b/include/mcl/macro/anonymous_variable.hpp
+index 09cd48a..96e3b48 100644
+--- a/include/mcl/macro/anonymous_variable.hpp
++++ b/include/mcl/macro/anonymous_variable.hpp
+@@ -7,6 +7,7 @@
+ #include <mcl/macro/concatenate_tokens.hpp>
+ 
+ #ifdef __COUNTER__
++#    pragma GCC diagnostic ignored "-Wc2y-extensions"
+ #    define ANONYMOUS_VARIABLE(str) CONCATENATE_TOKENS(str, __COUNTER__)
+ #else
+ #    define ANONYMOUS_VARIABLE(str) CONCATENATE_TOKENS(str, __LINE__)
