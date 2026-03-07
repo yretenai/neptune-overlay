@@ -99,6 +99,7 @@ RDEPEND="${PYTHON_DEPS}
 	>=media-libs/openimageio-2.5.6.0:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
+	sci-libs/ceres-solver
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
@@ -303,8 +304,6 @@ src_prepare() {
 	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
 	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml"
 
-	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
-
 	sed -e "s|var->ob_refcnt|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
 
 	if use experimental; then
@@ -329,6 +328,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
+		-DHIPRT_LIBRARY="${EPREFIX}/usr/$(get_libdir)/libhiprt64.so.2.5"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
