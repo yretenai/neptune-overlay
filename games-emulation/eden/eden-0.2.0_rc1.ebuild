@@ -26,6 +26,10 @@ REQUIRED_USE="
 "
 RESTRICT="!test? ( test )"
 
+PATCHES=(
+	"${FILESDIR}/${PN}-0.2.0-renderdoc.patch"
+)
+
 RDEPEND="
 	app-arch/lz4
 	app-arch/zstd

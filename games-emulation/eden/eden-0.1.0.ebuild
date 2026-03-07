@@ -29,6 +29,7 @@ RESTRICT="!test? ( test )"
 
 PATCHES=(
 	"${DISTDIR}/${PN}-0.1.0-fix-httplib-package.patch"
+	"${FILESDIR}/${PN}-0.2.0-renderdoc.patch"
 )
 
 RDEPEND="
