@@ -4,8 +4,8 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} python3_{13..14}t )
-RUST_MIN_VER="1.90.0"
-RUST_MAX_VER="1.90.0"
+RUST_MIN_VER="1.92.0"
+RUST_MAX_VER="1.92.0"
 
 inherit cargo shell-completion python-any-r1
 

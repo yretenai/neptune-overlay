@@ -4,8 +4,8 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} python3_{13..14}t )
-RUST_MIN_VER="1.90.0"
-RUST_MAX_VER="1.90.0"
+RUST_MIN_VER="1.92.0"
+RUST_MAX_VER="1.92.0"
 
 inherit cargo shell-completion python-any-r1
 
@@ -15,7 +15,7 @@ HOMEPAGE="
 	https://github.com/denoland/deno/
 "
 
-RUST_V8_VER="145.0.0"
+RUST_V8_VER="146.1.0"
 SRC_URI="
 	https://github.com/denoland/deno/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/neptuwunium/neptune-overlay/releases/download/deps/${P}-crates.tar.xz
