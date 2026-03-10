@@ -5,6 +5,7 @@ EAPI=8
 
 JAVA_PKG_WANT_SOURCE=11
 JAVA_PKG_WANT_TARGET=11
+RUST_MIN_VER="1.90.0"
 
 inherit cargo git-r3 desktop xdg java-pkg-2
 
