@@ -36,6 +36,7 @@ EPYTEST_DESELECT=(
 	tests/test_util.py::test_is_online_errors
 )
 
+EPYTEST_PLUGINS=()
 distutils_enable_tests pytest
 
 src_prepare() {

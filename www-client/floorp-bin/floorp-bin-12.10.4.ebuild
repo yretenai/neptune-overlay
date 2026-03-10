@@ -15,10 +15,10 @@ HOMEPAGE="
 SRC_URI="amd64? ( https://github.com/Floorp-Projects/Floorp/releases/download/v${PV}/floorp-linux-x86_64.tar.xz -> ${PN}-amd64-${PV}.tar.xz )
 	arm64? ( https://github.com/Floorp-Projects/Floorp/releases/download/v${PV}/floorp-linux-aarch64.tar.xz -> ${PN}-arm64-${PV}.tar.xz )"
 
-KEYWORDS="-* amd64 ~arm64"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="+gmp-autoupdate selinux wayland"
 SLOT="0"
+KEYWORDS="-* amd64 ~arm64"
+IUSE="+gmp-autoupdate selinux wayland"
 
 RESTRICT="mirror strip"
 

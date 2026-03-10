@@ -7,8 +7,12 @@
 # 	https://github.com/Ray-Tracing-Systems/HydraAPI
 # - Package USD
 # 	https://github.com/PixarAnimationStudios/OpenUSD
+# - Package MaterialX
+# 	https://github.com/AcademySoftwareFoundation/MaterialX
 # - Package Draco
 # 	https://github.com/google/draco
+# - Package Audaspace
+# 	https://github.com/neXyon/audaspace
 
 EAPI=8
 
@@ -17,7 +21,7 @@ LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
 ROCM_VERSION="6.3"
 
-inherit neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r2
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
@@ -56,10 +60,9 @@ fi
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
-+jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
-+openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml
-pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan
-+wayland +webp X
+jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
++opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
+renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
 "
 RESTRICT="test"
 
@@ -78,12 +81,13 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 # Library versions for official builds can be found in the blender source directory in:
 # build_files/build_environment/install_deps.sh
 RDEPEND="${PYTHON_DEPS}
-	app-arch/zstd
+	>=dev-cpp/abseil-cpp-20250814.1:=
+	>=app-arch/zstd-1.5.7
 	dev-libs/boost:=[nls?]
 	dev-libs/lzo:2=
 	$(python_gen_cond_dep '
 		dev-python/cython[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.3.4[${PYTHON_USEDEP}]
 		dev-python/zstandard[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 	')
@@ -96,13 +100,13 @@ RDEPEND="${PYTHON_DEPS}
 	>=media-libs/openimageio-2.5.6.0:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
-	sci-libs/ceres-solver
+	>=sci-libs/ceres-solver-2.3.0
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
 	alembic? ( >=media-gfx/alembic-1.8.3-r2[boost(+),hdf(+)] )
 	collada? ( >=media-libs/opencollada-1.6.68 )
-	color-management? ( media-libs/opencolorio:= )
+	color-management? ( >=media-libs/opencolorio-2.5.0:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( media-libs/embree:=[raymask] )
 	ffmpeg? (
@@ -113,7 +117,6 @@ RDEPEND="${PYTHON_DEPS}
 	gmp? ( dev-libs/gmp[cxx] )
 	hip? ( dev-util/hip:= )
 	jack? ( virtual/jack )
-	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
 		app-misc/spacenavd
@@ -121,20 +124,16 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? ( >=media-libs/oidn-2.3.2:= )
-	oneapi? ( || (
-			dev-libs/intel-compute-runtime:0
-			dev-libs/intel-compute-runtime:legacy
-		)
-	)
+	oidn? ( >=media-libs/oidn-2.4.1:= )
+	oneapi? ( dev-libs/intel-compute-runtime:0 )
 	openexr? (
-		>=dev-libs/imath-3.1.7:=
-		>=media-libs/openexr-3.2.1:0=
+		>=dev-libs/imath-3.2.2:=
+		>=media-libs/openexr-3.4.3:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,tbb?] )
+	opensubdiv? ( >=media-libs/opensubdiv-3.7.0[opengl,cuda?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
+		>=media-gfx/openvdb-13.0.0:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( dev-libs/optix )
@@ -148,7 +147,7 @@ RDEPEND="${PYTHON_DEPS}
 	pulseaudio? ( media-libs/libpulse )
 	sdl? ( media-libs/libsdl2[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
-	tbb? ( >=dev-cpp/tbb-2021.13.0:= )
+	tbb? ( >=dev-cpp/tbb-2022.3.0:= )
 	tiff? ( media-libs/tiff:= )
 	valgrind? ( dev-debug/valgrind )
 	wayland? (
@@ -160,10 +159,10 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-		media-libs/shaderc
+		>=media-libs/shaderc-2025.4
 		dev-util/spirv-tools
 		dev-util/glslang
-		media-libs/vulkan-loader
+		>=media-libs/vulkan-loader-1.4.328
 	)
 	otf? (
 		media-libs/harfbuzz
@@ -180,7 +179,7 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}
-	dev-cpp/eigen:=
+	>=dev-cpp/eigen-5.0.2:=
 "
 
 BDEPEND="
@@ -257,7 +256,7 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 
 	if use llvm; then
-		llvm-r1_pkg_setup
+		llvm-r2_pkg_setup
 	fi
 }
 
@@ -379,7 +378,7 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
+		-DWITH_MEM_TBB=$(usex tbb)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)

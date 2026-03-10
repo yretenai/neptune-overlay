@@ -4,7 +4,7 @@
 EAPI=8
 
 LLVM_COMPAT=( 20 )
-inherit cmake llvm-r1
+inherit cmake llvm-r2
 
 if [[ ${PV} == 9999* ]]; then
 	EGIT_REPO_URI="https://github.com/dotnet/ClangSharp.git"

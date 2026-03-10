@@ -87,6 +87,9 @@
 		<flag name="amdgpu_targets_gfx1103">
 			AMD GCN GFX1103 RDNA 3 (RX 760M APU)
 		</flag>
+		<flag name="hip">
+			Enable ROCM HIP support (computation on GPU)
+		</flag>
 		<flag name="alembic">
 			Add support for Alembic through
 			<pkg>media-gfx/alembic</pkg>.

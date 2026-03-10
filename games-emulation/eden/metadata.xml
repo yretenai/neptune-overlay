@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-  <use>
-    <flag name="camera">Enable camera support</flag>
-    <flag name="cubeb">Enable the cubeb audio backend</flag>
-    <flag name="discord">Enable Discord Rich Presence</flag>
-    <flag name="opengl">Enable the OpenGL frontend</flag>
-    <flag name="sdl">Enable the SDL2 frontend</flag>
-    <flag name="ssl">Enable OpenSSL backend for ISslConnection</flag>
-    <flag name="usb">Enable the use of LibUSB</flag>
-    <flag name="web-applet">Enable web applet support</flag>
-    <flag name="web-service">Enable web services (telemetry, etc.)</flag>
-    <flag name="wifi">Enable Wi-Fi scanning</flag>
-  </use>
-  <upstream>
+	<use>
+		<flag name="camera">Enable camera support</flag>
+		<flag name="cubeb">Enable the cubeb audio backend</flag>
+		<flag name="discord">Enable Discord Rich Presence</flag>
+		<flag name="opengl">Enable the OpenGL frontend</flag>
+		<flag name="sdl">Enable the SDL2 frontend</flag>
+		<flag name="ssl">Enable OpenSSL backend for ISslConnection</flag>
+		<flag name="usb">Enable the use of LibUSB</flag>
+		<flag name="web-applet">Enable web applet support</flag>
+		<flag name="web-service">Enable web services (telemetry, etc.)</flag>
+		<flag name="wifi">Enable Wi-Fi scanning</flag>
+		<flag name="room">Enable Rooms</flag>
+		<flag name="llvm">Build using LLVM</flag>
+	</use>
+	<upstream>
 		<remote-id type="github">eden-emulator/Releases</remote-id>
-    <bugs-to>https://git.eden-emu.dev/eden-emu/eden/issues</bugs-to>
-  </upstream>
+		<bugs-to>https://git.eden-emu.dev/eden-emu/eden/issues</bugs-to>
+	</upstream>
 </pkgmetadata>

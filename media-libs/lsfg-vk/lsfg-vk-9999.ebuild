@@ -7,7 +7,7 @@ inherit cmake flag-o-matic toolchain-funcs
 
 DESCRIPTION="Lossless Scaling Frame Generation on Linux via DXVK/Vulkan"
 HOMEPAGE="https://github.com/PancakeTAS/lsfg-vk"
-LICENSE="GPL-3.0"
+LICENSE="GPL-3"
 SLOT="0"
 IUSE="+gui"
 

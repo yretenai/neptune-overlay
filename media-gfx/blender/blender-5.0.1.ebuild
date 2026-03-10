@@ -17,7 +17,7 @@ LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
 ROCM_VERSION="6.3"
 
-inherit neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r1
+inherit neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r2
 
 DESCRIPTION="3D Creation/Animation/Publishing System"
 HOMEPAGE="https://www.blender.org"
@@ -120,11 +120,7 @@ RDEPEND="${PYTHON_DEPS}
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
 	oidn? ( >=media-libs/oidn-2.3.2:= )
-	oneapi? ( || (
-			dev-libs/intel-compute-runtime:0
-			dev-libs/intel-compute-runtime:legacy
-		)
-	)
+	oneapi? ( dev-libs/intel-compute-runtime:0 )
 	openexr? (
 		>=dev-libs/imath-3.1.7:=
 		>=media-libs/openexr-3.2.1:0=
@@ -255,7 +251,7 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 
 	if use llvm; then
-		llvm-r1_pkg_setup
+		llvm-r2_pkg_setup
 	fi
 }
 

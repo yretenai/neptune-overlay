@@ -49,3 +49,6 @@ BDEPEND="
 "
 
 RESTRICT="!test? ( test )"
+
+EPYTEST_PLUGINS=()
+distutils_enable_tests pytest
