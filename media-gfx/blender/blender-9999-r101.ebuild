@@ -100,13 +100,13 @@ RDEPEND="${PYTHON_DEPS}
 	>=media-libs/openimageio-2.5.6.0:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
-	>=sci-libs/ceres-solver-2.3.0
+	>=sci-libs/ceres-solver-2.3.0_alpha1
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
 	alembic? ( >=media-gfx/alembic-1.8.3-r2[boost(+),hdf(+)] )
 	collada? ( >=media-libs/opencollada-1.6.68 )
-	color-management? ( >=media-libs/opencolorio-2.5.0:= )
+	color-management? ( media-libs/opencolorio:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( media-libs/embree:=[raymask] )
 	ffmpeg? (
@@ -124,16 +124,16 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? ( >=media-libs/oidn-2.4.1:= )
+	oidn? ( media-libs/oidn:= )
 	oneapi? ( dev-libs/intel-compute-runtime:0 )
 	openexr? (
-		>=dev-libs/imath-3.2.2:=
-		>=media-libs/openexr-3.4.3:0=
+		dev-libs/imath:=
+		media-libs/openexr:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.7.0[opengl,cuda?,tbb?] )
+	opensubdiv? ( media-libs/opensubdiv[opengl,cuda?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-13.0.0:=[nanovdb?]
+		media-gfx/openvdb:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( dev-libs/optix )
@@ -179,7 +179,7 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}
-	>=dev-cpp/eigen-5.0.2:=
+	dev-cpp/eigen:3/5
 "
 
 BDEPEND="

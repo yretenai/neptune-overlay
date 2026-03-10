@@ -18,7 +18,7 @@ SRC_URI="
 S="${WORKDIR}/${PN}-${EIGEN_VERSION}"
 
 LICENSE="MPL-2.0"
-SLOT="3"
+SLOT="3/5"
 
 # The following lines are shamelessly stolen from ffmpeg-9999.ebuild with modifications
 ARM_CPU_FEATURES=(
