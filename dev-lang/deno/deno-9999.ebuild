@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{12..14} python3_{13..14}t )
-RUST_MIN_VER="1.90.0"
+RUST_MIN_VER="1.92.0"
 
 inherit git-r3 cargo shell-completion python-any-r1
 
@@ -28,7 +28,7 @@ RESTRICT="test network-sandbox" # tests require /etc/hosts to be modified.
 
 RDEPEND="
 	dev-libs/glib
-	!!dev-lang/deno-bin
+	!!<dev-lang/deno-bin-9999
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

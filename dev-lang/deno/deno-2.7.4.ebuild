@@ -9,7 +9,7 @@ RUST_MAX_VER="1.92.0"
 
 inherit cargo shell-completion python-any-r1
 
-DESCRIPTION="Modern runtime for JavaScript and TypeScript"
+DESCRIPTION=798165"Modern runtime for JavaScript and TypeScript"
 HOMEPAGE="
 	https://deno.com/
 	https://github.com/denoland/deno/
@@ -44,7 +44,7 @@ RESTRICT="test" # requires network access, and /etc/hosts to be modified.
 RDEPEND="
 	${RDEPEND}
 	dev-libs/glib
-	!!dev-lang/deno-bin
+	!!<dev-lang/deno-bin-9999
 "
 DEPEND="${RDEPEND}"
 BDEPEND="

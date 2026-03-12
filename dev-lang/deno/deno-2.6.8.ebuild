@@ -44,7 +44,7 @@ RESTRICT="test" # requires network access, and /etc/hosts to be modified.
 RDEPEND="
 	${RDEPEND}
 	dev-libs/glib
-	!!dev-lang/deno-bin
+	!!<dev-lang/deno-bin-9999
 "
 DEPEND="${RDEPEND}"
 BDEPEND="
