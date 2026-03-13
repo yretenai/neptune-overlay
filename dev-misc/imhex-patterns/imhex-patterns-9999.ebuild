@@ -10,20 +10,19 @@ S="${WORKDIR}/${P}"
 LICENSE="GPL-2"
 SLOT="0"
 
-inherit git-r3 vcs-clean
+inherit git-r3
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex-Patterns.git"
 
 RDEPEND="
 	app-editors/imhex
 "
 
-src_prepare() {
-	default
-	egit_clean
-}
-
 src_install() {
 	insinto /usr/share/imhex
-	rm -rf "${S}/tests"
+	cd "${S}"
+	rm -rf ".github" "tests"
+	dodoc CONTRIBUTING.md LICENSE README.md
+	rm CONTRIBUTING.md LICENSE README.md .gitattributes .gitignore .gitmodules 
 	doins -r "${S}"/*
 }
+
