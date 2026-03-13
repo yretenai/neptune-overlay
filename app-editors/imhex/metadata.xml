@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<changelog>https://github.com/WerWolv/ImHex/releases</changelog>
+		<bugs-to>https://github.com/WerWolv/ImHex/issues</bugs-to>
+		<remote-id type="github">WerWolv/ImHex</remote-id>
+	</upstream>
+	<use>
+		<flag name="llvm">Use the system LLVM installation</flag>
+		<flag name="desktop-portal">Use sys-apps/xdg-desktop-portal file picker instead of the GTK one</flag>
+		<flag name="lz4">Enable lz4 compression / decompression support</flag>
+	</use>
+</pkgmetadata>

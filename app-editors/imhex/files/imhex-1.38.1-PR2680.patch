@@ -1,0 +1,22 @@
+From 6f2666a120bc615f7d46d6c697247ace2e3a7171 Mon Sep 17 00:00:00 2001
+From: Aya Freya Ahmed <614231+neptuwunium@users.noreply.github.com>
+Date: Fri, 13 Mar 2026 13:16:08 +0530
+Subject: [PATCH] Fix build with USE_SYSTEM_LLVM failing to find Demangle.h
+
+---
+ lib/trace/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/trace/CMakeLists.txt b/lib/trace/CMakeLists.txt
+index 256a4bf82e64a..63799debdcdcf 100644
+--- a/lib/trace/CMakeLists.txt
++++ b/lib/trace/CMakeLists.txt
+@@ -24,7 +24,7 @@ else()
+     set(LIBIMHEX_LIBRARY_TYPE_PRIVATE PRIVATE)
+ endif()
+ 
+-target_include_directories(tracing ${LIBIMHEX_LIBRARY_TYPE_PUBLIC} include)
++target_include_directories(tracing ${LIBIMHEX_LIBRARY_TYPE_PUBLIC} include ${LLVM_INCLUDE_DIRS})
+ 
+ if (NOT IMHEX_DISABLE_STACKTRACE)
+     if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")

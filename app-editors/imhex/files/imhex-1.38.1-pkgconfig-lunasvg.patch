@@ -1,0 +1,21 @@
+diff --git a/cmake/build_helpers.cmake b/cmake/build_helpers.cmake
+index 3391f9215..27237dd99 100644
+--- a/cmake/build_helpers.cmake
++++ b/cmake/build_helpers.cmake
+@@ -913,8 +913,14 @@ macro(addBundledLibraries)
+         add_subdirectory(${THIRD_PARTY_LIBS_FOLDER}/lunasvg EXCLUDE_FROM_ALL)
+         set(LUNASVG_LIBRARIES lunasvg)
+     else()
+-        find_package(lunasvg REQUIRED)
+-        set(LUNASVG_LIBRARIES lunasvg::lunasvg)
++        find_package(lunasvg QUIET)
++        if(lunasvg_FOUND)
++            set(LUNASVG_LIBRARIES lunasvg::lunasvg)
++        else()
++            find_package(PkgConfig REQUIRED)
++            pkg_check_modules(PC_LUNASVG REQUIRED IMPORTED_TARGET lunasvg)
++            set(LUNASVG_LIBRARIES PkgConfig::PC_LUNASVG)
++        endif()
+     endif()
+ 
+     if (NOT USE_SYSTEM_MD4C)
