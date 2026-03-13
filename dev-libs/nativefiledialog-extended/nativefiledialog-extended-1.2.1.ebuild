@@ -1,16 +1,12 @@
-# Copyright 2023-2025 Gentoo Authors
+# Copyright 2026 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-CMAKE_BUILD_TYPE="Release"
-
 inherit cmake
 
-DESCRIPTION="File dialog library with C and C++ bindings, based on nativefiledialog"
-HOMEPAGE="https://github.com/btzy/nativefiledialog-extended"
-LICENSE="ZLIB"
-SLOT="0/${PV}"
+DESCRIPTION="Cross platform native file dialog library with C and C++ bindings"
+HOMEPAGE="https://github.com/btzy/nativefiledialog-extended/"
 
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
@@ -22,15 +18,22 @@ else
 	KEYWORDS="~amd64 ~arm64"
 fi
 
-RDEPEND="
-	x11-libs/gtk+:3
-	dev-libs/glib
+LICENSE="ZLIB"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
+IUSE="+desktop-portal"
+
+DEPEND="
+	desktop-portal? ( sys-apps/dbus )
+	!desktop-portal? (
+		dev-libs/glib:2
+		x11-libs/gtk+:3
+	)
 "
-DEPEND="${RDEPEND}"
-
-IUSE="test"
-
-RESTRICT="!test? ( test )"
+RDEPEND="
+	${DEPEND}
+	desktop-portal? ( sys-apps/xdg-desktop-portal )
+"
 
 src_prepare() {
 	eapply_user
@@ -40,7 +43,10 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DNFD_BUILD_TESTS=$(usex test)
+		# tests are non-automated examples that open interactive dialogs
+		-DNFD_BUILD_TESTS=no
+		-DNFD_PORTAL=$(usex desktop-portal)
 	)
+
 	cmake_src_configure
 }
