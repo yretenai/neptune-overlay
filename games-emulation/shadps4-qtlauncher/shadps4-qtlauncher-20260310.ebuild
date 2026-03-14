@@ -15,8 +15,8 @@ if [[ ${PV} == *99999999* ]]; then
 	EGIT_REPO_URI="https://github.com/shadps4-emu/shadps4-qtlauncher.git"
 	EGIT_SUBMODULES=( "externals/fmt" )
 else
-	COMMIT=
-	EXT_FMT_COMMIT=
+	COMMIT=40bfed660a4876a43c88551bf9a73c516834b493
+	EXT_FMT_COMMIT=64db979e38ec644b1798e41610b28c8d2c8a2739
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadps4-qtlauncher/archive/${COMMIT}.tar.gz -> ${P}.tar.gz
@@ -34,7 +34,6 @@ DEPEND="
 	media-libs/libsdl3
 	dev-util/volk
 	dev-cpp/toml11
-	>=dev-libs/pugixml-1.14
 	dev-qt/qtbase:6[widgets,vulkan,concurrent,network]
 	dev-qt/qtmultimedia:6[ffmpeg,vulkan]
 	dev-qt/qttools:6[linguist]
