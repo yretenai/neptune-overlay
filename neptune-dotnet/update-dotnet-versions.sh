@@ -11,11 +11,16 @@ dotnet_strip() {
 dotnet_apply() {
 	EBUILD_NAME="$1"
 	VERSION="$2"
+	IS_PREVIEW="$3"
 	VERSION_SAFE="$(dotnet_strip "${VERSION}")"
 
 	cp "${EBUILD_NAME}.ebuild" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild"
 	if ! [ "${VERSION_SAFE}" = "${VERSION}" ]; then
 		sed -i "/\${PV}/s//${VERSION}/g" "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild" || exit
+	fi
+
+	if [[ "${IS_PREVIEW}" == 1 ]]; then
+		sed -i '/KEYWORDS=/d' "${ADADOTNET_ROOT}/${EBUILD_NAME}/${EBUILD_NAME}-${VERSION_SAFE}.ebuild"
 	fi
 }
 
@@ -41,19 +46,25 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 	RELEASE_INDEX_DATA=$(curl -s "${RELEASE_INDEX}")
 	RELEASE_ASP="$(echo ${RELEASE_INDEX_DATA} | jq --raw-output '.releases[0]["aspnetcore-runtime"].version')"
 	RELEASE_SDK_SAFE="$(dotnet_strip "${RELEASE_HEAD_SDK}")"
-	dotnet_apply dotnet-sdk "${RELEASE_HEAD_SDK}"
+
+	if ([ "${RELEASE_TYPE}" = "go-live" ] || [ "${RELEASE_TYPE}" = "preview" ]); then
+		IS_PREVIEW=1
+	else
+		IS_PREVIEW=0
+	fi
+
+	dotnet_apply dotnet-sdk "${RELEASE_HEAD_SDK}" "${IS_PREVIEW}"
 	sed -i "/__DOTNET_ASP_VERSION__/s//$(dotnet_strip "${RELEASE_ASP}")/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 	sed -i "/__DOTNET_VERSION__/s//$(dotnet_strip "${RELEASE_RUNTIME}")/g" "${ADADOTNET_ROOT}/dotnet-sdk/dotnet-sdk-${RELEASE_SDK_SAFE}.ebuild" || exit
 
-	dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}"
-	dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}"
+	dotnet_apply dotnet-aspnetcore-runtime "${RELEASE_ASP}" "${IS_PREVIEW}"
+	dotnet_apply dotnet-runtime "${RELEASE_RUNTIME}" "${IS_PREVIEW}"
 
-	IS_PREVIEW=0
 	if ([ "${RELEASE_TYPE}" = "active" ] || [ "${RELEASE_TYPE}" = "eol" ] || [ "${RELEASE_TYPE}" = "maintenance" ]); then
 		# only add head cli
 		if [ "${IS_FIRST}" = "Y" ]; then
-			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
-			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_HEAD_SDK}" | sed 's/..$/00/')"
+			dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}" "${IS_PREVIEW}"
+			dotnet_apply dotnet-man "$(printf "%s" "${RELEASE_HEAD_SDK}" | sed 's/..$/00/')" "${IS_PREVIEW}"
 			# dotnet_apply netstandard "${LATEST_NETSTANDARD_VERSION}.${RELEASE_HEAD_SDK}"
 
 			# sed -i "/__DOTNET_VERSION__/s//${RELEASE_HEAD_SDK}/g" "${ADADOTNET_ROOT}/netstandard/netstandard-${LATEST_NETSTANDARD_VERSION}.${RELEASE_HEAD_SDK}.ebuild" || exit
@@ -63,12 +74,11 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 			IS_FIRST=N
 		fi
 	else
-		IS_PREVIEW=1
 		# also add preview cli
-		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}"
+		dotnet_apply dotnet-cli-bin "${RELEASE_RUNTIME}" "${IS_PREVIEW}"
 	fi
 
-	echo $RELEASE_CHANNEL $RELEASE_TYPE $RELEASE_HEAD_SDK $RELEASE_RUNTIME $RELEASE_ASP $RELEASE_INDEX
+	echo channel=$RELEASE_CHANNEL type=$RELEASE_TYPE preview=$IS_PREVIEW sdk=$RELEASE_HEAD_SDK runtime=$RELEASE_RUNTIME asp=$RELEASE_ASP index=$RELEASE_INDEX
 
 	RELEASE_NUGET_VERSIONS=""
 	RELEASE_ASPNET_VERSIONS=""
@@ -81,7 +91,7 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 
 		RELEASE_NUGET_VERSIONS+="${RELEASE_NUGET} "
 	done
-	dotnet_apply dotnet-runtime-nugets "${RELEASE_CHANNEL}.${REVISION}"
+	dotnet_apply dotnet-runtime-nugets "${RELEASE_CHANNEL}.${REVISION}" "${IS_PREVIEW}"
 	sed -i "/__DOTNET_VERSION__/s//${RELEASE_NUGET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-runtime-nugets/dotnet-runtime-nugets-$(dotnet_strip "${RELEASE_CHANNEL}.${REVISION}").ebuild" || exit
 
 	for RELEASE_NUGET in $(echo ${RELEASE_INDEX_DATA} | jq --raw-output '[.releases[]["aspnetcore-runtime"].version] | join(" ")'); do
@@ -91,7 +101,7 @@ for RELEASE in $(curl -s https://dotnetcli.blob.core.windows.net/dotnet/release-
 
 		RELEASE_ASPNET_VERSIONS+="${RELEASE_NUGET} "
 	done
-	dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_CHANNEL}.${REVISION}"
+	dotnet_apply dotnet-aspnetcore-nugets "${RELEASE_CHANNEL}.${REVISION}" "${IS_PREVIEW}"
 	sed -i "/__DOTNET_VERSION__/s//${RELEASE_ASPNET_VERSIONS}/g" "${ADADOTNET_ROOT}/dotnet-aspnetcore-nugets/dotnet-aspnetcore-nugets-$(dotnet_strip "${RELEASE_CHANNEL}.${REVISION}").ebuild" || exit
 
 	if [ "${RELEASE_CHANNEL}" = "8.0" ]; then
@@ -106,9 +116,6 @@ done
 
 pkgdev_do() {
 	git add $1
-	if [ -n "$(git status --porcelain .)" ]; then
-		pkgdev commit
-	fi
 }
 
 if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
@@ -118,5 +125,10 @@ if [ ! -z "$NEPTUNE_REPO_PKGDEV" ]; then
 		pkgdev_do $TARGET
 	done
 	# pkgdev_do netstandard
+
+	if [ -n "$(git status --porcelain .)" ]; then
+		pkgdev commit -m "neptune-dotnet: bump dotnet"
+	fi
+
 	cd "${OLD_PWD}"
 fi
