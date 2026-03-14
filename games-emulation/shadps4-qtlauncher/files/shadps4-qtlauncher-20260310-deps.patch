@@ -1,25 +1,3 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5860d25..87f7e1f 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -391,7 +391,7 @@ qt_add_executable(shadPS4QtLauncher
- 
- create_target_directory_groups(shadPS4QtLauncher)
- 
--target_link_libraries(shadPS4QtLauncher PRIVATE Vulkan::Headers fmt::fmt toml11::toml11 SDL3::SDL3 pugixml::pugixml volk_headers)
-+target_link_libraries(shadPS4QtLauncher PRIVATE Vulkan::Headers fmt::fmt toml11::toml11 SDL3::SDL3 pugixml::pugixml)
- 
- if (APPLE)
-     # Include MoltenVK, along with an ICD file so it can be found by the system Vulkan loader if used for loading layers.
-@@ -421,7 +421,7 @@ if (APPLE)
-     add_dependencies(shadPS4QtLauncher CopyMoltenVK)
- endif()
- 
--target_link_libraries(shadPS4QtLauncher PRIVATE Qt6::Widgets Qt6::Concurrent Qt6::Network Qt6::Multimedia nlohmann_json::nlohmann_json)
-+target_link_libraries(shadPS4QtLauncher PRIVATE Qt6::Widgets Qt6::Concurrent Qt6::Network Qt6::Multimedia)
- if (ENABLE_UPDATER)
-     add_definitions(-DENABLE_UPDATER)
- endif()
 diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
 index 811836d..a79e72b 100644
 --- a/externals/CMakeLists.txt

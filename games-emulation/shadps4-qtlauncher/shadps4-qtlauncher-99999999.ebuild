@@ -67,6 +67,7 @@ src_unpack() {
 
 src_prepare() {
 	default
+	cmake_prepare
 
 	sed -e "s|volk_headers||g" -i CMakeLists.txt || die
 	sed -e "s|nlohmann_json::nlohmann_json||g" -i CMakeLists.txt || die
