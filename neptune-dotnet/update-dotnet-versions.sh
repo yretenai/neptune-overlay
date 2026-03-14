@@ -26,7 +26,7 @@ dotnet_apply() {
 
 TARGETS="dotnet-aspnetcore-runtime dotnet-runtime dotnet-aspnetcore-nugets dotnet-runtime-nugets dotnet-sdk dotnet-cli-bin dotnet-man"
 for TARGET in $TARGETS; do
-	find "${ADADOTNET_ROOT}/${TARGET}" \( -iname "*8.0*.ebuild" -or -iname "*9.0*.ebuild" -or -iname "*10.0*.ebuild" \) -delete
+	find "${ADADOTNET_ROOT}/${TARGET}" \( -iname "*8.0*.ebuild" -or -iname "*9.0*.ebuild" -or -iname "*10.0*.ebuild"-or -iname "*11.0*.ebuild" \) -delete
 done
 # find "${ADADOTNET_ROOT}/netstandard" -iname "*.ebuild" -delete
 
