@@ -114,6 +114,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-4.3-mono-path.patch"
 	"${FILESDIR}/${PN}-4.5-udev.patch"
 	"${FILESDIR}/${PN}-9999-volk.patch"
+	"${FILESDIR}/${PN}-9999-cursorshape.patch"
 )
 
 addpredicthid() {
@@ -162,8 +163,6 @@ src_prepare() {
 	sed -e "s/app_id = \"org.godotengine.ProjectManager\"/app_id = \"org.godotengine.ProjectManager${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 	sed -e "s/app_id = \"org.godotengine.Godot\"/app_id = \"org.godotengine.Godot${s}\"/g" -i platform/linuxbsd/wayland/display_server_wayland.cpp || die
 	sed -e "s|__GODOT_VERSION__|godot${s}|" -i modules/mono/godotsharp_dirs.cpp
-
-	sed -i "s/#define WAYLAND/#ifdef CursorShape\n#undef CursorShape\n#endif\n#define WAYLAND/" platform/linuxbsd/wayland/display_server_wayland.cpp || die
 
 	# use of builtin_ switches can be messy (see below), delete to be sure
 	local unbundle=(

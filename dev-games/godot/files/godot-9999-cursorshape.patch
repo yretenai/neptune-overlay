@@ -1,0 +1,12 @@
+diff --git a/drivers/vulkan/godot_vulkan.h b/drivers/vulkan/godot_vulkan.h
+index b665cddd6f..c4f6e04768 100644
+--- a/drivers/vulkan/godot_vulkan.h
++++ b/drivers/vulkan/godot_vulkan.h
+@@ -36,4 +36,7 @@
+ #include <cstdint>
+ #define VK_NO_STDINT_H
+ #include <vulkan/vulkan.h>
++#ifdef CursorShape
++#undef CursorShape
++#endif
+ #endif
