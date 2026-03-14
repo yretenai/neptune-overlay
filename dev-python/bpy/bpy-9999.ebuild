@@ -3,7 +3,7 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{13..14} )
+PYTHON_COMPAT=( python3_13 )
 LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
 ROCM_VERSION="6.3"
@@ -36,10 +36,10 @@ fi
 
 IUSE="
 alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
-debug +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack jpeg2k
-llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl +opensubdiv
-+openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio renderdoc
-sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
+debug +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
+jpeg2k llvm +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
++opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
+renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
 "
 RESTRICT="test"
 
@@ -58,12 +58,13 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 # Library versions for official builds can be found in the blender source directory in:
 # build_files/build_environment/install_deps.sh
 RDEPEND="${PYTHON_DEPS}
-	app-arch/zstd
+	>=dev-cpp/abseil-cpp-20250814.1:=
+	>=app-arch/zstd-1.5.7
 	dev-libs/boost:=[nls?]
 	dev-libs/lzo:2=
 	$(python_gen_cond_dep '
 		dev-python/cython[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.3.4[${PYTHON_USEDEP}]
 		dev-python/zstandard[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 	')
@@ -76,6 +77,7 @@ RDEPEND="${PYTHON_DEPS}
 	>=media-libs/openimageio-2.5.6.0:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
+	>=sci-libs/ceres-solver-2.3.0_alpha1
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
@@ -99,16 +101,16 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? ( >=media-libs/oidn-2.3.2:= )
+	oidn? ( media-libs/oidn:= )
 	oneapi? ( dev-libs/intel-compute-runtime:0 )
 	openexr? (
-		>=dev-libs/imath-3.1.7:=
-		>=media-libs/openexr-3.2.1:0=
+		dev-libs/imath:=
+		media-libs/openexr:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,tbb?] )
+	opensubdiv? ( media-libs/opensubdiv[opengl,cuda?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
+		media-gfx/openvdb:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( dev-libs/optix )
@@ -122,7 +124,7 @@ RDEPEND="${PYTHON_DEPS}
 	pulseaudio? ( media-libs/libpulse )
 	sdl? ( media-libs/libsdl2[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
-	tbb? ( >=dev-cpp/tbb-2021.13.0:= )
+	tbb? ( >=dev-cpp/tbb-2022.3.0:= )
 	tiff? ( media-libs/tiff:= )
 	valgrind? ( dev-debug/valgrind )
 	wayland? (
@@ -134,10 +136,10 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-		media-libs/shaderc
+		>=media-libs/shaderc-2025.4
 		dev-util/spirv-tools
 		dev-util/glslang
-		media-libs/vulkan-loader
+		>=media-libs/vulkan-loader-1.4.328
 	)
 	otf? (
 		media-libs/harfbuzz
@@ -154,7 +156,7 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}
-	dev-cpp/eigen:=
+	dev-cpp/eigen:3/5
 "
 
 BDEPEND="
@@ -227,7 +229,6 @@ src_prepare() {
 	sed -e "s|GENERATE_HTMLHELP      = YES|GENERATE_HTMLHELP      = NO|" \
 		-i doc/doxygen/Doxyfile || die
 
-	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
 	sed -e "s|var->ob_refcnt|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
 
 	if use experimental; then
@@ -252,6 +253,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
+		-DHIPRT_LIBRARY="${EPREFIX}/usr/$(get_libdir)/libhiprt64.so.2.5"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
