@@ -40,7 +40,7 @@ RDEPEND="
 src_install() {
 	exeinto "/opt/${PN}"
 	doexe hytale-launcher
-	dosym "/opt/${PN}/hytale-launcher" /usr/bin/hytale-launcher
+	dosym "../../opt/${PN}/hytale-launcher" /usr/bin/hytale-launcher
 	doicon "${FILESDIR}/hytale.png"
 	make_desktop_entry --eapi9 "hytale-launcher" -n "Hytale Launcher" -i "hytale" -c "Game"
 }
