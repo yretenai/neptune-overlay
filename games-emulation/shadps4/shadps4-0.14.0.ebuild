@@ -100,7 +100,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
 	"${FILESDIR}/${PN}-0.8.0-tracy.patch"
-	"${FILESDIR}/${PN}-9999-deps.patch"
+	"${FILESDIR}/${PN}-0.14.0-deps.patch"
 )
 
 src_unpack() {
@@ -127,6 +127,8 @@ src_prepare() {
 	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt || die
 	sed -e "s|nlohmann_json::nlohmann_json||" -i CMakeLists.txt || die
 	sed -e "s|<miniz.h>|<miniz/miniz.h>|" -i src/video_core/cache_storage.cpp || die
+	sed -e "s|add_subdirectory(json)||" -i externals/CMakeLists.txt || die
+	sed -e "s|add_subdirectory(miniz)|find_package(miniz REQUIRED)|" -i externals/CMakeLists.txt || die
 
 	cmake_src_prepare
 }
