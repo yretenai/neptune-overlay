@@ -353,7 +353,7 @@ electron-r1_patch_electron_builder() {
 		return
 	fi
 
-	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|await unpack|return; await unpack|' {} \; || die "can't prevent electron from unpacking"
+	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|.*await unpack|return; await unpack|' {} \; || die "can't prevent electron from unpacking"
 	find node_modules -iwholename "*/app-builder-lib/out/electron/ElectronFramework.js" -exec sed -i -e 's|beforeCopyExtraFiles(options) {|beforeCopyExtraFiles(options) { return;|' {} \; || die "can't prevent electron from renaming files"
 }
 
