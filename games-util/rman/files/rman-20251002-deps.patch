@@ -1,0 +1,394 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af1e7d8..31f557a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,6 +14,8 @@ if (WIN32)
+     include_directories("C:/Program Files (x86)/WinFsp/inc")
+ endif()
+ 
++add_compile_definitions(ZSTD_STATIC_LINKING_ONLY=1)
++
+ add_library(rlib STATIC
+     lib/rlib/ar.hpp
+     lib/rlib/ar.cpp
+@@ -52,9 +54,9 @@ add_library(rlib STATIC
+     lib/rlib/rmanifest.hpp
+ )
+ target_include_directories(rlib PUBLIC lib/)
+-target_link_libraries(rlib PUBLIC argparse libcurl zstd fmt)
+-target_link_libraries(rlib PUBLIC argparse zstd fmt)
+-target_link_libraries(rlib PRIVATE json_struct digestpp miniz blake3)
++target_link_libraries(rlib PUBLIC fmt)
++target_link_libraries(rlib PUBLIC ${CURL_LIBRARIES} ${ZSTD_STATIC_LIBRARIES} ${XXHASH_LIBRARIES})
++target_link_libraries(rlib PRIVATE miniz blake3)
+ if (WIN32)
+     target_sources(rlib INTERFACE
+         res/longpath.manifest
+@@ -62,47 +64,64 @@ if (WIN32)
+     )
+ endif()
+ 
++include(GNUInstallDirs)
++
+ add_executable(rman-dl src/rman_dl.cpp)
+ target_link_libraries(rman-dl PRIVATE rlib)
++install(TARGETS rman-dl RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-ls src/rman_ls.cpp)
+ target_link_libraries(rman-ls PRIVATE rlib)
++install(TARGETS rman-ls RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-bl src/rman_bl.cpp)
+ target_link_libraries(rman-bl PRIVATE rlib)
++install(TARGETS rman-bl RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-diff src/rman_diff.cpp)
+ target_link_libraries(rman-diff PRIVATE rlib)
++install(TARGETS rman-diff RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-make src/rman_make.cpp)
+ target_link_libraries(rman-make PRIVATE rlib)
++install(TARGETS rman-make RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-merge src/rman_merge.cpp)
+ target_link_libraries(rman-merge PRIVATE rlib)
++install(TARGETS rman-merge RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-mount src/rman_mount.cpp)
+ target_link_libraries(rman-mount PRIVATE rlib fuse3)
++install(TARGETS rman-mount RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-rads src/rman_rads.cpp)
+ target_link_libraries(rman-rads PRIVATE rlib)
++install(TARGETS rman-rads RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-chk src/rman_chk.cpp)
+ target_link_libraries(rman-chk PRIVATE rlib)
++install(TARGETS rman-chk RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rman-remake src/rman_remake.cpp)
+ target_link_libraries(rman-remake PRIVATE rlib)
++install(TARGETS rman-remake RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rbun-chk src/rbun_chk.cpp)
+ target_link_libraries(rbun-chk PRIVATE rlib)
++install(TARGETS rbun-chk RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rbun-ex src/rbun_ex.cpp)
+ target_link_libraries(rbun-ex PRIVATE rlib)
++install(TARGETS rbun-ex RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rbun-ls src/rbun_ls.cpp)
+ target_link_libraries(rbun-ls PRIVATE rlib)
++install(TARGETS rbun-ls RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rbun-merge src/rbun_merge.cpp)
+ target_link_libraries(rbun-merge PRIVATE rlib)
++install(TARGETS rbun-merge RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ add_executable(rbun-usage src/rbun_usage.cpp)
+ target_link_libraries(rbun-usage PRIVATE rlib)
++install(TARGETS rbun-usage RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/dep/CMakeLists.txt b/dep/CMakeLists.txt
+index 3c75949..9c2d723 100644
+--- a/dep/CMakeLists.txt
++++ b/dep/CMakeLists.txt
+@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20)
+ # This is need on some linuxes because threading is "optional"
+ find_package (Threads REQUIRED)
+ 
++if (WIN32)
+ # Manage all our dependencies with cmake and git
+ include(FetchContent)
+ 
+@@ -144,3 +145,15 @@ if(NOT blake3_POPULATED)
+     FetchContent_Populate(blake3)
+     add_subdirectory(${blake3_SOURCE_DIR}/c ${blake3_BINARY_DIR})
+ endif()
++endif()
++
++include(FindPkgConfig)
++
++pkg_search_module(CURL REQUIRED libcurl)
++pkg_search_module(ZSTD REQUIRED libzstd)
++pkg_search_module(XXHASH REQUIRED libxxhash)
++find_package (argparse CONFIG REQUIRED)
++find_package (fmt CONFIG REQUIRED)
++find_package (json_struct CONFIG REQUIRED)
++find_package (miniz CONFIG REQUIRED)
++find_package (blake3 CONFIG REQUIRED)
+diff --git a/lib/rlib/ar_zip.cpp b/lib/rlib/ar_zip.cpp
+index f4e88e8..e149487 100644
+--- a/lib/rlib/ar_zip.cpp
++++ b/lib/rlib/ar_zip.cpp
+@@ -1,4 +1,4 @@
+-#include <miniz.h>
++#include <miniz/miniz.h>
+ 
+ #include "ar.hpp"
+ 
+diff --git a/lib/rlib/rbundle.cpp b/lib/rlib/rbundle.cpp
+index 4acb18b..15e286b 100644
+--- a/lib/rlib/rbundle.cpp
++++ b/lib/rlib/rbundle.cpp
+@@ -1,6 +1,6 @@
+ #include "rbundle.hpp"
+ 
+-#include <common/xxhash.h>
++#include <xxhash.h>
+ #include <zstd.h>
+ 
+ #include <bit>
+diff --git a/lib/rlib/rcache.cpp b/lib/rlib/rcache.cpp
+index 0fcb87f..84b0f31 100644
+--- a/lib/rlib/rcache.cpp
++++ b/lib/rlib/rcache.cpp
+@@ -1,6 +1,6 @@
+ #include "rcache.hpp"
+ 
+-#include <common/xxhash.h>
++#include <xxhash.h>
+ #include <zstd.h>
+ 
+ #include <charconv>
+@@ -303,4 +303,4 @@ auto RCache::load_folder_internal() -> void {
+         }
+         lookup_.merge(std::move(bundle.lookup));
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/lib/rlib/rchunk.cpp b/lib/rlib/rchunk.cpp
+index 1594225..10019de 100644
+--- a/lib/rlib/rchunk.cpp
++++ b/lib/rlib/rchunk.cpp
+@@ -2,7 +2,7 @@
+ 
+ #include <bit>
+ #include <cstring>
+-#include <digestpp.hpp>
++#include <digestpp/digestpp.hpp>
+ 
+ #include "common.hpp"
+ #include "iofile.hpp"
+@@ -116,4 +116,4 @@ auto RChunk::Dst::verify(fs::path const& path, std::vector<RChunk::Dst>& chunks,
+         }
+         return false;
+     });
+-}
+\ No newline at end of file
++}
+diff --git a/lib/rlib/rchunk.hpp b/lib/rlib/rchunk.hpp
+index e60a524..5a8b602 100644
+--- a/lib/rlib/rchunk.hpp
++++ b/lib/rlib/rchunk.hpp
+@@ -77,7 +77,7 @@ namespace rlib {
+ template <>
+ struct fmt::formatter<rlib::BundleID> : formatter<std::string> {
+     template <typename FormatContext>
+-    auto format(rlib::BundleID id, FormatContext& ctx) {
++    auto format(rlib::BundleID id, FormatContext& ctx) const {
+         return formatter<std::string>::format(fmt::format("{:016X}", (std::uint64_t)id), ctx);
+     }
+ };
+@@ -85,7 +85,7 @@ struct fmt::formatter<rlib::BundleID> : formatter<std::string> {
+ template <>
+ struct fmt::formatter<rlib::ChunkID> : formatter<std::string> {
+     template <typename FormatContext>
+-    auto format(rlib::ChunkID id, FormatContext& ctx) {
++    auto format(rlib::ChunkID id, FormatContext& ctx) const {
+         return formatter<std::string>::format(fmt::format("{:016X}", (std::uint64_t)id), ctx);
+     }
+-};
+\ No newline at end of file
++};
+diff --git a/lib/rlib/rfile.hpp b/lib/rlib/rfile.hpp
+index a2f1ebe..192010b 100644
+--- a/lib/rlib/rfile.hpp
++++ b/lib/rlib/rfile.hpp
+@@ -53,7 +53,7 @@ namespace rlib {
+ template <>
+ struct fmt::formatter<rlib::FileID> : formatter<std::string> {
+     template <typename FormatContext>
+-    auto format(rlib::FileID id, FormatContext& ctx) {
++    auto format(rlib::FileID id, FormatContext& ctx) const {
+         return formatter<std::string>::format(fmt::format("{:016X}", (std::uint64_t)id), ctx);
+     }
+ };
+diff --git a/src/rbun_chk.cpp b/src/rbun_chk.cpp
+index b02f180..8a1870e 100644
+--- a/src/rbun_chk.cpp
++++ b/src/rbun_chk.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rbun_ex.cpp b/src/rbun_ex.cpp
+index f7b3693..423e8ea 100644
+--- a/src/rbun_ex.cpp
++++ b/src/rbun_ex.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <charconv>
+ #include <iostream>
+ #include <rlib/common.hpp>
+diff --git a/src/rbun_ls.cpp b/src/rbun_ls.cpp
+index 9c64517..4b6b8a5 100644
+--- a/src/rbun_ls.cpp
++++ b/src/rbun_ls.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rbun_merge.cpp b/src/rbun_merge.cpp
+index 22da14d..ecc328d 100644
+--- a/src/rbun_merge.cpp
++++ b/src/rbun_merge.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rbun_usage.cpp b/src/rbun_usage.cpp
+index cfd943b..25558ad 100644
+--- a/src/rbun_usage.cpp
++++ b/src/rbun_usage.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_bl.cpp b/src/rman_bl.cpp
+index 4387040..7eb399e 100644
+--- a/src/rman_bl.cpp
++++ b/src/rman_bl.cpp
+@@ -1,7 +1,7 @@
+ #include <fmt/args.h>
+ #include <fmt/format.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_chk.cpp b/src/rman_chk.cpp
+index b8af7ca..198b2aa 100644
+--- a/src/rman_chk.cpp
++++ b/src/rman_chk.cpp
+@@ -1,7 +1,7 @@
+ #include <fmt/args.h>
+ #include <fmt/format.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_diff.cpp b/src/rman_diff.cpp
+index 81263a8..3dd3dad 100644
+--- a/src/rman_diff.cpp
++++ b/src/rman_diff.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_dl.cpp b/src/rman_dl.cpp
+index 6c91be8..d187ca1 100644
+--- a/src/rman_dl.cpp
++++ b/src/rman_dl.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_ls.cpp b/src/rman_ls.cpp
+index 58b63a6..a029f0c 100644
+--- a/src/rman_ls.cpp
++++ b/src/rman_ls.cpp
+@@ -1,4 +1,4 @@
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_make.cpp b/src/rman_make.cpp
+index 918b20d..d362574 100644
+--- a/src/rman_make.cpp
++++ b/src/rman_make.cpp
+@@ -1,8 +1,8 @@
+-#include <common/xxhash.h>
++#include <xxhash.h>
+ #include <fmt/args.h>
+ #include <fmt/format.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/ar.hpp>
+ #include <rlib/common.hpp>
+diff --git a/src/rman_merge.cpp b/src/rman_merge.cpp
+index 997ac21..ba910a0 100644
+--- a/src/rman_merge.cpp
++++ b/src/rman_merge.cpp
+@@ -1,8 +1,8 @@
+-#include <common/xxhash.h>
++#include <xxhash.h>
+ #include <fmt/args.h>
+ #include <fmt/format.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/ar.hpp>
+ #include <rlib/common.hpp>
+diff --git a/src/rman_mount.cpp b/src/rman_mount.cpp
+index d2c0c2a..0c0f19c 100644
+--- a/src/rman_mount.cpp
++++ b/src/rman_mount.cpp
+@@ -4,7 +4,7 @@
+ #include <fuse3/fuse_common.h>
+ #include <sys/stat.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <chrono>
+ #include <cinttypes>
+ #include <compare>
+diff --git a/src/rman_rads.cpp b/src/rman_rads.cpp
+index e84d89e..c4966c7 100644
+--- a/src/rman_rads.cpp
++++ b/src/rman_rads.cpp
+@@ -1,7 +1,7 @@
+ #include <fmt/args.h>
+ #include <fmt/format.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/common.hpp>
+ #include <rlib/iofile.hpp>
+diff --git a/src/rman_remake.cpp b/src/rman_remake.cpp
+index 12f76c6..a4bbf58 100644
+--- a/src/rman_remake.cpp
++++ b/src/rman_remake.cpp
+@@ -1,8 +1,8 @@
+-#include <common/xxhash.h>
++#include <xxhash.h>
+ #include <fmt/args.h>
+ #include <fmt/format.h>
+ 
+-#include <argparse.hpp>
++#include <argparse/argparse.hpp>
+ #include <iostream>
+ #include <rlib/ar.hpp>
+ #include <rlib/common.hpp>

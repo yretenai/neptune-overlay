@@ -11,12 +11,12 @@ HOMEPAGE="https://github.com/moonshadow565/rman"
 LICENSE="MIT"
 SLOT="0"
 
-if [[ ${PV} == *99999999* ]]; then
+if [[ 20240406 == *99999999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/moonshadow565/rman.git"
 else
-	SRC_URI="https://github.com/moonshadow565/rman/archive/refs/tags/2024-04-06-c4e7a9f.tar.gz -> ${PN}-${PV}.tar.gz"
-	S="${WORKDIR}/${PN}-2024-04-06-c4e7a9f"
+	SRC_URI="https://github.com/moonshadow565/rman/archive/refs/tags/2025-10-02-c1b8a9e.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/${PN}-2025-10-02-c1b8a9e"
 	KEYWORDS="~amd64 ~arm64"
 fi
 
@@ -30,6 +30,7 @@ DEPEND="
 	dev-cpp/json_struct
 	dev-libs/libfmt:=
 	dev-libs/miniz
+	dev-libs/blake3
 	sys-fs/fuse:=
 "
 
@@ -38,11 +39,5 @@ RDEPEND="
 "
 
 PATCHES="
-	${FILESDIR}/${PN}-${PV}-deps.patch
-	${FILESDIR}/${PN}-${PV}-install.patch
-	${FILESDIR}/${PN}-${PV}-digestpp.patch
-	${FILESDIR}/${PN}-${PV}-argparse.patch
-	${FILESDIR}/${PN}-${PV}-miniz.patch
-	${FILESDIR}/${PN}-${PV}-xxhash.patch
-	${FILESDIR}/${PN}-${PV}-fmtconst.patch
+	${FILESDIR}/${P}-deps.patch
 "
