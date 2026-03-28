@@ -21,12 +21,11 @@ if [[ "${PV}" == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/Mastermindzh/tidal-hifi.git"
 else
 	SRC_URI="https://github.com/Mastermindzh/tidal-hifi/archive/refs/tags/${PV}-Mavy.tar.gz -> ${P}.tar.gz"
-	# Requires network access (https) as long as NPM dependencies aren't packaged
-	RESTRICT="network-sandbox"
 	S="${WORKDIR}/${P}-Mavy"
 fi
 
-RESTRICT="mirror test ${RESTRICT}"
+# Requires network access (https) as long as NPM dependencies aren't packaged
+RESTRICT="mirror test ${RESTRICT} network-sandbox"
 
 BDEPEND="
 	>=net-libs/nodejs-20.6.1[npm]
