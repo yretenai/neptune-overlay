@@ -58,7 +58,7 @@ else
 fi
 
 IUSE="
-alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
+alembic +bullet +color-management cuda +cycles-bin-kernels +cycles
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
 jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
 +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
@@ -105,7 +105,6 @@ RDEPEND="${PYTHON_DEPS}
 	virtual/libintl
 	virtual/opengl
 	alembic? ( >=media-gfx/alembic-1.8.3-r2[boost(+),hdf(+)] )
-	collada? ( >=media-libs/opencollada-1.6.68 )
 	color-management? ( >=media-libs/opencolorio-2.5:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( media-libs/embree:=[raymask] )
@@ -330,7 +329,6 @@ src_configure() {
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DWITH_ALEMBIC=$(usex alembic)
-		-DWITH_BOOST=yes
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CLANG=$(usex llvm)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
@@ -359,7 +357,6 @@ src_configure() {
 		-DWITH_FFTW3=$(usex fftw)
 		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"
 		-DWITH_GHOST_WAYLAND_DYNLOAD=no
-		-DWITH_GHOST_WAYLAND_LIBDECOR=no
 		-DWITH_GHOST_WAYLAND=$(usex wayland)
 		-DWITH_GHOST_X11=$(usex X)
 		-DWITH_GMP=$(usex gmp)
@@ -378,13 +375,11 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_TBB=$(usex tbb)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)
 		-DWITH_NANOVDB=$(usex nanovdb)
 		-DWITH_OPENAL=$(usex openal)
-		-DWITH_OPENCOLLADA=$(usex collada)
 		-DWITH_OPENCOLORIO=$(usex color-management)
 		-DWITH_OPENIMAGEDENOISE=$(usex oidn)
 		-DWITH_OPENSUBDIV=$(usex opensubdiv)
@@ -402,7 +397,6 @@ src_configure() {
 		-DWITH_STRICT_BUILD_OPTIONS=yes
 		-DEigen3_DIR=/usr/share/eigen5/cmake
 		-DWITH_SYSTEM_FREETYPE=yes
-		-DWITH_SYSTEM_LZO=yes
 		-DWITH_TBB=$(usex tbb)
 		-DWITH_USD=no # TODO: Package USD
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
