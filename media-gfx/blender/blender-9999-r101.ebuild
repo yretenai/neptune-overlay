@@ -106,7 +106,7 @@ RDEPEND="${PYTHON_DEPS}
 	virtual/opengl
 	alembic? ( >=media-gfx/alembic-1.8.3-r2[boost(+),hdf(+)] )
 	collada? ( >=media-libs/opencollada-1.6.68 )
-	color-management? ( media-libs/opencolorio:0/2.5:= )
+	color-management? ( >=media-libs/opencolorio-2.5:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( media-libs/embree:=[raymask] )
 	ffmpeg? (
@@ -179,7 +179,7 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}
-	dev-cpp/eigen:3/5
+	dev-cpp/eigen:3
 "
 
 BDEPEND="
@@ -324,7 +324,7 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
-		-DHIPRT_ROOT_DIR="/usr/include/hiprt/2.5/"
+		-DHIPRT_ROOT_DIR="/usr/lib/hiprt/2.5/"
 		-DHIPRT_LIBRARY="${EPREFIX}/usr/$(get_libdir)/libhiprt64.so.2.5"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
