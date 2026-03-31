@@ -13,7 +13,6 @@ SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
 RDEPEND="
-	media-gfx/blender
 	app-eselect/eselect-blender
 "
 
