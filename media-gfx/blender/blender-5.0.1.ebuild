@@ -321,7 +321,7 @@ src_configure() {
 
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
-		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
+		-DHIPRT_ROOT_DIR="/usr/include/hiprt/2.5/"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
