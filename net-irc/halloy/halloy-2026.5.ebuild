@@ -1060,7 +1060,10 @@ DEPEND="
 		x11-libs/libXrandr
 	)
 "
-RDEPEND="${DEPEND}"
+RDEPEND="
+	${DEPEND}
+	x11-libs/libxkbcommon[wayland?,X?]
+"
 
 QA_FLAGS_IGNORED="usr/bin/${PN}"
 
