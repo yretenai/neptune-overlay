@@ -100,7 +100,7 @@ RDEPEND="${PYTHON_DEPS}
 	>=media-libs/openimageio-2.5.6.0:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
-	>=sci-libs/ceres-solver-2.3.0_alpha1
+	>=sci-libs/ceres-solver-2.3.0
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
