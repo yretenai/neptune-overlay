@@ -405,7 +405,7 @@ src_configure() {
 		-DWITH_XR_OPENXR=no
 		-DWITH_PYTHON=on
 		-DWITH_PYTHON_SECURITY=on
-		-DWITH_PYTHON_MODULE=$(usex bpy)
+		-DWITH_PYTHON_MODULE=off
 	)
 
 	if has_version ">=dev-python/numpy-2"; then
@@ -446,7 +446,22 @@ src_configure() {
 	# Ease compiling with required gcc similar to cuda_sanitize but for cmake
 	use cuda && use cycles-bin-kernels && mycmakeargs+=( -DCUDA_HOST_COMPILER="$(cuda_gccdir)" )
 
-	cmake_src_configure
+	CMAKE_USE_DIR="${S}" BUILD_DIR="${S}_build" cmake_src_configure
+
+	if use bpy; then
+		mycmakeargs+=(
+			-DWITH_PYTHON_MODULE=on
+		)
+		CMAKE_USE_DIR="${S}" BUILD_DIR="${S}_build_bpy" cmake_src_configure
+	fi
+}
+
+src_compile() {
+	BUILD_DIR="${S}_build" cmake_src_compile
+
+	if use bpy; then
+		BUILD_DIR="${S}_build_bpy" cmake_src_compile
+	fi
 }
 
 src_install() {
@@ -455,7 +470,11 @@ src_install() {
 	# Pax mark blender for hardened support.
 	pax-mark m "${BUILD_DIR}"/bin/blender
 
-	cmake_src_install
+	BUILD_DIR="${S}_build" cmake_src_install
+
+	if use bpy; then
+		BUILD_DIR="${S}_build_bpy" cmake_src_install
+	fi
 
 	if use man; then
 		# Slot the man page
