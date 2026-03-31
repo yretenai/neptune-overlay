@@ -18,7 +18,7 @@ SRC_URI="
 S="${WORKDIR}/${PN}-${EIGEN_VERSION}"
 
 LICENSE="MPL-2.0"
-SLOT="3/5"
+SLOT="5"
 
 # The following lines are shamelessly stolen from ffmpeg-9999.ebuild with modifications
 ARM_CPU_FEATURES=(
@@ -144,6 +144,7 @@ DEPEND="
 PATCHES=(
 	"${FILESDIR}/${PN}-3.4.0-doc-nocompress.patch" # bug 830064
 	"${FILESDIR}/${PN}-3.4.0-buildstring.patch"
+	"${FILESDIR}/${PN}-5.0.0-slot.patch"
 	"${FILESDIR}/${PN}-9999-please_protect_your_min_with_parentheses.patch"
 )
 

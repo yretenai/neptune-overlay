@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 44cf5fe..7f1f907 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -177,12 +177,12 @@ if(EIGEN_INCLUDE_INSTALL_DIR AND NOT INCLUDE_INSTALL_DIR)
+       CACHE PATH "The directory relative to CMAKE_INSTALL_PREFIX where Eigen header files are installed")
+ else()
+   set(INCLUDE_INSTALL_DIR
+-      "${CMAKE_INSTALL_INCLUDEDIR}/eigen3"
++      "${CMAKE_INSTALL_INCLUDEDIR}/eigen5"
+       CACHE PATH "The directory relative to CMAKE_INSTALL_PREFIX where Eigen header files are installed"
+       )
+ endif()
+ set(CMAKEPACKAGE_INSTALL_DIR
+-    "${CMAKE_INSTALL_DATADIR}/eigen3/cmake"
++    "${CMAKE_INSTALL_DATADIR}/eigen5/cmake"
+     CACHE PATH "The directory relative to CMAKE_INSTALL_PREFIX where Eigen3Config.cmake is installed"
+     )
+ set(PKGCONFIG_INSTALL_DIR
+@@ -229,8 +229,8 @@ install(FILES
+   )
+ 
+ if(EIGEN_BUILD_PKGCONFIG)
+-    configure_file(eigen3.pc.in eigen3.pc @ONLY)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eigen3.pc
++    configure_file(eigen3.pc.in eigen5.pc @ONLY)
++    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/eigen5.pc
+         DESTINATION ${PKGCONFIG_INSTALL_DIR})
+ endif()
+ 
