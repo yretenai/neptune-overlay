@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<bugs-to>https://github.com/squidowl/halloy/issues</bugs-to>
+		<doc>https://halloy.chat</doc>
+		<remote-id type="github">squidowl/halloy</remote-id>
+	</upstream>
+</pkgmetadata>
