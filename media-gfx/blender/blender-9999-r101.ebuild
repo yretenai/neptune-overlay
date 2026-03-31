@@ -179,7 +179,7 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}
-	dev-cpp/eigen:3
+	dev-cpp/eigen:5
 "
 
 BDEPEND="
@@ -400,7 +400,7 @@ src_configure() {
 		-DWITH_SDL=$(usex sdl)
 		-DWITH_STATIC_LIBS=no
 		-DWITH_STRICT_BUILD_OPTIONS=yes
-		-DWITH_SYSTEM_EIGEN3=yes
+		-DEigen3_DIR=/usr/share/eigen5/cmake
 		-DWITH_SYSTEM_FREETYPE=yes
 		-DWITH_SYSTEM_LZO=yes
 		-DWITH_TBB=$(usex tbb)
