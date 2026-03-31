@@ -58,7 +58,7 @@ else
 fi
 
 IUSE="
-alembic +bullet +color-management cuda +cycles-bin-kernels +cycles
+alembic +bullet +color-management cuda +cycles-bin-kernels +cycles bpy
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
 jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
 +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
@@ -210,8 +210,8 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-9999-cycles.patch"
-	"${FILESDIR}/${PN}-9999-pycore.patch"
+	"${FILESDIR}/${PN}-5.1.0-cycles.patch"
+	"${FILESDIR}/${PN}-5.1.0-pycore.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
@@ -403,7 +403,7 @@ src_configure() {
 		-DWITH_XR_OPENXR=no
 		-DWITH_PYTHON=on
 		-DWITH_PYTHON_SECURITY=on
-		-DWITH_PYTHON_MODULE=off
+		-DWITH_PYTHON_MODULE=$(usex bpy)
 	)
 
 	if has_version ">=dev-python/numpy-2"; then

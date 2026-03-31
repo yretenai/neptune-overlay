@@ -57,7 +57,7 @@ alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
 +jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
 +openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml
-pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan
+pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan bpy
 +wayland +webp X
 "
 RESTRICT="test"
@@ -405,7 +405,7 @@ src_configure() {
 		-DWITH_XR_OPENXR=no
 		-DWITH_PYTHON=on
 		-DWITH_PYTHON_SECURITY=on
-		-DWITH_PYTHON_MODULE=off
+		-DWITH_PYTHON_MODULE=$(usex bpy)
 	)
 
 	if has_version ">=dev-python/numpy-2"; then

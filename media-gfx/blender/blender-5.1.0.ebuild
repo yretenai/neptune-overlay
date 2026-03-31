@@ -7,8 +7,12 @@
 # 	https://github.com/Ray-Tracing-Systems/HydraAPI
 # - Package USD
 # 	https://github.com/PixarAnimationStudios/OpenUSD
+# - Package MaterialX
+# 	https://github.com/AcademySoftwareFoundation/MaterialX
 # - Package Draco
 # 	https://github.com/google/draco
+# - Package Audaspace
+# 	https://github.com/neXyon/audaspace
 
 EAPI=8
 
@@ -45,6 +49,7 @@ else
 	if [[ "${PR}" != "r0" ]]; then
 		case $PR in
 			r100) EGIT_BRANCH="npr-prototype" ;;
+			r101) EGIT_BRANCH="cycles-tx" ;;
 		esac
 
 		IS_BRANCH=1
@@ -53,12 +58,11 @@ else
 fi
 
 IUSE="
-alembic +bullet collada +color-management cuda +cycles-bin-kernels +cycles
+alembic +bullet +color-management cuda +cycles-bin-kernels +cycles bpy
 debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
-+jemalloc jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr
-+openpgl +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml
-pulseaudio renderdoc sdl +sndfile +tbb +tiff valgrind vulkan
-+wayland +webp X
+jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
++opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
+renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
 "
 RESTRICT="test"
 
@@ -77,12 +81,13 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}
 # Library versions for official builds can be found in the blender source directory in:
 # build_files/build_environment/install_deps.sh
 RDEPEND="${PYTHON_DEPS}
-	app-arch/zstd
+	>=dev-cpp/abseil-cpp-20250814.1:=
+	>=app-arch/zstd-1.5.7
 	dev-libs/boost:=[nls?]
 	dev-libs/lzo:2=
 	$(python_gen_cond_dep '
 		dev-python/cython[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		>=dev-python/numpy-2.3.4[${PYTHON_USEDEP}]
 		dev-python/zstandard[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
 	')
@@ -95,12 +100,12 @@ RDEPEND="${PYTHON_DEPS}
 	>=media-libs/openimageio-2.5.6.0:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
+	>=sci-libs/ceres-solver-2.3.0
 	virtual/glu
 	virtual/libintl
 	virtual/opengl
 	alembic? ( >=media-gfx/alembic-1.8.3-r2[boost(+),hdf(+)] )
-	collada? ( >=media-libs/opencollada-1.6.68 )
-	color-management? ( media-libs/opencolorio:= )
+	color-management? ( >=media-libs/opencolorio-2.5:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
 	embree? ( media-libs/embree:=[raymask] )
 	ffmpeg? (
@@ -111,7 +116,6 @@ RDEPEND="${PYTHON_DEPS}
 	gmp? ( dev-libs/gmp[cxx] )
 	hip? ( dev-util/hip:= )
 	jack? ( virtual/jack )
-	jemalloc? ( dev-libs/jemalloc:= )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
 		app-misc/spacenavd
@@ -119,16 +123,16 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
-	oidn? ( >=media-libs/oidn-2.3.2:= )
+	oidn? ( media-libs/oidn:= )
 	oneapi? ( dev-libs/intel-compute-runtime:0 )
 	openexr? (
-		>=dev-libs/imath-3.1.7:=
-		>=media-libs/openexr-3.2.1:0=
+		dev-libs/imath:=
+		media-libs/openexr:0=
 	)
 	openpgl? ( media-libs/openpgl:= )
-	opensubdiv? ( >=media-libs/opensubdiv-3.6.0-r2[opengl,cuda?,tbb?] )
+	opensubdiv? ( media-libs/opensubdiv[opengl,cuda?,tbb?] )
 	openvdb? (
-		>=media-gfx/openvdb-11.0.0:=[nanovdb?]
+		media-gfx/openvdb:=[nanovdb?]
 		dev-libs/c-blosc:=
 	)
 	optix? ( dev-libs/optix )
@@ -142,7 +146,7 @@ RDEPEND="${PYTHON_DEPS}
 	pulseaudio? ( media-libs/libpulse )
 	sdl? ( media-libs/libsdl2[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
-	tbb? ( >=dev-cpp/tbb-2021.13.0:= )
+	tbb? ( >=dev-cpp/tbb-2022.3.0:= )
 	tiff? ( media-libs/tiff:= )
 	valgrind? ( dev-debug/valgrind )
 	wayland? (
@@ -154,10 +158,10 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-		media-libs/shaderc
+		>=media-libs/shaderc-2025.4
 		dev-util/spirv-tools
 		dev-util/glslang
-		media-libs/vulkan-loader
+		>=media-libs/vulkan-loader-1.4.328
 	)
 	otf? (
 		media-libs/harfbuzz
@@ -174,7 +178,7 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}
-	dev-cpp/eigen:=
+	dev-cpp/eigen:5
 "
 
 BDEPEND="
@@ -206,8 +210,8 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-4.1.1-clang.patch"
-	"${FILESDIR}/${PN}-4.4.0-cycles.patch"
-	"${FILESDIR}/${PN}-4.5.5-lemon.patch"
+	"${FILESDIR}/${PN}-5.1.0-cycles.patch"
+	"${FILESDIR}/${PN}-5.1.0-pycore.patch"
 )
 
 if [ "${IS_BRANCH}" ]; then
@@ -296,8 +300,6 @@ src_prepare() {
 	mv release/freedesktop/blender.desktop "release/freedesktop/blender-${BV}.desktop" || die
 	mv release/freedesktop/org.blender.Blender.metainfo.xml "release/freedesktop/blender-${BV}.metainfo.xml"
 
-	sed -e "s/\"libhiprt64.so\"/\"libhiprt64.so.2.5\"/" -i extern/hipew/src/hiprtew.cc || die
-
 	sed -e "s|var->ob_refcnt|Py_REFCNT(var)|" -i source/blender/python/generic/py_capi_utils.cc
 
 	if use experimental; then
@@ -322,11 +324,11 @@ src_configure() {
 	local mycmakeargs=(
 		-DBUILD_SHARED_LIBS=no
 		-DHIPRT_ROOT_DIR="/usr/include/hiprt/02005/"
+		-DHIPRT_LIBRARY="${EPREFIX}/usr/$(get_libdir)/libhiprt64.so.2.5"
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DPYTHON_VERSION="${EPYTHON/python/}"
 		-DWITH_ALEMBIC=$(usex alembic)
-		-DWITH_BOOST=yes
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CLANG=$(usex llvm)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
@@ -355,7 +357,6 @@ src_configure() {
 		-DWITH_FFTW3=$(usex fftw)
 		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"
 		-DWITH_GHOST_WAYLAND_DYNLOAD=no
-		-DWITH_GHOST_WAYLAND_LIBDECOR=no
 		-DWITH_GHOST_WAYLAND=$(usex wayland)
 		-DWITH_GHOST_X11=$(usex X)
 		-DWITH_GMP=$(usex gmp)
@@ -374,13 +375,11 @@ src_configure() {
 		-DWITH_LIBS_PRECOMPILED=no
 		-DWITH_LLVM=$(usex llvm)
 		-DWITH_MATERIALX=no # TODO: Package MaterialX
-		-DWITH_MEM_JEMALLOC=$(usex jemalloc)
 		-DWITH_MEM_VALGRIND=$(usex valgrind)
 		-DWITH_MOD_FLUID=$(usex fluid)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)
 		-DWITH_NANOVDB=$(usex nanovdb)
 		-DWITH_OPENAL=$(usex openal)
-		-DWITH_OPENCOLLADA=$(usex collada)
 		-DWITH_OPENCOLORIO=$(usex color-management)
 		-DWITH_OPENIMAGEDENOISE=$(usex oidn)
 		-DWITH_OPENSUBDIV=$(usex opensubdiv)
@@ -396,16 +395,15 @@ src_configure() {
 		-DWITH_SDL=$(usex sdl)
 		-DWITH_STATIC_LIBS=no
 		-DWITH_STRICT_BUILD_OPTIONS=yes
-		-DWITH_SYSTEM_EIGEN3=yes
+		-DEigen3_DIR=/usr/share/eigen5/cmake
 		-DWITH_SYSTEM_FREETYPE=yes
-		-DWITH_SYSTEM_LZO=yes
 		-DWITH_TBB=$(usex tbb)
 		-DWITH_USD=no # TODO: Package USD
 		-DWITH_VULKAN_BACKEND=$(usex vulkan)
 		-DWITH_XR_OPENXR=no
 		-DWITH_PYTHON=on
 		-DWITH_PYTHON_SECURITY=on
-		-DWITH_PYTHON_MODULE=off
+		-DWITH_PYTHON_MODULE=$(usex bpy)
 	)
 
 	if has_version ">=dev-python/numpy-2"; then
