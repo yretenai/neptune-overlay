@@ -5,8 +5,8 @@ EAPI=8
 
 inherit cmake git-r3
 
-DESCRIPTION="Image file loading library"
-HOMEPAGE="https://www.libsdl.org/projects/SDL_image/"
+DESCRIPTION="Shader translation library for SDL's GPU API"
+HOMEPAGE="https://github.com/libsdl-org/SDL_shadercross"
 EGIT_SUBMODULES=()
 EGIT_REPO_URI="https://github.com/libsdl-org/SDL_shadercross.git"
 LICENSE="ZLIB"
