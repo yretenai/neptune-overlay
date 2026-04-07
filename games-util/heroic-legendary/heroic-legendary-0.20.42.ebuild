@@ -13,15 +13,13 @@ HOMEPAGE="
 	https://github.com/Heroic-Games-Launcher/legendary.git
 "
 
-MY_PN=legendary
-
 if [[ ${PV} == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/Heroic-Games-Launcher/${MY_PN}.git"
+	EGIT_REPO_URI="https://github.com/Heroic-Games-Launcher/legendary.git"
 else
-	SRC_URI="https://github.com/Heroic-Games-Launcher/${MY_PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/Heroic-Games-Launcher/legendary/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~arm64"
-	S="${WORKDIR}/${MY_PN}-${PV}"
+	S="${WORKDIR}/legendary-${PV}"
 fi
 
 LICENSE="GPL-3+"
@@ -30,7 +28,8 @@ SLOT="0"
 RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/filelock[${PYTHON_USEDEP}]
-		<dev-python/requests-3.0[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
+		dev-python/requests-futures[${PYTHON_USEDEP}]
 	')
 	!!games-util/legendary
 "
