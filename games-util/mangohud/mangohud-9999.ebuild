@@ -13,18 +13,12 @@ MY_PV=$(ver_cut 1-3)
 DESCRIPTION="Vulkan and OpenGL overlay for monitoring FPS, sensors, system load and more"
 HOMEPAGE="https://github.com/flightlessmango/MangoHud"
 
-VK_HEADERS_VER="1.3.283"
-VK_HEADERS_MESON_WRAP_VER="1"
 IMGUI_VER="1.91.6"
 IMGUI_MESON_WRAP_VER="3"
 IMPLOT_VER="0.16"
 IMPLOT_MESON_WRAP_VER="1"
 
 SRC_URI="
-	https://github.com/KhronosGroup/Vulkan-Headers/archive/v${VK_HEADERS_VER}.tar.gz
-		-> vulkan-headers-${VK_HEADERS_VER}.tar.gz
-	https://wrapdb.mesonbuild.com/v2/vulkan-headers_${VK_HEADERS_VER}-${VK_HEADERS_MESON_WRAP_VER}/get_patch
-		-> vulkan-headers-${VK_HEADERS_VER}-${VK_HEADERS_MESON_WRAP_VER}-meson-wrap.zip
 	https://github.com/ocornut/imgui/archive/refs/tags/v${IMGUI_VER}.tar.gz
 		-> imgui-v${IMGUI_VER}.tar.gz
 	https://wrapdb.mesonbuild.com/v2/imgui_${IMGUI_VER}-${IMPLOT_MESON_WRAP_VER}/get_patch
@@ -61,6 +55,8 @@ REQUIRED_USE="
 BDEPEND="
 	app-arch/unzip
 	dev-util/glslang
+	>=dev-util/vulkan-headers-1.4.346
+	>=dev-util/vulkan-utility-libraries-1.4.346
 	test? ( dev-util/cmocka )
 	$(python_gen_cond_dep 'dev-python/mako[${PYTHON_USEDEP}]')
 "
@@ -101,6 +97,10 @@ RDEPEND="
 	)
 "
 
+PATCHES=(
+	"${FILESDIR}/${PN}-9999-vulkan-headers.patch"
+)
+
 src_unpack() {
 	default
 
@@ -109,7 +109,6 @@ src_unpack() {
 	fi
 
 	mv \
-		"${WORKDIR}/Vulkan-Headers-${VK_HEADERS_VER}" \
 		"${WORKDIR}/imgui-${IMGUI_VER}" \
 		"${WORKDIR}/implot-${IMPLOT_VER}" \
 		"${S}/subprojects/" || die
