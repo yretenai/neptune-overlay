@@ -78,7 +78,7 @@ DEPEND="
 	virtual/jack
 	media-libs/openal
 	dev-libs/half
-	>=dev-libs/zydis-5.0.0_alpha
+	>=dev-libs/zydis-5.0.0_alpha2
 	dev-cpp/tracy:=
 	dev-libs/libusb
 	dev-libs/cereal
@@ -128,6 +128,7 @@ src_prepare() {
 	sed -e "s|<miniz.h>|<miniz/miniz.h>|" -i src/video_core/cache_storage.cpp || die
 	sed -e "s|add_subdirectory(json)||" -i externals/CMakeLists.txt || die
 	sed -e "s|add_subdirectory(miniz)|find_package(miniz REQUIRED)|" -i externals/CMakeLists.txt || die
+	sed -e "s|find_package(Zydis 5.0.0 MODULE)|find_package(Zydis 5.0.0 CONFIG)|" -i CMakeLists.txt || die
 
 	cmake_src_prepare
 }
