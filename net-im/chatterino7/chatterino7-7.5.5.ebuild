@@ -58,6 +58,7 @@ RDEPEND="
 	dev-qt/qtmultimedia:6
 	dev-qt/qtimageformats:6
 	dev-qt/qtsvg:6
+	!!net-im/chatterino
 "
 DEPEND="
 	${RDEPEND}
@@ -76,7 +77,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-7.5.3-miniaudio.patch"
-	"${FILESDIR}/${PN}-7.5.4-name.patch"
 )
 
 src_unpack() {
@@ -113,8 +113,8 @@ src_configure() {
 			-DCMAKE_CXX_FLAGS="${CXXFLAGS} -DNDEBUG"
 		)
 	fi
-
-	CMAKE_BUILD_TYPE=$(usex debug Debug Release) cmake_src_configure
+	
+	cmake_src_configure
 }
 
 pkg_postinst() {
