@@ -8,7 +8,7 @@ inherit cmake java-pkg-2 optfeature xdg
 DESCRIPTION="Prism Launcher fork with support for alternative auth servers"
 HOMEPAGE="https://github.com/unmojang/FjordLauncher"
 
-NBTPLUSPLUS_COMMIT=23b955121b8217c1c348a9ed2483167a6f3ff4ad
+NBTPLUSPLUS_COMMIT=531449ba1c930c98e0bcf5d332b237a8566f9d78
 SRC_URI="
 	https://github.com/unmojang/FjordLauncher/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
 	https://github.com/PrismLauncher/libnbtplusplus/archive/${NBTPLUSPLUS_COMMIT}.tar.gz -> ${PN}-nbtplusplus-${NBTPLUSPLUS_COMMIT}.tar.gz
@@ -54,11 +54,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-9.2.2-java.patch"
-	"${FILESDIR}/${PN}-9.2.2-gulrak-filesystem.patch"
-	"${FILESDIR}/${PN}-9.2.2-tomlplusplus.patch"
-	"${FILESDIR}/${PN}-9.2.2-loud.patch"
-	"${FILESDIR}/${PN}-9.2.2-mcpack.patch"
-	"${FILESDIR}/${PN}-9.2.2-gamemode.patch"
 )
 
 src_unpack() {
@@ -71,6 +66,7 @@ src_prepare() {
 	cmake_src_prepare
 	sed -i -e 's/-Werror//' CMakeLists.txt || die 'Failed to remove -Werror via sed'
 	sed -i -e "/CMAKE_CXX_FLAGS_RELEASE/d" CMakeLists.txt || die 'Failed to remove "CMAKE_CXX_FLAGS_RELEASE" from CMakeLists via sed'
+	sed -i -e '/Launcher_mrpack_MIMEInfo/d' CMakeLists.txt || die 'Failed to remove mrpack MIME'
 }
 
 src_configure(){
