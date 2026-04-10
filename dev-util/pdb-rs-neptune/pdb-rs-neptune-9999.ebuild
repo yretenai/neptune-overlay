@@ -22,6 +22,7 @@ RDEPEND="
 
 BDEPEND="
 	!dev-util/pdb-rs
+	${RUST_DEPEND}
 "
 
 src_unpack() {

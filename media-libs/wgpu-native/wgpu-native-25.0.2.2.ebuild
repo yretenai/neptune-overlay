@@ -169,6 +169,7 @@ SRC_URI="
 
 BDEPEND="
 	~dev-util/webgpu-headers-20241112:=
+	${RUST_DEPEND}
 "
 
 LICENSE="|| ( Apache-2.0 MIT )"

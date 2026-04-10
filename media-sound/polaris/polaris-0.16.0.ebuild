@@ -311,9 +311,8 @@ KEYWORDS="~amd64"
 DEPEND="
 	dev-libs/openssl:=
 	dev-db/sqlite
+	acct-user/polaris
 "
-
-BDEPEND="acct-user/polaris"
 
 src_install() {
 	cargo_src_install

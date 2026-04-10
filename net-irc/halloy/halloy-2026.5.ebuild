@@ -1043,6 +1043,7 @@ fi
 # https://github.com/iced-rs/iced/blob/master/DEPENDENCIES.md
 BDEPEND="
 	virtual/pkgconfig
+	${RUST_DEPEND}
 "
 DEPEND="
 	dev-libs/expat
