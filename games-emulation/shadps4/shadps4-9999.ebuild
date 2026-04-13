@@ -19,7 +19,7 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/sirit"
 		"externals/discord-rpc"
 		"externals/LibAtrac9"
-		"externals/ext-libusb"
+		"externals/libusb"
 		"externals/hwinfo"
 		"externals/aacdec/fdk-aac"
 	)
@@ -80,7 +80,6 @@ DEPEND="
 	dev-libs/half
 	>=dev-libs/zydis-5.0.0_alpha2
 	dev-cpp/tracy:=
-	dev-libs/libusb
 	dev-libs/cereal
 	dev-libs/miniz
 "
