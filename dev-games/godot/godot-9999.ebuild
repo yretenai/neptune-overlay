@@ -155,7 +155,7 @@ src_prepare() {
 	sed -e "s/godot/&${s}/g" \
 		-i misc/dist/shell/{godot.bash-completion,godot.fish,_godot.zsh-completion} || die
 
-	sed -i "s|#include "thirdparty/linuxbsd_headers/udev/libudev.h"|#include <libudev.h>|" thirdparty/sdl/core/linux/SDL_udev.h || die
+	sed -i "s|#include <thirdparty/linuxbsd_headers/udev/libudev.h>|#include <libudev.h>|" thirdparty/sdl/core/linux/SDL_udev.h || die
 	sed -i "s|pkg-config |$(tc-getPKG_CONFIG) |" platform/linuxbsd/detect.py || die
 	sed -i "s/mbedtls mbedcrypto mbedx509/mbedtls3 mbedcrypto3 mbedx5093/" platform/linuxbsd/detect.py || die
 	sed -i "s/--exists mbedtls/--exists mbedtls3/" platform/linuxbsd/detect.py || die
