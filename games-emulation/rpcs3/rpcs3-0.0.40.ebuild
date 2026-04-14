@@ -10,18 +10,17 @@ HOMEPAGE="https://rpcs3.net/"
 
 if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/RPCS3/rpcs3"
+	# todo: we can unbundle wolfssl
 	EGIT_SUBMODULES=(
-		'asmjit' '3rdparty/glslang' '3rdparty/miniupnp/miniupnp' '3rdparty/rtmidi/rtmidi' '3rdparty/wolfssl'
-		'3rdparty/SoundTouch/soundtouch' '3rdparty/fusion/fusion' '3rdparty/GPUOpen/VulkanMemoryAllocator'
+		'asmjit'
+		'3rdparty/wolfssl'
+		'3rdparty/SoundTouch/soundtouch'
+		'3rdparty/fusion/fusion'
+		'3rdparty/yaml-cpp'
 	)
-	# Delete sources when ensuring yaml-cpp compiled with fexceptions
-	EGIT_SUBMODULES+=( '3rdparty/yaml-cpp' )
 	inherit git-r3
 else
 	ASMJIT_COMMIT=416f7356967c1f66784dc1580fe157f9406d8bff
-	GLSLANG_COMMIT=fc9889c889561c5882e83819dcaffef5ed45529b
-	MINIUPNP_COMMIT=d66872e34d9ff83a07f8b71371b13419b2089953
-	RTMIDI_COMMIT=1e5b49925aa60065db52de44c366d446a902547b
 	WOLFSSL_COMMIT=b077c81eb635392e694ccedbab8b644297ec0285
 	SOUNDTOUCH_COMMIT=3982730833b6daefe77dcfb32b5c282851640c17
 	YAMLCPP_COMMIT=05c44fcd18074836e21e1eda9fc02b3a4a1529b5
@@ -30,9 +29,6 @@ else
 	SRC_URI="
 		https://github.com/RPCS3/rpcs3/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz
 		https://github.com/asmjit/asmjit/archive/${ASMJIT_COMMIT}.tar.gz -> ${PN}-asmjit-${ASMJIT_COMMIT}.tar.gz
-		https://github.com/KhronosGroup/glslang/archive/${GLSLANG_COMMIT}.tar.gz -> ${PN}-glslang-${GLSLANG_COMMIT}.tar.gz
-		https://github.com/miniupnp/miniupnp/archive/${MINIUPNP_COMMIT}.tar.gz -> ${PN}-miniupnp-${MINIUPNP_COMMIT}.tar.gz
-		https://github.com/thestk/rtmidi/archive/${RTMIDI_COMMIT}.tar.gz -> ${PN}-rtmidi-${RTMIDI_COMMIT}.tar.gz
 		https://github.com/wolfSSL/wolfssl/archive/${WOLFSSL_COMMIT}.tar.gz -> ${PN}-wolfssl-${WOLFSSL_COMMIT}.tar.gz
 		https://github.com/RPCS3/soundtouch/archive/${SOUNDTOUCH_COMMIT}.tar.gz -> ${PN}-soundtouch-${SOUNDTOUCH_COMMIT}.tar.gz
 		https://github.com/RPCS3/yaml-cpp/archive/${YAMLCPP_COMMIT}.tar.gz -> ${PN}-yaml-cpp-${YAMLCPP_COMMIT}.tar.gz
@@ -70,6 +66,11 @@ DEPEND="
 	media-libs/openal
 	dev-libs/stb
 	app-arch/zstd
+	dev-libs/protobuf:=
+	games-util/gamemode
+	dev-util/glslang
+	net-libs/miniupnpc
+	media-libs/rtmidi
 	faudio? ( app-emulation/faudio )
 	opencv? ( media-libs/opencv )
 	vulkan? ( media-libs/vulkan-loader[wayland?] media-libs/VulkanMemoryAllocator )
@@ -77,12 +78,15 @@ DEPEND="
 	sdl? ( >=media-libs/libsdl3-3.4.2:= )
 "
 RDEPEND="${DEPEND}"
+BDEPEND="
+	dev-libs/protobuf
+"
 
 QA_PREBUILT="usr/share/rpcs3/test/.*"
 QA_WX_LOAD="usr/share/rpcs3/test/*"
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.0.37-system-openal.patch"
+	"${FILESDIR}/${PN}-9999-system-openal.patch"
 	"${FILESDIR}/${PN}-0.0.34-system-stb.patch"
 	"${FILESDIR}/${PN}-0.0.34-system-zstd.patch"
 	"${FILESDIR}/${PN}-0.0.37-hidapi.patch"
@@ -92,15 +96,6 @@ src_prepare() {
 	if [[ ${PV} != "9999" ]]; then
 		rmdir "${S}/3rdparty/asmjit/asmjit" || die
 		mv "${WORKDIR}/asmjit-${ASMJIT_COMMIT}" "${S}/3rdparty/asmjit/asmjit" || die
-
-		rmdir "${S}/3rdparty/glslang/glslang" || die
-		mv "${WORKDIR}/glslang-${GLSLANG_COMMIT}" "${S}/3rdparty/glslang/glslang" || die
-
-		rmdir "${S}/3rdparty/miniupnp/miniupnp" || die
-		mv "${WORKDIR}/miniupnp-${MINIUPNP_COMMIT}" "${S}/3rdparty/miniupnp/miniupnp" || die
-
-		rmdir "${S}/3rdparty/rtmidi/rtmidi" || die
-		mv "${WORKDIR}/rtmidi-${RTMIDI_COMMIT}" "${S}/3rdparty/rtmidi/rtmidi" || die
 
 		rmdir "${S}/3rdparty/wolfssl/wolfssl" || die
 		mv "${WORKDIR}/wolfssl-${WOLFSSL_COMMIT}" "${S}/3rdparty/wolfssl/wolfssl" || die
@@ -138,16 +133,6 @@ src_prepare() {
 	sed -i -e '$afind_package(cubeb)\n' CMakeLists.txt || die
 	sed -i -e 's/3rdparty::cubeb/cubeb/' rpcs3/Emu/CMakeLists.txt || die
 
-	# Unbundle yaml-cpp: system yaml-cpp should be compiled with -fexceptions
-	# sed -i -e '/yaml-cpp/d' 3rdparty/CMakeLists.txt || die
-	# sed -i -e '$afind_package(yaml-cpp)\n' CMakeLists.txt || die
-	# sed -i -e 's/3rdparty::yaml-cpp/yaml-cpp/' rpcs3/Emu/CMakeLists.txt \
-	#	rpcs3/rpcs3qt/CMakeLists.txt || die
-
-	# Fix build with GCC 15
-	# https://github.com/KhronosGroup/glslang/commit/e40c14a3e007fac0e4f2e4164fdf14d1712355bd
-	sed -i '/<algorithm>/a#include <cstdint>' 3rdparty/glslang/glslang/SPIRV/SpvBuilder.h || die
-
 	cmake_src_prepare
 }
 
@@ -159,14 +144,16 @@ src_configure() {
 		-DUSE_PRECOMPILED_HEADERS=ON
 		-DUSE_SYSTEM_CURL=ON
 		-DUSE_SYSTEM_FFMPEG=ON
-		-DUSE_SYSTEM_FLATBUFFERS=ON
 		-DUSE_SYSTEM_LIBPNG=ON
 		-DUSE_SYSTEM_LIBUSB=ON
 		-DUSE_SYSTEM_PUGIXML=ON
-		-DUSE_SYSTEM_XXHASH=ON
 		-DUSE_SYSTEM_ZLIB=ON
 		-DUSE_SYSTEM_SDL=ON
 		-DUSE_SYSTEM_VULKAN_MEMORY_ALLOCATOR=ON
+		-DUSE_SYSTEM_GLSLANG=ON
+		-DUSE_SYSTEM_MINIUPNPC=ON
+		-DUSE_SYSTEM_RTMIDI=ON
+		-DUSE_SYSTEM_PROTOBUF=ON
 		-DUSE_SDL=$(usex sdl)
 		-DUSE_DISCORD_RPC=$(usex discord)
 		-DUSE_FAUDIO=$(usex faudio)

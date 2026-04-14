@@ -1,0 +1,41 @@
+diff --git a/rpcs3/Emu/Cell/Modules/cellMic.cpp b/rpcs3/Emu/Cell/Modules/cellMic.cpp
+index 0c58d2ec7..20ee73231 100644
+--- a/rpcs3/Emu/Cell/Modules/cellMic.cpp
++++ b/rpcs3/Emu/Cell/Modules/cellMic.cpp
+@@ -11,7 +11,7 @@
+ #include <cmath>
+ 
+ #ifndef WITHOUT_OPENAL
+-#include "alext.h"
++#include "AL/alext.h"
+ #endif
+ 
+ LOG_CHANNEL(cellMic);
+diff --git a/rpcs3/Emu/Cell/Modules/cellMic.h b/rpcs3/Emu/Cell/Modules/cellMic.h
+index a07cec23a..10defe085 100644
+--- a/rpcs3/Emu/Cell/Modules/cellMic.h
++++ b/rpcs3/Emu/Cell/Modules/cellMic.h
+@@ -3,7 +3,7 @@
+ #include "Utilities/Thread.h"
+ #include "Utilities/mutex.h"
+ 
+-#include "alc.h"
++#include "AL/alc.h"
+ 
+ // Error Codes
+ enum CellMicInError : u32
+diff --git a/rpcs3/rpcs3qt/microphone_creator.cpp b/rpcs3/rpcs3qt/microphone_creator.cpp
+index c44449c54..90aee348b 100644
+--- a/rpcs3/rpcs3qt/microphone_creator.cpp
++++ b/rpcs3/rpcs3qt/microphone_creator.cpp
+@@ -3,8 +3,8 @@
+ 
+ #include "Utilities/StrUtil.h"
+ 
+-#include "al.h"
+-#include "alc.h"
++#include "AL/al.h"
++#include "AL/alc.h"
+ 
+ LOG_CHANNEL(cfg_log, "CFG");
+ 
