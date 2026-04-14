@@ -37,20 +37,7 @@ else
 	EGIT_LFS="yes"
 	inherit git-r3
 	EGIT_REPO_URI="https://projects.blender.org/blender/blender.git"
-	if [[ ${PV} == *_beta* ]]; then
-		EGIT_BRANCH="blender-v$(ver_cut 1-2)-release"
-	fi
-
-	# special branches
-	if [[ "${PR}" != "r0" ]]; then
-		case $PR in
-			r100) EGIT_BRANCH="npr-prototype" ;;
-			r101) EGIT_BRANCH="cycles-tx" ;;
-		esac
-
-		IS_BRANCH=1
-		SLOT="${EGIT_BRANCH}"
-	fi
+	inherit neptune-blender
 fi
 
 IUSE="
@@ -282,8 +269,20 @@ src_prepare() {
 		-e "s|org.blender.Blender.metainfo.xml|blender-${BV}.metainfo.xml|" \
 		-i source/creator/CMakeLists.txt || die
 
+	BVV="${BV}"
+	if [[ ${IS_BRANCH} ]]; then
+		BVN=" Branch"
+		BVV="${BRANCH_NAME}"
+	elif [[ ${PV} == *9999* || ${PV} == *_alpha* ]]; then
+		BVN=" Alpha"
+	elif [[ ${PV} == *_beta* ]]; then
+		BVN=" Beta"
+	elif [[ ${PV} == *_rc* ]]; then
+		BVN=" Release Candidate"
+	fi
+
 	sed \
-		-e "s|Name=Blender|Name=Blender ${BV}|" \
+		-e "s|Name=Blender|Name=Blender ${BVV}${BVN}|" \
 		-e "s|Exec=blender|Exec=blender-${BV}|" \
 		-e "s|Icon=blender|Icon=blender-${BV}|" \
 		-i release/freedesktop/blender.desktop || die
