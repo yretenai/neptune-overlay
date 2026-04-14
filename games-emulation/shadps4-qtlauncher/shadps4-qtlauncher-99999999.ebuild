@@ -51,7 +51,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-20251102-compat.patch"
-	"${FILESDIR}/${PN}-20260310-deps.patch"
 	"${FILESDIR}/${PN}-20251102-system-install.patch"
 )
 
@@ -69,6 +68,8 @@ src_prepare() {
 	default
 	cmake_prepare
 
+	sed -e "s|add_subdirectory(volk)||g" -i externals/CMakeLists.txt || die
+	sed -e "s|add_subdirectory(json)||g" -i externals/CMakeLists.txt || die
 	sed -e "s|volk_headers||g" -i CMakeLists.txt || die
 	sed -e "s|nlohmann_json::nlohmann_json||g" -i CMakeLists.txt || die
 }
