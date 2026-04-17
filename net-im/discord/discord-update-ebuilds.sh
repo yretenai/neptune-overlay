@@ -10,7 +10,7 @@ update_discord() {
 	EBUILD_PRE="${NETIM_ROOT}/${NAME}/${NAME}-"
 	VERSION=$(./discord-version.sh $TARGET)
 	echo $NAME version is $VERSION
-	EBUILD_NAME="${EBUILD_PRE}0.0.${VERSION}.ebuild"
+	EBUILD_NAME="${EBUILD_PRE}${VERSION}.ebuild"
 	find "${NETIM_ROOT}/${NAME}" -iname "*.ebuild" -print -delete
 	cp $EBUILD_TEMPLATE $EBUILD_NAME
 	OLD_PWD="$PWD"
