@@ -3,7 +3,7 @@
 
 EAPI=8
 
-NUGET_PVS="9.0.14 9.0.13 9.0.12 9.0.11 9.0.10 9.0.9 9.0.8 9.0.7 9.0.6 9.0.5 9.0.4 9.0.3 9.0.2 9.0.1 9.0.0 "
+NUGET_PVS="11.0.0-preview.3.26207.106 11.0.0-preview.2.26159.112 11.0.0-preview.1.26104.118 "
 for NUGET_PV in $NUGET_PVS; do
 	NUGETS+="
 		microsoft.netcore.app.host.linux-arm@${NUGET_PV}
@@ -33,7 +33,6 @@ SRC_URI="
 S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="$(ver_cut 1-2)"
-KEYWORDS="~amd64 ~arm64"
 RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"

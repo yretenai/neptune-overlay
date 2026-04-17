@@ -4,10 +4,10 @@
 EAPI=8
 
 MY_PV="${PV/-r*/}"
-DN_PV="${PV}"
+DN_PV="11.0.100-preview.3.26207.106"
 
-RUNTIME_PV="8.0.25"
-ASP_PV="8.0.25"
+RUNTIME_PV="11.0.0.3.26207.106"
+ASP_PV="11.0.0.3.26207.106"
 
 inherit unpacker
 
@@ -29,7 +29,6 @@ LICENSE="MIT"
 SDK_SLOT="$(ver_cut 1-2)"
 RUNTIME_SLOT="${SDK_SLOT}.0"
 SLOT="${SDK_SLOT}/${RUNTIME_SLOT}"
-KEYWORDS="~amd64 ~arm64"
 RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"
