@@ -103,6 +103,10 @@ src_prepare() {
 	cd "${S}"
 	default
 
+	cd locales
+	chromium_remove_language_paks
+	cd ..
+
 	# fix .desktop exec location
 	sed -i "/Exec/s:/usr/share/${MY_PN}/${MY_PN_UC}:${DESTDIR}/${MY_PN_UC}:" \
 		"${MY_PN}.desktop" ||
