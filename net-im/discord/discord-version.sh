@@ -1,9 +1,14 @@
 #!/bin/sh
 
-if [ -z "$1" ]; then
-	discord_version=$(curl -I "https://discord.com/api/download?platform=linux&format=tar.gz" 2>/dev/null | grep location | grep -oP '[.\d]+(?=/)')
-else
-	discord_version=$(curl -I "https://discord.com/api/download/$1?platform=linux&format=tar.gz" 2>/dev/null | grep location | grep -oP '[.\d]+(?=/)')
-fi
+case "$1" in
+	canary)
+		echo $(curl "https://updates.discord.com/distributions/app/manifests/latest?channel=$1&platform=linux&arch=x64" | jq -r '.full.host_version | join(".")' )
+		;;
+	ptb|development)
+		echo $(curl -I "https://discord.com/api/download/$1?platform=linux&format=tar.gz" 2>/dev/null | grep location | grep -oP '[.\d]+(?=/)')
+		;;
+	*)
+		echo $(curl -I "https://discord.com/api/download?platform=linux&format=tar.gz" 2>/dev/null | grep location | grep -oP '[.\d]+(?=/)')
+		;;
+esac
 
-echo $discord_version
