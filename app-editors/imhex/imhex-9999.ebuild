@@ -48,6 +48,8 @@ PATCHES=(
 	"${FILESDIR}/imhex-1.38.1-optional-patterns.patch"
 	# search lunasvg on pkgconfig if not exist
 	"${FILESDIR}/imhex-1.38.1-pkgconfig-lunasvg.patch"
+	# Fix nullptr deref
+	"${FILESDIR}/imhex-1.38.1-PR2718.patch"
 )
 
 DOCS+=( LICENSE PLUGINS.md changelog.md )
@@ -118,7 +120,7 @@ src_configure() {
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
 		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_ENABLE_LTO=$(usex lto) \
-		-D IMHEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
+		-D IMHhttps://github.com/WerWolv/ImHex/pull/2718.patchEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
 		-D IMHEX_BUILD_HARDENING=OFF \
 		-D IMHEX_STRICT_WARNINGS=OFF \
 		-D IMHEX_STATIC_LINK_PLUGINS=OFF \
