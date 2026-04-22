@@ -48,8 +48,6 @@ PATCHES=(
 	"${FILESDIR}/imhex-1.38.1-optional-patterns.patch"
 	# search lunasvg on pkgconfig if not exist
 	"${FILESDIR}/imhex-1.38.1-pkgconfig-lunasvg.patch"
-	# Fix nullptr deref
-	"${FILESDIR}/imhex-1.38.1-PR2718.patch"
 )
 
 DOCS+=( LICENSE PLUGINS.md changelog.md )
