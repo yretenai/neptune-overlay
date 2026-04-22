@@ -48,6 +48,8 @@ PATCHES=(
 	"${FILESDIR}/imhex-1.38.1-optional-patterns.patch"
 	# search lunasvg on pkgconfig if not exist
 	"${FILESDIR}/imhex-1.38.1-pkgconfig-lunasvg.patch"
+	# search for include patterns in user provided folders
+	"${FILESDIR}/imhex-1.38.1-PR2720.patch"
 )
 
 DOCS+=( LICENSE PLUGINS.md changelog.md )

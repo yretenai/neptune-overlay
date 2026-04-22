@@ -1,0 +1,36 @@
+From 53b1d0fb851d66f56434f2dedc266d3e70a8fd9a Mon Sep 17 00:00:00 2001
+From: Ada Freya Ahmed <ada@chronovore.dev>
+Date: Wed, 22 Apr 2026 15:46:31 +0530
+Subject: [PATCH] Search for include patterns in user provided folders
+
+---
+ lib/libimhex/source/api/content_registry.cpp                 | 2 +-
+ plugins/builtin/source/content/views/view_pattern_editor.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/libimhex/source/api/content_registry.cpp b/lib/libimhex/source/api/content_registry.cpp
+index 10696655572a0..7b268c4efdc45 100644
+--- a/lib/libimhex/source/api/content_registry.cpp
++++ b/lib/libimhex/source/api/content_registry.cpp
+@@ -724,7 +724,7 @@ namespace hex {
+                 );
+             }
+ 
+-            runtime.setIncludePaths(paths::PatternsInclude.read() | paths::Patterns.read());
++            runtime.setIncludePaths(paths::PatternsInclude.read() | paths::Patterns.read() | ImHexApi::System::getAdditionalFolderPaths());
+ 
+             for (const auto &[ns, name, paramCount, callback, dangerous] : impl::getFunctions()) {
+                 if (dangerous)
+diff --git a/plugins/builtin/source/content/views/view_pattern_editor.cpp b/plugins/builtin/source/content/views/view_pattern_editor.cpp
+index 89c6482ce5ae8..7b5d27da20b42 100644
+--- a/plugins/builtin/source/content/views/view_pattern_editor.cpp
++++ b/plugins/builtin/source/content/views/view_pattern_editor.cpp
+@@ -2802,7 +2802,7 @@ namespace hex::plugin::builtin {
+         auto provider = ImHexApi::Provider::get();
+         if (provider == nullptr)
+             return;
+-        const auto basePaths = paths::Patterns.read();
++        const auto basePaths = paths::Patterns.read() | ImHexApi::System::getAdditionalFolderPaths();
+         std::vector<std::fs::path> paths;
+ 
+         for (const auto &imhexPath : basePaths) {
