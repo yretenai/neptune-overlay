@@ -30,14 +30,15 @@ IUSE="voice"
 # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=a2963fc1a23747bbb60a3785bf06dd566e6d8be9
 
 RDEPEND="${COMMON_DEPEND}
-	>=dev-python/cryptography-3.4.8[${PYTHON_USEDEP}]
+	>=dev-python/cryptography-43.0.0[${PYTHON_USEDEP}]
 	dev-python/css-parser[${PYTHON_USEDEP}]
 	>=dev-python/emoji-2.6.0[${PYTHON_USEDEP}]
+	dev-python/httpx[${PYTHON_USEDEP}]
 	dev-python/keyring[${PYTHON_USEDEP}]
 	<dev-python/nbxmpp-8.0.0[${PYTHON_USEDEP}]
-	>=dev-python/nbxmpp-7.0.0[${PYTHON_USEDEP}]
+	>=dev-python/nbxmpp-7.2.0[${PYTHON_USEDEP}]
 	<dev-python/omemo-dr-2.0.0[${PYTHON_USEDEP}]
-	>=dev-python/omemo-dr-1.0.0[${PYTHON_USEDEP}]
+	>=dev-python/omemo-dr-1.2.0[${PYTHON_USEDEP}]
 	dev-python/packaging[${PYTHON_USEDEP}]
 	>=dev-python/pillow-9.1.0[${PYTHON_USEDEP}]
 	>=dev-python/precis-i18n-1.0.0[${PYTHON_USEDEP}]
@@ -45,7 +46,7 @@ RDEPEND="${COMMON_DEPEND}
 	>=dev-python/pygobject-3.52.0:3[cairo,${PYTHON_USEDEP}]
 	>=dev-python/qrcode-7.3.1[${PYTHON_USEDEP}]
 	>=dev-python/sqlalchemy-2.0.0[${PYTHON_USEDEP}]
-	dev-python/httpx[${PYTHON_USEDEP}]
+	dev-python/truststore[${PYTHON_USEDEP}]
 
 	>=dev-libs/glib-2.80.0:2[introspection(+)]
 	>=gui-libs/gtk-4.17.5:4[introspection]
