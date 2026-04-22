@@ -334,7 +334,7 @@ src_install() {
 	dodoc AUTHORS.md CHANGELOG.md DONORS.md README.md
 
 	if use gui; then
-		newicon icon.svg ${s}.svg
+		newicon misc/logo/icon.svg ${s}.svg
 		newmenu misc/dist/linux/org.godotengine.Godot.desktop \
 			org.godotengine.${s^}.desktop
 
