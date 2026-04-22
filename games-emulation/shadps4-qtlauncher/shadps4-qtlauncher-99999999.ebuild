@@ -83,6 +83,10 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-D ENABLE_UPDATER=OFF
+		-D FETCHCONTENT_QUIET=OFF
+		-D FETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS
+		-D FETCHCONTENT_FULLY_DISCONNECTED=ON
+		-D FETCHCONTENT_SOURCE_DIR_FMT="${S}/externals/fmt"
 	)
 
 	cmake_src_configure
