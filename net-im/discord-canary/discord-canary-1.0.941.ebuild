@@ -18,18 +18,18 @@ CHROMIUM_LANGS="
 inherit chromium-2 desktop linux-info optfeature unpacker xdg
 
 DISCORD_MODULE_URI="
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_cloudsync/1/full.distro -> ${P}-discord_cloudsync-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_desktop_core/1/full.distro -> ${P}-discord_desktop_core-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_dispatch/1/full.distro -> ${P}-discord_dispatch-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_erlpack/1/full.distro -> ${P}-discord_erlpack-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_game_utils/1/full.distro -> ${P}-discord_game_utils-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_krisp/1/full.distro -> ${P}-discord_krisp-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_modules/1/full.distro -> ${P}-discord_modules-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_rpc/1/full.distro -> ${P}-discord_rpc-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_spellcheck/1/full.distro -> ${P}-discord_spellcheck-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_utils/1/full.distro -> ${P}-discord_utils-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_voice/1/full.distro -> ${P}-discord_voice-1.tar.br
-	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.927/discord_zstd/1/full.distro -> ${P}-discord_zstd-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_cloudsync/1/full.distro -> ${P}-discord_cloudsync-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_desktop_core/1/full.distro -> ${P}-discord_desktop_core-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_dispatch/1/full.distro -> ${P}-discord_dispatch-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_erlpack/1/full.distro -> ${P}-discord_erlpack-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_game_utils/1/full.distro -> ${P}-discord_game_utils-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_krisp/1/full.distro -> ${P}-discord_krisp-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_modules/1/full.distro -> ${P}-discord_modules-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_rpc/1/full.distro -> ${P}-discord_rpc-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_spellcheck/1/full.distro -> ${P}-discord_spellcheck-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_utils/1/full.distro -> ${P}-discord_utils-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_voice/1/full.distro -> ${P}-discord_voice-1.tar.br
+	https://canary.dl2.discordapp.net/distro/app/canary/linux/x64/1.0.941/discord_zstd/1/full.distro -> ${P}-discord_zstd-1.tar.br
 "
 
 DISCORD_MODULE="
@@ -130,6 +130,10 @@ src_prepare() {
 
 	cd "${S}"
 	default
+
+	cd locales
+	chromium_remove_language_paks
+	cd ..
 
 	# fix .desktop exec location
 	sed -i "/Exec/s:/usr/share/${MY_PN}/${MY_PN_UC}:${DESTDIR}/${MY_PN_UC}:" \
