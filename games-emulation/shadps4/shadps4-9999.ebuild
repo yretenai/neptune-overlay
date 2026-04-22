@@ -22,17 +22,21 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/libusb"
 		"externals/hwinfo"
 		"externals/aacdec/fdk-aac"
+		"externals/spdlog"
+		"externals/ImGuiFileDialog"
 	)
 else
 	VULKANMEMORYALLOCATOR_COMMIT=
 	EXT_DISCORD_RPC_COMMIT=
-	EXT_FMT_COMMIT=
+	EXT_FMT_COMMIT= # breaks on system version?
 	EXT_IMGUI_COMMIT=
 	EXT_LIBATRAC9_COMMIT=
 	EXT_LIBUSB_COMMIT= # todo: this exists as a package
 	EXT_HWINFO_COMMIT= # todo: this exists as a package
 	SIRIT_COMMIT=
 	FDK_AAC_COMMIT= # todo: this exists as a package
+	SPDLOG_COMMIT= # todo: this exists as a package, but need v2
+	IMGUI_FILE_DIALOG_COMMIT=
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
@@ -41,10 +45,12 @@ else
 		https://github.com/shadps4-emu/ext-fmt/archive/${EXT_FMT_COMMIT}.tar.gz -> ${PN}-ext-fmt-${EXT_FMT_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-imgui/archive/${EXT_IMGUI_COMMIT}.tar.gz -> ${PN}-ext-imgui-${EXT_IMGUI_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-LibAtrac9/archive/${EXT_LIBATRAC9_COMMIT}.tar.gz -> ${PN}-ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}.tar.gz
-		https://github.com/shadps4-emu/ext-libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-ext-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
+		https://github.com/shadexternals/libusb/archive/${EXT_LIBUSB_COMMIT}.tar.gz -> ${PN}-libusb-${EXT_LIBUSB_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/ext-hwinfo/archive/${EXT_HWINFO_COMMIT}.tar.gz -> ${PN}-ext-hwinfo-${EXT_HWINFO_COMMIT}.tar.gz
 		https://github.com/shadps4-emu/sirit/archive/${SIRIT_COMMIT}.tar.gz -> ${PN}-sirit-${SIRIT_COMMIT}.tar.gz
 		https://android.googlesource.com/platform/external/aac/+archive/${FDK_AAC_COMMIT}.tar.gz -> ${PN}-aacedc-{$FDK_AAC_COMMIT}.tar.gz
+		https://github.com/gabime/spdlog/archive/${SPDLOG_COMMIT}.tar.gz -> ${PN}-spdlog-${SPDLOG_COMMIT}.tar.gz
+		https://github.com/shadexternals/ImGuiFileDialog/archive/${IMGUI_FILE_DIALOG_COMMIT}.tar.gz -> ${PN}-ImGuiFileDialog-${IMGUI_FILE_DIALOG_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/shadPS4-v.${PV}"
 	KEYWORDS="~amd64"
@@ -112,10 +118,12 @@ src_unpack() {
 		rmdir "${S}/externals/discord-rpc"; mv "${WORKDIR}/ext-discord-rpc-${EXT_DISCORD_RPC_COMMIT}" "${S}/externals/discord-rpc" || die "Cannot move ext-discord-rpc"
 		rmdir "${S}/externals/fmt"; mv "${WORKDIR}/ext-fmt-${EXT_FMT_COMMIT}" "${S}/externals/fmt" || die "Cannot move ext-fmt"
 		rmdir "${S}/externals/LibAtrac9"; mv "${WORKDIR}/ext-LibAtrac9-${EXT_LIBATRAC9_COMMIT}" "${S}/externals/LibAtrac9" || die "Cannot move ext-LibAtrac9"
-		rmdir "${S}/externals/ext-libusb"; mv "${WORKDIR}/ext-libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/ext-libusb" || die "Cannot move ext-libusb"
+		rmdir "${S}/externals/libusb"; mv "${WORKDIR}/libusb-${EXT_LIBUSB_COMMIT}" "${S}/externals/libusb" || die "Cannot move libusb"
 		rmdir "${S}/externals/hwinfo"; mv "${WORKDIR}/ext-hwinfo-${EXT_LIBUSB_COMMIT}" "${S}/externals/hwinfo" || die "Cannot move ext-hwinfo"
 		rmdir "${S}/externals/sirit"; mv "${WORKDIR}/sirit-${SIRIT_COMMIT}" "${S}/externals/sirit" || die "Cannot move sirit"
 		rmdir "${S}/externals/aacdec/fdk-aac"; mv "${WORKDIR}/sirit-${FDK_AAC_COMMIT}" "${S}/externals/aacdec/fdk-aac" || die "Cannot move fdk-aac"
+		rmdir "${S}/externals/spdlog"; mv "${WORKDIR}/spdlog-${SPDLOG_COMMIT}" "${S}/externals/spdlog" || die "Cannot move spdlog"
+		rmdir "${S}/externals/ImGuiFileDialog"; mv "${WORKDIR}/ImGuiFileDialog-${IMGUI_FILE_DIALOG_COMMIT}" "${S}/externals/ImGuiFileDialog" || die "Cannot move ImGuiFileDialog"
 	fi
 }
 
