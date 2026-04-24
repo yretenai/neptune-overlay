@@ -53,6 +53,7 @@ else
 	KEYWORDS="~amd64"
 	SRC_URI="
 		https://github.com/squidowl/halloy/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz
+		${CARGO_CRATE_URIS}
 	"
 	if [[ ${PKGBUMPING} != ${PVR} ]]; then
 		SRC_URI+="
