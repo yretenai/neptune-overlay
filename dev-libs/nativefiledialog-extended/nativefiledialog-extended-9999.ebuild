@@ -22,13 +22,19 @@ else
 	KEYWORDS="~amd64 ~arm64"
 fi
 
-RDEPEND="
-	x11-libs/gtk+:3
-	dev-libs/glib
-"
-DEPEND="${RDEPEND}"
+IUSE="+desktop-portal test"
 
-IUSE="test"
+DEPEND="
+	desktop-portal? ( sys-apps/dbus )
+	!desktop-portal? (
+		dev-libs/glib:2
+		x11-libs/gtk+:3
+	)
+"
+RDEPEND="
+	${DEPEND}
+	desktop-portal? ( sys-apps/xdg-desktop-portal )
+"
 
 RESTRICT="!test? ( test )"
 
@@ -41,6 +47,7 @@ src_prepare() {
 src_configure() {
 	local mycmakeargs=(
 		-DNFD_BUILD_TESTS=$(usex test)
+		-DNFD_PORTAL=$(usex desktop-portal)
 	)
 	cmake_src_configure
 }

@@ -3,7 +3,7 @@
 
 EAPI=8
 
-LLVM_COMPAT=( {15..22} )
+LLVM_COMPAT=( {20..22} )
 
 inherit cmake llvm-r2 toolchain-funcs flag-o-matic git-r3 xdg-utils
 
@@ -25,7 +25,6 @@ EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
 IUSE="+llvm test lto +desktop-portal lz4"
 RESTRICT="!test? ( test )"
 
@@ -79,7 +78,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	=dev-misc/imhex-patterns-${PV}
+	~dev-misc/imhex-patterns-${PV}
 "
 BDEPEND="
 	app-admin/chrpath

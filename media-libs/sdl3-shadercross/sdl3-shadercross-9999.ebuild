@@ -11,7 +11,6 @@ EGIT_SUBMODULES=()
 EGIT_REPO_URI="https://github.com/libsdl-org/SDL_shadercross.git"
 LICENSE="ZLIB"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64"
 IUSE="test"
 RESTRICT="!test? ( test )"
 

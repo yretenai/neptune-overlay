@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<use>
+		<flag name="desktop-portal">Use xdg-desktop-portal instead of GTK</flag>
+	</use>
 	<upstream>
 		<changelog>https://github.com/btzy/nativefiledialog-extended/releases</changelog>
 		<remote-id type="github">btzy/nativefiledialog-extended</remote-id>

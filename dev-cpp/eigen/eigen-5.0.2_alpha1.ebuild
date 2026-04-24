@@ -12,7 +12,7 @@ HOMEPAGE="https://eigen.tuxfamily.org/index.php?title=Main_Page"
 
 EIGEN_VERSION="8a1083e9bf41b91fdea6546681f806154efdc25a"
 SRC_URI="
-	https://gitlab.com/lib${PN}/${PN}/-/archive/${EIGEN_VERSION}/${PN}-${EIGEN_VERSION}.tar.gz
+	https://gitlab.com/lib${PN}/${PN}/-/archive/${EIGEN_VERSION}/${PN}-${EIGEN_VERSION}.tar.bz2 -> ${P}.tar.bz2
 	test? ( lapack? ( https://downloads.tuxfamily.org/${PN}/lapack_addons_3.4.1.tgz -> ${PN}-lapack_addons-3.4.1.tgz ) )
 "
 S="${WORKDIR}/${PN}-${EIGEN_VERSION}"

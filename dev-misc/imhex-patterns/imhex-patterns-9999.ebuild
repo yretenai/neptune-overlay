@@ -22,7 +22,6 @@ src_install() {
 	cd "${S}"
 	rm -rf ".github" "tests"
 	dodoc CONTRIBUTING.md LICENSE README.md
-	rm CONTRIBUTING.md LICENSE README.md .gitattributes .gitignore .gitmodules 
+	rm CONTRIBUTING.md LICENSE README.md .gitattributes .gitignore .gitmodules
 	doins -r "${S}"/*
 }
-

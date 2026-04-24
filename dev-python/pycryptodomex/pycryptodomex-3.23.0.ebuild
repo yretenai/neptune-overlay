@@ -17,7 +17,7 @@ HOMEPAGE="
 	https://pypi.org/project/pycryptodomex/
 "
 SRC_URI="
-	https://github.com/Legrandin/pycryptodome/archive/v${PV}.tar.gz -> ${P}.tar.gz
+	https://github.com/Legrandin/pycryptodome/archive/v${PV}.tar.gz -> ${P}.gh.tar.gz
 "
 S="${WORKDIR}/pycryptodome-${PV}"
 LICENSE="BSD-2 Unlicense"

@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Minimalistic MP3 decoder single header library"
 HOMEPAGE="https://github.com/lieff/minimp3"
 COMMIT="7b590fdcfa5a79c033e76eacc05d0c3e4c79f536"
-SRC_URI="https://github.com/lieff/minimp3/archive/${COMMIT}.zip"
+SRC_URI="https://github.com/lieff/minimp3/archive/${COMMIT}.tar.gz -> ${P}.tar.gz"
 S="${WORKDIR}/${PN}-${COMMIT}"
 
 LICENSE="CC0-1.0"

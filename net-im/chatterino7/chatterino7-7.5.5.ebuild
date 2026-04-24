@@ -111,7 +111,7 @@ src_configure() {
 			-DCMAKE_CXX_FLAGS="${CXXFLAGS} -DNDEBUG"
 		)
 	fi
-	
+
 	cmake_src_configure
 }
 

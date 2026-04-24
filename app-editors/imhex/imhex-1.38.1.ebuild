@@ -3,7 +3,7 @@
 
 EAPI=8
 
-LLVM_COMPAT=( {15..22} )
+LLVM_COMPAT=( {20..22} )
 
 inherit cmake llvm-r2 toolchain-funcs flag-o-matic xdg-utils
 
@@ -70,7 +70,7 @@ DEPEND="
 "
 RDEPEND="
 	${DEPEND}
-	=dev-misc/imhex-patterns-${PV}
+	~dev-misc/imhex-patterns-${PV}
 "
 BDEPEND="
 	app-admin/chrpath

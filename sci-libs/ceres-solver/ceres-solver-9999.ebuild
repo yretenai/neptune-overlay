@@ -6,7 +6,7 @@ EAPI=8
 # TODO
 # - multilib? Why?
 
-PYTHON_COMPAT=( python3_{12..13} )
+PYTHON_COMPAT=( python3_{12..14} )
 DOCS_BUILDER="sphinx"
 DOCS_DEPEND="dev-python/sphinx-rtd-theme"
 DOCS_DIR="docs/source"
@@ -31,10 +31,10 @@ LICENSE="sparse? ( BSD ) !sparse? ( LGPL-2.1 )"
 # SONAME
 SLOT="0/4"
 # TODO openmp? tbb?
-IUSE="+eigen examples cuda cudss lapack metis +schur sparse test"
+IUSE="+eigen examples cuda lapack metis +schur sparse test"
 
 REQUIRED_USE="
-	|| ( cudss eigen sparse )
+	|| ( eigen sparse )
 	sparse? (
 		lapack
 	)
@@ -59,9 +59,6 @@ BDEPEND="${PYTHON_DEPS}
 RDEPEND="
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
-	)
-	cudss? (
-		dev-libs/cudss:=
 	)
 	eigen? (
 		>=dev-cpp/eigen-3.3.4:=
@@ -175,7 +172,6 @@ src_configure() {
 		-DEIGENMETIS="$(usex eigen "$(usex metis)")"
 		-DEIGENSPARSE="$(usex eigen)"
 		-DSUITESPARSE="$(usex sparse)"
-		-Dcudss_DIR="$(usex cuda "$(usex cudss "${CUDNN_PATH:-${ESYSROOT}/opt/cuda}/$(get_libdir)/cmake/cudss" NOTFOUND)")"
 		# --debug-find-pkg="cudss"
 		-DCUSTOM_BLAS="yes"
 
