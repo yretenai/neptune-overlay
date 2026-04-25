@@ -1,0 +1,25 @@
+diff --git a/cli/CMakeLists.txt b/cli/CMakeLists.txt
+index 163eded2..9d6a1139 100644
+--- a/cli/CMakeLists.txt
++++ b/cli/CMakeLists.txt
+@@ -72,7 +72,7 @@ if (WIN32)
+     endif()
+ 
+ else ()
+-    set(CMAKE_INSTALL_BINDIR "bin")
++    include(GNUInstallDirs)
+ endif ()
+ 
+ install(TARGETS plcli DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index b1935689..121ace42 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -109,5 +109,6 @@ target_link_libraries(libpl PUBLIC wolv::types wolv::io wolv::utils wolv::hash w
+ set_target_properties(libpl PROPERTIES PREFIX "")
+ 
+ if (LIBPL_SHARED_LIBRARY)
+-    install(TARGETS libpl DESTINATION lib)
++    include(GNUInstallDirs)
++    install(TARGETS libpl DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ endif ()
