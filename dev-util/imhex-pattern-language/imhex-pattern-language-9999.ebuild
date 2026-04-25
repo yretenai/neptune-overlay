@@ -29,14 +29,16 @@ PATCHES=(
 )
 
 DEPEND="
-	>=dev-cpp/nlohmann_json-3.10.2
 	>=dev-libs/libfmt-11.0.2:=
-	dev-cpp/cli11
 	dev-cpp/throwing_ptr
 "
 RDEPEND="
 	${DEPEND}
 	dev-misc/imhex-patterns
+"
+BDEPEND="
+	>=dev-cpp/nlohmann_json-3.10.2
+	dev-cpp/cli11
 "
 
 src_configure() {
