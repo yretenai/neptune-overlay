@@ -11,15 +11,17 @@ DESCRIPTION="A hex editor for reverse engineers, programmers, and eyesight"
 HOMEPAGE="https://github.com/WerWolv/ImHex"
 EGIT_SUBMODULES=(
 	"*"
-	"-lib/third_party/yara/yara"
 	"-lib/third_party/capstone"
 	"-lib/third_party/fmt"
 	"-lib/third_party/md4c"
 	"-lib/third_party/nativefiledialog"
 	"-lib/third_party/lunasvg"
+	"-lib/third_party/yara/yara"
 	"-lib/external/disassembler/external/fmt"
 	"-lib/external/disassembler/external/json"
 	"-lib/external/pattern_language/external/fmt"
+	"-lib/external/pattern_language/external/cli11"
+	"-lib/external/pattern_language/external/throwing_ptr"
 )
 EGIT_REPO_URI="https://github.com/WerWolv/ImHex.git"
 
@@ -56,25 +58,23 @@ DEPEND="
 	app-arch/xz-utils
 	app-arch/zstd:=
 	>=app-forensics/yara-4.2.0:=
-	>=dev-cpp/nlohmann_json-3.10.2
 	dev-libs/boost
 	>=dev-libs/capstone-5.0.3:=
 	<dev-libs/capstone-6
-	dev-libs/md4c
 	>=dev-libs/libfmt-11.0.2:=
 	>=dev-libs/nativefiledialog-extended-1.2.1[desktop-portal?]
 	media-libs/fontconfig
 	media-libs/freetype
 	>=media-libs/glfw-3.4[X]
 	media-libs/glm
-	media-libs/libglvnd
 	media-libs/lunasvg
 	net-libs/mbedtls:=
 	net-misc/curl
 	sys-apps/file
-	virtual/zlib:=
 	virtual/libiconv
 	virtual/libintl
+	virtual/opengl
+	virtual/zlib:=
 "
 RDEPEND="
 	${DEPEND}
@@ -82,6 +82,10 @@ RDEPEND="
 "
 BDEPEND="
 	app-admin/chrpath
+	dev-cpp/cli11
+	>=dev-cpp/nlohmann_json-3.10.2
+	dev-cpp/throwing_ptr
+	dev-libs/md4c
 	gnome-base/librsvg
 	lz4? ( app-arch/lz4 )
 	llvm? (
@@ -98,11 +102,6 @@ pkg_pretend() {
 }
 
 src_configure() {
-	# Building ImHex with -Werror=strict-aliasing gives a failed build
-	# for tests/algorithms/source/endian.cpp, and ImHex usually has pretty
-	# clean build (without warnings), so it should be safe to do
-	filter-flags -Werror=strict-aliasing
-
 	if use test; then
 		sed -ie "s/tests EXCLUDE_FROM_ALL/tests ALL/" "${S}/CMakeLists.txt"
 	fi
@@ -117,7 +116,7 @@ src_configure() {
 		-D IMHEX_DISABLE_STACKTRACE=OFF \
 		-D IMHEX_BUNDLE_DOTNET=OFF \
 		-D IMHEX_ENABLE_LTO=$(usex lto) \
-		-D IMHhttps://github.com/WerWolv/ImHex/pull/2718.patchEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
+		-D IMHEX_USE_DEFAULT_BUILD_SETTINGS=OFF \
 		-D IMHEX_BUILD_HARDENING=OFF \
 		-D IMHEX_STRICT_WARNINGS=OFF \
 		-D IMHEX_STATIC_LINK_PLUGINS=OFF \
@@ -127,16 +126,16 @@ src_configure() {
 		-D IMHEX_ENABLE_PRECOMPILED_HEADERS=OFF \
 		-D IMHEX_ENABLE_CXX_MODULES=OFF \
 		-D IMHEX_ENABLE_CPPCHECK=OFF \
-		-D IMHEX_BUNDLE_PLUGIN_SDK=ON \
+		-D IMHEX_BUNDLE_PLUGIN_SDK=OFF \
 		-D IMHEX_COMPRESS_DEBUG_INFO=OFF \
 		-D IMHEX_VERSION="${PV}" \
 		-D PROJECT_VERSION="${PV}" \
 		-D LIBPL_ENABLE_TESTS=$(usex test) \
-		-D LIBPL_ENABLE_EXAMPLE=ON \
 		-D LIBWOLV_ENABLE_TESTS=$(usex test) \
 		-D LIBWOLV_ENABLE_EXAMPLES=ON \
 		-D USE_SYSTEM_BOOST=ON \
 		-D USE_SYSTEM_CAPSTONE=ON \
+		-D USE_SYSTEM_CLI11=ON \
 		-D USE_SYSTEM_FMT=ON \
 		-D USE_SYSTEM_LLVM=$(usex llvm) \
 		-D USE_SYSTEM_MD4C=ON \
