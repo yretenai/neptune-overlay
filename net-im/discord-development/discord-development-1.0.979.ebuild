@@ -17,11 +17,45 @@ CHROMIUM_LANGS="
 
 inherit chromium-2 desktop linux-info optfeature unpacker xdg
 
+DISCORD_MODULE_URI="
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_cloudsync/1/full.distro -> ${P}-discord_cloudsync-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_desktop_core/1/full.distro -> ${P}-discord_desktop_core-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_dispatch/1/full.distro -> ${P}-discord_dispatch-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_erlpack/1/full.distro -> ${P}-discord_erlpack-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_game_utils/1/full.distro -> ${P}-discord_game_utils-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_krisp/1/full.distro -> ${P}-discord_krisp-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_modules/1/full.distro -> ${P}-discord_modules-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_rpc/1/full.distro -> ${P}-discord_rpc-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_spellcheck/1/full.distro -> ${P}-discord_spellcheck-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_utils/1/full.distro -> ${P}-discord_utils-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_voice/1/full.distro -> ${P}-discord_voice-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_zstd/1/full.distro -> ${P}-discord_zstd-1.tar.br
+"
+
+DISCORD_MODULE="
+	discord_cloudsync-1
+	discord_desktop_core-1
+	discord_dispatch-1
+	discord_erlpack-1
+	discord_game_utils-1
+	discord_krisp-1
+	discord_modules-1
+	discord_rpc-1
+	discord_spellcheck-1
+	discord_utils-1
+	discord_voice-1
+	discord_zstd-1
+"
+
 DESCRIPTION="All-in-one voice and text chat for gamers"
 HOMEPAGE="https://discordapp.com"
-SRC_URI="https://dl-${MY_BRANCH}.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
+SRC_URI="
+	https://dl-${MY_BRANCH}.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz
+	https://${MY_BRANCH}.dl2.discordapp.net/distro/app/${MY_BRANCH}/linux/x64/${MY_PV}/full.distro -> ${P}.full.tar.br
+	${DISCORD_MODULE_URI}
+"
 
-S="${WORKDIR}/${MY_PN_UC}"
+S="${WORKDIR}/files"
 LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -59,6 +93,10 @@ RDEPEND="
 	x11-libs/pango
 	appindicator? ( dev-libs/libayatana-appindicator )
 "
+BDEPEND="
+	app-arch/brotli
+	app-misc/jq
+"
 
 DESTDIR="/opt/${MY_PN}"
 
@@ -66,22 +104,37 @@ QA_PREBUILT="*"
 
 CONFIG_CHECK="~USER_NS"
 src_unpack() {
-	unpack ${MY_PN}-${MY_PV}.tar.gz
-}
+	cd "${DISTDIR}"
+	brotli -c --decompress "${DISTDIR}/${P}.full.tar.br" > "${WORKDIR}/${P}.full.tar"
 
-src_configure() {
-	default
-	chromium_suid_sandbox_check_kernel_config
+	mkdir -p "${S}/modules/${MODULE}"
+	for MODULE in ${DISCORD_MODULE}; do
+		brotli -c --decompress "${DISTDIR}/${P}-${MODULE}.tar.br" > "${S}/modules/${MODULE}.tar"
+	done
+
+	cd "${WORKDIR}"
+	unpacker "${WORKDIR}/${P}.full.tar"
+	unpacker "${P}.tar.gz"
+
+	for MODULE in ${DISCORD_MODULE}; do
+		cd "${S}/modules"
+		unpacker "${S}/modules/${MODULE}.tar"
+		rm -f delta_manifest.json "${S}/modules/${MODULE}.tar"
+		mv files "${MODULE%-[0-9]*}"
+	done
 }
 
 src_prepare() {
+	cd "${WORKDIR}/${MY_PN_UC}"
+	mv "${MY_PN}.desktop" "${MY_PN_RAW}.png" "${S}"
+
+	cd "${S}"
 	default
-	# remove post-install script
-	rm postinst.sh || die "the removal of the unneeded post-install script failed"
-	# cleanup languages
-	pushd "locales/" >/dev/null || die "location change for language cleanup failed"
+
+	cd locales
 	chromium_remove_language_paks
-	popd >/dev/null || die "location reset for language cleanup failed"
+	cd ..
+
 	# fix .desktop exec location
 	sed -i "/Exec/s:/usr/share/${MY_PN}/${MY_PN_UC}:${DESTDIR}/${MY_PN_UC}:" \
 		"${MY_PN}.desktop" ||
@@ -96,6 +149,11 @@ src_prepare() {
 	mv "${MY_PN_RAW}.png" "${MY_PN}.png"
 }
 
+src_configure() {
+	default
+	chromium_suid_sandbox_check_kernel_config
+}
+
 src_install() {
 	doicon -s 256 "${MY_PN}.png"
 
@@ -106,10 +164,17 @@ src_install() {
 
 	doexe "${MY_PN_UC}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
 
+	ewarn
+	ewarn "patching build info to point locally, meaning modules will not be updated."
+	ewarn "if things break, consider using the proper client installer which installs to .config/${MY_PN}"
+	ewarn
+	jq ". + { \"localModulesRoot\": \"${DESTDIR}/modules\" }" resources/build_info.json > build_info.json
+	mv build_info.json resources/build_info.json
+
 	insinto "${DESTDIR}"
 	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin
 	insopts -m0755
-	doins -r locales resources
+	doins -r locales resources modules
 
 	# Chrome-sandbox requires the setuid bit to be specifically set.
 	# see https://github.com/electron/electron/issues/17972
