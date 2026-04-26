@@ -123,6 +123,7 @@ src_configure() {
 		-D IMHEX_ENABLE_UNITY_BUILD=OFF \
 		-D IMHEX_ENABLE_STD_ASSERTS=OFF \
 		-D IMHEX_ENABLE_UNIT_TESTS=$(usex test) \
+		-D IMHEX_ENABLE_PLUGIN_TESTS=$(usex test) \
 		-D IMHEX_ENABLE_PRECOMPILED_HEADERS=OFF \
 		-D IMHEX_ENABLE_CXX_MODULES=OFF \
 		-D IMHEX_ENABLE_CPPCHECK=OFF \
@@ -130,9 +131,10 @@ src_configure() {
 		-D IMHEX_COMPRESS_DEBUG_INFO=OFF \
 		-D IMHEX_VERSION="${PV}" \
 		-D PROJECT_VERSION="${PV}" \
-		-D LIBPL_ENABLE_TESTS=$(usex test) \
+		-D LIBPL_ENABLE_TESTS=OFF \
+		-D LIBPL_ENABLE_EXAMPLES=OFF \
 		-D LIBWOLV_ENABLE_TESTS=$(usex test) \
-		-D LIBWOLV_ENABLE_EXAMPLES=ON \
+		-D LIBWOLV_ENABLE_EXAMPLES=OFF \
 		-D USE_SYSTEM_BOOST=ON \
 		-D USE_SYSTEM_CAPSTONE=ON \
 		-D USE_SYSTEM_CLI11=ON \
@@ -148,10 +150,18 @@ src_configure() {
 	cmake_src_configure
 }
 
+src_test() {
+	cmake_build unit_tests
+	cmake_build libwolv-tests
+	cmake_build imhex_all
+	cmake_src_test
+}
+
 pkg_postinst() {
 	xdg_desktop_database_update
 	xdg_mimeinfo_database_update
 }
+
 pkg_postrm() {
 	xdg_desktop_database_update
 	xdg_mimeinfo_database_update
