@@ -48,8 +48,6 @@ src_unpack() {
 	fi
 
 	cd "${S}"
-	eapply "${FILESDIR}/${PN}-5.0.0-tsc-errors.patch"
-
 	electron-r1_prep_npm
 
 	export COREPACK_ENABLE_STRICT=0
