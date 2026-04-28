@@ -18,11 +18,33 @@ CHROMIUM_LANGS="
 inherit chromium-2 desktop linux-info optfeature unpacker xdg
 
 DISCORD_MODULE_URI="
-
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_cloudsync/1/full.distro -> ${P}-discord_cloudsync-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_desktop_core/1/full.distro -> ${P}-discord_desktop_core-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_dispatch/1/full.distro -> ${P}-discord_dispatch-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_erlpack/1/full.distro -> ${P}-discord_erlpack-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_game_utils/1/full.distro -> ${P}-discord_game_utils-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_krisp/1/full.distro -> ${P}-discord_krisp-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_modules/1/full.distro -> ${P}-discord_modules-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_rpc/1/full.distro -> ${P}-discord_rpc-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_spellcheck/1/full.distro -> ${P}-discord_spellcheck-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_utils/1/full.distro -> ${P}-discord_utils-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_voice/1/full.distro -> ${P}-discord_voice-1.tar.br
+	https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.979/discord_zstd/1/full.distro -> ${P}-discord_zstd-1.tar.br
 "
 
 DISCORD_MODULE="
-
+	discord_cloudsync-1
+	discord_desktop_core-1
+	discord_dispatch-1
+	discord_erlpack-1
+	discord_game_utils-1
+	discord_krisp-1
+	discord_modules-1
+	discord_rpc-1
+	discord_spellcheck-1
+	discord_utils-1
+	discord_voice-1
+	discord_zstd-1
 "
 
 DESCRIPTION="All-in-one voice and text chat for gamers"
