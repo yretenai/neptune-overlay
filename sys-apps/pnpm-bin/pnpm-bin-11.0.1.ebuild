@@ -48,5 +48,5 @@ src_install() {
 	dosym "../opt/pnpm-bin/pnpm" /usr/bin/pnpm
 	newbashcomp "${S}/dist/templates/completion.bash" pnpm
 	newfishcomp "${S}/dist/templates/completion.fish" pnpm
-	newzshcomp "${S}/dist/templates/completion.zsh" pnpm
+	newzshcomp "${S}/dist/templates/completion.zsh" _pnpm
 }

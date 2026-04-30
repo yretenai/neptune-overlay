@@ -32,5 +32,5 @@ src_install() {
 		doman build/man/man1/mommy.1
 	fi
 	dofishcomp build/completions/fish/mommy.fish
-	dozshcomp build/completions/fish/mommy.fish
+	dozshcomp build/completions/zsh/_mommy
 }
