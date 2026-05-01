@@ -1,0 +1,13 @@
+diff --git a/bin/gen_enum_to_str.py b/bin/gen_enum_to_str.py
+index a22d6c7..d7e6ca3 100644
+--- a/bin/gen_enum_to_str.py
++++ b/bin/gen_enum_to_str.py
+@@ -288,6 +288,8 @@ def compute_max_enum_name(s):
+         return "VK_SWAPCHAIN_IMAGE_USAGE_FLAG_BITS_MAX_ENUM"
+     if s == "VkTensorTilingARM":
+         return "VK_TENSOR_TILING_MAX_ENUM_ARM"
++    if s == "VkThrottleHintTypeSEC":
++        return "VK_THROTTLE_HINT_TYPE_MAX_ENUM_SEC"
+     max_enum_name = CamelCase_to_SHOUT_CASE(s)
+     last_prefix = max_enum_name.rsplit('_', 1)[-1]
+     # Those special prefixes need to be always at the end

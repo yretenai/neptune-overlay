@@ -99,6 +99,7 @@ RDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-9999-vulkan-headers.patch"
+	"${FILESDIR}/${PN}-9999-VkThrottleHintTypeSEC.patch"
 )
 
 src_unpack() {
