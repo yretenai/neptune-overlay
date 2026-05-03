@@ -1,0 +1,12 @@
+diff --git a/biodiff-wfa2-sys/CMakeLists.txt b/biodiff-wfa2-sys/CMakeLists.txt
+index a2693ba..8370b34 100644
+--- a/biodiff-wfa2-sys/CMakeLists.txt
++++ b/biodiff-wfa2-sys/CMakeLists.txt
+@@ -76,6 +76,7 @@ set(wfa2lib_SOURCE
+   ${WFA2_PATH}/alignment/affine2p_penalties.c
+   ${WFA2_PATH}/alignment/affine_penalties.c
+   ${WFA2_PATH}/alignment/cigar.c
++  ${WFA2_PATH}/alignment/cigar_utils.c
+   ${WFA2_PATH}/alignment/score_matrix.c
+ )
+ 
