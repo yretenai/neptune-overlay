@@ -83,7 +83,7 @@ PATCHES=(
 	# The analytics seem very reasonable, and even without this patch
 	# they are NOT sent before the user accepts.  But default the
 	# selection to off, just in case.
-	"${FILESDIR}"/${PN}-1.18-analytics-off.patch
+	"${FILESDIR}"/${PN}-1.41-analytics-off.patch
 
 	# Only search for PySide2 if pyside2 USE flag is set.
 	# Bug #833627
@@ -107,7 +107,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.39-multilib-install.patch
 
 	# modify ICD layer name with ABI
-	"${FILESDIR}"/${PN}-1.39-icd.patch
+	"${FILESDIR}"/${PN}-1.43-icd.patch
 )
 
 DOCS=( util/LINUX_DIST_README )
