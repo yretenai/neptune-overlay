@@ -5,6 +5,9 @@ EAPI=8
 
 MY_PN="${PN/-bin/}"
 MY_PV="${PV/-r*/}"
+MY_BRANCH="stable"
+MY_PN_RAW="${MY_PN}"
+MY_PN_UC="${MY_PN_RAW^}"
 
 CHROMIUM_LANGS="
 	af am ar bg bn ca cs da de el en-GB en-US es es-419 et fa fi fil fr gu he hi
@@ -14,11 +17,17 @@ CHROMIUM_LANGS="
 
 inherit chromium-2 desktop linux-info optfeature unpacker xdg
 
+__DISCORD_MODULES__
+
 DESCRIPTION="All-in-one voice and text chat for gamers"
 HOMEPAGE="https://discordapp.com"
-SRC_URI="https://dl.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz"
+SRC_URI="
+	https://dl.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz
+	https://${MY_BRANCH}.dl2.discordapp.net/distro/app/${MY_BRANCH}/linux/x64/${MY_PV}/full.distro -> ${P}.full.tar.br
+	${DISCORD_MODULE_URI}
+"
 
-S="${WORKDIR}/${MY_PN^}"
+S="${WORKDIR}/files"
 LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -56,40 +65,65 @@ RDEPEND="
 	x11-libs/pango
 	appindicator? ( dev-libs/libayatana-appindicator )
 "
+BDEPEND="
+	app-arch/brotli
+	app-misc/jq
+"
 
 DESTDIR="/opt/${MY_PN}"
 
 QA_PREBUILT="*"
 
 CONFIG_CHECK="~USER_NS"
-
 src_unpack() {
-	unpack ${MY_PN}-${MY_PV}.tar.gz
+	cd "${DISTDIR}"
+	brotli -c --decompress "${DISTDIR}/${P}.full.tar.br" > "${WORKDIR}/${P}.full.tar"
+
+	mkdir -p "${S}/modules/${MODULE}"
+	for MODULE in ${DISCORD_MODULE}; do
+		brotli -c --decompress "${DISTDIR}/${P}-${MODULE}.tar.br" > "${S}/modules/${MODULE}.tar"
+	done
+
+	cd "${WORKDIR}"
+	unpacker "${WORKDIR}/${P}.full.tar"
+	unpacker "${P}.tar.gz"
+
+	for MODULE in ${DISCORD_MODULE}; do
+		cd "${S}/modules"
+		unpacker "${S}/modules/${MODULE}.tar"
+		rm -f delta_manifest.json "${S}/modules/${MODULE}.tar"
+		mv files "${MODULE%-[0-9]*}"
+	done
+}
+
+src_prepare() {
+	cd "${WORKDIR}/${MY_PN_UC}"
+	mv "${MY_PN}.desktop" "${MY_PN_RAW}.png" "${S}"
+
+	cd "${S}"
+	default
+
+	cd locales
+	chromium_remove_language_paks
+	cd ..
+
+	# fix .desktop exec location
+	sed -i "/Exec/s:/usr/share/${MY_PN}/${MY_PN_UC}:${DESTDIR}/${MY_PN_UC}:" \
+		"${MY_PN}.desktop" ||
+		die "fixing of exec location on .desktop failed"
+	# USE seccomp
+	if ! use seccomp; then
+		sed -i "/Exec/s/${MY_PN_UC}/${MY_PN_UC} --disable-seccomp-filter-sandbox/" \
+			"${MY_PN}.desktop" ||
+			die "sed failed for seccomp"
+	fi
+	# fix icon path
+	mv "${MY_PN_RAW}.png" "${MY_PN}.png"
 }
 
 src_configure() {
 	default
 	chromium_suid_sandbox_check_kernel_config
-}
-
-src_prepare() {
-	default
-	# remove post-install script
-	rm postinst.sh || die "the removal of the unneeded post-install script failed"
-	# cleanup languages
-	pushd "locales/" >/dev/null || die "location change for language cleanup failed"
-	chromium_remove_language_paks
-	popd >/dev/null || die "location reset for language cleanup failed"
-	# fix .desktop exec location
-	sed -i "/Exec/s:/usr/share/discord/Discord:${DESTDIR}/${MY_PN^}:" \
-		"${MY_PN}.desktop" ||
-		die "fixing of exec location on .desktop failed"
-	# USE seccomp
-	if ! use seccomp; then
-		sed -i '/Exec/s/Discord/Discord --disable-seccomp-filter-sandbox/' \
-			"${MY_PN}.desktop" ||
-			die "sed failed for seccomp"
-	fi
 }
 
 src_install() {
@@ -100,12 +134,19 @@ src_install() {
 
 	exeinto "${DESTDIR}"
 
-	doexe "${MY_PN^}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
+	doexe "${MY_PN_UC}" chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1
+
+	ewarn
+	ewarn "patching build info to point locally, meaning modules will not be updated."
+	ewarn "if things break, consider using the proper client installer which installs to .config/${MY_PN}"
+	ewarn
+	jq ". + { \"localModulesRoot\": \"${DESTDIR}/modules\" }" resources/build_info.json > build_info.json
+	mv build_info.json resources/build_info.json
 
 	insinto "${DESTDIR}"
 	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin
 	insopts -m0755
-	doins -r locales resources
+	doins -r locales resources modules
 
 	# Chrome-sandbox requires the setuid bit to be specifically set.
 	# see https://github.com/electron/electron/issues/17972
@@ -116,11 +157,11 @@ src_install() {
 	# See #903616 and #890595
 	[[ -x chrome_crashpad_handler ]] && doins chrome_crashpad_handler
 
-	dosym "${DESTDIR}/${MY_PN^}" "/usr/bin/${MY_PN}"
+	dosym "${DESTDIR}/${MY_PN_UC}" "/usr/bin/${MY_PN}"
 
 	# https://bugs.gentoo.org/898912
 	if use appindicator; then
-		dosym ../../usr/lib64/libayatana-appindicator3.so /opt/discord/libappindicator3.so
+		dosym ../../usr/lib64/libayatana-appindicator3.so ${DESTDIR}/libappindicator3.so
 	fi
 }
 
