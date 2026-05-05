@@ -101,8 +101,6 @@ PATCHES=(
 	# Bug #925578
 	"${FILESDIR}"/${PN}-1.31-lld.patch
 
-	"${FILESDIR}"/${PN}-1.36-gcc15-fix.patch
-
 	# add -DINSTALL_SHARED_FILES
 	"${FILESDIR}"/${PN}-1.39-multilib-install.patch
 
