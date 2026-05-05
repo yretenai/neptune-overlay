@@ -14,7 +14,7 @@ update_discord() {
 	find "${NETIM_ROOT}/${NAME}" -iname "*.ebuild" -print -delete
 	cp "$EBUILD_TEMPLATE" "$EBUILD_NAME"
 	case "${TARGET}" in
-		canary)
+		canary|development)
 			MODULES="$(./discord-modules.sh $TARGET)"
 			awk -v r="${MODULES}" '{gsub(/__DISCORD_MODULES__/, r)}1' "$EBUILD_NAME" > "$EBUILD_NAME.tmp"
 			mv "$EBUILD_NAME.tmp" "$EBUILD_NAME"

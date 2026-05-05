@@ -22,7 +22,7 @@ __DISCORD_MODULES__
 DESCRIPTION="All-in-one voice and text chat for gamers"
 HOMEPAGE="https://discordapp.com"
 SRC_URI="
-	https://dl-${MY_BRANCH}.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz -> ${P}.tar.gz
+	https://dl-${MY_BRANCH}.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.tar.gz
 	https://${MY_BRANCH}.dl2.discordapp.net/distro/app/${MY_BRANCH}/linux/x64/${MY_PV}/full.distro -> ${P}.full.tar.br
 	${DISCORD_MODULE_URI}
 "
