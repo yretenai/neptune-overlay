@@ -153,10 +153,10 @@ RDEPEND="${PYTHON_DEPS}
 		sys-apps/dbus
 	)
 	vulkan? (
-		media-libs/shaderc
-		dev-util/spirv-tools
-		dev-util/glslang
-		media-libs/vulkan-loader
+		media-libs/shaderc:=
+		dev-util/spirv-tools:=
+		dev-util/glslang:=
+		media-libs/vulkan-loader:=
 	)
 	otf? (
 		media-libs/harfbuzz
