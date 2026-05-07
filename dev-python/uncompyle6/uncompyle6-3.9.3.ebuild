@@ -27,6 +27,7 @@ RDEPEND="
 	$(python_gen_cond_dep '
 		dev-python/click[${PYTHON_USEDEP}]
 		dev-python/xdis[${PYTHON_USEDEP}]
+		dev-python/spark-parser[${PYTHON_USEDEP}]
 		dev-python/configobj[${PYTHON_USEDEP}]
 	')
 "
