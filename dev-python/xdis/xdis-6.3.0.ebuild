@@ -7,7 +7,7 @@ PYTHON_COMPAT=( python3_{11..14} python3_{13..14}t )
 DISTUTILS_USE_PEP517=setuptools
 inherit distutils-r1
 
-DESCRIPTION=" Python cross-version bytecode library and disassembler"
+DESCRIPTION="Python cross-version bytecode library and disassembler"
 HOMEPAGE="https://github.com/rocky/python-xdis"
 LICENSE="MIT"
 SLOT="0"
