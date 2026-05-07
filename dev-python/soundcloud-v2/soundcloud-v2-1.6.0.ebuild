@@ -14,7 +14,7 @@ SLOT="0"
 
 if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/7x11x13/soundcloud.py/${PN}.git"
+	EGIT_REPO_URI="https://github.com/7x11x13/soundcloud.py.git"
 else
 	SRC_URI="https://github.com/7x11x13/soundcloud.py/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 	S="${WORKDIR}/soundcloud.py-${PV}"
