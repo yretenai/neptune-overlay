@@ -16,13 +16,13 @@ if [[ ${PV} == *9999* ]]; then
 		subprojects/dxil-spirv/third_party/spirv-headers # skip cross/tools
 	)
 else
-	HASH_VKD3D=21a49c975df83a7c5e7c0a68b5c1fb58f23df7c1
-	HASH_DXIL=4e36bab794afdb7d78f56b866971009ca894fe9c
-	HASH_DXBC=a38b5d78ed29f5fe44c2a2e157d5f7c2516df6e5
-	HASH_SPIRV=3b9447dc98371e96b59a6225bd062a9867e1d203
-	HASH_SPIRV_DXIL=3b9447dc98371e96b59a6225bd062a9867e1d203
+	HASH_VKD3D=3b10bd7a7ec6a7347e616cf8bea59333afec2255
+	HASH_DXIL=62dbb07f771534c8ce924479efdc6c8fa510361d
+	HASH_DXBC=29c93aeecd55533a357fdd7c95be5587d1c1f506
+	HASH_SPIRV=f88a2d766840fc825af1fc065977953ba1fa4a91
+	HASH_SPIRV_DXIL=f88a2d766840fc825af1fc065977953ba1fa4a91
 	HASH_SPIRV_DXBC=c8ad050fcb29e42a2f57d9f59e97488f465c436d
-	HASH_VULKAN=b39ab380a44b6c8df462c34e976ea9ce2d2c336b
+	HASH_VULKAN=ad9ce1235e88dc09287e19171dfac384db8ec32c
 	SRC_URI="
 		https://github.com/HansKristian-Work/vkd3d-proton/archive/refs/tags/v${PV}.tar.gz
 			-> ${P}.tar.gz
