@@ -1,4 +1,7 @@
+# POLARIS_BIN_PATH=/usr/bin/polaris
+# POLARIS_WEB_DIR=/var/lib/polaris/web
 # POLARIS_DB_DIR=/var/lib/polaris/data
 # POLARIS_LOG_DIR=/var/log/polaris
 # POLARIS_CACHE_DIR=/var/cache/polaris
+# POLARIS_CONFIG_DIR=/etc/polaris
 # POLARIS_PORT=5050

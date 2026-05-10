@@ -1,5 +1,5 @@
 [Unit]
-Description = Polaris Music Server
+Description=Polaris Music Server
 After=syslog.target network.target
 
 [Service]
@@ -11,7 +11,7 @@ StateDirectory=polaris
 CacheDirectory=polaris
 LogsDirectory=polaris
 ConfigurationDirectory=polaris
-ExecStart=/usr/bin/polaris --foreground --port $POLARIS_PORT --database "$POLARIS_DB_DIR/data.sqlite" --log "$POLARIS_LOG_DIR/polaris.log" --cache "$POLARIS_CACHE_DIR" --web "$POLARIS_WEB_DIR" --swagger "$POLARIS_SWAGGER_DIR"
+ExecStart=/usr/bin/polaris --foreground --port $POLARIS_PORT --config "${POLARIS_CONFIG_DIR}/polaris.toml" --data "$POLARIS_DB_DIR" --log "$POLARIS_LOG_DIR/polaris.log" --cache "$POLARIS_CACHE_DIR" --web "$POLARIS_WEB_DIR"
 TimeoutStopSec=20
 KillMode=process
 Restart=always
