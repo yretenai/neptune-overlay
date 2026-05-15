@@ -1,0 +1,52 @@
+# Copyright 2023-2025 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=8
+
+NUGET_PVS="9.0.16 9.0.15 9.0.14 9.0.13 9.0.12 9.0.11 9.0.10 9.0.9 9.0.8 9.0.7 9.0.6 9.0.5 9.0.4 9.0.3 9.0.2 9.0.1 9.0.0 "
+for NUGET_PV in $NUGET_PVS; do
+	NUGETS+="
+		microsoft.aspnetcore.app.ref@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-arm@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-arm64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-arm@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-arm64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-musl-x64@${NUGET_PV}
+		microsoft.aspnetcore.app.runtime.linux-x64@${NUGET_PV}
+	"
+done
+
+inherit unpacker nuget
+
+DESCRIPTION="dotnet runtime nugets"
+HOMEPAGE="https://github.com/dotnet/runtime"
+SRC_URI="
+	${NUGET_URIS}
+"
+
+S="${WORKDIR}"
+LICENSE="MIT"
+SLOT="$(ver_cut 1-2)"
+KEYWORDS="~amd64 ~arm64"
+RESTRICT="bindist mirror strip test"
+
+QA_PREBUILT="*"
+
+src_unpack() {
+	return
+}
+
+src_install() {
+	insinto "opt/neptune-dotnet/library-packs"
+	local archive
+	for archive in ${A} ; do
+		case "${archive}" in
+			*.nupkg )
+				doins "${DISTDIR}/${archive}"
+				;;
+			* )
+				:
+				;;
+		esac
+	done
+}
