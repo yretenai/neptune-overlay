@@ -18,18 +18,18 @@ CHROMIUM_LANGS="
 inherit chromium-2 desktop linux-info optfeature unpacker xdg
 
 DISCORD_MODULE_URI="
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_cloudsync/1/full.distro -> ${P}-discord_cloudsync-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_desktop_core/1/full.distro -> ${P}-discord_desktop_core-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_dispatch/1/full.distro -> ${P}-discord_dispatch-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_erlpack/1/full.distro -> ${P}-discord_erlpack-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_game_utils/1/full.distro -> ${P}-discord_game_utils-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_krisp/1/full.distro -> ${P}-discord_krisp-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_modules/1/full.distro -> ${P}-discord_modules-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_rpc/1/full.distro -> ${P}-discord_rpc-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_spellcheck/1/full.distro -> ${P}-discord_spellcheck-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_utils/1/full.distro -> ${P}-discord_utils-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_voice/1/full.distro -> ${P}-discord_voice-1.tar.br
-	https://dl.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_zstd/1/full.distro -> ${P}-discord_zstd-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_cloudsync/1/full.distro -> ${P}-discord_cloudsync-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_desktop_core/1/full.distro -> ${P}-discord_desktop_core-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_dispatch/1/full.distro -> ${P}-discord_dispatch-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_erlpack/1/full.distro -> ${P}-discord_erlpack-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_game_utils/1/full.distro -> ${P}-discord_game_utils-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_krisp/1/full.distro -> ${P}-discord_krisp-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_modules/1/full.distro -> ${P}-discord_modules-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_rpc/1/full.distro -> ${P}-discord_rpc-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_spellcheck/1/full.distro -> ${P}-discord_spellcheck-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_utils/1/full.distro -> ${P}-discord_utils-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_voice/1/full.distro -> ${P}-discord_voice-1.tar.br
+	https://stable.dl2.discordapp.net/distro/app/stable/linux/x64/1.0.138/discord_zstd/1/full.distro -> ${P}-discord_zstd-1.tar.br
 "
 
 DISCORD_MODULE="
