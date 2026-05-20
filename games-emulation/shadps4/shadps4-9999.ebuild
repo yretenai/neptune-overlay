@@ -24,6 +24,7 @@ if [[ ${PV} == *9999* ]]; then
 		"externals/aacdec/fdk-aac"
 		"externals/spdlog"
 		"externals/ImGuiFileDialog"
+		"externals/libressl"
 	)
 else
 	VULKANMEMORYALLOCATOR_COMMIT=
@@ -37,6 +38,7 @@ else
 	FDK_AAC_COMMIT= # todo: this exists as a package
 	SPDLOG_COMMIT= # todo: this exists as a package, but need v2
 	IMGUI_FILE_DIALOG_COMMIT=
+	LIBRESSL_COMMIT=
 
 	SRC_URI="
 		https://github.com/shadps4-emu/shadPS4/archive/v.${PV}.tar.gz -> ${P}.tar.gz
@@ -51,6 +53,7 @@ else
 		https://android.googlesource.com/platform/external/aac/+archive/${FDK_AAC_COMMIT}.tar.gz -> ${PN}-aacedc-{$FDK_AAC_COMMIT}.tar.gz
 		https://github.com/gabime/spdlog/archive/${SPDLOG_COMMIT}.tar.gz -> ${PN}-spdlog-${SPDLOG_COMMIT}.tar.gz
 		https://github.com/shadexternals/ImGuiFileDialog/archive/${IMGUI_FILE_DIALOG_COMMIT}.tar.gz -> ${PN}-ImGuiFileDialog-${IMGUI_FILE_DIALOG_COMMIT}.tar.gz
+		https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_COMMIT}.tar.gz -> ${PN}-LibreSSL-${LIBRESSL_COMMIT}.tar.gz
 	"
 	S="${WORKDIR}/shadPS4-v.${PV}"
 	KEYWORDS="~amd64"
@@ -124,17 +127,19 @@ src_unpack() {
 		rmdir "${S}/externals/aacdec/fdk-aac"; mv "${WORKDIR}/sirit-${FDK_AAC_COMMIT}" "${S}/externals/aacdec/fdk-aac" || die "Cannot move fdk-aac"
 		rmdir "${S}/externals/spdlog"; mv "${WORKDIR}/spdlog-${SPDLOG_COMMIT}" "${S}/externals/spdlog" || die "Cannot move spdlog"
 		rmdir "${S}/externals/ImGuiFileDialog"; mv "${WORKDIR}/ImGuiFileDialog-${IMGUI_FILE_DIALOG_COMMIT}" "${S}/externals/ImGuiFileDialog" || die "Cannot move ImGuiFileDialog"
+		rmdir "${S}/externals/libressl"; mv "${WORKDIR}/libressl-${LIBRESSL_COMMIT}" "${S}/externals/libressl" || die "Cannot move libressl"
 	fi
 }
 
 src_prepare() {
 	eapply_user
 
-	sed -e "s|find_package(fmt|#|" -i CMakeLists.txt || die
+	sed "/find_package(fmt/d" -i CMakeLists.txt || die
+	sed "/find_package(LibreSSL/d" -i CMakeLists.txt || die
 	sed -e "s|find_package(glslang|find_package(glslang CONFIG)#|" -i CMakeLists.txt || die
 	sed -e "s|nlohmann_json::nlohmann_json||" -i CMakeLists.txt || die
 	sed -e "s|<miniz.h>|<miniz/miniz.h>|" -i src/video_core/cache_storage.cpp || die
-	sed -e "s|add_subdirectory(json)||" -i externals/CMakeLists.txt || die
+	sed "/add_subdirectory(json)/d" -i externals/CMakeLists.txt || die
 	sed -e "s|add_subdirectory(miniz)|find_package(miniz REQUIRED)|" -i externals/CMakeLists.txt || die
 	sed -e "s|find_package(Zydis 5.0.0 MODULE)|find_package(Zydis 5.0.0 CONFIG)|" -i CMakeLists.txt || die
 
