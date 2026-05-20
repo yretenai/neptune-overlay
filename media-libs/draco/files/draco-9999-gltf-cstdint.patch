@@ -1,0 +1,12 @@
+diff --git a/src/draco/io/gltf_utils.h b/src/draco/io/gltf_utils.h
+index befbacb..4547d42 100644
+--- a/src/draco/io/gltf_utils.h
++++ b/src/draco/io/gltf_utils.h
+@@ -21,6 +21,7 @@
+ #include <iomanip>
+ #include <sstream>
+ #include <string>
++#include <cstdint>
+ 
+ namespace draco {
+ 

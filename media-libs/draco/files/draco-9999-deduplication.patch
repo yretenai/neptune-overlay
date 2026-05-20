@@ -1,0 +1,17 @@
+diff --git a/src/draco/mesh/mesh.cc b/src/draco/mesh/mesh.cc
+index 086c34d..ad01e72 100644
+--- a/src/draco/mesh/mesh.cc
++++ b/src/draco/mesh/mesh.cc
+@@ -287,10 +287,12 @@ void Mesh::RemoveUnusedMaterials(bool remove_unused_material_indices) {
+   }
+   auto mat_att = attribute(mat_att_index);
+ 
++  #ifdef DRACO_ATTRIBUTE_VALUES_DEDUPLICATION_SUPPORTED
+   // Deduplicate attribute values in the material attribute to ensure that one
+   // attribute value index corresponds to one unique material index.
+   // Note that this does not remove unused material indices.
+   mat_att->DeduplicateValues(*mat_att);
++  #endif
+ 
+   // Gather all material indices that are referenced by faces of the mesh.
+   const int num_materials = GetMaterialLibrary().NumMaterials();
