@@ -12,7 +12,6 @@ DESCRIPTION="A cycle-accurate Nintendo Game Boy Advance emulator"
 HOMEPAGE="https://github.com/nba-emu/NanoBoyAdvance"
 
 EGIT_REPO_URI="https://github.com/nba-emu/${PN}.git"
-SRC_URI="https://github.com/Dav1dde/glad/archive/refs/tags/v${GLAD_PV}.tar.gz -> glad-${GLAD_PV}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -24,7 +23,7 @@ DEPEND="
 	virtual/opengl
 	media-libs/glew
 	app-arch/unarr
-	>=dev-libs/libfmt-8.0.1:=
+	>=dev-libs/libfmt-12.1.0:=
 	dev-qt/qtbase:6[gui,opengl,widgets]
 	dev-qt/qt5compat:6
 	${PYTHON_DEPS}
@@ -34,7 +33,7 @@ BDEPEND="
 	$(python_gen_cond_dep '
 		>=dev-python/jinja2-2.7[${PYTHON_USEDEP}]
 	')
-	>=dev-cpp/toml11-3.7
+	>=dev-cpp/toml11-4.4.0
 	app-text/dos2unix
 "
 
@@ -43,22 +42,19 @@ src_unpack() {
 	git-r3_src_unpack
 }
 
-src_configure() {
-	sed -e "s|find_package(Python |find_package(Python ${EPYTHON:6} EXACT |" -i "${WORKDIR}/glad-${GLAD_PV}/cmake/GladConfig.cmake" || die
+src_prepare() {
+	sed -e "s/unarr 1.1.0/unarr/" -i thirdparty/CMakeLists.txt
+	sed -e "s/toml11 4.4.0/toml11/" -i thirdparty/CMakeLists.txt
+	sed -e "s/fmt 12.1.0/fmt/" -i thirdparty/CMakeLists.txt
+	default
+	cmake_prepare
+}
 
+src_configure() {
 	local mycmakeargs=(
 		-DPORTABLE_MODE=OFF
 		-DBUILD_SHARED_LIBS=OFF
-		-DUSE_QT6=ON
 		-DPLATFORM_QT=$(usex gui)
-		-DUSE_SYSTEM_TOML11=ON
-		-DUSE_SYSTEM_UNARR=ON
-		-DUSE_SYSTEM_FMT=ON
-		-DRELEASE_BUILD=ON
-		-DFETCHCONTENT_FULLY_DISCONNECTED=ON
-		-DFETCHCONTENT_QUIET=OFF
-		-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS
-		-DFETCHCONTENT_SOURCE_DIR_GLAD="${WORKDIR}/glad-${GLAD_PV}"
 	)
 
 	cmake_src_configure
