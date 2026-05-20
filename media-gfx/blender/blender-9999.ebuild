@@ -100,7 +100,7 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp[cxx] )
-	hip? ( >=dev-util/hip-7.1.1:= )
+	hip? ( >=dev-util/hip-7.1.0:= )
 	jack? ( virtual/jack )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
