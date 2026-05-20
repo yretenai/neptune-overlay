@@ -90,7 +90,6 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-include-cstdint.patch"
-	"${FILESDIR}/${PN}-1.14.7.0-test-shade.patch"
 )
 
 cuda_get_host_compiler() {
