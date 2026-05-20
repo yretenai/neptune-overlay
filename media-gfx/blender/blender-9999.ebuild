@@ -9,8 +9,6 @@
 # 	https://github.com/PixarAnimationStudios/OpenUSD
 # - Package MaterialX
 # 	https://github.com/AcademySoftwareFoundation/MaterialX
-# - Package Draco
-# 	https://github.com/google/draco
 # - Package Audaspace
 # 	https://github.com/neXyon/audaspace
 
@@ -19,7 +17,7 @@ EAPI=8
 PYTHON_COMPAT=( python3_{13..14} )
 LLVM_COMPAT=( {18..20} )
 LLVM_OPTIONAL=1
-ROCM_VERSION="6.3"
+ROCM_VERSION="7.1"
 
 inherit neptune-rocm check-reqs cmake cuda flag-o-matic pax-utils python-single-r1 toolchain-funcs xdg-utils llvm-r2
 
@@ -50,6 +48,7 @@ debug doc +embree experimental +ffmpeg +fftw +fluid +gmp hip hiprt jack
 jpeg2k llvm man +nanovdb ndof nls +oidn oneapi openal +openexr +openpgl
 +opensubdiv +openvdb optix osl +otf +pdf +potrace +pugixml pulseaudio
 renderdoc sdl +sndfile +tbb +tiff valgrind vulkan +wayland +webp X
+draco meshoptimizer tracy
 "
 RESTRICT="test"
 
@@ -81,10 +80,10 @@ RDEPEND="${PYTHON_DEPS}
 	media-libs/freetype:=[brotli]
 	media-libs/libepoxy:=
 	media-libs/libjpeg-turbo:=
-	media-libs/libpng:=
+	>=media-libs/libpng-1.6.58:=
 	media-libs/libsamplerate
 	media-libs/rubberband
-	>=media-libs/openimageio-2.5.6.0:=
+	>=media-libs/openimageio-3.1.13.1:=
 	virtual/zlib:=
 	>sci-mathematics/manifold-3.0.1-r0:=
 	>=sci-libs/ceres-solver-2.3.0
@@ -94,14 +93,14 @@ RDEPEND="${PYTHON_DEPS}
 	alembic? ( >=media-gfx/alembic-1.8.3-r2[boost(+),hdf(+)] )
 	color-management? ( >=media-libs/opencolorio-2.5:= )
 	cuda? ( dev-util/nvidia-cuda-toolkit:= )
-	embree? ( media-libs/embree:=[raymask] )
+	embree? ( >=media-libs/embree-4.4.0:=[raymask] )
 	ffmpeg? (
-		media-video/ffmpeg:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
+		>=media-video/ffmpeg-8.1:=[encode(+),jpeg2k?,opus,theora,vorbis,vpx,x264,xvid]
 		|| ( media-video/ffmpeg[lame(-)] media-video/ffmpeg[mp3(-)] )
 	)
 	fftw? ( sci-libs/fftw:3.0= )
 	gmp? ( dev-libs/gmp[cxx] )
-	hip? ( dev-util/hip:= )
+	hip? ( >=dev-util/hip-7.1.1:= )
 	jack? ( virtual/jack )
 	jpeg2k? ( media-libs/openjpeg:2= )
 	ndof? (
@@ -114,9 +113,9 @@ RDEPEND="${PYTHON_DEPS}
 	oneapi? ( dev-libs/intel-compute-runtime:0 )
 	openexr? (
 		dev-libs/imath:=
-		media-libs/openexr:0=
+		>=media-libs/openexr-3.4.10:0=
 	)
-	openpgl? ( media-libs/openpgl:= )
+	openpgl? ( >=media-libs/openpgl-0.7.1:= )
 	opensubdiv? ( media-libs/opensubdiv[opengl,cuda?,tbb?] )
 	openvdb? (
 		media-gfx/openvdb:=[nanovdb?]
@@ -124,24 +123,24 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	optix? ( dev-libs/optix )
 	osl? (
-		>=media-libs/osl-1.13:=[${LLVM_USEDEP}]
-		media-libs/mesa[${LLVM_USEDEP}]
+		>=media-libs/osl-1.15:=[${LLVM_USEDEP}]
+		>=media-libs/mesa-25.3.6[${LLVM_USEDEP}]
 	)
 	pdf? ( media-libs/libharu )
 	potrace? ( media-gfx/potrace )
 	pugixml? ( dev-libs/pugixml )
 	pulseaudio? ( media-libs/libpulse )
-	sdl? ( media-libs/libsdl2[sound,joystick] )
+	sdl? ( >=media-libs/libsdl3-3.4.2[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
 	tbb? ( >=dev-cpp/tbb-2022.3.0:= )
-	tiff? ( media-libs/tiff:= )
+	tiff? ( >=media-libs/tiff-4.7.1:= )
 	valgrind? ( dev-debug/valgrind )
 	wayland? (
 		>=dev-libs/wayland-1.12
 		>=dev-libs/wayland-protocols-1.15
 		>=x11-libs/libxkbcommon-0.2.0
 		dev-util/wayland-scanner
-		media-libs/mesa[wayland]
+		>=media-libs/mesa-25.3.6[wayland]
 		sys-apps/dbus
 	)
 	vulkan? (
@@ -162,6 +161,9 @@ RDEPEND="${PYTHON_DEPS}
 		x11-libs/libXxf86vm
 	)
 	hiprt? ( dev-libs/hiprt:2.5= )
+	draco? ( >=media-libs/draco-1.5.7[gltf,transcoder] )
+	meshoptimizer? ( >=media-libs/meshoptimizer-1.0 )
+	tracy? ( >=dev-cpp/tracy-0.13.1 )
 "
 
 DEPEND="${RDEPEND}
@@ -355,7 +357,8 @@ src_configure() {
 		-DWITH_CYCLES_STANDALONE=no
 		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_DOC_MANPAGE=$(usex man)
-		-DWITH_DRACO=yes # TODO: Package Draco
+		-DWITH_DRACO=$(usex draco)
+		-DWITH_MESHOPTIMIZER=$(usex meshoptimizer)
 		-DWITH_EXPERIMENTAL_FEATURES=$(usex experimental)
 		-DWITH_FFTW3=$(usex fftw)
 		-DWITH_GHOST_WAYLAND_APP_ID="blender-${BV}"

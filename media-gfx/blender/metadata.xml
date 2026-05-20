@@ -169,6 +169,12 @@
 		<flag name="vulkan">
 			Add support for the experimental Vulkan viewport backend
 		</flag>
+		<flag name="draco">
+			Add support for draco mesh compression
+		</flag>
+		<flag name="meshoptimizer">
+			Add support for meshoptimizer compression
+		</flag>
 	</use>
 	<upstream>
 		<changelog>https://developer.blender.org/docs/release_notes/</changelog>
