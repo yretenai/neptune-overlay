@@ -90,6 +90,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.0.34-system-stb.patch"
 	"${FILESDIR}/${PN}-0.0.34-system-zstd.patch"
 	"${FILESDIR}/${PN}-0.0.37-hidapi.patch"
+	"${FILESDIR}/${PN}-9999-tss-support.patch"
 )
 
 src_prepare() {

@@ -1,0 +1,473 @@
+diff --git a/rpcs3/Emu/Cell/Modules/sceNpTus.cpp b/rpcs3/Emu/Cell/Modules/sceNpTus.cpp
+index ee82e1093..01152cc18 100644
+--- a/rpcs3/Emu/Cell/Modules/sceNpTus.cpp
++++ b/rpcs3/Emu/Cell/Modules/sceNpTus.cpp
+@@ -1,11 +1,19 @@
+ #include "stdafx.h"
+ #include "Emu/Cell/PPUModule.h"
+ #include "Emu/IdManager.h"
++#include "Emu/System.h"
++
++#include <curl/curl.h>
++
++#include <cstdlib>
++#include <limits>
+ 
+ #include "sceNp.h"
+ #include "sceNpTus.h"
+ 
+ #include "Emu/NP/np_handler.h"
++#include "Emu/NP/np_helpers.h"
++#include "Emu/NP/rpcn_config.h"
+ 
+ LOG_CHANNEL(sceNpTus);
+ 
+@@ -914,6 +922,66 @@ error_code sceNpTusSetDataVUserAsync(s32 transId, vm::cptr<SceNpTusVirtualUserId
+ 	return scenp_tus_set_data(transId, targetVirtualUserId, slotId, totalSize, sendSize, data, info, infoStructSize, option, true, true);
+ }
+ 
++// If a restore sentinel (<config_dir>/tus/<commId>/<npId>/<slot_20d>.tdt.restore) exists,
++// serve its contents directly and delete the sentinel (one-shot).
++// Returns nullopt when no sentinel is present (fall through to RPCN).
++// Returns SCE_NP_COMMUNITY_SERVER_ERROR_USER_STORAGE_DATA_NOT_FOUND when the sentinel is
++// empty (zero-byte file — "create new game" path, mirrors RPCN's own no-data response).
++// Returns not_an_error(bytes_copied) when the sentinel contains backup data.
++static std::optional<error_code> scenp_tus_serve_restore(const shared_ptr<tus_transaction_ctx>& trans,
++	const SceNpOnlineId& targetNpId, SceNpTusSlotId slotId,
++	vm::ptr<SceNpTusDataStatus> dataStatus, vm::ptr<void> data, u32 recvSize)
++{
++	const std::string comm_id     = np::communication_id_to_string(trans->communicationId);
++	const std::string np_id       = std::string(targetNpId.data);
++	const std::string restore_path = fmt::format("%stus/%s/%s/%020d.tdt.restore",
++		fs::get_config_dir(), comm_id, np_id, slotId);
++
++	fs::file f(restore_path, fs::read);
++	if (!f)
++		return std::nullopt;
++
++	sceNpTus.notice("[TUS] Restore sentinel found for slot %d: %s", slotId, restore_path);
++
++	std::vector<u8> buf(f.size());
++	if (!buf.empty() && f.read(buf.data(), buf.size()) != buf.size())
++	{
++		sceNpTus.error("[TUS] Read error for restore file: %s", restore_path);
++		return std::nullopt;
++	}
++	f.close();
++
++	// Remove sentinel so the next GetData goes to RPCN as normal.
++	fs::remove_file(restore_path);
++
++	// Empty sentinel = "no data" — mirrors the real RPCN no-data response so the
++	// game treats this exactly like a fresh account with no cloud save.
++	if (buf.empty())
++	{
++		sceNpTus.notice("[TUS] Empty sentinel for slot %d — reporting USER_STORAGE_DATA_NOT_FOUND (new game)", slotId);
++		return {SCE_NP_COMMUNITY_SERVER_ERROR_USER_STORAGE_DATA_NOT_FOUND};
++	}
++
++	sceNpTus.notice("[TUS] Restore complete for slot %d, sentinel removed", slotId);
++
++	const u32 file_size  = static_cast<u32>(buf.size());
++	const u32 copy_bytes = std::min(file_size, recvSize);
++
++	if (copy_bytes > 0)
++		std::memcpy(data.get_ptr(), buf.data(), copy_bytes);
++
++	auto* status = dataStatus.get_ptr();
++	std::memset(status, 0, sizeof(SceNpTusDataStatus));
++	np::string_to_npid(np_id, status->ownerId);
++	status->hasData              = 1;
++	status->lastChangedDate.tick = 0;
++	status->lastChangedAuthorId  = status->ownerId;
++	status->data                 = data;
++	status->dataSize             = file_size;
++
++	return not_an_error(copy_bytes);
++}
++
+ template<typename T>
+ error_code scenp_tus_get_data(s32 transId, T targetNpId, SceNpTusSlotId slotId, vm::ptr<SceNpTusDataStatus> dataStatus, u32 dataStatusSize, vm::ptr<void> data, u32 recvSize, vm::ptr<void> option, bool vuser, bool async)
+ {
+@@ -952,6 +1020,22 @@ error_code scenp_tus_get_data(s32 transId, T targetNpId, SceNpTusSlotId slotId,
+ 		return SCE_NP_COMMUNITY_ERROR_INVALID_ID;
+ 	}
+ 
++	// Check for a restore sentinel (backup restore or empty "new game" override).
++	{
++		const auto restored = scenp_tus_serve_restore(
++			trans_ctx, get_scenp_online_id(*targetNpId.get_ptr()),
++			slotId, dataStatus, data, recvSize);
++		if (restored.has_value())
++		{
++			if (async)
++			{
++				trans_ctx->result = *restored;
++				return CELL_OK;
++			}
++			return *restored;
++		}
++	}
++
+ 	nph.tus_get_data(trans_ctx, get_scenp_online_id(*targetNpId.get_ptr()), slotId, dataStatus, data, recvSize, vuser, async);
+ 
+ 	if (async)
+@@ -1327,11 +1411,181 @@ error_code sceNpTusDeleteMultiSlotDataVUserAsync(s32 transId, vm::cptr<SceNpTusV
+ 
+ void scenp_tss_no_file(const shared_ptr<tus_transaction_ctx>& trans, vm::ptr<SceNpTssDataStatus> dataStatus)
+ {
+-	// TSS are files stored on PSN by developers, no dumps available atm
+ 	std::memset(dataStatus.get_ptr(), 0, sizeof(SceNpTssDataStatus));
+ 	trans->result = not_an_error(0);
+ }
+ 
++// Download a TSS payload from the RPCN server's TSS HTTP endpoint.
++// The server listens on port+2 relative to the main RPCN port and serves files at:
++//   http://<host>:<port+2>/tss/<titleId>/<titleId>-<slot>.tss
++static std::vector<u8> scenp_tss_fetch_from_rpcn(const std::string& title_id, const std::string& file_name)
++{
++	const auto parsed = parse_rpcn_host(g_cfg_rpcn.get_host());
++	if (!parsed)
++	{
++		sceNpTus.warning("[TSS] Could not parse RPCN host");
++		return {};
++	}
++
++	const auto& [hostname, port] = *parsed;
++	const std::string url = fmt::format("http://%s:%u/tss/%s/%s", hostname, port + 2, title_id, file_name);
++
++	sceNpTus.notice("[TSS] Fetching from RPCN: %s", url);
++
++	struct CurlBuf
++	{
++		std::vector<u8> data;
++
++		static size_t write_cb(void* ptr, size_t sz, size_t nmemb, void* ud)
++		{
++			auto& b = *static_cast<CurlBuf*>(ud);
++			const size_t n = sz * nmemb;
++			if (n == 0)
++				return 0;
++			constexpr size_t max_size = std::numeric_limits<u32>::max();
++			if (n > max_size || b.data.size() > max_size - n)
++				return 0;
++			const u8* p = static_cast<const u8*>(ptr);
++			b.data.insert(b.data.end(), p, p + n);
++			return n;
++		}
++	} buf;
++
++	CURL* curl = curl_easy_init();
++	if (!curl)
++	{
++		sceNpTus.error("[TSS] curl_easy_init() failed");
++		return {};
++	}
++
++	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
++	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlBuf::write_cb);
++	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buf);
++	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
++	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
++
++	const CURLcode res = curl_easy_perform(curl);
++	long http_code = 0;
++	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
++	curl_easy_cleanup(curl);
++
++	if (res != CURLE_OK)
++	{
++		sceNpTus.warning("[TSS] curl error %d (%s) for %s", static_cast<int>(res), curl_easy_strerror(res), url);
++		return {};
++	}
++
++	if (http_code != 200)
++	{
++		sceNpTus.warning("[TSS] HTTP %ld for %s", http_code, url);
++		return {};
++	}
++
++	return buf.data;
++}
++
++// Load a TSS payload from the local filesystem or from RPCN as a fallback.
++// Local files are placed under <config_dir>/tss/<titleId>-<slot>.tss
++// (e.g. tss/<titleId>-0.tss).
++static u32 scenp_tss_serve_file(const shared_ptr<tus_transaction_ctx>& trans, SceNpTssSlotId slotId, vm::ptr<SceNpTssDataStatus> dataStatus, vm::ptr<void> data, u32 recvSize, vm::ptr<SceNpTssGetDataOptParam> option)
++{
++	const std::string title_id = np::communication_id_to_string(trans->communicationId);
++	const std::string file_name = fmt::format("%s-%d.tss", title_id, slotId);
++	const std::string file_path = fs::get_config_dir() + "tss/" + file_name;
++
++	std::vector<u8> buf;
++
++	fs::file f(file_path, fs::read);
++	if (f)
++	{
++		sceNpTus.notice("[TSS] Reading local file %s", file_path);
++		buf.resize(f.size());
++		if (!buf.empty() && f.read(buf.data(), buf.size()) != buf.size())
++		{
++			sceNpTus.error("[TSS] Read error for %s", file_path);
++			scenp_tss_no_file(trans, dataStatus);
++			return 0;
++		}
++	}
++	else
++	{
++		sceNpTus.notice("[TSS] Local file not found (%s), fetching from RPCN", file_path);
++		buf = scenp_tss_fetch_from_rpcn(title_id, file_name);
++		if (buf.empty())
++		{
++			sceNpTus.warning("[TSS] %s not available locally or from RPCN", file_name);
++			scenp_tss_no_file(trans, dataStatus);
++			return 0;
++		}
++	}
++
++	const u64 file_size = buf.size();
++	u64 read_offset = 0;
++	u64 read_limit = file_size;
++
++	if (option)
++	{
++		if (option->offset)
++		{
++			read_offset = std::min<u64>(*option->offset, file_size);
++		}
++
++		if (option->lastByte)
++		{
++			const u64 requested_end = *option->lastByte == std::numeric_limits<u64>::max() ? file_size : std::min<u64>(*option->lastByte + 1, file_size);
++			read_limit = std::max(read_offset, requested_end);
++		}
++
++		if (option->ifParam)
++		{
++			sceNpTus.notice("[TSS] Ignoring ifParam for %s (type=%d)", file_name, option->ifParam->ifType);
++		}
++	}
++
++	const u64 range_size = read_limit - read_offset;
++
++	if (read_offset != 0 || read_limit != file_size)
++	{
++		sceNpTus.warning("[TSS] Partial range request for %s: offset=%llu lastByte=%llu fileSize=%llu rangeBytes=%llu",
++			file_name, read_offset, read_limit - 1, file_size, range_size);
++	}
++
++	sceNpTus.notice("[TSS] Serving %s (offset=%llu, bytes=%llu)", file_name, read_offset, range_size);
++
++	// Initialized once at first TSS serve; used as a stable lastModified timestamp for the session.
++	static const u64 s_session_start_tick = static_cast<u64>(
++		std::chrono::duration_cast<std::chrono::microseconds>(
++			std::chrono::system_clock::now().time_since_epoch()).count());
++
++	auto* status = dataStatus.get_ptr();
++	std::memset(status, 0, sizeof(SceNpTssDataStatus));
++	status->lastModified.tick = s_session_start_tick;
++	status->contentLength = static_cast<u32>(file_size);
++	status->statusCodeType = (read_offset != 0 || read_limit != file_size) ? SCE_NP_TSS_STATUS_TYPE_PARTIAL : SCE_NP_TSS_STATUS_TYPE_OK;
++
++	u32 copy_bytes = 0;
++
++	if (data && recvSize > 0)
++	{
++		copy_bytes = static_cast<u32>(std::min<u64>(range_size, recvSize));
++
++		if (copy_bytes != 0)
++		{
++			std::memcpy(data.get_ptr(), buf.data() + read_offset, copy_bytes);
++		}
++
++		if (copy_bytes < range_size)
++		{
++			sceNpTus.warning("[TSS] Buffer too small for %s: recvSize=%u rangeBytes=%llu clipped=%llu bytes lost",
++				file_name, recvSize, range_size, range_size - copy_bytes);
++			status->statusCodeType = SCE_NP_TSS_STATUS_TYPE_PARTIAL;
++		}
++	}
++
++	trans->result = not_an_error(copy_bytes);
++	return copy_bytes;
++}
++
+ error_code sceNpTssGetData(s32 transId, SceNpTssSlotId slotId, vm::ptr<SceNpTssDataStatus> dataStatus, u32 dataStatusSize, vm::ptr<void> data, u32 recvSize, vm::ptr<SceNpTssGetDataOptParam> option)
+ {
+ 	sceNpTus.warning("sceNpTssGetData(transId=%d, slotId=%d, dataStatus=*0x%x, dataStatusSize=%d, data=*0x%x, recvSize=%d, option=*0x%x)", transId, slotId, dataStatus, dataStatusSize, data, recvSize, option);
+@@ -1343,16 +1597,31 @@ error_code sceNpTssGetData(s32 transId, SceNpTssSlotId slotId, vm::ptr<SceNpTssD
+ 		return SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED;
+ 	}
+ 
+-	if (nph.get_psn_status() != SCE_NP_MANAGER_STATUS_ONLINE)
+-	{
+-		return SCE_NP_COMMUNITY_ERROR_INVALID_ONLINE_ID;
+-	}
++	// NOTE: PSN status check not required here; TSS files are served from
++	// the local filesystem or fetched from RPCN's TSS HTTP endpoint, so the
++	// game never falls back to its own HTTP client (which sends the unformatted
++	// template URL "<titleId>-{}.tss").
+ 
+ 	if (!dataStatus)
+ 	{
+ 		return SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT;
+ 	}
+ 
++	if (slotId < 0)
++	{
++		return SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT;
++	}
++
++	if (dataStatusSize != sizeof(SceNpTssDataStatus))
++	{
++		return SCE_NP_COMMUNITY_ERROR_INVALID_ALIGNMENT;
++	}
++
++	if (option && option->size != sizeof(SceNpTssGetDataOptParam))
++	{
++		return SCE_NP_COMMUNITY_ERROR_INVALID_ALIGNMENT;
++	}
++
+ 	auto trans_ctx = idm::get_unlocked<tus_transaction_ctx>(transId);
+ 
+ 	if (!trans_ctx)
+@@ -1360,9 +1629,9 @@ error_code sceNpTssGetData(s32 transId, SceNpTssSlotId slotId, vm::ptr<SceNpTssD
+ 		return SCE_NP_COMMUNITY_ERROR_INVALID_ID;
+ 	}
+ 
+-	scenp_tss_no_file(trans_ctx, dataStatus);
++	const u32 bytes_copied = scenp_tss_serve_file(trans_ctx, slotId, dataStatus, data, recvSize, option);
+ 
+-	return CELL_OK;
++	return not_an_error(bytes_copied);
+ }
+ 
+ error_code sceNpTssGetDataAsync(s32 transId, SceNpTssSlotId slotId, vm::ptr<SceNpTssDataStatus> dataStatus, u32 dataStatusSize, vm::ptr<void> data, u32 recvSize, vm::ptr<SceNpTssGetDataOptParam> option)
+@@ -1376,16 +1645,28 @@ error_code sceNpTssGetDataAsync(s32 transId, SceNpTssSlotId slotId, vm::ptr<SceN
+ 		return SCE_NP_COMMUNITY_ERROR_NOT_INITIALIZED;
+ 	}
+ 
+-	if (nph.get_psn_status() != SCE_NP_MANAGER_STATUS_ONLINE)
+-	{
+-		return SCE_NP_COMMUNITY_ERROR_INVALID_ONLINE_ID;
+-	}
++	// NOTE: PSN status check not required here; same reason as sceNpTssGetData.
+ 
+ 	if (!dataStatus)
+ 	{
+ 		return SCE_NP_COMMUNITY_ERROR_INSUFFICIENT_ARGUMENT;
+ 	}
+ 
++	if (slotId < 0)
++	{
++		return SCE_NP_COMMUNITY_ERROR_INVALID_ARGUMENT;
++	}
++
++	if (dataStatusSize != sizeof(SceNpTssDataStatus))
++	{
++		return SCE_NP_COMMUNITY_ERROR_INVALID_ALIGNMENT;
++	}
++
++	if (option && option->size != sizeof(SceNpTssGetDataOptParam))
++	{
++		return SCE_NP_COMMUNITY_ERROR_INVALID_ALIGNMENT;
++	}
++
+ 	auto trans_ctx = idm::get_unlocked<tus_transaction_ctx>(transId);
+ 
+ 	if (!trans_ctx)
+@@ -1393,9 +1674,9 @@ error_code sceNpTssGetDataAsync(s32 transId, SceNpTssSlotId slotId, vm::ptr<SceN
+ 		return SCE_NP_COMMUNITY_ERROR_INVALID_ID;
+ 	}
+ 
+-	scenp_tss_no_file(trans_ctx, dataStatus);
++	scenp_tss_serve_file(trans_ctx, slotId, dataStatus, data, recvSize, option);
+ 
+-	return CELL_OK;
++	return CELL_OK; // result retrieved via sceNpTusPollAsync -> trans->result
+ }
+ 
+ error_code sceNpTssGetDataNoLimit()
+diff --git a/rpcs3/Emu/NP/np_requests.cpp b/rpcs3/Emu/NP/np_requests.cpp
+index d9dd6dc33..15ebd28cf 100644
+--- a/rpcs3/Emu/NP/np_requests.cpp
++++ b/rpcs3/Emu/NP/np_requests.cpp
+@@ -112,7 +112,9 @@ namespace np
+ 	{
+ 		const u32 req_id = generate_callback_info(ctx_id, optParam, SCE_NP_MATCHING2_REQUEST_EVENT_GetWorldInfoList, true);
+ 
+-		if (!get_rpcn()->get_world_list(req_id, get_match2_context(ctx_id)->communicationId, server_id))
++		const auto& comm_id = get_match2_context(ctx_id)->communicationId;
++
++		if (!get_rpcn()->get_world_list(req_id, comm_id, server_id))
+ 		{
+ 			rpcn_log.error("Disconnecting from RPCN!");
+ 			is_psn_active = false;
+@@ -139,19 +141,22 @@ namespace np
+ 
+ 		ensure(!reply.is_error(), "Malformed reply to GetWorldList command");
+ 
++		// HACK: Some games are not registered as having multiple worlds in RPCN but
++		// assume in-code that they will receive a list of a certain length. Padding
++		// the world list prevents out-of-bounds reads that would cause hard crashes.
++		while (world_list.size() < 10)
++			world_list.push_back(65537);
++
+ 		const u32 event_key = get_event_key();
+ 
+ 		auto& edata = allocate_req_result(event_key, SCE_NP_MATCHING2_EVENT_DATA_MAX_SIZE_GetWorldInfoList, sizeof(SceNpMatching2GetWorldInfoListResponse));
+ 		auto* world_info = reinterpret_cast<SceNpMatching2GetWorldInfoListResponse*>(edata.data());
+ 		world_info->worldNum = ::size32(world_list);
+ 
+-		if (!world_list.empty())
++		auto* worlds = edata.allocate<SceNpMatching2World>(::narrow<u32>(sizeof(SceNpMatching2World) * world_list.size()), world_info->world);
++		for (usz i = 0; i < world_list.size(); i++)
+ 		{
+-			auto* worlds = edata.allocate<SceNpMatching2World>(::narrow<u32>(sizeof(SceNpMatching2World) * world_list.size()), world_info->world);
+-			for (usz i = 0; i < world_list.size(); i++)
+-			{
+-				worlds[i].worldId = world_list[i];
+-			}
++			worlds[i].worldId = world_list[i];
+ 		}
+ 
+ 		np_memory.shrink_allocation(edata.addr(), edata.size());
+@@ -1782,6 +1787,38 @@ namespace np
+ 
+ 		if (tdata->tus_data.size() == tdata->tus_data_size)
+ 		{
++			// Save a timestamped local backup before sending to RPCN.
++			{
++				const std::string comm_id = communication_id_to_string(trans_ctx->communicationId);
++				const std::string np_id   = std::string(targetNpId.data);
++				const std::string bak_dir = fs::get_config_dir() + "tus/" + comm_id + "/" + np_id + "/backups/";
++
++				if (fs::create_path(bak_dir))
++				{
++					const std::time_t t = std::time(nullptr);
++					std::tm tm_buf{};
++#ifdef _WIN32
++					localtime_s(&tm_buf, &t);
++#else
++					localtime_r(&t, &tm_buf);
++#endif
++					const std::string ts = fmt::format("%04d-%02d-%02d_%02d%02d%02d",
++						tm_buf.tm_year + 1900, tm_buf.tm_mon + 1, tm_buf.tm_mday,
++						tm_buf.tm_hour, tm_buf.tm_min, tm_buf.tm_sec);
++					const std::string bak_path = fmt::format("%s%s_%s_%020d.tdt", bak_dir, ts, comm_id, slotId);
++
++					if (fs::file bf{bak_path, fs::rewrite})
++					{
++						bf.write(tdata->tus_data.data(), tdata->tus_data.size());
++						rpcn_log.notice("[TUS] Backup saved: %s", bak_path);
++					}
++					else
++					{
++						rpcn_log.warning("[TUS] Failed to write backup: %s", bak_path);
++					}
++				}
++			}
++
+ 			trans_ctx->result = std::nullopt;
+ 			const u32 req_id = get_req_id(REQUEST_ID_HIGH::TUS);
+ 			get_rpcn()->tus_set_data(req_id, trans_ctx->communicationId, targetNpId, slotId, tdata->tus_data, info, option, vuser);
