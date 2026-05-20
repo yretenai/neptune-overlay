@@ -16,6 +16,7 @@ SRC_URI="
 		https://downloads.xiph.org/releases/celt/celt-0.6.1.tar.gz -> celt-061.tar.gz
 		https://downloads.xiph.org/releases/celt/celt-0.11.0.tar.gz -> celt-0110.tar.gz
 	)
+	https://patch-diff.githubusercontent.com/raw/vgmstream/vgmstream/pull/1923.patch -> ${P}-PR1923.patch
 "
 
 ATRAC9_EGIT_COMMIT="7406e447c05bb5a99b8c8b22ab747c5a220c6ea3"
@@ -59,6 +60,10 @@ RDEPEND=$DEPEND
 BDEPEND="
 	dev-lang/yasm
 "
+
+PATCHES=(
+	"${DISTDIR}/${P}-PR1923.patch"
+)
 
 src_unpack() {
 	default
