@@ -11,7 +11,7 @@
 		production environment.
 	</longdescription>
 	<upstream>
-		<remote-id type="github">RenderKit/openpgl</remote-id>
+		<remote-id type="github">OpenPathGuidingLibrary/openpgl</remote-id>
 	</upstream>
 	<use>
 		<flag name="tools">Building Open PGL tools as well</flag>
