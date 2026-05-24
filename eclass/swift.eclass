@@ -184,6 +184,8 @@ _swift_src_install_bundle() {
 }
 
 swift_src_install() {
+	exeinto /usr/bin
+
 	if [[ "${SWIFT_HAS_RESOURCES}" -eq 1 ]]; then
 		_swift_src_install_bundle
 	else
