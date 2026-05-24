@@ -97,6 +97,7 @@ swift_version() {
 # Calls the Swift driver with the arguments
 eswift() {
 	swift_version
+	export XDG_CONFIG_HOME="${T}"
 	local SWIFTC="${SWIFTPATH}/usr/bin/swift"
 	${SWIFTC} $@ || die "could not build"
 }
@@ -111,22 +112,36 @@ _swift_checkout_dep() {
 	ln -s "$path" "$target" || die "could not link dependency"
 }
 
+swift_src_unpack() {
+	default
+
+	if has live "${PROPERTIES}"; then
+		git-r3_src_unpack
+		cd "${S}"
+		eswift package resolve
+	fi
+}
+
 swift_src_prepare() {
 	default
 
-	mkdir -p "${SWIFT_WORKDIR}/.build/checkouts/" || die "could not make checkouts directory"
-	for SWIFT_CHECKOUT in "${SWIFT_CHECKOUTS[@]}"; do
-		local checkout=($SWIFT_CHECKOUT)
-		_swift_checkout_dep "${WORKDIR}/${checkout[0]}-${checkout[2]}" "${checkout[0]}-${checkout[2]}"
-	done
+	if ! has live "${PROPERTIES}"; then
+		export XDG_CONFIG_HOME="${T}"
+		mkdir -p "${SWIFT_WORKDIR}/.build/checkouts/" || die "could not make checkouts directory"
+		for SWIFT_CHECKOUT in "${SWIFT_CHECKOUTS[@]}"; do
+			local checkout=($SWIFT_CHECKOUT)
+			_swift_checkout_dep "${WORKDIR}/${checkout[0]}-${checkout[2]}" "${checkout[0]}-${checkout[2]}"
+		done
+	fi
 }
 
 swift_src_configure() {
-	pyswiftebuild --workdir "${SWIFT_WORKDIR}" --state
+	if ! has live "${PROPERTIES}"; then
+		pyswiftebuild --workdir "${SWIFT_WORKDIR}" --state
+	fi
 }
 
 swift_src_compile() {
-	addpredict "${EPREFIX}/var/lib/portage/home/.swiftpm"
 	eswift build --disable-automatic-resolution --disable-dependency-cache --disable-local-rpath --disable-build-manifest-caching --disable-prefetching -c "${SWIFT_BUILD_TARGET}" ${SWIFTARGS} ${SWIFT_BUILD_ARGS}
 }
 
@@ -193,5 +208,5 @@ swift_src_install() {
 	fi
 }
 
-EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install
+EXPORT_FUNCTIONS src_unpack src_prepare src_configure src_compile src_install
 fi
