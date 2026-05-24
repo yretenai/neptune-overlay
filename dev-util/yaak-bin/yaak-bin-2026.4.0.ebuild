@@ -27,18 +27,21 @@ RDEPEND="
 QA_PREBUILT="*"
 
 src_unpack() {
-	unpack_deb "yaak_${MY_PV}_amd64.deb"
+	unpack_deb "${MY_PN}_${MY_PV}_amd64.deb"
 }
 
 src_install() {
-	doicon "share/icons/hicolor/256x256@2/apps/${MY_PN}-app.png"
+	doicon "share/icons/hicolor/256x256@2/apps/${MY_PN}-app-client.png"
 	domenu "share/applications/${MY_PN}.desktop"
 
-	insinto "/usr/lib/yaak"
-	doins -r lib/yaak/*
+	insinto /usr/share/metainfo
+	doins share/metainfo/app.yaak.Yaak.metainfo.xml
+
+	insinto "/usr/lib/${MY_PN}"
+	doins -r "lib/${MY_PN}/"*
 
 	cd bin
-	dobin yaak-app
+	dobin "${MY_PN}-app-client"
 }
 
 pkg_postinst() {
