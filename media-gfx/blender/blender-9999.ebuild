@@ -76,6 +76,7 @@ RDEPEND="${PYTHON_DEPS}
 		>=dev-python/numpy-2.3.4[${PYTHON_USEDEP}]
 		dev-python/zstandard[${PYTHON_USEDEP}]
 		dev-python/requests[${PYTHON_USEDEP}]
+		dev-python/cattrs[${PYTHON_USEDEP}]
 	')
 	media-libs/freetype:=[brotli]
 	media-libs/libepoxy:=
