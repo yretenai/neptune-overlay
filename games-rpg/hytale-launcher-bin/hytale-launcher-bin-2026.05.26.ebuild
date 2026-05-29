@@ -3,7 +3,7 @@
 
 EAPI=8
 
-HYTALE_VERSION="2026.05.22-c731d18"
+HYTALE_VERSION="2026.05.26-a9aec87"
 
 inherit desktop xdg
 DESCRIPTION="A sandbox block game"
