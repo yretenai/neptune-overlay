@@ -57,6 +57,7 @@ BDEPEND="${PYTHON_DEPS}
 	)
 "
 RDEPEND="
+	dev-cpp/abseil-cpp:=
 	cuda? (
 		dev-util/nvidia-cuda-toolkit:=
 	)
