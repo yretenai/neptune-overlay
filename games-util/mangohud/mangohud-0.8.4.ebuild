@@ -13,14 +13,18 @@ MY_PV=$(ver_cut 1-3)
 DESCRIPTION="Vulkan and OpenGL overlay for monitoring FPS, sensors, system load and more"
 HOMEPAGE="https://github.com/flightlessmango/MangoHud"
 
-VK_HEADERS_VER="1.2.158"
-VK_HEADERS_MESON_WRAP_VER="2"
+IMGUI_VER="1.91.6"
+IMGUI_MESON_WRAP_VER="3"
+IMPLOT_VER="0.16"
+IMPLOT_MESON_WRAP_VER="1"
 
 SRC_URI="
-	https://github.com/KhronosGroup/Vulkan-Headers/archive/v${VK_HEADERS_VER}.tar.gz
-		-> vulkan-headers-${VK_HEADERS_VER}.tar.gz
-	https://wrapdb.mesonbuild.com/v2/vulkan-headers_${VK_HEADERS_VER}-${VK_HEADERS_MESON_WRAP_VER}/get_patch
-		-> vulkan-headers-${VK_HEADERS_VER}-${VK_HEADERS_MESON_WRAP_VER}-meson-wrap.zip
+	https://github.com/ocornut/imgui/archive/refs/tags/v${IMGUI_VER}.tar.gz
+		-> imgui-v${IMGUI_VER}.tar.gz
+	https://github.com/epezent/implot/archive/refs/tags/v${IMPLOT_VER}.tar.gz
+		-> implot-v${IMPLOT_VER}.tar.gz
+	https://wrapdb.mesonbuild.com/v2/implot_${IMPLOT_VER}-${IMPLOT_MESON_WRAP_VER}/get_patch
+		-> implot-${IMPLOT_VER}-${IMPLOT_MESON_WRAP_VER}-meson-wrap.zip
 "
 
 if [[ ${PV} == *9999* ]]; then
@@ -28,8 +32,9 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/flightlessmango/MangoHud.git"
 	EGIT_SUBMODULES=()
 else
-	SRC_URI+="
+	SRC_URI="
 		https://github.com/flightlessmango/MangoHud/archive/v${MY_PV}${MY_PV_REV}.tar.gz -> ${P}.tar.gz
+		${SRC_URI}
 	"
 	KEYWORDS="~amd64"
 	S="${WORKDIR}/MangoHud-${MY_PV}${MY_PV_REV}"
@@ -44,20 +49,19 @@ REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	|| ( X wayland )
 	xnvctrl? ( video_cards_nvidia )
-	mangoapp? ( X )
 "
 
 BDEPEND="
 	app-arch/unzip
 	dev-util/glslang
+	>=dev-util/vulkan-headers-1.4.346
+	>=dev-util/vulkan-utility-libraries-1.4.346
 	test? ( dev-util/cmocka )
 	$(python_gen_cond_dep 'dev-python/mako[${PYTHON_USEDEP}]')
 "
 
 DEPEND="
 	${PYTHON_DEPS}
-	<media-libs/imgui-1.92.0:=[opengl,vulkan,${MULTILIB_USEDEP}]
-	media-libs/implot:=[${MULTILIB_USEDEP}]
 	dev-libs/spdlog:=[${MULTILIB_USEDEP}]
 	dev-libs/libfmt:=[${MULTILIB_USEDEP}]
 	dev-cpp/nlohmann_json
@@ -70,7 +74,6 @@ DEPEND="
 	)
 	wayland? ( dev-libs/wayland[${MULTILIB_USEDEP}] )
 	mangoapp? (
-		media-libs/imgui[glfw]
 		media-libs/glfw[X(+)?,wayland(+)?]
 		media-libs/glew
 	)
@@ -94,7 +97,8 @@ RDEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-0.8.0-imgui-1.90.patch"
+	"${FILESDIR}/${PN}-9999-vulkan-headers.patch"
+	"${FILESDIR}/${PN}-9999-VkThrottleHintTypeSEC.patch"
 )
 
 src_unpack() {
@@ -104,18 +108,12 @@ src_unpack() {
 		git-r3_src_unpack
 	fi
 
-	mv "${WORKDIR}/Vulkan-Headers-${VK_HEADERS_VER}" "${S}/subprojects/" || die
-}
-
-src_prepare() {
-	default
-	# replace all occurences of "#include <imgui.h>" to "#include <imgui/imgui.h>"
-	find . -type f -exec sed -i 's|<imgui.h>|<imgui/imgui.h>|g' {} \; || die
-	find . -type f -exec sed -i 's|"imgui.h"|<imgui/imgui.h>|g' {} \; || die
-	find . -type f -exec sed -i 's|<imgui_internal.h>|<imgui/imgui_internal.h>|g' {} \; || die
-	find . -type f -exec sed -i 's|"imgui_internal.h"|<imgui/imgui_internal.h>|g' {} \; || die
-	find . -type f -exec sed -i 's|"imgui_impl_glfw.h"|<imgui/imgui_impl_glfw.h>|g' {} \; || die
-	find . -type f -exec sed -i 's|"imgui_impl_opengl3.h"|<imgui/imgui_impl_opengl3.h>|g' {} \; || die
+	mv \
+		"${WORKDIR}/imgui-${IMGUI_VER}" \
+		"${WORKDIR}/implot-${IMPLOT_VER}" \
+		"${S}/subprojects/" || die
+	
+	cp "${S}/subprojects/packagefiles/imgui-${IMGUI_VER}/"* "${S}/subprojects/imgui-${IMGUI_VER}" || die 
 }
 
 multilib_src_configure() {
