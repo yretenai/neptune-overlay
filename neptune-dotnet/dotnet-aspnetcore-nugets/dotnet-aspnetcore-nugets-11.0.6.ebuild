@@ -3,7 +3,7 @@
 
 EAPI=8
 
-NUGET_PVS="8.0.27 8.0.26 8.0.25 8.0.24 8.0.23 8.0.22 8.0.21 8.0.20 8.0.19 8.0.18 8.0.17 8.0.16 8.0.15 8.0.14 8.0.13 8.0.12 8.0.11 8.0.10 8.0.8 8.0.7 8.0.6 8.0.5 8.0.4 8.0.3 8.0.2 8.0.1 8.0.0 "
+NUGET_PVS="11.0.0-preview.5.26302.115 11.0.0-preview.4.26230.115 11.0.0-preview.3.26207.106 11.0.0-preview.2.26159.112 11.0.0-preview.1.26104.118 "
 for NUGET_PV in $NUGET_PVS; do
 	NUGETS+="
 		microsoft.aspnetcore.app.ref@${NUGET_PV}
@@ -27,7 +27,6 @@ SRC_URI="
 S="${WORKDIR}"
 LICENSE="MIT"
 SLOT="$(ver_cut 1-2)"
-KEYWORDS="~amd64 ~arm64"
 RESTRICT="bindist mirror strip test"
 
 QA_PREBUILT="*"
