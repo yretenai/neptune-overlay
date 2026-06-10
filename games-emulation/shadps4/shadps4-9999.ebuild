@@ -91,6 +91,8 @@ DEPEND="
 	dev-cpp/tracy:=
 	dev-libs/cereal
 	dev-libs/miniz
+	media-libs/freetype:2
+	dev-cpp/cpp-httplib[ssl,zlib]
 "
 
 RDEPEND="
@@ -109,6 +111,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.4.0-install.patch"
 	"${FILESDIR}/${PN}-0.4.0-half.patch"
 	"${FILESDIR}/${PN}-0.8.0-tracy.patch"
+	"${FILESDIR}/${PN}-9999-deps2.patch"
 )
 
 src_unpack() {

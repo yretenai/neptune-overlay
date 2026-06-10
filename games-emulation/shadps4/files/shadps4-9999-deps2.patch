@@ -1,0 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c6500796..7058bba4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -227,6 +227,11 @@ if(NOT (GIT_REMOTE_URL_LOWER MATCHES "shadps4-emu/shadps4" AND (GIT_BRANCH STREQ
+ endif()
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
++find_package(PkgConfig)
++pkg_search_module(FREETYPE QUIET IMPORTED_TARGET freetype2)
++add_library(freetype ALIAS PkgConfig::FREETYPE)
++find_package(httplib CONFIG)
++add_library(Cpp_Httplib ALIAS httplib::httplib)
+ find_package(Boost 1.84.0 CONFIG)
+ find_package(CLI11 2.6.1 CONFIG)
+ find_package(FFmpeg 5.1.2 MODULE)
+diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
+index b5782ec5..dc5db81a 100644
+--- a/externals/CMakeLists.txt
++++ b/externals/CMakeLists.txt
+@@ -351,6 +351,7 @@ else()
+ endif()
+ 
+ # cpp-httplib
++if (false)
+ add_library(Cpp_Httplib INTERFACE)
+ target_include_directories(Cpp_Httplib INTERFACE cpp-httplib/)
+ 
+@@ -369,3 +370,4 @@ if (DEFINED SSL_DEPENDENCIES)
+ else()
+     message(STATUS "cpp-httplib: OpenSSL/LibreSSL not available — libSceHttp HTTPS will fall back to mock at runtime.")
+ endif()
++endif()
