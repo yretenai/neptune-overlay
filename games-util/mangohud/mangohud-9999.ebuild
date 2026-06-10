@@ -17,6 +17,8 @@ IMGUI_VER="1.91.6"
 IMGUI_MESON_WRAP_VER="3"
 IMPLOT_VER="0.16"
 IMPLOT_MESON_WRAP_VER="1"
+VKROOTS_VER="5106d8a0df95de66cc58dc1ea37e69c99afc9540"
+VKBOOTSTRAP_VER="1.4.328"
 
 SRC_URI="
 	https://github.com/ocornut/imgui/archive/refs/tags/v${IMGUI_VER}.tar.gz
@@ -27,6 +29,10 @@ SRC_URI="
 		-> implot-v${IMPLOT_VER}.tar.gz
 	https://wrapdb.mesonbuild.com/v2/implot_${IMPLOT_VER}-${IMPLOT_MESON_WRAP_VER}/get_patch
 		-> implot-${IMPLOT_VER}-${IMPLOT_MESON_WRAP_VER}-meson-wrap.zip
+	https://github.com/charles-lunarg/vk-bootstrap/archive/refs/tags/v${VKBOOTSTRAP_VER}.tar.gz
+		-> vk-boostrap-${VKBOOTSTRAP_VER}.tar.gz
+	https://github.com/misyltoad/vkroots/archive/${VKROOTS_VER}.tar.gz
+		-> vkroots-${VKROOTS_VER}.tar.gz
 "
 
 if [[ ${PV} == *9999* ]]; then
@@ -99,7 +105,8 @@ RDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-9999-vulkan-headers.patch"
-	"${FILESDIR}/${PN}-9999-VkThrottleHintTypeSEC.patch"
+	"${FILESDIR}/${PN}-9999-systemd.patch"
+	"${FILESDIR}/${PN}-0.8.4-VkThrottleHintTypeSEC.patch"
 )
 
 src_unpack() {
@@ -113,6 +120,20 @@ src_unpack() {
 		"${WORKDIR}/imgui-${IMGUI_VER}" \
 		"${WORKDIR}/implot-${IMPLOT_VER}" \
 		"${S}/subprojects/" || die
+
+	mv \
+		"${WORKDIR}/vk-bootstrap-${VKBOOTSTRAP_VER}" \
+		"${S}/subprojects/vk-bootstrap" || die
+	mv \
+		"${S}/subprojects/packagefiles/vk-bootstrap/"* \
+		"${S}/subprojects/vk-bootstrap" || die
+
+	mv \
+		"${WORKDIR}/vkroots-${VKROOTS_VER}" \
+		"${S}/subprojects/vkroots" || die
+	mv \
+		"${S}/subprojects/packagefiles/vkroots/"* \
+		"${S}/subprojects/vkroots" || die
 }
 
 multilib_src_configure() {

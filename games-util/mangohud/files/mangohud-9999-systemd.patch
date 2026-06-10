@@ -1,0 +1,86 @@
+From 21de03ecf28627b9b65e7daab8f28dc23ea5f7b4 Mon Sep 17 00:00:00 2001
+From: Ada Freya Ahmed <ada@chronovore.dev>
+Date: Wed, 10 Jun 2026 19:36:59 +0530
+Subject: [PATCH] next: fix elogind
+
+---
+ mangohud-next/ipc/meson.build            | 3 ++-
+ mangohud-next/meson.build                | 2 +-
+ mangohud-next/render/imgui/meson.build   | 2 +-
+ mangohud-next/render/meson.build         | 3 ++-
+ mangohud-next/server/metrics/meson.build | 3 ++-
+ 5 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/mangohud-next/ipc/meson.build b/mangohud-next/ipc/meson.build
+index 4b5d924d99..110e08e7e2 100644
+--- a/mangohud-next/ipc/meson.build
++++ b/mangohud-next/ipc/meson.build
+@@ -1,4 +1,4 @@
+-systemd_dep = dependency('libsystemd')
++systemd_dep = dependency('libsystemd', 'libelogind')
+ 
+ ipc_inc = include_directories('.')
+ 
+@@ -45,4 +45,5 @@ ipc_lib = static_library(
+ ipc_dep = declare_dependency(
+   link_with: ipc_lib,
+   include_directories: [ipc_inc],
++  dependencies: [systemd_dep]
+ )
+diff --git a/mangohud-next/meson.build b/mangohud-next/meson.build
+index 38507e4a95..9677a003e4 100644
+--- a/mangohud-next/meson.build
++++ b/mangohud-next/meson.build
+@@ -8,11 +8,11 @@ inc_common += [
+ subdir('utils')
+ vkbootstrap_dep = subproject('vk-bootstrap').get_variable('vkbootstrap_dep')
+ libdrm_dep = dependency('libdrm')
++subdir('ipc')
+ # subdir('render')
+ if get_option('with_server')
+   subdir('render')
+ endif
+-subdir('ipc')
+ if get_option('with_server')
+   subdir('server')
+ endif
+diff --git a/mangohud-next/render/imgui/meson.build b/mangohud-next/render/imgui/meson.build
+index ec8ab212c0..96727bf8f5 100644
+--- a/mangohud-next/render/imgui/meson.build
++++ b/mangohud-next/render/imgui/meson.build
+@@ -3,6 +3,6 @@ subdir('font')
+ mangohud_imgui = static_library(
+     'mangohud_imgui',
+     files('imgui_ctx.cpp'),
+-    dependencies: [dearimgui_dep, spdlog_dep, vkbootstrap_dep, implot_dep],
++    dependencies: [dearimgui_dep, spdlog_dep, vkbootstrap_dep, implot_dep, ipc_dep],
+     include_directories: inc_common
+ )
+diff --git a/mangohud-next/render/meson.build b/mangohud-next/render/meson.build
+index 7265235d1d..9f92a58034 100644
+--- a/mangohud-next/render/meson.build
++++ b/mangohud-next/render/meson.build
+@@ -15,7 +15,8 @@ render_lib = static_library(
+                    dependency('libdrm'),
+                    dependency('gl'),
+                    dependency('egl'),
+-                   dep_vulkan_utility_libraries],
++                   dep_vulkan_utility_libraries,
++                   ipc_dep],
+     link_with: mangohud_imgui,
+     include_directories: inc_common
+ 
+diff --git a/mangohud-next/server/metrics/meson.build b/mangohud-next/server/metrics/meson.build
+index d2f10f797f..53a9d2160b 100644
+--- a/mangohud-next/server/metrics/meson.build
++++ b/mangohud-next/server/metrics/meson.build
+@@ -12,7 +12,8 @@ metrics_lib = static_library(
+                   vkbootstrap_dep,
+                   dearimgui_dep,
+                   implot_dep,
+-                  vulkan_dep],
++                  vulkan_dep,
++                  ipc_dep],
+     link_with: [cpu_lib,
+                 gpu_lib],
+     include_directories: utils_inc

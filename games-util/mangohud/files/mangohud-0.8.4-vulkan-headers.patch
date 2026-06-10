@@ -1,0 +1,28 @@
+diff --git a/meson.build b/meson.build
+index 2bcc128..fc3a93b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -172,17 +172,18 @@ endif
+ 
+ # Commented code can be used if mangohud start using latest SDK Vulkan-Headers
+ # Allowing user to build mangohud using system Vulkan-Headers
+-# if not dependency('VulkanHeaders').found()
++if not dependency('VulkanHeaders').found()
+   vulkan_headers_sp = subproject('vulkan-headers')
+   vulkan_headers_api_xml = vulkan_headers_sp.get_variable('vulkan_api_xml')
+   dep_vulkan_headers = vulkan_headers_sp.get_variable('vulkan_headers_dep')
+ 
+   vulkan_utility_libraries_sp = subproject('vulkan-utility-libraries')
+   dep_vulkan_utility_libraries = vulkan_utility_libraries_sp.get_variable('vulkan_utility_libraries_dep')
+-# else
+-#  dep_vulkan_headers = dependency('VulkanHeaders', required: true)
+-#  vulkan_headers_api_xml = files('/usr/share/vulkan/registry/vk.xml')
+-# endif
++else
++  dep_vulkan_headers = dependency('VulkanHeaders', required: true)
++  vulkan_headers_api_xml = files('/usr/share/vulkan/registry/vk.xml')
++  dep_vulkan_utility_libraries = dependency('VulkanUtilityLibraries', required: false)
++endif
+ 
+ vk_enum_to_str = custom_target(
+   'vk_enum_to_str',
