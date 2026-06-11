@@ -1,5 +1,7 @@
 # neptune-overlay
 
+# Repo will not be updated until the 1st week of July due to internet issues
+
 Please [create an issue](https://github.com/yretenai/neptune-overlay/issues/new) for any bugs.
 
 Primarily to package applications that I haven't seen on many overlays, or was incomplete/outdated.
