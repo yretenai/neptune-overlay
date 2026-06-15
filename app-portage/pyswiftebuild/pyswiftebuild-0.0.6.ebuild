@@ -10,14 +10,15 @@ inherit distutils-r1
 
 DESCRIPTION="A generator and build tool for Swift ebuilds."
 HOMEPAGE="
-	https://github.com/neptuwunium/pyswiftebuild/
+	https://codeberg.org/neptuwunium/pyswiftebuild/
 "
 
 if [[ "${PV}" == *9999* ]]; then
 	inherit git-r3
-	EGIT_REPO_URI="https://github.com/neptuwunium/pyswiftebuild.git"
+	EGIT_REPO_URI="https://codeberg.org/neptuwunium/pyswiftebuild.git"
 else
-	SRC_URI="https://github.com/neptuwunium/pyswiftebuild/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	SRC_URI="https://codeberg.org/neptuwunium/pyswiftebuild/archive/refs/tags/v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
+	S="${WORKDIR}/${PN}"
 	KEYWORDS="~amd64 ~arm64"
 fi
 
