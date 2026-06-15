@@ -105,7 +105,7 @@ RDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-9999-vulkan-headers.patch"
-	"${FILESDIR}/${PN}-9999-systemd.patch"
+	# "${FILESDIR}/${PN}-9999-systemd.patch"
 	"${FILESDIR}/${PN}-0.8.4-VkThrottleHintTypeSEC.patch"
 )
 
